@@ -1,0 +1,122 @@
+import java.nio.charset.StandardCharsets
+
+plugins {
+    id 'idea'
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'io.github.honhimw'
+version = '0.0.1-SNAPSHOT'
+description = 'Java client for meilisearch.'
+
+def title = 'Meilisearch rest client for java'
+def reactorNettyHttpVersion = '1.1.13'
+def jacksonVersion = '2.15.2'
+def lombokVersion = '1.18.26'
+def snapshots = version.toString().endsWith('SNAPSHOT')
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform("com.fasterxml.jackson:jackson-bom:${jacksonVersion}")
+
+    implementation "io.projectreactor.netty:reactor-netty-core:${reactorNettyHttpVersion}"
+    implementation "io.projectreactor.netty:reactor-netty-http:${reactorNettyHttpVersion}"
+
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-io:commons-io:2.13.0'
+    implementation 'commons-io:commons-io:2.13.0'
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+
+    compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+    compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.19'
+
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        create('library', MavenPublication) {
+            from components.java
+            pom {
+                name.set(title)
+                url.set("")
+                licenses {
+                    license {
+                        name.set('The Apache License, Version 2.0')
+                        url.set('https://www.apache.org/licenses/LICENSE-2.0.txt')
+                    }
+                }
+                developers {
+                    developer {
+                        name.set('honhimw')
+                        email.set('honhimw@outlook.com')
+                        url.set('https://honhimW.github.io')
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "sonatype"
+            if (snapshots) {
+                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            } else {
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            }
+            credentials {
+                username = findProperty("SONATYPE_USERNAME") as String
+                password = findProperty("SONATYPE_PASSWORD") as String
+            }
+        }
+    }
+}
+
+jar {
+    enabled(true)
+    archiveClassifier = ''
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = StandardCharsets.UTF_8.name()
+    inputs.files(tasks.withType(ProcessResources))
+
+}
+
+test {
+    useJUnitPlatform()
+}
