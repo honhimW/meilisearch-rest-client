@@ -15,7 +15,9 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.Index;
+import io.github.honhimw.ms.model.IndexStats;
 import io.github.honhimw.ms.model.Page;
+import io.github.honhimw.ms.model.Stats;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 
@@ -29,7 +31,6 @@ import java.util.List;
  */
 
 public interface Indexes {
-
 
     /**
      * List all indexes
@@ -115,5 +116,23 @@ public interface Indexes {
 
     @Operation(tags = "/indexes/{indexUid}/settings")
     Settings settings(String uid);
+
+    /**
+     * Get stats of all indexes.
+     *
+     * @return stats of all indexes.
+     */
+    @Operation(method = "GET", tags = "/stats")
+    Stats stats();
+
+    /**
+     * Get stats of an index.
+     *
+     * @return stats of an index.
+     */
+    @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")
+    IndexStats stats(String uid);
+
+
 
 }

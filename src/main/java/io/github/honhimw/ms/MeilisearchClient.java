@@ -28,13 +28,13 @@
 
 package io.github.honhimw.ms;
 
-import io.github.honhimw.ms.api.Indexes;
-import io.github.honhimw.ms.api.Keys;
-import io.github.honhimw.ms.api.Settings;
-import io.github.honhimw.ms.api.Tasks;
+import io.github.honhimw.ms.api.*;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.Version;
+import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;
 
@@ -89,6 +89,53 @@ public class MeilisearchClient {
     }
 
     public List<SearchResponse> multiSearch(MultiSearchRequest request) {
+        // TODO
+        return null;
+    }
+
+    public void healthy() {
+        // TODO
+        throw new IllegalStateException("server status not ['available']");
+    }
+
+    public Version version() {
+        // TODO
+        return null;
+    }
+
+    /**
+     * <a href="https://www.meilisearch.com/docs/reference/api/dump"><h1>Dumps</h1></a>
+     * The /dumps route allows the creation of database dumps. Dumps are .dump files that can be used to restore Meilisearch data or migrate between different versions.
+     * <p>
+     * Triggers a dump creation task. Once the process is complete, a dump is created in the dump directory. If the dump directory does not exist yet, it will be created.
+     * <p>
+     * Dump tasks take priority over all other tasks in the queue. This means that a newly created dump task will be processed as soon as the current task is finished.
+     *
+     */
+    @Operation(method = "POST", tags = "/dumps")
+    public TaskInfo dumps() {
+        // TODO
+        return null;
+    }
+
+    /**
+     * <a href="https://www.meilisearch.com/docs/reference/api/snapshots"><h1>Snapshots</h1></a>
+     * The /snapshot route allows you to create database snapshots. Snapshots are .snapshot files that can be used to make quick backups of Meilisearch data.
+     * <p>
+     * <a style="color:red" href="https://www.meilisearch.com/docs/learn/advanced/snapshots">Learn more about snapshots.</a>
+     * <p>
+     * Snapshot tasks take priority over other tasks in the queue.
+     */
+    @Operation(method = "POST", tags = "/snapshots")
+    public TaskInfo snapshots() {
+        // TODO
+        return null;
+    }
+
+    /**
+     * @return {@link ExperimentalFeaturesSettings} operator
+     */
+    public ExperimentalFeaturesSettings experimentalFeatures() {
         // TODO
         return null;
     }
