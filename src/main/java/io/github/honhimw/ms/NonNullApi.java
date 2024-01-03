@@ -14,31 +14,21 @@
 
 package io.github.honhimw.ms;
 
-import io.github.honhimw.ms.api.Indexes;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jakarta.annotation.Nonnull;
+
+import javax.annotation.meta.TypeQualifierDefault;
+import java.lang.annotation.*;
 
 /**
  * @author hon_him
- * @since 2023-12-29
+ * @since 2024-01-02
  */
 
-public class ClientTests {
-
-    private MeilisearchClient client;
-
-    @BeforeEach
-    void initClient() {
-        MeilisearchConfig config = MeilisearchConfig.withDefault()
-            .serverUrl("http://10.37.1.132:7700")
-            .apiKey(null)
-            .build();
-        client = new MeilisearchClient(config);
-    }
-
-    @Test
-    void index() {
-        Indexes index = client.indexes();
-    }
-
+@Target(ElementType.PACKAGE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Nonnull
+@javax.annotation.Nonnull
+@TypeQualifierDefault({ElementType.METHOD, ElementType.PARAMETER})
+public @interface NonNullApi {
 }

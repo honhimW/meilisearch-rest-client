@@ -18,9 +18,12 @@ import io.github.honhimw.ms.model.Index;
 import io.github.honhimw.ms.model.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
+
 import java.util.List;
 
 /**
+ * An index is an entity that gathers a set of documents with its own settings. Learn more about indexes.
+ *
  * @author hon_him
  * @since 2023-12-29
  */
@@ -56,9 +59,7 @@ public interface Indexes {
     Object create(String uid, @Nullable String primaryKey);
 
     /**
-     * Update an index's primary key. You can freely update the primary key of an index as long as it contains no
-     * documents. To change the primary key of an index that already contains documents, you must first delete all
-     * documents in that index. You may then change the primary key and index your dataset again.
+     * Update an index. Specify a primaryKey if it doesn't already exists yet.
      *
      * @param uid uid of the requested index
      * @return TODO
@@ -76,18 +77,43 @@ public interface Indexes {
     Object delete(String uid);
 
     /**
-     * Swap the documents, settings, and task history of two or more indexes. You can only swap indexes in pairs.
-     * However, a single request can swap as many index pairs as you wish.
-     * <p>
-     * Swapping indexes is an atomic transaction: either all indexes are successfully swapped, or none are.
-     * <p>
-     * Swapping indexA and indexB will also replace every mention of indexA by indexB and vice-versa in the task
-     * history. enqueued tasks are left unmodified.
+     * Deploy a new version of an index without any downtime for clients by swapping documents,
+     * settings, and task history between two indexes.
+     * Specifying several swap operations that will be processed in an atomic way is possible.
      *
-     * @param uids 	Array of the two indexUids to be swapped
+     * @param uids Array of the two indexUids to be swapped
      * @return indexSwap
      */
     @Operation(method = "POST", tags = "/indexes/{index_uid}")
     Index swap(List<String> uids);
+
+    /**
+     * Documents are objects composed of fields that can store any type of data.
+     * Each field contains an attribute and its associated value.
+     * Documents are stored inside indexes.
+     * Learn more about documents.
+     *
+     * @param uid uid of the requested index
+     * @return {@link Documents} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/documents")
+    Documents documents(String uid);
+
+    /**
+     * Meilisearch exposes 3 routes to perform document searches:
+     * <ul>
+     *     <li>A POST route: this is the preferred route when using API authentication, as it allows preflight request caching and better performances.</li>
+     *     <li>A GET route: the usage of this route is discouraged, unless you have good reason to do otherwise (specific caching abilities for example). Other than the differences mentioned above, the two routes are strictly equivalent.</li>
+     *     <li>A POST multi-search route allowing to perform multiple search queries in a single HTTP request. Meilisearch exposes 1 route to perform facet searches:</li>
+     *     <li>A POST facet-search route allowing to perform a facet search query on a facet in a single HTTP request.</li>
+     * </ul>
+     * @param uid uid of the requested index
+     * @return {@link Search} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/search")
+    Search search(String uid);
+
+    @Operation(tags = "/indexes/{indexUid}/settings")
+    Settings settings(String uid);
 
 }

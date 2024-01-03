@@ -12,33 +12,32 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms;
+package io.github.honhimw.ms.model;
 
-import io.github.honhimw.ms.api.Indexes;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * @author hon_him
- * @since 2023-12-29
+ * @since 2024-01-02
  */
 
-public class ClientTests {
+public enum TaskStatus {
+    ENQUEUED("enqueued"),
+    PROCESSING("processing"),
+    SUCCEEDED("succeeded"),
+    FAILED("failed"),
+    CANCELED("canceled");
 
-    private MeilisearchClient client;
+    public final String taskStatus;
 
-    @BeforeEach
-    void initClient() {
-        MeilisearchConfig config = MeilisearchConfig.withDefault()
-            .serverUrl("http://10.37.1.132:7700")
-            .apiKey(null)
-            .build();
-        client = new MeilisearchClient(config);
+    TaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
-    @Test
-    void index() {
-        Indexes index = client.indexes();
+    @JsonValue
+    @Override
+    public String toString() {
+        return this.taskStatus;
     }
 
 }

@@ -12,33 +12,26 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms;
+package io.github.honhimw.ms.model;
 
-import io.github.honhimw.ms.api.Indexes;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author hon_him
- * @since 2023-12-29
+ * @since 2024-01-02
  */
 
-public class ClientTests {
-
-    private MeilisearchClient client;
-
-    @BeforeEach
-    void initClient() {
-        MeilisearchConfig config = MeilisearchConfig.withDefault()
-            .serverUrl("http://10.37.1.132:7700")
-            .apiKey(null)
-            .build();
-        client = new MeilisearchClient(config);
-    }
-
-    @Test
-    void index() {
-        Indexes index = client.indexes();
-    }
-
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public class SearchWithIndexRequest extends SearchRequest {
+    
+    @Schema(description = "uid of the requested index")
+    private String indexUid;
+    
 }

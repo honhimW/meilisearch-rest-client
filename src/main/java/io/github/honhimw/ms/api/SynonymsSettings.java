@@ -1,0 +1,63 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.github.honhimw.ms.api;
+
+import io.github.honhimw.ms.model.TaskInfo;
+import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <a href="https://www.meilisearch.com/docs/reference/api/settings#synonyms"><h1>Synonyms</h1></a>
+ * The synonyms object contains words and their respective synonyms. A synonym in Meilisearch is considered equal to its associated word for the purposes of calculating search results.
+ * <p>
+ * <a style="color:red"
+ * href="https://www.meilisearch.com/docs/learn/configuration/synonyms">
+ * To learn more about synonyms, refer to our dedicated guide.
+ * </a>
+ *
+ * @author hon_him
+ * @since 2024-01-03
+ */
+
+public interface SynonymsSettings {
+
+    /**
+     * Get the list of synonyms of an index.
+     *
+     * @return current index stop words
+     */
+    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/synonyms")
+    Map<String, List<String>> get();
+
+    /**
+     * Update the list of synonyms of an index. Synonyms are normalized.
+     *
+     * @param synonyms An object that contains all synonyms and their associated words. Add the associated words in an array to set a synonym for a word.
+     * @return update task
+     */
+    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
+    TaskInfo update(Map<String, List<String>> synonyms);
+
+    /**
+     * Reset the list of synonyms of an index to its default value.
+     *
+     * @return reset task
+     */
+    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/synonyms")
+    TaskInfo reset();
+
+}

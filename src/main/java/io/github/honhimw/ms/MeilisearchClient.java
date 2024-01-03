@@ -29,7 +29,14 @@
 package io.github.honhimw.ms;
 
 import io.github.honhimw.ms.api.Indexes;
+import io.github.honhimw.ms.api.Keys;
+import io.github.honhimw.ms.api.Settings;
+import io.github.honhimw.ms.api.Tasks;
 import io.github.honhimw.ms.json.JsonHandler;
+import io.github.honhimw.ms.model.MultiSearchRequest;
+import io.github.honhimw.ms.model.SearchResponse;
+
+import java.util.List;
 
 /**
  * @author hon_him
@@ -56,7 +63,32 @@ public class MeilisearchClient {
     ==========================================================================
      */
 
-    public Indexes index() {
+    /**
+     * TODO
+     * @return {@link Indexes} operator
+     */
+    public Indexes indexes() {
+        return null;
+    }
+
+    /**
+     * TODO
+     * @return {@link Tasks} operator
+     */
+    public Tasks tasks() {
+        return null;
+    }
+
+    /**
+     * TODO
+     * @return {@link Keys} operator
+     */
+    public Keys keys() {
+        // TODO
+        return null;
+    }
+
+    public List<SearchResponse> multiSearch(MultiSearchRequest request) {
         // TODO
         return null;
     }

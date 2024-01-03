@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'io.github.honhimw'
-version = '0.0.1-SNAPSHOT'
+version = '1.5.0.0-SNAPSHOT'
 description = 'Java client for meilisearch.'
 
 def title = 'Meilisearch rest client for java'
@@ -48,6 +48,7 @@ dependencies {
 
     compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.19'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
@@ -56,6 +57,7 @@ dependencies {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'com.meilisearch.sdk:meilisearch-java:0.11.5'
 
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
