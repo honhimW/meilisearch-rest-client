@@ -39,7 +39,7 @@ public interface Settings {
      * @return settings detail of current index
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/settings")
-    Settings get();
+    Setting get();
 
     /**
      * Update the settings of an index.
@@ -98,6 +98,12 @@ public interface Settings {
     PaginationSettings pagination();
 
     /**
+     * @return {@link RankingRulesSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")
+    RankingRulesSettings rankingRules();
+
+    /**
      * @return {@link SearchableAttributesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/searchable-attributes")
@@ -110,7 +116,7 @@ public interface Settings {
     SeparatorTokensSettings separatorTokens();
 
     /**
-     * @return {@link SeparatorTokensSettings} operator
+     * @return {@link NonSeparatorTokensSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/non-separator-tokens")
     NonSeparatorTokensSettings nonSeparatorTokens();
@@ -132,5 +138,11 @@ public interface Settings {
      */
     @Operation(tags = "/indexes/{index_uid}/settings/synonyms")
     SynonymsSettings synonyms();
+
+    /**
+     * @return {@link TypoToleranceSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    TypoToleranceSettings typoTolerance();
 
 }

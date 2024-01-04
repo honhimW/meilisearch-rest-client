@@ -35,8 +35,10 @@ package io.github.honhimw.ms.json;
 
 public interface JsonHandler {
 
-    String encode(Object o);
+    String toJson(Object o);
 
-    <T> T decode(String json, Class<T> tClass);
+    <T> T fromJson(String json, Class<T> tClass);
+
+    <T> T fromJson(String json, TypeRef<T> tTypeRef);
 
 }

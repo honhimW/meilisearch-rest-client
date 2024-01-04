@@ -28,10 +28,11 @@
 
 package io.github.honhimw.ms;
 
+import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -41,7 +42,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public final class MeilisearchConfig {
+public final class MSearchConfig {
 
     private final String serverUrl;
     
@@ -49,19 +50,23 @@ public final class MeilisearchConfig {
 
     private final JsonHandler jsonHandler;
 
+    private final ReactiveHttpUtils httpClient;
+
     public static Builder builder() {
         return new Builder();
     }
 
     public static Builder withDefault() {
         return new Builder()
-            .jsonHandler(new JacksonJsonHandler());
+            .jsonHandler(new JacksonJsonHandler())
+            .httpClient(ReactiveHttpUtils.getInstance());
     }
 
     public static class Builder {
         private String serverUrl;
         private String apiKey;
         private JsonHandler jsonHandler;
+        private ReactiveHttpUtils httpClient;
 
         public Builder() {
         }
@@ -71,7 +76,7 @@ public final class MeilisearchConfig {
             return this;
         }
 
-        public Builder apiKey(String apiKey) {
+        public Builder apiKey(@Nullable String apiKey) {
             this.apiKey = apiKey;
             return this;
         }
@@ -81,8 +86,13 @@ public final class MeilisearchConfig {
             return this;
         }
 
-        public MeilisearchConfig build() {
-            return new MeilisearchConfig(serverUrl, apiKey, jsonHandler);
+        public Builder httpClient(ReactiveHttpUtils httpClient) {
+            this.httpClient = httpClient;
+            return this;
+        }
+
+        public MSearchConfig build() {
+            return new MSearchConfig(serverUrl, apiKey, jsonHandler, httpClient);
         }
     }
 }

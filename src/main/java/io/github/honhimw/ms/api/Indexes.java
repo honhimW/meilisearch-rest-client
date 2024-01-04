@@ -14,14 +14,12 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.Index;
-import io.github.honhimw.ms.model.IndexStats;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.Stats;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * An index is an entity that gathers a set of documents with its own settings. Learn more about indexes.
@@ -35,11 +33,11 @@ public interface Indexes {
     /**
      * List all indexes
      *
-     * @param limit  Number of indexes to return
      * @param offset Number of indexes to skip
+     * @param limit  Number of indexes to return
      */
     @Operation(method = "GET", tags = "/indexes")
-    Page<Index> list(Integer limit, Integer offset);
+    Page<Index> list(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
      * Get information about an index.
@@ -54,28 +52,28 @@ public interface Indexes {
      *
      * @param uid        uid of the requested index
      * @param primaryKey Primary key of the requested index
-     * @return TODO
+     * @return create task
      */
     @Operation(method = "POST", tags = "/indexes")
-    Object create(String uid, @Nullable String primaryKey);
+    TaskInfo create(String uid, @Nullable String primaryKey);
 
     /**
      * Update an index. Specify a primaryKey if it doesn't already exists yet.
      *
      * @param uid uid of the requested index
-     * @return TODO
+     * @return update task
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}")
-    Object update(String uid);
+    TaskInfo update(String uid, String primaryKey);
 
     /**
      * Delete an index.
      *
      * @param uid uid of the requested index
-     * @return TODO
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/indexes/{index_uid}")
-    Object delete(String uid);
+    TaskInfo delete(String uid);
 
     /**
      * Deploy a new version of an index without any downtime for clients by swapping documents,
@@ -85,8 +83,8 @@ public interface Indexes {
      * @param uids Array of the two indexUids to be swapped
      * @return indexSwap
      */
-    @Operation(method = "POST", tags = "/indexes/{index_uid}")
-    Index swap(List<String> uids);
+    @Operation(method = "POST", tags = "/swap-indexes")
+    TaskInfo swap(List<Map.Entry<String, String>> uids);
 
     /**
      * Documents are objects composed of fields that can store any type of data.

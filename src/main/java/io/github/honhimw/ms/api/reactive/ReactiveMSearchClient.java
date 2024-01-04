@@ -12,96 +12,44 @@
  * limitations under the License.
  */
 
-/*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package io.github.honhimw.ms.api.reactive;
 
-package io.github.honhimw.ms;
-
-import io.github.honhimw.ms.api.*;
-import io.github.honhimw.ms.json.JsonHandler;
+import io.github.honhimw.ms.MSearchConfig;
+import io.github.honhimw.ms.internal.MSearchClientImpl;
+import io.github.honhimw.ms.internal.reactive.ReactiveMSearchClientImpl;
 import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.Version;
 import io.swagger.v3.oas.annotations.Operation;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
- * @since 2023-07-24
+ * @since 2024-01-03
  */
 
-public class MeilisearchClient {
+public interface ReactiveMSearchClient {
 
-    private final String serverUrl;
+    ReactiveIndexes indexes();
 
-    private final String apiKey;
+    ReactiveTasks tasks();
 
-    private final JsonHandler jsonHandler;
+    ReactiveKeys keys();
 
-    public MeilisearchClient(MeilisearchConfig config) {
-        this.serverUrl = config.getServerUrl();
-        this.apiKey = config.getApiKey();
-        this.jsonHandler = config.getJsonHandler();
-    }
+    @Operation(method = "POST", tags = "/multi-search")
+    Mono<List<SearchResponse>> multiSearch(MultiSearchRequest request);
 
-    /*
-    ==========================================================================
-    Indexes
-    ==========================================================================
-     */
-
-    /**
-     * TODO
-     * @return {@link Indexes} operator
-     */
-    public Indexes indexes() {
-        return null;
-    }
-
-    /**
-     * TODO
-     * @return {@link Tasks} operator
-     */
-    public Tasks tasks() {
-        return null;
-    }
-
-    /**
-     * TODO
-     * @return {@link Keys} operator
-     */
-    public Keys keys() {
-        // TODO
-        return null;
-    }
-
-    public List<SearchResponse> multiSearch(MultiSearchRequest request) {
-        // TODO
-        return null;
-    }
-
-    public void healthy() {
-        // TODO
+    @Operation(method = "GET", tags = "/health")
+    default Mono<Void> healthy() {
         throw new IllegalStateException("server status not ['available']");
     }
 
-    public Version version() {
-        // TODO
-        return null;
-    }
+    @Operation(method = "GET", tags = "/version")
+    Mono<Version> version();
 
     /**
      * <a href="https://www.meilisearch.com/docs/reference/api/dump"><h1>Dumps</h1></a>
@@ -113,10 +61,7 @@ public class MeilisearchClient {
      *
      */
     @Operation(method = "POST", tags = "/dumps")
-    public TaskInfo dumps() {
-        // TODO
-        return null;
-    }
+    Mono<TaskInfo> dumps();
 
     /**
      * <a href="https://www.meilisearch.com/docs/reference/api/snapshots"><h1>Snapshots</h1></a>
@@ -127,17 +72,19 @@ public class MeilisearchClient {
      * Snapshot tasks take priority over other tasks in the queue.
      */
     @Operation(method = "POST", tags = "/snapshots")
-    public TaskInfo snapshots() {
-        // TODO
-        return null;
+    Mono<TaskInfo> snapshots();
+
+    ReactiveExperimentalFeaturesSettings experimentalFeatures();
+
+    static ReactiveMSearchClient create(MSearchConfig config) {
+        return new ReactiveMSearchClientImpl(config);
     }
 
-    /**
-     * @return {@link ExperimentalFeaturesSettings} operator
-     */
-    public ExperimentalFeaturesSettings experimentalFeatures() {
-        // TODO
-        return null;
+    static ReactiveMSearchClient create(Consumer<MSearchConfig.Builder> configure) {
+        MSearchConfig.Builder builder = MSearchConfig.withDefault();
+        configure.accept(builder);
+        MSearchConfig config = builder.build();
+        return new ReactiveMSearchClientImpl(config);
     }
 
 }

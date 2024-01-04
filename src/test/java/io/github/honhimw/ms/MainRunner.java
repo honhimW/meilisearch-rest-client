@@ -14,6 +14,12 @@
 
 package io.github.honhimw.ms;
 
+import io.github.honhimw.ms.json.JacksonJsonHandler;
+import io.github.honhimw.ms.json.TypeRef;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * @author hon_him
  * @since 2024-01-02
@@ -22,36 +28,19 @@ package io.github.honhimw.ms;
 public class MainRunner {
 
     public static void main(String[] args) {
-        String str = "search,Provides access to both POST and GET search endpoints\n" +
-            "documents.add,Provides access to the add documents and update documents endpoints\n" +
-            "documents.get,Provides access to the get one document, get documents with POST, and get documents with GET endpoints endpoints\n" +
-            "documents.delete,Provides access to the delete one document, delete all documents, batch delete, and delete by filter endpoints\n" +
-            "indexes.create,Provides access to the create index endpoint\n" +
-            "indexes.get,Provides access to the get one index and list all indexes endpoints. Non-authorized indexes will be omitted from the response\n" +
-            "indexes.update,Provides access to the update index endpoint\n" +
-            "indexes.delete,Provides access to the delete index endpoint\n" +
-            "indexes.swap,Provides access to the swap indexes endpoint. Non-authorized indexes will not be swapped\n" +
-            "tasks.get,Provides access to the get one task and get tasks endpoints. Tasks from non-authorized indexes will be omitted from the response\n" +
-            "tasks.cancel,Provides access to the cancel tasks endpoint. Tasks from non-authorized indexes will not be canceled\n" +
-            "tasks.delete,Provides access to the delete tasks endpoint. Tasks from non-authorized indexes will not be deleted\n" +
-            "settings.get,Provides access to the get settings endpoint and equivalents for all subroutes\n" +
-            "settings.update,Provides access to the update settings and reset settings endpoints and equivalents for all subroutes\n" +
-            "stats.get,Provides access to the get stats of an index endpoint and the get stats of all indexes endpoint. For the latter, non-authorized indexes are omitted from the response\n" +
-            "dumps.create,Provides access to the create dump endpoint. Not restricted by indexes\n" +
-            "snapshots.create,Provides access to the create snapshot endpoint. Not restricted by indexes\n" +
-            "version,Provides access to the get Meilisearch version endpoint\n" +
-            "keys.get,Provides access to the get all keys endpoint\n" +
-            "keys.create,Provides access to the create key endpoint\n" +
-            "keys.update,Provides access to the update key endpoint\n" +
-            "keys.delete,Provides access to the delete key endpoint";
-        String[] split = str.split("\n");
-        for (String string : split) {
-            String[] split1 = string.split(",", 2);
-            String string1 = split1[0];
-            String string2 = split1[1];
-            String name = string1.replaceAll("\\.", "_").toUpperCase();
-            System.out.println(String.format(String.format("%s(\"%s\", \"%s\"),", name, string1, string2)));
-        }
+        String RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'";
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(RFC_3339);
+        String string = "2023-07-20T10:01:54.611687902Z";
+
+        LocalDateTime localDateTime = LocalDateTime.parse(string, dateTimeFormatter);
+
+        System.out.println(localDateTime);
+
+        JacksonJsonHandler jacksonJsonHandler = new JacksonJsonHandler();
+        String string1 = jacksonJsonHandler.fromJson("\"skuid\"", new TypeRef<String>() {
+        });
+        System.out.println(string1);
+
     }
 
 }

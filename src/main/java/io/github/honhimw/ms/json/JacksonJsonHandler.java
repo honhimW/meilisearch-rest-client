@@ -14,9 +14,9 @@
 
 package io.github.honhimw.ms.json;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -29,6 +29,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -56,7 +57,7 @@ public class JacksonJsonHandler implements JsonHandler {
     }
 
     public static JsonMapper.Builder defaultBuilder() {
-        String RFC_3339 = "yyyy-MM-ddThh:mm:ss.SSSSSSZ";
+        String RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'";
         DateTimeFormatter RFC_3339_FORMATTER = DateTimeFormatter.ofPattern(RFC_3339);
         JsonMapper.Builder builder = JsonMapper.builder();
 
@@ -76,10 +77,9 @@ public class JacksonJsonHandler implements JsonHandler {
                 String formattedDate = formatter.format(value);
                 gen.writeString(formattedDate);
             }
-        });
-        javaTimeModule.addDeserializer(Date.class, new JsonDeserializer<Date>() {
+        }).addDeserializer(Date.class, new JsonDeserializer<Date>() {
             @Override
-            public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+            public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
                 String text = p.getText();
                 SimpleDateFormat formatter = new SimpleDateFormat(RFC_3339);
                 try {
@@ -104,7 +104,7 @@ public class JacksonJsonHandler implements JsonHandler {
     }
 
     @Override
-    public String encode(Object o) {
+    public String toJson(Object o) {
         try {
             return objectMapper.writeValueAsString(o);
         } catch (Exception e) {
@@ -113,9 +113,23 @@ public class JacksonJsonHandler implements JsonHandler {
     }
 
     @Override
-    public <T> T decode(String json, Class<T> tClass) {
+    public <T> T fromJson(String json, Class<T> tClass) {
         try {
             return objectMapper.readValue(json, tClass);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("json decode exception", e);
+        }
+    }
+
+    @Override
+    public <T> T fromJson(String json, TypeRef<T> tTypeRef) {
+        try {
+            return objectMapper.readValue(json, new TypeReference<T>() {
+                @Override
+                public Type getType() {
+                    return tTypeRef.getType();
+                }
+            });
         } catch (Exception e) {
             throw new IllegalArgumentException("json decode exception", e);
         }

@@ -14,13 +14,18 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.json.TypeRef;
+import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
+import io.github.honhimw.ms.model.FilterableAttributesRequest;
+import io.github.honhimw.ms.model.Page;
+import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Documents are objects composed of fields that can store any type of data.
@@ -37,12 +42,22 @@ public interface Documents {
     /**
      * Get documents by batch.
      *
-     * @param limit  default 20
      * @param offset default 0
+     * @param limit  default 20
      * @return
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    Page<Document> list(@Nullable Integer limit, @Nullable Integer offset);
+    Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit);
+
+    /**
+     * Get documents by batch.
+     *
+     * @param limit  default 20
+     * @param offset default 0
+     * @param typeRef document type
+     */
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
 
 
     /**
@@ -93,7 +108,13 @@ public interface Documents {
      * Get documents by batch.
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
-    Page<Document> batchGet(BatchGetDocumentsRequest fetch);
+    Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch);
+
+    /**
+     * Get documents by batch.
+     */
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    <T> Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
 
     /**
      * Delete a set of documents based on an array of document ids.
@@ -120,7 +141,18 @@ public interface Documents {
      *               Default *.
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
-    TaskInfo get(String id, String... fields);
+    Map<String, Object> get(String id, @Nullable String... fields);
+
+    /**
+     * Get one document using its unique id.
+     *
+     * @param id     Document id of the requested document
+     * @param fields Comma-separated list of fields to display for an API resource.
+     *               By default it contains all fields of an API resource.
+     *               Default *.
+     */
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    <T> T get(String id, TypeRef<T> typeRef, @Nullable String... fields);
 
     /**
      * Delete one document based on its unique id.

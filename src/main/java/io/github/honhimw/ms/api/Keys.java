@@ -19,6 +19,7 @@ import io.github.honhimw.ms.model.Key;
 import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.UpdateKeyRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.Nullable;
 
 /**
  * Manage API keys for a Meilisearch instance. Each key has a given set of permissions.
@@ -39,7 +40,7 @@ public interface Keys {
      * @return Returns the 20 most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
      */
     @Operation(method = "GET", tags = "/keys")
-    Page<Key> get(Integer offset, Integer limit);
+    Page<Key> get(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
      * Get information on the specified key. Attempting to use this endpoint with a non-existent or deleted key will result in an error.

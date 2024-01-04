@@ -20,7 +20,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.cookie.Cookie;
 import lombok.*;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,7 +44,10 @@ import reactor.netty.http.client.HttpClientResponse;
 import reactor.netty.resources.ConnectionProvider;
 import reactor.netty.resources.ConnectionProvider.Builder;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -77,6 +79,7 @@ public class ReactiveHttpUtils {
     public static final String METHOD_GET = "GET";
     public static final String METHOD_POST = "POST";
     public static final String METHOD_PUT = "PUT";
+    public static final String METHOD_PATCH = "PATCH";
     public static final String METHOD_DELETE = "DELETE";
     public static final String METHOD_OPTIONS = "OPTIONS";
     public static final String METHOD_HEAD = "HEAD";
@@ -136,121 +139,124 @@ public class ReactiveHttpUtils {
         httpClient = requestConfig.config(httpClient);
     }
 
-    public HttpResult get(String url) throws URISyntaxException {
+    public HttpResult get(String url) {
         return request(METHOD_GET, url, configurer -> {
         });
     }
 
-    public HttpResult post(String url) throws URISyntaxException {
+    public HttpResult post(String url) {
         return request(METHOD_POST, url, configurer -> {
         });
     }
 
-    public HttpResult put(String url) throws URISyntaxException {
+    public HttpResult put(String url) {
         return request(METHOD_PUT, url, configurer -> {
         });
     }
 
-    public HttpResult delete(String url) throws URISyntaxException {
+    public HttpResult patch(String url) {
+        return request(METHOD_PATCH, url, configurer -> {
+        });
+    }
+
+    public HttpResult delete(String url) {
         return request(METHOD_DELETE, url, configurer -> {
         });
     }
 
-    public HttpResult options(String url) throws URISyntaxException {
+    public HttpResult options(String url) {
         return request(METHOD_OPTIONS, url, configurer -> {
         });
     }
 
-    public HttpResult head(String url) throws URISyntaxException {
+    public HttpResult head(String url) {
         return request(METHOD_HEAD, url, configurer -> {
         });
     }
 
-    public HttpResult get(String url, Consumer<Configurer> configurer) throws URISyntaxException {
+    public HttpResult get(String url, Consumer<Configurer> configurer) {
         return request(METHOD_GET, url, configurer);
     }
 
-    public HttpResult post(String url, Consumer<Configurer> configurer) throws URISyntaxException {
+    public HttpResult post(String url, Consumer<Configurer> configurer) {
         return request(METHOD_POST, url, configurer);
     }
 
-    public HttpResult put(String url, Consumer<Configurer> configurer) throws URISyntaxException {
+    public HttpResult put(String url, Consumer<Configurer> configurer) {
         return request(METHOD_PUT, url, configurer);
     }
 
-    public HttpResult delete(String url, Consumer<Configurer> configurer) throws URISyntaxException {
+    public HttpResult patch(String url, Consumer<Configurer> configurer) {
+        return request(METHOD_PATCH, url, configurer);
+    }
+
+    public HttpResult delete(String url, Consumer<Configurer> configurer) {
         return request(METHOD_DELETE, url, configurer);
     }
 
-    public HttpResult options(String url, Consumer<Configurer> configurer) throws URISyntaxException {
+    public HttpResult options(String url, Consumer<Configurer> configurer) {
         return request(METHOD_OPTIONS, url, configurer);
     }
 
-    public HttpResult head(String url, Consumer<Configurer> configurer) throws URISyntaxException {
+    public HttpResult head(String url, Consumer<Configurer> configurer) {
         return request(METHOD_HEAD, url, configurer);
     }
 
-    public HttpResult request(String method, String url, Consumer<Configurer> configurer) throws URISyntaxException {
+    public HttpResult request(String method, String url, Consumer<Configurer> configurer) {
         return request(method, url, configurer, httpResult -> httpResult);
     }
 
-    public RxHttpResult rGet(String url) throws URISyntaxException {
+    public ReactiveHttpResult rGet(String url) {
         return receiver(METHOD_GET, url, configurer -> {
         });
     }
 
-    public RxHttpResult rPost(String url) throws URISyntaxException {
+    public ReactiveHttpResult rPost(String url) {
         return receiver(METHOD_POST, url, configurer -> {
         });
     }
 
-    public RxHttpResult rPut(String url) throws URISyntaxException {
+    public ReactiveHttpResult rPut(String url) {
         return receiver(METHOD_PUT, url, configurer -> {
         });
     }
 
-    public RxHttpResult rDelete(String url) throws URISyntaxException {
+    public ReactiveHttpResult rDelete(String url) {
         return receiver(METHOD_DELETE, url, configurer -> {
         });
     }
 
-    public RxHttpResult rOptions(String url) throws URISyntaxException {
+    public ReactiveHttpResult rOptions(String url) {
         return receiver(METHOD_OPTIONS, url, configurer -> {
         });
     }
 
-    public RxHttpResult rHead(String url) throws URISyntaxException {
+    public ReactiveHttpResult rHead(String url) {
         return receiver(METHOD_HEAD, url, configurer -> {
         });
     }
 
-    public RxHttpResult rGet(String url, Consumer<Configurer> configurer)
-        throws URISyntaxException {
+    public ReactiveHttpResult rGet(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_GET, url, configurer);
     }
 
-    public RxHttpResult rPost(String url, Consumer<Configurer> configurer)
-        throws URISyntaxException {
+    public ReactiveHttpResult rPost(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_POST, url, configurer);
     }
 
-    public RxHttpResult rPut(String url, Consumer<Configurer> configurer)
-        throws URISyntaxException {
+    public ReactiveHttpResult rPut(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_PUT, url, configurer);
     }
 
-    public RxHttpResult rDelete(String url, Consumer<Configurer> configurer)
-        throws URISyntaxException {
+    public ReactiveHttpResult rDelete(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_DELETE, url, configurer);
     }
 
-    public RxHttpResult rOptions(String url, Consumer<Configurer> configurer)
-        throws URISyntaxException {
+    public ReactiveHttpResult rOptions(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_OPTIONS, url, configurer);
     }
 
-    public RxHttpResult rHead(String url, Consumer<Configurer> configurer)
-        throws URISyntaxException {
+    public ReactiveHttpResult rHead(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_HEAD, url, configurer);
     }
 
@@ -262,7 +268,7 @@ public class ReactiveHttpUtils {
      * @param resultMapper result mapping
      */
     public <T> T request(String method, String url, Consumer<Configurer> configurer,
-        Function<HttpResult, T> resultMapper) throws URISyntaxException {
+                         Function<HttpResult, T> resultMapper) {
         _assertState(StringUtils.isNotBlank(url), "URL should not be blank");
         _assertState(Objects.nonNull(configurer), "String should not be null");
         Configurer requestConfigurer = new Configurer()
@@ -274,7 +280,7 @@ public class ReactiveHttpUtils {
         return resultMapper.apply(httpResult);
     }
 
-    private HttpResult request(Configurer configurer) throws URISyntaxException {
+    private HttpResult request(Configurer configurer) {
         HttpResult httpResult = new HttpResult();
         long start = System.currentTimeMillis();
         Mono<byte[]> byteMono = _request(configurer).responseSingle((httpClientResponse, byteBufMono) -> {
@@ -292,11 +298,10 @@ public class ReactiveHttpUtils {
     }
 
     /**
-     * @param method     HTTP method
-     * @param url        HTTP url
+     * @param method HTTP method
+     * @param url    HTTP url
      */
-    public RxHttpResult receiver(String method, String url, Consumer<Configurer> configurer)
-        throws URISyntaxException {
+    public ReactiveHttpResult receiver(String method, String url, Consumer<Configurer> configurer) {
         _assertState(StringUtils.isNotBlank(url), "URL should not be blank");
         _assertState(Objects.nonNull(configurer), "String should not be null");
         Configurer requestConfigurer = new Configurer()
@@ -306,11 +311,16 @@ public class ReactiveHttpUtils {
             .config(RequestConfig.DEFAULT_CONFIG.copy().build());
         configurer.accept(requestConfigurer);
         ResponseReceiver<?> responseReceiver = _request(requestConfigurer);
-        return new RxHttpResult(responseReceiver);
+        return new ReactiveHttpResult(responseReceiver);
     }
 
-    private ResponseReceiver<?> _request(Configurer configurer) throws URISyntaxException {
-        URI uri = new URIBuilder(configurer.url, configurer.charset).addParameters(configurer.params).build();
+    private ResponseReceiver<?> _request(Configurer configurer) {
+        URI uri = null;
+        try {
+            uri = new URIBuilder(configurer.url, configurer.charset).addParameters(configurer.params).build();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
         HttpClient client = Optional.ofNullable(configurer.config)
             .map(requestConfig -> requestConfig.config(httpClient))
             .orElse(httpClient);
@@ -343,16 +353,20 @@ public class ReactiveHttpUtils {
                 responseReceiver = client.head();
                 break;
             }
-            case "OPTIONS":{
+            case "OPTIONS": {
                 responseReceiver = client.options();
                 break;
             }
-            case "POST":{
+            case "POST": {
                 responseReceiver = client.post();
                 break;
             }
-            case "PUT":{
+            case "PUT": {
                 responseReceiver = client.put();
+                break;
+            }
+            case "PATCH": {
+                responseReceiver = client.patch();
                 break;
             }
             default: {
@@ -692,7 +706,7 @@ public class ReactiveHttpUtils {
                 return this;
             }
 
-            public Raw json(Serializable obj) {
+            public Raw json(Object obj) {
                 if (Objects.isNull(raw) && Objects.nonNull(obj)) {
                     try {
                         this.raw = OBJECT_MAPPER.writeValueAsString(obj);
@@ -960,7 +974,7 @@ public class ReactiveHttpUtils {
         }
 
         public boolean isOK() {
-            return this.statusCode == HttpResponseStatus.OK.code();
+            return 200 <= this.statusCode && this.statusCode < 300;
         }
 
         private void setCharset(String charset) {
@@ -1034,11 +1048,11 @@ public class ReactiveHttpUtils {
 
     }
 
-    public static class RxHttpResult {
+    public static class ReactiveHttpResult {
 
         private final ResponseReceiver<?> responseReceiver;
 
-        private RxHttpResult(ResponseReceiver<?> responseReceiver) {
+        private ReactiveHttpResult(ResponseReceiver<?> responseReceiver) {
             this.responseReceiver = responseReceiver;
 
         }

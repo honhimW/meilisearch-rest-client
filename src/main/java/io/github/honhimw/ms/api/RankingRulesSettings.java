@@ -52,7 +52,7 @@ public interface RankingRulesSettings {
      * @return current index ranking rules
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/ranking-rules")
-    List<String> get();
+    List<RankingRule> get();
 
     /**
      * Update the ranking rules of an index.

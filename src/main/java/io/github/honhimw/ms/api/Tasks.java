@@ -15,6 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.CancelTasksRequest;
+import io.github.honhimw.ms.model.GetTasksRequest;
 import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,7 @@ public interface Tasks {
      * @return paginated result
      */
     @Operation(method = "GET", tags = "/tasks")
-    Page<TaskInfo> list(Integer limit);
+    Page<TaskInfo> list(GetTasksRequest request);
 
     /**
      * Delete finished tasks
@@ -42,7 +43,7 @@ public interface Tasks {
      * @return paginated result
      */
     @Operation(method = "DELETE", tags = "/tasks")
-    Page<TaskInfo> delete(Integer limit);
+    Page<TaskInfo> delete(GetTasksRequest request);
 
     /**
      * Get a single task.
