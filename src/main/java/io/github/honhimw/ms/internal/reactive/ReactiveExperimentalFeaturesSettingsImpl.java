@@ -33,7 +33,7 @@ class ReactiveExperimentalFeaturesSettingsImpl extends AbstractReactiveImpl impl
     @Override
     public Mono<ExperimentalFeatures> get() {
         return get("/experimental-features", new TypeRef<ExperimentalFeatures>() {
-        })
+        });
     }
 
     @Override

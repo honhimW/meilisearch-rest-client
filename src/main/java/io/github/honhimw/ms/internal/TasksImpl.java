@@ -53,4 +53,9 @@ class TasksImpl implements Tasks {
     public TaskInfo cancel(CancelTasksRequest request) {
         return _reactive.cancel(request).block();
     }
+
+    @Override
+    public void waitForTask(int uid) {
+        _reactive.waitForTask(uid).block();
+    }
 }

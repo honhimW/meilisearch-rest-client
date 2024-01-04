@@ -18,6 +18,7 @@ import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.json.TypeRef;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClientResponse;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -48,23 +49,28 @@ public abstract class AbstractReactiveImpl {
     }
 
     protected <T> Mono<T> get(String path, TypeRef<T> typeRef) {
-        return get(path, configurer -> {}, typeRef);
+        return get(path, configurer -> {
+        }, typeRef);
     }
 
     protected <T> Mono<T> post(String path, TypeRef<T> typeRef) {
-        return post(path, configurer -> {}, typeRef);
+        return post(path, configurer -> {
+        }, typeRef);
     }
 
     protected <T> Mono<T> put(String path, TypeRef<T> typeRef) {
-        return put(path, configurer -> {}, typeRef);
+        return put(path, configurer -> {
+        }, typeRef);
     }
 
     protected <T> Mono<T> patch(String path, TypeRef<T> typeRef) {
-        return patch(path, configurer -> {}, typeRef);
+        return patch(path, configurer -> {
+        }, typeRef);
     }
 
     protected <T> Mono<T> delete(String path, TypeRef<T> typeRef) {
-        return delete(path, configurer -> {}, typeRef);
+        return delete(path, configurer -> {
+        }, typeRef);
     }
 
     protected <T> Mono<T> get(String path, Consumer<ReactiveHttpUtils.Configurer> configurer, TypeRef<T> typeRef) {
@@ -100,15 +106,16 @@ public abstract class AbstractReactiveImpl {
     }
 
     protected <T> Mono<T> extract(ReactiveHttpUtils.ReactiveHttpResult receiver, TypeRef<T> typeRef) {
-        return receiver.responseSingle((httpClientResponse, byteBufMono) -> {
+        return receiver.responseSingle((httpClientResponse, byteBufMono) -> byteBufMono.asByteArray()
+            .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+            .handle((s, sink) -> {
                 int code = httpClientResponse.status().code();
                 if (200 > code || code >= 300) {
-                    throw new IllegalStateException(String.format("failure with status code: %d", code));
+                    sink.error(new IllegalStateException(String.format("failure with status code: [%d] [%s] %s, %s", code, httpClientResponse.method(), httpClientResponse.resourceUrl(), s)));
+                } else {
+                    sink.next(jsonHandler.fromJson(s, typeRef));
                 }
-                return byteBufMono.asByteArray();
-            })
-            .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
-            .map(json -> jsonHandler.fromJson(json, typeRef));
+            }));
     }
 
     protected void json(ReactiveHttpUtils.Configurer configurer, Object object) {
@@ -116,7 +123,7 @@ public abstract class AbstractReactiveImpl {
     }
 
     protected void json(ReactiveHttpUtils.Configurer configurer, String json) {
-        configurer.body(bodyModel -> bodyModel.raw(raw -> raw.json(jsonHandler.toJson(json))));
+        configurer.body(bodyModel -> bodyModel.raw(raw -> raw.json(json)));
     }
 
 }

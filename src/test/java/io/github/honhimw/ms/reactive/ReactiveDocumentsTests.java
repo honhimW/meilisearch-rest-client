@@ -15,19 +15,37 @@
 package io.github.honhimw.ms.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
-import org.junit.jupiter.api.Test;
+import io.github.honhimw.ms.model.TaskInfo;
+import org.junit.jupiter.api.*;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.time.Duration;
 
 /**
  * @author hon_him
  * @since 2024-01-03
  */
 
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Order(2)
 public class ReactiveDocumentsTests extends ReactiveIndexesTests {
 
+    @Order(100)
+    @Test
+    void save() {
+        Mono<TaskInfo> save = indexes.documents(index).save(movies);
+        Duration duration = StepVerifier.create(save
+                .flatMap(taskInfo -> tasks.waitForTask(taskInfo.getTaskUid())))
+            .verifyComplete();
+        log.info("save document task wait for: {}", duration);
+    }
+
+    @Order(101)
     @Test
     void listDocuments() {
-        ReactiveDocuments movies = indexes.documents("movies");
+        ReactiveDocuments movies = indexes.documents(index);
         StepVerifier.create(movies.list(null, null))
             .assertNext(mapPage -> {
                 assert mapPage.getLimit() == 20;
@@ -40,13 +58,25 @@ public class ReactiveDocumentsTests extends ReactiveIndexesTests {
         ;
     }
 
+    @Order(102)
     @Test
     void getOne() {
-        ReactiveDocuments movies = indexes.documents("movies");
-        StepVerifier.create(movies.get("233"))
+        ReactiveDocuments movies = indexes.documents(index);
+        StepVerifier.create(movies.get("2"))
             .assertNext(map -> {
                 assert map != null;
                 log.info(jsonHandler.toJson(map));
+            })
+            .verifyComplete();
+    }
+
+    @Order(103)
+    @Test
+    void g() {
+        StepVerifier.create(indexes.search(index).find("2"))
+            .assertNext(searchResponse -> {
+                log.info(jsonHandler.toJson(searchResponse.getHits()));
+                assert !searchResponse.getHits().isEmpty();
             })
             .verifyComplete();
     }

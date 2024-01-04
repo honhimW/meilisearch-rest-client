@@ -70,7 +70,7 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
-    public <T> Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef) {
+    public <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef) {
         return _documents.batchGet(fetch, typeRef).block();
     }
 

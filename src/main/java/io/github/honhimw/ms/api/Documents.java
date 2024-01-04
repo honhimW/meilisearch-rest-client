@@ -114,7 +114,7 @@ public interface Documents {
      * Get documents by batch.
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
-    <T> Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
+    <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
 
     /**
      * Delete a set of documents based on an array of document ids.

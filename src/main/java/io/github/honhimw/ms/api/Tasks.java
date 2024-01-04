@@ -63,8 +63,6 @@ public interface Tasks {
     @Operation(method = "POST", tags = "/tasks/cancel")
     TaskInfo cancel(CancelTasksRequest request);
 
-
-
-
+    void waitForTask(int uid);
 
 }

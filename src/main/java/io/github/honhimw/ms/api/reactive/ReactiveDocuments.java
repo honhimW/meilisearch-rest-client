@@ -77,7 +77,7 @@ public interface ReactiveDocuments {
      * @param json json formatted array
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    Mono<TaskInfo> save(@Nullable String json);
+    Mono<TaskInfo> save(String json);
 
     /**
      * Add a list of documents or update them if they already exist.
@@ -96,7 +96,7 @@ public interface ReactiveDocuments {
      * @param json json formatted array
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    Mono<TaskInfo> update(@Nullable String json);
+    Mono<TaskInfo> update(String json);
 
     /**
      * Delete all documents in the specified index.
@@ -114,7 +114,7 @@ public interface ReactiveDocuments {
      * Get documents by batch.
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
-    <T> Mono<Page<Map<String, Object>>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
+    <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
 
     /**
      * Delete a set of documents based on an array of document ids.

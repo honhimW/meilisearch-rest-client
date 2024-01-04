@@ -15,6 +15,7 @@
 package io.github.honhimw.ms.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
+import io.github.honhimw.ms.api.reactive.ReactiveTasks;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,6 +33,8 @@ public class ReactiveClientTests {
 
     protected static ReactiveMSearchClient client;
 
+    protected static ReactiveTasks tasks;
+
     protected static JsonHandler jsonHandler;
 
     @BeforeAll
@@ -41,8 +44,8 @@ public class ReactiveClientTests {
             .serverUrl("http://10.37.1.132:7700")
             .jsonHandler(jsonHandler)
         );
+        tasks = client.tasks();
     }
-
 
     public static final String movies = "[\n" +
         "{\"id\":2,\"title\":\"Ariel\",\"overview\":\"Taisto Kasurinen is a Finnish coal miner whose father has just committed suicide and who is framed for a crime he did not commit. In jail, he starts to dream about leaving the country and starting a new life. He escapes from prison but things don't go as planned...\",\"genres\":[\"Drama\",\"Crime\",\"Comedy\"],\"poster\":\"https://image.tmdb.org/t/p/w500/ojDg0PGvs6R9xYFodRct2kdI6wC.jpg\",\"release_date\":593395200},\n" +

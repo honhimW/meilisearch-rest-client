@@ -14,12 +14,12 @@
 
 package io.github.honhimw.ms.api.reactive;
 
-import io.github.honhimw.ms.model.CancelTasksRequest;
-import io.github.honhimw.ms.model.GetTasksRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.RetrySpec;
+
+import java.time.Duration;
 
 /**
  * The tasks route gives information about the progress of the asynchronous operations.
@@ -63,4 +63,17 @@ public interface ReactiveTasks {
      */
     @Operation(method = "POST", tags = "/tasks/cancel")
     Mono<TaskInfo> cancel(CancelTasksRequest request);
+
+    default Mono<Void> waitForTask(int uid) {
+        return get(uid)
+            .doOnNext(taskInfo -> {
+                if (taskInfo.getStatus() != TaskStatus.SUCCEEDED && taskInfo.getStatus() != TaskStatus.FAILED) {
+                    throw new IllegalStateException("task not completed");
+                }
+            })
+            .retryWhen(RetrySpec.fixedDelay(100, Duration.ofMillis(50)))
+            .then();
+
+    }
+
 }
