@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
 import reactor.util.retry.RetrySpec;
 
 import java.time.Duration;
+import java.util.function.Consumer;
 
 /**
  * The tasks route gives information about the progress of the asynchronous operations.
@@ -38,13 +39,27 @@ public interface ReactiveTasks {
     @Operation(method = "GET", tags = "/tasks")
     Mono<Page<TaskInfo>> list(GetTasksRequest request);
 
+    @Operation(method = "GET", tags = "/tasks")
+    default Mono<Page<TaskInfo>> list(Consumer<GetTasksRequest.Builder> builder) {
+        GetTasksRequest.Builder _builder = GetTasksRequest.builder();
+        builder.accept(_builder);
+        return list(_builder.build());
+    }
+
     /**
      * Delete finished tasks
      *
-     * @return paginated result
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/tasks")
-    Mono<Page<TaskInfo>> delete(GetTasksRequest request);
+    Mono<TaskInfo> delete(GetTasksRequest request);
+
+    @Operation(method = "DELETE", tags = "/tasks")
+    default Mono<TaskInfo> delete(Consumer<GetTasksRequest.Builder> builder) {
+        GetTasksRequest.Builder _builder = GetTasksRequest.builder();
+        builder.accept(_builder);
+        return delete(_builder.build());
+    }
 
     /**
      * Get a single task.
@@ -63,6 +78,13 @@ public interface ReactiveTasks {
      */
     @Operation(method = "POST", tags = "/tasks/cancel")
     Mono<TaskInfo> cancel(CancelTasksRequest request);
+
+    @Operation(method = "POST", tags = "/tasks/cancel")
+    default Mono<TaskInfo> cancel(Consumer<CancelTasksRequest.Builder> builder) {
+        CancelTasksRequest.Builder _builder = CancelTasksRequest.builder();
+        builder.accept(_builder);
+        return cancel(_builder.build());
+    }
 
     default Mono<Void> waitForTask(int uid) {
         return get(uid)

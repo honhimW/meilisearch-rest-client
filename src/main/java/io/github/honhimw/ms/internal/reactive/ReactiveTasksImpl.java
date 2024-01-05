@@ -45,11 +45,11 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
     }
 
     @Override
-    public Mono<Page<TaskInfo>> delete(GetTasksRequest request) {
+    public Mono<TaskInfo> delete(GetTasksRequest request) {
         return delete("/tasks", configurer -> {
             Map<String, String> parameters = request.toParameters();
             configurer.params(parameters);
-        }, new TypeRef<Page<TaskInfo>>() {
+        }, new TypeRef<TaskInfo>() {
         });
     }
 

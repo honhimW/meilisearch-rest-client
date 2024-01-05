@@ -20,6 +20,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * An index is an entity that gathers a set of documents with its own settings. Learn more about indexes.
@@ -39,6 +40,13 @@ public interface Indexes {
     @Operation(method = "GET", tags = "/indexes")
     Page<Index> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    @Operation(method = "GET", tags = "/indexes")
+    default Page<Index> list(Consumer<PageRequest> page) {
+        PageRequest pageRequest = new PageRequest();
+        page.accept(pageRequest);
+        return list(pageRequest.toOffset(), pageRequest.toLimit());
+    }
+
     /**
      * Get information about an index.
      *
@@ -56,6 +64,11 @@ public interface Indexes {
      */
     @Operation(method = "POST", tags = "/indexes")
     TaskInfo create(String uid, @Nullable String primaryKey);
+
+    @Operation(method = "POST", tags = "/indexes")
+    default TaskInfo create(String uid) {
+        return create(uid, null);
+    }
 
     /**
      * Update an index. Specify a primaryKey if it doesn't already exists yet.
@@ -85,6 +98,17 @@ public interface Indexes {
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     TaskInfo swap(List<Map.Entry<String, String>> uids);
+
+    /**
+     * @see #swap(List)
+     * @param consumer entryList configurer
+     */
+    @Operation(method = "POST", tags = "/swap-indexes")
+    default TaskInfo swap(Consumer<EntryList> consumer) {
+        EntryList entryList = new EntryList();
+        consumer.accept(entryList);
+        return swap(entryList.getList());
+    }
 
     /**
      * Documents are objects composed of fields that can store any type of data.

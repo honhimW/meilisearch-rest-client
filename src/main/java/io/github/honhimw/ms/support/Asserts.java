@@ -12,29 +12,19 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.model;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-
-import java.io.Serializable;
+package io.github.honhimw.ms.support;
 
 /**
  * @author hon_him
- * @since 2024-01-02
+ * @since 2024-01-05
  */
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder(builderClassName = "Builder")
-public class UpdateKeyRequest implements Serializable {
-    
-    @Schema(description = "A human-readable name for the key")
-    private String name;
+public class Asserts {
 
-    @Schema(description = "An optional description for the key")
-    private String description;
-    
+    public static void status(boolean status, String message) {
+        if (!status) {
+            throw new IllegalStateException(message);
+        }
+    }
+
 }

@@ -36,13 +36,13 @@ class KeysImpl implements Keys {
     }
 
     @Override
-    public Page<Key> get(@Nullable Integer offset, @Nullable Integer limit) {
-        return _reactive.get(offset, limit).block();
+    public Page<Key> list(@Nullable Integer offset, @Nullable Integer limit) {
+        return _reactive.list(offset, limit).block();
     }
 
     @Override
     public Key get(String keyOrUid) {
-        return _reactive.get(keyOrUid).block();
+        return _reactive.list(keyOrUid).block();
     }
 
     @Override

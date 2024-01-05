@@ -20,6 +20,8 @@ import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 
+import java.util.function.Consumer;
+
 /**
  * The tasks route gives information about the progress of the asynchronous operations.
  *
@@ -37,13 +39,27 @@ public interface Tasks {
     @Operation(method = "GET", tags = "/tasks")
     Page<TaskInfo> list(GetTasksRequest request);
 
+    @Operation(method = "GET", tags = "/tasks")
+    default Page<TaskInfo> list(Consumer<GetTasksRequest.Builder> builder) {
+        GetTasksRequest.Builder _builder = GetTasksRequest.builder();
+        builder.accept(_builder);
+        return list(_builder.build());
+    }
+
     /**
      * Delete finished tasks
      *
      * @return paginated result
      */
     @Operation(method = "DELETE", tags = "/tasks")
-    Page<TaskInfo> delete(GetTasksRequest request);
+    TaskInfo delete(GetTasksRequest request);
+
+    @Operation(method = "DELETE", tags = "/tasks")
+    default TaskInfo delete(Consumer<GetTasksRequest.Builder> builder) {
+        GetTasksRequest.Builder _builder = GetTasksRequest.builder();
+        builder.accept(_builder);
+        return delete(_builder.build());
+    }
 
     /**
      * Get a single task.
@@ -62,6 +78,13 @@ public interface Tasks {
      */
     @Operation(method = "POST", tags = "/tasks/cancel")
     TaskInfo cancel(CancelTasksRequest request);
+
+    @Operation(method = "POST", tags = "/tasks/cancel")
+    default TaskInfo cancel(Consumer<CancelTasksRequest.Builder> builder) {
+        CancelTasksRequest.Builder _builder = CancelTasksRequest.builder();
+        builder.accept(_builder);
+        return cancel(_builder.build());
+    }
 
     void waitForTask(int uid);
 

@@ -56,6 +56,13 @@ public interface ReactivePaginationSettings {
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
     Mono<TaskInfo> update(Pagination pagination);
 
+    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
+    default Mono<TaskInfo> update(int maxTotalHits) {
+        Pagination pagination = new Pagination();
+        pagination.setMaxTotalHits(maxTotalHits);
+        return update(pagination);
+    }
+
     /**
      * Reset an index's faceting settings to their default value.
      * Setting sortFacetValuesBy to null( --data-binary '{ "sortFacetValuesBy": null }'), will restore it to the default value ("*": "alpha").

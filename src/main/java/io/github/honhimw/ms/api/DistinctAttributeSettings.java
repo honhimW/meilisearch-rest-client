@@ -17,8 +17,6 @@ package io.github.honhimw.ms.api;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 
-import java.util.List;
-
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#distinct-attribute"><h1>Distinct attribute</h1></a>
  * The distinct attribute is a field whose value will always be unique in the returned documents.

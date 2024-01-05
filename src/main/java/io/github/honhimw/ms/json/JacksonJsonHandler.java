@@ -122,12 +122,12 @@ public class JacksonJsonHandler implements JsonHandler {
     }
 
     @Override
-    public <T> T fromJson(String json, TypeRef<T> tTypeRef) {
+    public <T> T fromJson(String json, TypeRef<T> typeRef) {
         try {
             return objectMapper.readValue(json, new TypeReference<T>() {
                 @Override
                 public Type getType() {
-                    return tTypeRef.getType();
+                    return typeRef.getType();
                 }
             });
         } catch (Exception e) {

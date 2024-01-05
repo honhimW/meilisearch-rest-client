@@ -14,12 +14,11 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.CreateKeyRequest;
-import io.github.honhimw.ms.model.Key;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.UpdateKeyRequest;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
+
+import java.util.function.Consumer;
 
 /**
  * Manage API keys for a Meilisearch instance. Each key has a given set of permissions.
@@ -40,7 +39,14 @@ public interface Keys {
      * @return Returns the 20 most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
      */
     @Operation(method = "GET", tags = "/keys")
-    Page<Key> get(@Nullable Integer offset, @Nullable Integer limit);
+    Page<Key> list(@Nullable Integer offset, @Nullable Integer limit);
+
+    @Operation(method = "GET", tags = "/keys")
+    default Page<Key> list(Consumer<PageRequest> page) {
+        PageRequest pageRequest = new PageRequest();
+        page.accept(pageRequest);
+        return list(pageRequest.toOffset(), pageRequest.toLimit());
+    }
 
     /**
      * Get information on the specified key. Attempting to use this endpoint with a non-existent or deleted key will result in an error.
@@ -57,6 +63,13 @@ public interface Keys {
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
     Key create(String keyOrUid, CreateKeyRequest request);
 
+    @Operation(method = "POST", tags = "/keys/{key_or_uid}")
+    default Key create(String keyOrUid, Consumer<CreateKeyRequest.Builder> builder) {
+        CreateKeyRequest.Builder _builder = CreateKeyRequest.builder();
+        builder.accept(_builder);
+        return create(keyOrUid, _builder.build());
+    }
+
     /**
      * A valid API key or uid is required.
      *
@@ -65,6 +78,13 @@ public interface Keys {
      */
     @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
     Key update(String keyOrUid, UpdateKeyRequest request);
+
+    @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
+    default Key update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder) {
+        UpdateKeyRequest.Builder _builder = UpdateKeyRequest.builder();
+        builder.accept(_builder);
+        return update(keyOrUid, _builder.build());
+    }
 
     @Operation(method = "DELETE", tags = "/keys/{key_or_uid}")
     void delete(String keyOrUid);

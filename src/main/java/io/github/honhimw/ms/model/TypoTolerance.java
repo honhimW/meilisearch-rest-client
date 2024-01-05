@@ -15,10 +15,7 @@
 package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,6 +45,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(builderClassName = "Builder")
 public class TypoTolerance implements Serializable {
 
     @Schema(description = "Whether typo tolerance is enabled or not", defaultValue = "true")

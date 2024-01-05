@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
+import java.util.function.Consumer;
+
 /**
  * Settings is a list of all the customization possible for an index.
  * It is possible to update all the settings in one go or individually with the dedicated routes.
@@ -53,6 +55,13 @@ public interface ReactiveSettings {
      */
     @Operation(method = "PATCH", tags = "/indexes/{indexUid}/settings")
     Mono<TaskInfo> update(@Nullable Setting setting);
+
+    @Operation(method = "PATCH", tags = "/indexes/{indexUid}/settings")
+    default Mono<TaskInfo> update(Consumer<Setting.Builder> builder) {
+        Setting.Builder _builder = Setting.builder();
+        builder.accept(_builder);
+        return update(_builder.build());
+    }
 
     /**
      * Reset all the settings of an index to their default value.

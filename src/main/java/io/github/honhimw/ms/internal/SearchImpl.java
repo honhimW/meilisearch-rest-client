@@ -32,6 +32,7 @@ import io.github.honhimw.ms.api.Search;
 import io.github.honhimw.ms.api.reactive.ReactiveSearch;
 import io.github.honhimw.ms.model.FacetSearchRequest;
 import io.github.honhimw.ms.model.FacetSearchResponse;
+import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
 
 /**
@@ -50,6 +51,11 @@ class SearchImpl implements Search {
     @Override
     public SearchResponse find(String q) {
         return _search.find(q).block();
+    }
+
+    @Override
+    public SearchResponse find(SearchRequest request) {
+        return _search.find(request).block();
     }
 
     @Override

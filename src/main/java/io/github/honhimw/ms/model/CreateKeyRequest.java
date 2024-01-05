@@ -16,10 +16,7 @@ package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -34,6 +31,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(builderClassName = "Builder")
 public class CreateKeyRequest implements Serializable {
     
     @Schema(description = "A list of API actions permitted for the key. [\"*\"] for all actions")

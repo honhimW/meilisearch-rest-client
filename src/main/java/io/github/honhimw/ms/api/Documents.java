@@ -15,17 +15,16 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
-import io.github.honhimw.ms.model.FilterableAttributesRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Documents are objects composed of fields that can store any type of data.
@@ -49,6 +48,13 @@ public interface Documents {
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    default Page<Map<String, Object>> list(Consumer<PageRequest> page) {
+        PageRequest pageRequest = new PageRequest();
+        page.accept(pageRequest);
+        return list(pageRequest.toOffset(), pageRequest.toLimit());
+    }
+
     /**
      * Get documents by batch.
      *
@@ -59,6 +65,12 @@ public interface Documents {
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
 
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    default <T> Page<T> list(Consumer<PageRequest> page, TypeRef<T> typeRef) {
+        PageRequest pageRequest = new PageRequest();
+        page.accept(pageRequest);
+        return list(pageRequest.toOffset(), pageRequest.toLimit(), typeRef);
+    }
 
     /**
      * Add a list of documents or replace them if they already exist.
@@ -79,6 +91,9 @@ public interface Documents {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(@Nullable String json);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    TaskInfo save(Collection<?> collection);
+
     /**
      * Add a list of documents or update them if they already exist.
      * <p/>
@@ -98,6 +113,9 @@ public interface Documents {
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(@Nullable String json);
 
+    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    TaskInfo update(Collection<?> collection);
+
     /**
      * Delete all documents in the specified index.
      */
@@ -110,11 +128,25 @@ public interface Documents {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    default Page<Map<String, Object>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder) {
+        BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
+        builder.accept(_builder);
+        return batchGet(_builder.build());
+    }
+
     /**
      * Get documents by batch.
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    default <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef) {
+        BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
+        builder.accept(_builder);
+        return batchGet(_builder.build(), typeRef);
+    }
 
     /**
      * Delete a set of documents based on an array of document ids.

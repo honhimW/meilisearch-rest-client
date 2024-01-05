@@ -39,6 +39,6 @@ public interface JsonHandler {
 
     <T> T fromJson(String json, Class<T> tClass);
 
-    <T> T fromJson(String json, TypeRef<T> tTypeRef);
+    <T> T fromJson(String json, TypeRef<T> typeRef);
 
 }

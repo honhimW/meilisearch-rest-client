@@ -23,6 +23,7 @@ import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
 import jakarta.annotation.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -55,8 +56,18 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
+    public TaskInfo save(Collection<?> collection) {
+        return _documents.save(collection).block();
+    }
+
+    @Override
     public TaskInfo update(@Nullable String json) {
         return _documents.update(json).block();
+    }
+
+    @Override
+    public TaskInfo update(Collection<?> collection) {
+        return _documents.update(collection).block();
     }
 
     @Override

@@ -15,18 +15,17 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
-import io.github.honhimw.ms.model.FilterableAttributesRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Documents are objects composed of fields that can store any type of data.
@@ -48,6 +47,13 @@ public interface ReactiveDocuments {
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    default Mono<Page<Map<String, Object>>> list(Consumer<PageRequest> page) {
+        PageRequest pageRequest = new PageRequest();
+        page.accept(pageRequest);
+        return list(pageRequest.toOffset(), pageRequest.toLimit());
+    }
 
     /**
      * Get documents by batch.
@@ -79,6 +85,9 @@ public interface ReactiveDocuments {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(String json);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    Mono<TaskInfo> save(Collection<?> collection);
+
     /**
      * Add a list of documents or update them if they already exist.
      * <p/>
@@ -97,6 +106,9 @@ public interface ReactiveDocuments {
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(String json);
+
+    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    Mono<TaskInfo> update(Collection<?> collection);
 
     /**
      * Delete all documents in the specified index.

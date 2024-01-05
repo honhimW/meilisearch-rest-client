@@ -52,7 +52,7 @@ public interface DictionarySettings {
      * @return current index dictionary settings
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/dictionary")
-    public abstract List<String> get();
+    List<String> get();
 
     /**
      * Update an index's user-defined dictionary.
@@ -61,7 +61,7 @@ public interface DictionarySettings {
      * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/dictionary")
-    public abstract TaskInfo update(List<String> dictionary);
+    TaskInfo update(List<String> dictionary);
 
     /**
      * Reset an index's dictionary to its default value, [].
@@ -69,6 +69,6 @@ public interface DictionarySettings {
      * @return reset task
      */
     @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/dictionary")
-    public abstract TaskInfo reset();
+    TaskInfo reset();
 
 }

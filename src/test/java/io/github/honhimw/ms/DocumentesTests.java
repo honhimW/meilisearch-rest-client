@@ -32,7 +32,7 @@ public class DocumentesTests extends IndexesTests {
     @Test
     void listDocuments() {
         Documents movies = indexes.documents("movies");
-        Page<Map<String, Object>> list = movies.list(null, null);
+        Page<Map<String, Object>> list = movies.list(pageRequest -> {});
         assert list.getLimit() == 20;
         assert list.getOffset() == 0;
         if (log.isDebugEnabled()) {

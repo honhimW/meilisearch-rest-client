@@ -21,6 +21,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * An index is an entity that gathers a set of documents with its own settings. Learn more about indexes.
@@ -40,6 +41,13 @@ public interface ReactiveIndexes {
     @Operation(method = "GET", tags = "/indexes")
     Mono<Page<Index>> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    @Operation(method = "GET", tags = "/indexes")
+    default Mono<Page<Index>> list(Consumer<PageRequest> page) {
+        PageRequest pageRequest = new PageRequest();
+        page.accept(pageRequest);
+        return list(pageRequest.toOffset(), pageRequest.toLimit());
+    }
+
     /**
      * Get information about an index.
      *
@@ -47,6 +55,11 @@ public interface ReactiveIndexes {
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}")
     Mono<Index> get(String uid);
+
+    @Operation(method = "POST", tags = "/indexes")
+    default Mono<TaskInfo> create(String uid) {
+        return create(uid, null);
+    }
 
     /**
      * Create an index.
@@ -86,6 +99,17 @@ public interface ReactiveIndexes {
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     Mono<TaskInfo> swap(List<Map.Entry<String, String>> uids);
+
+    /**
+     * @see #swap(List)
+     * @param consumer entryList configurer
+     */
+    @Operation(method = "POST", tags = "/swap-indexes")
+    default Mono<TaskInfo> swap(Consumer<EntryList> consumer) {
+        EntryList entryList = new EntryList();
+        consumer.accept(entryList);
+        return swap(entryList.getList());
+    }
 
     /**
      * Documents are objects composed of fields that can store any type of data.

@@ -31,9 +31,12 @@ package io.github.honhimw.ms;
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
+import io.github.honhimw.ms.support.Asserts;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.Objects;
 
 /**
  * @author hon_him
@@ -92,6 +95,9 @@ public final class MSearchConfig {
         }
 
         public MSearchConfig build() {
+            Asserts.status(Objects.nonNull(serverUrl), "serverUrl must not be null");
+            Asserts.status(Objects.nonNull(jsonHandler), "jsonHandler must not be null");
+            Asserts.status(Objects.nonNull(httpClient), "httpClient must not be null");
             return new MSearchConfig(serverUrl, apiKey, jsonHandler, httpClient);
         }
     }

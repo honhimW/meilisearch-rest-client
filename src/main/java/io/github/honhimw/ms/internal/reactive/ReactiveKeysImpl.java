@@ -38,7 +38,7 @@ class ReactiveKeysImpl extends AbstractReactiveImpl implements ReactiveKeys {
     }
 
     @Override
-    public Mono<Page<Key>> get(@Nullable Integer offset, @Nullable Integer limit) {
+    public Mono<Page<Key>> list(@Nullable Integer offset, @Nullable Integer limit) {
         return get("/keys", configurer -> {
                 String _offset = Optional.ofNullable(offset).map(String::valueOf).orElse("0");
                 String _limit = Optional.ofNullable(limit).map(String::valueOf).orElse("20");
@@ -51,7 +51,7 @@ class ReactiveKeysImpl extends AbstractReactiveImpl implements ReactiveKeys {
     }
 
     @Override
-    public Mono<Key> get(String keyOrUid) {
+    public Mono<Key> list(String keyOrUid) {
         return null;
     }
 

@@ -16,10 +16,7 @@ package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.support.DateTimeUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -38,6 +35,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(builderClassName = "Builder")
 public class CancelTasksRequest implements Serializable {
     
     @Schema(description = "Cancel tasks based on uid. Separate multiple uids with a comma (,). Use uids=* for all uids")

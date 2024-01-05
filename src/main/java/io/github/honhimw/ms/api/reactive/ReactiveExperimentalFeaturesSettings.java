@@ -18,6 +18,8 @@ import io.github.honhimw.ms.model.ExperimentalFeatures;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
+import java.util.function.Consumer;
+
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/experimental_features"><h1>Experimental features</h1></a>
  * The /experimental-features route allows you to activate or deactivate some of Meilisearch's experimental features.
@@ -54,5 +56,12 @@ public interface ReactiveExperimentalFeaturesSettings {
      */
     @Operation(method = "PATCH", tags = "/experimental-features")
     Mono<ExperimentalFeatures> configure(ExperimentalFeatures configure);
+
+    @Operation(method = "PATCH", tags = "/experimental-features")
+    default Mono<ExperimentalFeatures> configure(Consumer<ExperimentalFeatures.Builder> builder) {
+        ExperimentalFeatures.Builder _builder = ExperimentalFeatures.builder();
+        builder.accept(_builder);
+        return configure(_builder.build());
+    }
 
 }

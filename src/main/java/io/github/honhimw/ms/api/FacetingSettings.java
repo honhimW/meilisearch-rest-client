@@ -18,6 +18,8 @@ import io.github.honhimw.ms.model.Faceting;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 
+import java.util.function.Consumer;
+
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#faceting"><h1>Faceting</h1></a>
  * With Meilisearch, you can create faceted search interfaces. This setting allows you to:
@@ -51,6 +53,13 @@ public interface FacetingSettings {
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
     TaskInfo update(Faceting faceting);
+
+    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
+    default TaskInfo update(Consumer<Faceting.Builder> builder) {
+        Faceting.Builder _builder = Faceting.builder();
+        builder.accept(_builder);
+        return update(_builder.build());
+    }
 
     /**
      * Reset an index's faceting settings to their default value.

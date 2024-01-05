@@ -21,6 +21,8 @@ import io.github.honhimw.ms.model.SearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
+import java.util.function.Consumer;
+
 /**
  * Meilisearch exposes 3 routes to perform document searches:
  * <ul>
@@ -56,6 +58,13 @@ public interface ReactiveSearch {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     Mono<SearchResponse> find(SearchRequest request);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    default Mono<SearchResponse> find(Consumer<SearchRequest.Builder> builder) {
+        SearchRequest.Builder _builder = SearchRequest.builder();
+        builder.accept(_builder);
+        return find(_builder.build());
+    }
+
     /**
      * Search for facet values matching a specific query for a facet. When many values exist for a facet,
      * users need to be able to discover non-show values they can select in order to refine their faceted search.
@@ -66,5 +75,11 @@ public interface ReactiveSearch {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    default Mono<FacetSearchResponse> facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
+        FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();
+        builder.accept(_builder);
+        return facetSearch(_builder.build());
+    }
 
 }

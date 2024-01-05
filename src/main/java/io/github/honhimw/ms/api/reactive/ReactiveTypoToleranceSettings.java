@@ -19,6 +19,8 @@ import io.github.honhimw.ms.model.TypoTolerance;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
+import java.util.function.Consumer;
+
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#typo-tolerance"><h1>Typo tolerance</h1></a>
  * Typo tolerance helps users find relevant results even when their search queries contain spelling mistakes or typos.
@@ -52,6 +54,13 @@ public interface ReactiveTypoToleranceSettings {
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
     Mono<TaskInfo> update(TypoTolerance typoTolerance);
+
+    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    default Mono<TaskInfo> update(Consumer<TypoTolerance.Builder> builder) {
+        TypoTolerance.Builder _builder = TypoTolerance.builder();
+        builder.accept(_builder);
+        return update(_builder.build());
+    }
 
     /**
      * Reset an index's typo tolerance settings to their default value.

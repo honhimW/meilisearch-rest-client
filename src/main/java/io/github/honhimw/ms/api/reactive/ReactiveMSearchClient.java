@@ -15,7 +15,6 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.MSearchConfig;
-import io.github.honhimw.ms.internal.MSearchClientImpl;
 import io.github.honhimw.ms.internal.reactive.ReactiveMSearchClientImpl;
 import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;

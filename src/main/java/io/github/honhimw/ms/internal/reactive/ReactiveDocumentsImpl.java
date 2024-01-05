@@ -23,10 +23,7 @@ import io.github.honhimw.ms.model.TaskInfo;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author hon_him
@@ -73,8 +70,20 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
     }
 
     @Override
+    public Mono<TaskInfo> save(Collection<?> collection) {
+        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
+        });
+    }
+
+    @Override
     public Mono<TaskInfo> update(String json) {
         return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), new TypeRef<TaskInfo>() {
+        });
+    }
+
+    @Override
+    public Mono<TaskInfo> update(Collection<?> collection) {
+        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
         });
     }
 

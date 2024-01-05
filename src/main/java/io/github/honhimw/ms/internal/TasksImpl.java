@@ -40,7 +40,7 @@ class TasksImpl implements Tasks {
     }
 
     @Override
-    public Page<TaskInfo> delete(GetTasksRequest request) {
+    public TaskInfo delete(GetTasksRequest request) {
         return _reactive.delete(request).block();
     }
 

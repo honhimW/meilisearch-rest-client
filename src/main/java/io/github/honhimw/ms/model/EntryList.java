@@ -14,27 +14,33 @@
 
 package io.github.honhimw.ms.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-
-import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hon_him
- * @since 2024-01-02
+ * @since 2024-01-05
  */
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder(builderClassName = "Builder")
-public class UpdateKeyRequest implements Serializable {
-    
-    @Schema(description = "A human-readable name for the key")
-    private String name;
+public class EntryList {
 
-    @Schema(description = "An optional description for the key")
-    private String description;
-    
+    private List<Map.Entry<String, String>> list;
+
+    public static EntryList newInstance() {
+        EntryList entryList = new EntryList();
+        entryList.list = new ArrayList<>();
+        return entryList;
+    }
+
+    public EntryList add(String key, String value) {
+        list.add(new AbstractMap.SimpleEntry<>(key, value));
+        return this;
+    }
+
+    public List<Map.Entry<String, String>> getList() {
+        return list;
+    }
+
 }
