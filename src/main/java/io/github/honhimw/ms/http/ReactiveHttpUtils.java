@@ -16,6 +16,7 @@ package io.github.honhimw.ms.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -104,20 +105,23 @@ public class ReactiveHttpUtils {
     }
 
     /**
-     * 最大连接数
+     * max total connections
      */
     public static final int MAX_TOTAL_CONNECTIONS = 1_000;
 
     /**
-     * 每个路由最大连接数
+     * max connections per route
      */
     public static final int MAX_ROUTE_CONNECTIONS = 200;
 
     /**
-     * 连接超时时间
+     * connect timeout
      */
     public static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(4);
 
+    /**
+     * read timeout
+     */
     public static final Duration READ_TIMEOUT = Duration.ofSeconds(20);
 
     private static final Charset defaultCharset = StandardCharsets.UTF_8;
@@ -131,7 +135,7 @@ public class ReactiveHttpUtils {
     }
 
     private void init(RequestConfig requestConfig) {
-        Builder connectionProviderBuilder = ConnectionProvider.builder("RtHttpUtils");
+        Builder connectionProviderBuilder = ConnectionProvider.builder("ReactiveHttpUtils");
         connectionProviderBuilder.maxConnections(MAX_TOTAL_CONNECTIONS);
         connectionProviderBuilder.pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS);
 
@@ -330,9 +334,9 @@ public class ReactiveHttpUtils {
 
         Configurer.Body body = Optional.ofNullable(configurer.bodyConfigurer)
             .map(bodyModelConsumer -> {
-                Configurer.BodyModel bodyModel = new Configurer.BodyModel();
-                bodyModelConsumer.accept(bodyModel);
-                return bodyModel.getBody();
+                Configurer.Payload payload = new Configurer.Payload();
+                bodyModelConsumer.accept(payload);
+                return payload.getBody();
             }).orElse(null);
         ;
         if (Objects.nonNull(body) && StringUtils.isNotBlank(body.contentType())) {
@@ -403,8 +407,6 @@ public class ReactiveHttpUtils {
             HttpClient client = httpClient;
             client = client
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Long.valueOf(connectTimeout.toMillis()).intValue())
-//                .option(ChannelOption.SO_TIMEOUT,
-//                    Long.valueOf(socketTimeout.toMillis()).intValue()) // 响应式不需要SO_TIMEOUT
                 .option(ChannelOption.SO_KEEPALIVE, keepalive)
                 .protocol(httpProtocols)
                 .keepAlive(keepalive)
@@ -455,7 +457,7 @@ public class ReactiveHttpUtils {
         }
 
         /**
-         * 请求配置Builder, 默认值放在此处
+         * Request configuration Builder, initial with default setting
          */
         public static class Builder {
 
@@ -471,14 +473,6 @@ public class ReactiveHttpUtils {
 
             public Builder connectTimeout(Duration connectTimeout) {
                 this.connectTimeout = connectTimeout;
-                return this;
-            }
-
-            /**
-             * @deprecated 客户端不需要配置{@link {@link ChannelOption#SO_TIMEOUT}
-             */
-            @Deprecated
-            public Builder socketTimeout(Duration socketTimeout) {
                 return this;
             }
 
@@ -537,7 +531,6 @@ public class ReactiveHttpUtils {
             }
         }
 
-
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -553,7 +546,7 @@ public class ReactiveHttpUtils {
 
         private final List<Map.Entry<String, String>> params = new ArrayList<>();
 
-        private Consumer<BodyModel> bodyConfigurer;
+        private Consumer<Payload> bodyConfigurer;
 
         private RequestConfig config;
 
@@ -609,13 +602,13 @@ public class ReactiveHttpUtils {
             return this;
         }
 
-        public Configurer body(Consumer<BodyModel> configurer) {
+        public Configurer body(Consumer<Payload> configurer) {
             bodyConfigurer = configurer;
             return this;
         }
 
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class BodyModel {
+        public static class Payload {
 
             private Body body;
 
@@ -623,23 +616,23 @@ public class ReactiveHttpUtils {
                 return body;
             }
 
-            public BodyModel raw(Consumer<Raw> configurer) {
+            public Payload raw(Consumer<Raw> configurer) {
                 return type(Raw::new, configurer);
             }
 
-            public BodyModel formData(Consumer<FormData> configurer) {
+            public Payload formData(Consumer<FormData> configurer) {
                 return type(FormData::new, configurer);
             }
 
-            public BodyModel binary(Consumer<Binary> configurer) {
+            public Payload binary(Consumer<Binary> configurer) {
                 return type(Binary::new, configurer);
             }
 
-            public BodyModel formUrlEncoded(Consumer<FormUrlEncoded> configurer) {
+            public Payload formUrlEncoded(Consumer<FormUrlEncoded> configurer) {
                 return type(FormUrlEncoded::new, configurer);
             }
 
-            public <T extends Body> BodyModel type(
+            public <T extends Body> Payload type(
                 Supplier<T> buildable, Consumer<T> configurer) {
                 Objects.requireNonNull(buildable);
                 Objects.requireNonNull(configurer);
@@ -741,6 +734,8 @@ public class ReactiveHttpUtils {
 
             private Supplier<byte[]> bytesSupplier;
 
+            private Publisher<? extends ByteBuf> byteBufPublisher;
+
             @Override
             protected String contentType() {
                 return contentType;
@@ -748,11 +743,21 @@ public class ReactiveHttpUtils {
 
             @Override
             protected ResponseReceiver<?> sender(RequestSender sender, Charset charset) {
+                if (Objects.nonNull(byteBufPublisher)) {
+                    return sender.send(byteBufPublisher);
+                }
                 if (Objects.nonNull(bytesSupplier)) {
                     return sender.send(Mono.fromSupplier(bytesSupplier)
                         .map(Unpooled::wrappedBuffer));
                 }
                 return sender;
+            }
+
+            public Binary publisher(Publisher<? extends ByteBuf> publisher) {
+                if (Objects.isNull(byteBufPublisher)) {
+                    this.byteBufPublisher = publisher;
+                }
+                return this;
             }
 
             public Binary file(File file) {

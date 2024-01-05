@@ -42,7 +42,7 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
     @Override
     public Mono<SearchResponse> find(String q) {
         return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
-                .body(bodyModel -> bodyModel.raw(raw -> {
+                .body(payload -> payload.raw(raw -> {
                     Map<String, String> obj = new HashMap<>();
                     obj.put("q", q);
                     raw.json(jsonHandler.toJson(obj));
@@ -54,7 +54,7 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
     @Override
     public Mono<SearchResponse> find(SearchRequest request) {
         return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
-                .body(bodyModel -> bodyModel.raw(raw -> raw.json(jsonHandler.toJson(request))))
+                .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
             , new TypeRef<SearchResponse>() {
             });
     }
@@ -62,7 +62,7 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
     @Override
     public Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request) {
         return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> configurer
-                .body(bodyModel -> bodyModel.raw(raw -> raw.json(jsonHandler.toJson(request))))
+                .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
             , new TypeRef<FacetSearchResponse>() {
             });
     }

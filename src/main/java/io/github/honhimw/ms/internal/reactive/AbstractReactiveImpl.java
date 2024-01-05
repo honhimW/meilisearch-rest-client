@@ -119,11 +119,11 @@ public abstract class AbstractReactiveImpl {
     }
 
     protected void json(ReactiveHttpUtils.Configurer configurer, Object object) {
-        configurer.body(bodyModel -> bodyModel.raw(raw -> raw.json(jsonHandler.toJson(object))));
+        configurer.body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(object))));
     }
 
     protected void json(ReactiveHttpUtils.Configurer configurer, String json) {
-        configurer.body(bodyModel -> bodyModel.raw(raw -> raw.json(json)));
+        configurer.body(payload -> payload.raw(raw -> raw.json(json)));
     }
 
 }

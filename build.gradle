@@ -8,12 +8,12 @@ plugins {
 }
 
 group = 'io.github.honhimw'
-version = '1.5.0.0-SNAPSHOT'
+version = '1.5.0.0-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
 description = 'Java client for meilisearch.'
 
 def title = 'Meilisearch rest client for java'
-def reactorNettyHttpVersion = '1.1.13'
-def jacksonVersion = '2.15.2'
+def reactorVersion = '2023.0.1'
+def jacksonVersion = '2.15.3'
 def lombokVersion = '1.18.26'
 def snapshots = version.toString().endsWith('SNAPSHOT')
 
@@ -29,9 +29,10 @@ repositories {
 
 dependencies {
     implementation platform("com.fasterxml.jackson:jackson-bom:${jacksonVersion}")
+    implementation platform("io.projectreactor:reactor-bom:${reactorVersion}")
 
-    implementation "io.projectreactor.netty:reactor-netty-core:${reactorNettyHttpVersion}"
-    implementation "io.projectreactor.netty:reactor-netty-http:${reactorNettyHttpVersion}"
+    implementation "io.projectreactor.netty:reactor-netty-core"
+    implementation "io.projectreactor.netty:reactor-netty-http"
 
     implementation 'com.fasterxml.jackson.core:jackson-core'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
@@ -42,13 +43,12 @@ dependencies {
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-io:commons-io:2.13.0'
-    implementation 'commons-io:commons-io:2.13.0'
-    implementation "org.projectlombok:lombok:${lombokVersion}"
     implementation 'org.slf4j:slf4j-api:2.0.7'
 
     compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.19'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
@@ -58,9 +58,10 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'com.meilisearch.sdk:meilisearch-java:0.11.5'
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    testImplementation 'io.projectreactor:reactor-test:3.6.1'
+    testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.slf4j:slf4j-simple:2.0.9'
 }
 

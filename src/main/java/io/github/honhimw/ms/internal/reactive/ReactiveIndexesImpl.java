@@ -71,7 +71,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
     @Override
     public Mono<TaskInfo> create(String uid, @Nullable String primaryKey) {
         return post("/indexes", configurer -> configurer
-            .body(bodyModel -> bodyModel
+            .body(payload -> payload
                 .raw(raw -> {
                     Map<String, String> obj = new HashMap<>();
                     obj.put("uid", uid);
@@ -85,7 +85,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
     @Override
     public Mono<TaskInfo> update(String uid, String primaryKey) {
         return post(String.format("/indexes/%s", uid), configurer -> configurer
-            .body(bodyModel -> bodyModel
+            .body(payload -> payload
                 .raw(raw -> {
                     Map<String, String> obj = new HashMap<>();
                     obj.put("primaryKey", primaryKey);
@@ -104,7 +104,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
     @Override
     public Mono<TaskInfo> swap(List<Map.Entry<String, String>> uids) {
         return delete("/swap-indexes", configurer -> configurer
-            .body(bodyModel -> bodyModel.raw(raw -> {
+            .body(payload -> payload.raw(raw -> {
                 List<Map<String, List<String>>> list = new ArrayList<>();
                 for (Map.Entry<String, String> uid : uids) {
                     Map<String, List<String>> swap = new HashMap<>();

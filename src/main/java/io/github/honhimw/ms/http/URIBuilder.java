@@ -26,12 +26,12 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * 从apache httpclient-core拷贝, 排除掉所有非jdk依赖
+ * copied from apache httpclient-core, exclude all dependencies except jdk
  * @author hon_him
  * @since 2023-07-24
  */
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"all", "unused", "UnusedReturnValue"})
 public final class URIBuilder {
 
     private String scheme;
@@ -403,7 +403,7 @@ public final class URIBuilder {
     }
 
     public URIBuilder setPathSegments(final List<String> pathSegments) {
-        this.pathSegments = pathSegments != null && pathSegments.size() > 0 ? new ArrayList<String>(pathSegments) : null;
+        this.pathSegments = pathSegments != null && !pathSegments.isEmpty() ? new ArrayList<>(pathSegments) : null;
         this.encodedSchemeSpecificPart = null;
         this.encodedPath = null;
         return this;
@@ -441,7 +441,8 @@ public final class URIBuilder {
         return this;
     }
 
-    public URIBuilder setParameters(final Map.Entry<String, String>... nvps) {
+    @SafeVarargs
+    public final URIBuilder setParameters(final Map.Entry<String, String>... nvps) {
         if (this.queryParams == null) {
             this.queryParams = new ArrayList<>();
         } else {
@@ -470,12 +471,7 @@ public final class URIBuilder {
             this.queryParams = new ArrayList<>();
         }
         if (!this.queryParams.isEmpty()) {
-            for (final Iterator<Map.Entry<String, String>> it = this.queryParams.iterator(); it.hasNext(); ) {
-                final Map.Entry<String, String> nvp = it.next();
-                if (nvp.getKey().equals(param)) {
-                    it.remove();
-                }
-            }
+            this.queryParams.removeIf(nvp -> nvp.getKey().equals(param));
         }
         this.queryParams.add(new AbstractMap.SimpleEntry<>(param, value));
         this.encodedQuery = null;
