@@ -94,9 +94,8 @@ public abstract class AbstractReactiveImpl {
 
     protected <T> Mono<T> request(String method, String path, Consumer<ReactiveHttpUtils.Configurer> configurer, TypeRef<T> typeRef) {
         if (Objects.nonNull(_client.apiKey)) {
-            Consumer<ReactiveHttpUtils.Configurer> _apiKey_configurer = configurer1 -> {
-                configurer1.header("Authorization", String.format("Bearer %s", _client.apiKey));
-            };
+            Consumer<ReactiveHttpUtils.Configurer> _apiKey_configurer = configurer1 -> configurer1
+                .header("Authorization", String.format("Bearer %s", _client.apiKey));
             configurer = _apiKey_configurer.andThen(configurer);
 
         }
