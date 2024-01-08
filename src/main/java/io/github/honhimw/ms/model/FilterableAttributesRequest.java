@@ -14,14 +14,15 @@
 
 package io.github.honhimw.ms.model;
 
+import io.github.honhimw.ms.support.FilterBuilder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -37,22 +38,20 @@ public class FilterableAttributesRequest implements Serializable {
     @Schema(description = "Refine results based on attributes in the filterableAttributes list")
     private String filter;
 
-    public FilterableAttributesRequest and(String filter) {
-        if (StringUtils.isBlank(this.filter)) {
-            this.filter = filter;
-        } else {
-            this.filter = this.filter + " AND " + filter;
-        }
+    public FilterableAttributesRequest filter(Consumer<FilterBuilder> consumer) {
+        FilterBuilder filterBuilder = FilterBuilder.builder();
+        consumer.accept(filterBuilder);
+        this.filter = filterBuilder.build();
         return this;
     }
 
-    public FilterableAttributesRequest or(String filter) {
-        if (StringUtils.isBlank(this.filter)) {
-            this.filter = filter;
-        } else {
-            this.filter = this.filter + " OR " + filter;
-        }
-        return this;
+    public static FilterableAttributesRequest builder(Consumer<FilterBuilder> consumer) {
+        FilterBuilder filterBuilder = FilterBuilder.builder();
+        consumer.accept(filterBuilder);
+        String filter = filterBuilder.build();
+        FilterableAttributesRequest filterableAttributesRequest = new FilterableAttributesRequest();
+        filterableAttributesRequest.setFilter(filter);
+        return filterableAttributesRequest;
     }
 
 }
