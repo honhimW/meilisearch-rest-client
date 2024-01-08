@@ -14,11 +14,13 @@
 
 package io.github.honhimw.ms;
 
+import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
+import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.json.TypeRef;
+import io.github.honhimw.ms.model.SearchResponse;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * @author hon_him
@@ -28,19 +30,19 @@ import java.time.format.DateTimeFormatter;
 public class MainRunner {
 
     public static void main(String[] args) {
-        String RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(RFC_3339);
-        String string = "2023-07-20T10:01:54.611687902Z";
 
-        LocalDateTime localDateTime = LocalDateTime.parse(string, dateTimeFormatter);
+        JsonHandler jsonHandler = new JacksonJsonHandler();
+        SearchResponse<String> strings = jsonHandler.fromJson("{\"hits\": [\"hello\", \"world\"]}", type(new TypeRef<String>() {
+        }));
+        List<String> hits = strings.getHits();
+        for (String string : hits) {
+            System.out.println(string);
+        }
+    }
 
-        System.out.println(localDateTime);
-
-        JacksonJsonHandler jacksonJsonHandler = new JacksonJsonHandler();
-        String string1 = jacksonJsonHandler.fromJson("\"skuid\"", new TypeRef<String>() {
-        });
-        System.out.println(string1);
-
+    public static <T> TypeRef<SearchResponse<T>> type(TypeRef<T> typeRef) {
+        return new ComplexTypeRef<SearchResponse<T>>(typeRef) {
+        };
     }
 
 }

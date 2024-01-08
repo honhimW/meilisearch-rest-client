@@ -14,54 +14,53 @@
 
 package io.github.honhimw.ms.internal.reactive;
 
-import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
+import io.github.honhimw.ms.api.reactive.ReactiveTypedDocuments;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
-import io.github.honhimw.ms.model.FilterableAttributesRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
  * @since 2024-01-04
  */
 
-class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocuments {
+class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements ReactiveTypedDocuments<T> {
 
     private final ReactiveIndexesImpl indexes;
     private final String indexUid;
+    private final TypeRef<T> typeRef;
+    private final ComplexTypeRef<Page<T>> complexTypeRef;
 
-    protected ReactiveDocumentsImpl(ReactiveIndexesImpl indexes, String indexUid) {
+    protected ReactiveTypedDocumentsImpl(ReactiveIndexesImpl indexes, String indexUid, TypeRef<T> typeRef) {
         super(indexes._client);
         this.indexes = indexes;
         this.indexUid = indexUid;
+        this.typeRef = typeRef;
+        this.complexTypeRef = new ComplexTypeRef<Page<T>>(typeRef) {
+        };
     }
 
     @Override
-    public Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit) {
+    public Mono<Page<T>> list(Consumer<PageRequest> page) {
+        return ReactiveTypedDocuments.super.list(page);
+    }
+
+    @Override
+    public Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit) {
         String _offset = Optional.ofNullable(offset).map(String::valueOf).orElse("0");
         String _limit = Optional.ofNullable(limit).map(String::valueOf).orElse("20");
         return get(String.format("/indexes/%s/documents", indexUid), configurer -> configurer
                 .param("offset", _offset)
                 .param("limit", _limit),
-            new TypeRef<Page<Map<String, Object>>>() {
-            });
-    }
-
-    @Override
-    public <T> Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef) {
-        String _offset = Optional.ofNullable(offset).map(String::valueOf).orElse("0");
-        String _limit = Optional.ofNullable(limit).map(String::valueOf).orElse("20");
-        return get(String.format("/indexes/%s/documents", indexUid), configurer -> configurer
-                .param("offset", _offset)
-                .param("limit", _limit),
-            new ComplexTypeRef<Page<T>>(typeRef) {
-            });
+            complexTypeRef);
     }
 
     @Override
@@ -71,7 +70,7 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
     }
 
     @Override
-    public Mono<TaskInfo> save(Collection<?> collection) {
+    public Mono<TaskInfo> save(Collection<? extends T> collection) {
         return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
         });
     }
@@ -83,7 +82,7 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
     }
 
     @Override
-    public Mono<TaskInfo> update(Collection<?> collection) {
+    public Mono<TaskInfo> update(Collection<? extends T> collection) {
         return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
         });
     }
@@ -95,16 +94,9 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
     }
 
     @Override
-    public Mono<Page<Map<String, Object>>> batchGet(BatchGetDocumentsRequest fetch) {
-        return post(String.format("/indexes/%s/documents/fetch", indexUid), configurer -> json(configurer, fetch), new TypeRef<Page<Map<String, Object>>>() {
-        });
-    }
-
-    @Override
-    public <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef) {
+    public Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch) {
         return post(String.format("/indexes/%s/documents/fetch", indexUid), configurer -> json(configurer, fetch),
-            new ComplexTypeRef<Page<T>>(typeRef) {
-            });
+            complexTypeRef);
     }
 
     @Override
@@ -120,20 +112,7 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
     }
 
     @Override
-    public Mono<Map<String, Object>> get(String id, @Nullable String... fields) {
-        String _fields;
-        if (Objects.isNull(fields) || fields.length == 0) {
-            _fields = "*";
-        } else {
-            _fields = String.join(",", fields);
-        }
-        return get(String.format("/indexes/%s/documents/%s", indexUid, id), configurer -> configurer
-            .param("fields", _fields), new TypeRef<Map<String, Object>>() {
-        });
-    }
-
-    @Override
-    public <T> Mono<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields) {
+    public Mono<T> get(String id, @Nullable String... fields) {
         String _fields;
         if (Objects.isNull(fields) || fields.length == 0) {
             _fields = "*";

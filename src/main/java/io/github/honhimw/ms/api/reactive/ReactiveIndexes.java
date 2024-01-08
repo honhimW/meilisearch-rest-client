@@ -14,11 +14,13 @@
 
 package io.github.honhimw.ms.api.reactive;
 
+import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -102,8 +104,8 @@ public interface ReactiveIndexes {
     Mono<TaskInfo> swap(List<Map.Entry<String, String>> uids);
 
     /**
-     * @see #swap(List)
      * @param consumer entryList configurer
+     * @see #swap(List)
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     default Mono<TaskInfo> swap(Consumer<EntryList> consumer) {
@@ -128,6 +130,22 @@ public interface ReactiveIndexes {
         return operation.apply(documents(uid));
     }
 
+    <T> ReactiveTypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
+
+    default <T> ReactiveTypedDocuments<T> documents(String uid, Class<T> type) {
+        // @formatter:off
+        return documents(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
+
+    default <T, R> R documents(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDocuments<T>, R> operation) {
+        return operation.apply(documents(uid, typeRef));
+    }
+
+    default <T, R> R documents(String uid, Class<T> type, Function<ReactiveTypedDocuments<T>, R> operation) {
+        return operation.apply(documents(uid, type));
+    }
+
     /**
      * Meilisearch exposes 3 routes to perform document searches:
      * <ul>
@@ -136,6 +154,7 @@ public interface ReactiveIndexes {
      *     <li>A POST multi-search route allowing to perform multiple search queries in a single HTTP request. Meilisearch exposes 1 route to perform facet searches:</li>
      *     <li>A POST facet-search route allowing to perform a facet search query on a facet in a single HTTP request.</li>
      * </ul>
+     *
      * @param uid uid of the requested index
      * @return {@link ReactiveSearch} operator
      */
@@ -144,6 +163,22 @@ public interface ReactiveIndexes {
 
     default <R> R search(String uid, Function<ReactiveSearch, R> operation) {
         return operation.apply(search(uid));
+    }
+
+    <T> ReactiveTypedSearch<T> search(String uid, TypeRef<T> typeRef);
+
+    default <T> ReactiveTypedSearch<T> search(String uid, Class<T> type) {
+        // @formatter:off
+        return search(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
+
+    default <T, R> R search(String uid, TypeRef<T> typeRef, Function<ReactiveTypedSearch<T>, R> operation) {
+        return operation.apply(search(uid, typeRef));
+    }
+
+    default <T, R> R search(String uid, Class<T> type, Function<ReactiveTypedSearch<T>, R> operation) {
+        return operation.apply(search(uid, type));
     }
 
     @Operation(tags = "/indexes/{indexUid}/settings")
@@ -168,7 +203,6 @@ public interface ReactiveIndexes {
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")
     Mono<IndexStats> stats(String uid);
-
 
 
 }

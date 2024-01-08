@@ -32,10 +32,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchResponse implements Serializable {
+public class SearchResponse<T> implements Serializable {
 
     @Schema(description = "Results of the query")
-    private List<Object> hits;
+    private List<T> hits;
     
     @Schema(description = "Number of documents skipped")
     private Integer offset;

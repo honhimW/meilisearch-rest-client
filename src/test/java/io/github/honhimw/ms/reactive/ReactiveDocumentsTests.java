@@ -14,13 +14,18 @@
 
 package io.github.honhimw.ms.reactive;
 
+import io.github.honhimw.ms.Movie;
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
+import io.github.honhimw.ms.json.TypeRef;
+import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hon_him
@@ -72,11 +77,43 @@ public class ReactiveDocumentsTests extends ReactiveIndexesTests {
 
     @Order(103)
     @Test
-    void g() {
+    void search() {
         StepVerifier.create(indexes.search(index).find("2"))
             .assertNext(searchResponse -> {
                 log.info(jsonHandler.toJson(searchResponse.getHits()));
                 assert !searchResponse.getHits().isEmpty();
+            })
+            .verifyComplete();
+
+        Mono<SearchResponse<Map<String, Object>>> indexes2 = client.indexes(indexes1 -> indexes1.search("movies", reactiveSearch -> reactiveSearch.find("hello world")));
+        List<Map<String, Object>> hits = indexes2.block().getHits();
+    }
+
+    @Order(104)
+    @Test
+    void search2() {
+        Mono<List<Movie>> mono = indexes.search(index).find("2", Movie.class)
+            .map(SearchResponse::getHits);
+        StepVerifier.create(mono)
+            .assertNext(movies1 -> {
+                for (Movie movie : movies1) {
+                    log.info(jsonHandler.toJson(movie));
+                }
+            })
+            .verifyComplete();
+    }
+
+    @Order(105)
+    @Test
+    void search3() {
+        Mono<List<Movie>> mono = indexes.search(index, new TypeRef<Movie>() {
+            }).find("2")
+            .map(SearchResponse::getHits);
+        StepVerifier.create(mono)
+            .assertNext(movies1 -> {
+                for (Movie movie : movies1) {
+                    log.info(jsonHandler.toJson(movie));
+                }
             })
             .verifyComplete();
     }

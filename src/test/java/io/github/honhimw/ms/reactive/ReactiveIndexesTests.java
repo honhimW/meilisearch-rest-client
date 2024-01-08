@@ -96,4 +96,16 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
             .verifyComplete();
     }
 
+    @Order(2)
+    @Test
+    void getOne2() {
+        Mono<Index> movies = client.indexes(indexes1 -> indexes1.get(index));
+        StepVerifier.create(movies)
+            .assertNext(index -> {
+                assert index != null;
+                log.info(jsonHandler.toJson(index));
+            })
+            .verifyComplete();
+    }
+
 }

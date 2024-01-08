@@ -28,10 +28,7 @@
 
 package io.github.honhimw.ms.internal.reactive;
 
-import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
-import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
-import io.github.honhimw.ms.api.reactive.ReactiveSearch;
-import io.github.honhimw.ms.api.reactive.ReactiveSettings;
+import io.github.honhimw.ms.api.reactive.*;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import jakarta.annotation.Nullable;
@@ -125,8 +122,18 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
     }
 
     @Override
+    public <T> ReactiveTypedDocuments<T> documents(String uid, TypeRef<T> typeRef) {
+        return new ReactiveTypedDocumentsImpl<>(this, uid, typeRef);
+    }
+
+    @Override
     public ReactiveSearch search(String uid) {
         return new ReactiveSearchImpl(this, uid);
+    }
+
+    @Override
+    public <T> ReactiveTypedSearch<T> search(String uid, TypeRef<T> typeRef) {
+        return new ReactiveTypedSearchImpl<>(this, uid, typeRef);
     }
 
     @Override

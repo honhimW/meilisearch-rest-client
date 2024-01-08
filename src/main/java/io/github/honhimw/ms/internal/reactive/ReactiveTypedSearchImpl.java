@@ -14,7 +14,7 @@
 
 package io.github.honhimw.ms.internal.reactive;
 
-import io.github.honhimw.ms.api.reactive.ReactiveSearch;
+import io.github.honhimw.ms.api.reactive.ReactiveTypedSearch;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.FacetSearchRequest;
@@ -31,53 +31,36 @@ import java.util.Map;
  * @since 2024-01-04
  */
 
-class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch {
+class ReactiveTypedSearchImpl<T> extends AbstractReactiveImpl implements ReactiveTypedSearch<T> {
 
     private final String indexUid;
+    private final TypeRef<T> typeRef;
+    private final ComplexTypeRef<SearchResponse<T>> complexTypeRef;
 
-    public ReactiveSearchImpl(ReactiveIndexesImpl indexes, String indexUid) {
+    public ReactiveTypedSearchImpl(ReactiveIndexesImpl indexes, String indexUid, TypeRef<T> typeRef) {
         super(indexes._client);
         this.indexUid = indexUid;
+        this.typeRef = typeRef;
+        this.complexTypeRef = new ComplexTypeRef<SearchResponse<T>>(typeRef) {
+        };
     }
 
     @Override
-    public Mono<SearchResponse<Map<String, Object>>> find(String q) {
+    public Mono<SearchResponse<T>> find(String q) {
         return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
                 .body(payload -> payload.raw(raw -> {
                     Map<String, String> obj = new HashMap<>();
                     obj.put("q", q);
                     raw.json(jsonHandler.toJson(obj));
                 }))
-            , new TypeRef<SearchResponse<Map<String, Object>>>() {
-            });
+            , complexTypeRef);
     }
 
     @Override
-    public <T> Mono<SearchResponse<T>> find(String q, TypeRef<T> typeRef) {
-        return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
-                .body(payload -> payload.raw(raw -> {
-                    Map<String, String> obj = new HashMap<>();
-                    obj.put("q", q);
-                    raw.json(jsonHandler.toJson(obj));
-                }))
-            , new ComplexTypeRef<SearchResponse<T>>(typeRef) {
-            });
-    }
-
-    @Override
-    public Mono<SearchResponse<Map<String, Object>>> find(SearchRequest request) {
+    public Mono<SearchResponse<T>> find(SearchRequest request) {
         return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
                 .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
-            , new TypeRef<SearchResponse<Map<String, Object>>>() {
-            });
-    }
-
-    @Override
-    public <T> Mono<SearchResponse<T>> find(SearchRequest request, TypeRef<T> typeRef) {
-        return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
-                .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
-            , new ComplexTypeRef<SearchResponse<T>>(typeRef) {
-            });
+            , complexTypeRef);
     }
 
     @Override
