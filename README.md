@@ -5,7 +5,7 @@
 > The goal of this library is to provide a more `object-oriented` and `semantic` meilisearch-rest client, supporting reactive usage through reactor-http.
 
 ### Version
-this library version naming as the official docs api version append `.X`
+The version number of this library is named by appending `.X` to the version number in the official documentation.
 
 - v1.5 Docs: [1.5.0.x,) (current)
 
