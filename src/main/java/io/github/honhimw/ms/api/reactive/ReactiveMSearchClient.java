@@ -25,6 +25,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author hon_him
@@ -35,9 +36,21 @@ public interface ReactiveMSearchClient {
 
     ReactiveIndexes indexes();
 
+    default <R> R indexes(Function<ReactiveIndexes, R> operation) {
+        return operation.apply(indexes());
+    }
+
     ReactiveTasks tasks();
 
+    default <R> R tasks(Function<ReactiveTasks, R> operation) {
+        return operation.apply(tasks());
+    }
+
     ReactiveKeys keys();
+
+    default <R> R keys(Function<ReactiveKeys, R> operation) {
+        return operation.apply(keys());
+    }
 
     @Operation(method = "POST", tags = "/multi-search")
     Mono<List<SearchResponse>> multiSearch(MultiSearchRequest request);
@@ -74,6 +87,10 @@ public interface ReactiveMSearchClient {
     Mono<TaskInfo> snapshots();
 
     ReactiveExperimentalFeaturesSettings experimentalFeatures();
+
+    default <R> R experimentalFeatures(Function<ReactiveExperimentalFeaturesSettings, R> operation) {
+        return operation.apply(experimentalFeatures());
+    }
 
     static ReactiveMSearchClient create(MSearchConfig config) {
         return new ReactiveMSearchClientImpl(config);

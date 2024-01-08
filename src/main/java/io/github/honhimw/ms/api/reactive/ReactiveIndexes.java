@@ -22,6 +22,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * An index is an entity that gathers a set of documents with its own settings. Learn more about indexes.
@@ -123,6 +124,10 @@ public interface ReactiveIndexes {
     @Operation(tags = "/indexes/{index_uid}/documents")
     ReactiveDocuments documents(String uid);
 
+    default <R> R documents(String uid, Function<ReactiveDocuments, R> operation) {
+        return operation.apply(documents(uid));
+    }
+
     /**
      * Meilisearch exposes 3 routes to perform document searches:
      * <ul>
@@ -137,8 +142,16 @@ public interface ReactiveIndexes {
     @Operation(tags = "/indexes/{index_uid}/search")
     ReactiveSearch search(String uid);
 
+    default <R> R search(String uid, Function<ReactiveSearch, R> operation) {
+        return operation.apply(search(uid));
+    }
+
     @Operation(tags = "/indexes/{indexUid}/settings")
     ReactiveSettings settings(String uid);
+
+    default <R> R settings(String uid, Function<ReactiveSettings, R> operation) {
+        return operation.apply(settings(uid));
+    }
 
     /**
      * Get stats of all indexes.

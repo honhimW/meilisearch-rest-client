@@ -21,6 +21,7 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * An index is an entity that gathers a set of documents with its own settings. Learn more about indexes.
@@ -122,6 +123,10 @@ public interface Indexes {
     @Operation(tags = "/indexes/{index_uid}/documents")
     Documents documents(String uid);
 
+    default <R> R documents(String uid, Function<Documents, R> operation) {
+        return operation.apply(documents(uid));
+    }
+
     /**
      * Meilisearch exposes 3 routes to perform document searches:
      * <ul>
@@ -136,8 +141,16 @@ public interface Indexes {
     @Operation(tags = "/indexes/{index_uid}/search")
     Search search(String uid);
 
+    default <R> R search(String uid, Function<Search, R> operation) {
+        return operation.apply(search(uid));
+    }
+
     @Operation(tags = "/indexes/{indexUid}/settings")
     Settings settings(String uid);
+
+    default <R> R settings(String uid, Function<Settings, R> operation) {
+        return operation.apply(settings(uid));
+    }
 
     /**
      * Get stats of all indexes.
@@ -154,7 +167,5 @@ public interface Indexes {
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")
     IndexStats stats(String uid);
-
-
 
 }

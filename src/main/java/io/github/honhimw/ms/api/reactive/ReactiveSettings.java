@@ -21,6 +21,7 @@ import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Settings is a list of all the customization possible for an index.
@@ -77,11 +78,19 @@ public interface ReactiveSettings {
     @Operation(tags = "/indexes/{index_uid}/settings/dictionary")
     ReactiveDictionarySettings dictionary();
 
+    default <R> R dictionary(Function<ReactiveDictionarySettings, R> operation) {
+        return operation.apply(dictionary());
+    }
+
     /**
      * @return {@link ReactiveDisplayedAttributesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/displayed-attributes")
     ReactiveDisplayedAttributesSettings displayedAttributes();
+
+    default <R> R displayedAttributes(Function<ReactiveDisplayedAttributesSettings, R> operation) {
+        return operation.apply(displayedAttributes());
+    }
 
     /**
      * @return {@link ReactiveDistinctAttributeSettings} operator
@@ -89,11 +98,19 @@ public interface ReactiveSettings {
     @Operation(tags = "/indexes/{index_uid}/settings/distinct-attribute")
     ReactiveDistinctAttributeSettings distinctAttribute();
 
+    default <R> R distinctAttribute(Function<ReactiveDistinctAttributeSettings, R> operation) {
+        return operation.apply(distinctAttribute());
+    }
+
     /**
      * @return {@link ReactiveFacetingSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/faceting")
     ReactiveFacetingSettings faceting();
+
+    default <R> R faceting(Function<ReactiveFacetingSettings, R> operation) {
+        return operation.apply(faceting());
+    }
 
     /**
      * @return {@link ReactiveFilterableAttributesSettings} operator
@@ -101,11 +118,19 @@ public interface ReactiveSettings {
     @Operation(tags = "/indexes/{index_uid}/settings/filterable-attributes")
     ReactiveFilterableAttributesSettings filterableAttributes();
 
+    default <R> R filterableAttributes(Function<ReactiveFilterableAttributesSettings, R> operation) {
+        return operation.apply(filterableAttributes());
+    }
+
     /**
      * @return {@link ReactivePaginationSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/pagination")
     ReactivePaginationSettings pagination();
+
+    default <R> R pagination(Function<ReactivePaginationSettings, R> operation) {
+        return operation.apply(pagination());
+    }
 
     /**
      * @return {@link ReactiveRankingRulesSettings} operator
@@ -113,11 +138,19 @@ public interface ReactiveSettings {
     @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")
     ReactiveRankingRulesSettings rankingRules();
 
+    default <R> R rankingRules(Function<ReactiveRankingRulesSettings, R> operation) {
+        return operation.apply(rankingRules());
+    }
+
     /**
      * @return {@link ReactiveSearchableAttributesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/searchable-attributes")
     ReactiveSearchableAttributesSettings searchAttributes();
+
+    default <R> R searchAttributes(Function<ReactiveSearchableAttributesSettings, R> operation) {
+        return operation.apply(searchAttributes());
+    }
 
     /**
      * @return {@link ReactiveSeparatorTokensSettings} operator
@@ -125,11 +158,19 @@ public interface ReactiveSettings {
     @Operation(tags = "/indexes/{index_uid}/settings/separator-tokens")
     ReactiveSeparatorTokensSettings separatorTokens();
 
+    default <R> R separatorTokens(Function<ReactiveSeparatorTokensSettings, R> operation) {
+        return operation.apply(separatorTokens());
+    }
+
     /**
      * @return {@link ReactiveNonSeparatorTokensSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/non-separator-tokens")
     ReactiveNonSeparatorTokensSettings nonSeparatorTokens();
+
+    default <R> R nonSeparatorTokens(Function<ReactiveNonSeparatorTokensSettings, R> operation) {
+        return operation.apply(nonSeparatorTokens());
+    }
 
     /**
      * @return {@link ReactiveSortableAttributesSettings} operator
@@ -137,11 +178,19 @@ public interface ReactiveSettings {
     @Operation(tags = "/indexes/{index_uid}/settings/sortable-attributes")
     ReactiveSortableAttributesSettings sortableAttributes();
 
+    default <R> R sortableAttributes(Function<ReactiveSortableAttributesSettings, R> operation) {
+        return operation.apply(sortableAttributes());
+    }
+
     /**
      * @return {@link ReactiveStopWordsSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/stop-words")
     ReactiveStopWordsSettings stopWords();
+
+    default <R> R stopWords(Function<ReactiveStopWordsSettings, R> operation) {
+        return operation.apply(stopWords());
+    }
 
     /**
      * @return {@link ReactiveSynonymsSettings} operator
@@ -149,10 +198,18 @@ public interface ReactiveSettings {
     @Operation(tags = "/indexes/{index_uid}/settings/synonyms")
     ReactiveSynonymsSettings synonyms();
 
+    default <R> R synonyms(Function<ReactiveSynonymsSettings, R> operation) {
+        return operation.apply(synonyms());
+    }
+
     /**
      * @return {@link ReactiveTypoToleranceSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/typo-tolerance")
     ReactiveTypoToleranceSettings typoTolerance();
+
+    default <R> R typoTolerance(Function<ReactiveTypoToleranceSettings, R> operation) {
+        return operation.apply(typoTolerance());
+    }
 
 }

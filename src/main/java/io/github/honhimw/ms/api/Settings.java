@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Settings is a list of all the customization possible for an index.
@@ -76,11 +77,19 @@ public interface Settings {
     @Operation(tags = "/indexes/{index_uid}/settings/dictionary")
     DictionarySettings dictionary();
 
+    default <R> R dictionary(Function<DictionarySettings, R> operation) {
+        return operation.apply(dictionary());
+    }
+
     /**
      * @return {@link DisplayedAttributesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/displayed-attributes")
     DisplayedAttributesSettings displayedAttributes();
+
+    default <R> R displayedAttributes(Function<DisplayedAttributesSettings, R> operation) {
+        return operation.apply(displayedAttributes());
+    }
 
     /**
      * @return {@link DistinctAttributeSettings} operator
@@ -88,11 +97,19 @@ public interface Settings {
     @Operation(tags = "/indexes/{index_uid}/settings/distinct-attribute")
     DistinctAttributeSettings distinctAttribute();
 
+    default <R> R distinctAttribute(Function<DistinctAttributeSettings, R> operation) {
+        return operation.apply(distinctAttribute());
+    }
+
     /**
      * @return {@link FacetingSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/faceting")
     FacetingSettings faceting();
+
+    default <R> R faceting(Function<FacetingSettings, R> operation) {
+        return operation.apply(faceting());
+    }
 
     /**
      * @return {@link FilterableAttributesSettings} operator
@@ -100,11 +117,19 @@ public interface Settings {
     @Operation(tags = "/indexes/{index_uid}/settings/filterable-attributes")
     FilterableAttributesSettings filterableAttributes();
 
+    default <R> R filterableAttributes(Function<FilterableAttributesSettings, R> operation) {
+        return operation.apply(filterableAttributes());
+    }
+
     /**
      * @return {@link PaginationSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/pagination")
     PaginationSettings pagination();
+
+    default <R> R pagination(Function<PaginationSettings, R> operation) {
+        return operation.apply(pagination());
+    }
 
     /**
      * @return {@link RankingRulesSettings} operator
@@ -112,11 +137,19 @@ public interface Settings {
     @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")
     RankingRulesSettings rankingRules();
 
+    default <R> R rankingRules(Function<RankingRulesSettings, R> operation) {
+        return operation.apply(rankingRules());
+    }
+
     /**
      * @return {@link SearchableAttributesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/searchable-attributes")
     SearchableAttributesSettings searchAttributes();
+
+    default <R> R searchAttributes(Function<SearchableAttributesSettings, R> operation) {
+        return operation.apply(searchAttributes());
+    }
 
     /**
      * @return {@link SeparatorTokensSettings} operator
@@ -124,11 +157,19 @@ public interface Settings {
     @Operation(tags = "/indexes/{index_uid}/settings/separator-tokens")
     SeparatorTokensSettings separatorTokens();
 
+    default <R> R separatorTokens(Function<SeparatorTokensSettings, R> operation) {
+        return operation.apply(separatorTokens());
+    }
+
     /**
      * @return {@link NonSeparatorTokensSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/non-separator-tokens")
     NonSeparatorTokensSettings nonSeparatorTokens();
+
+    default <R> R nonSeparatorTokens(Function<NonSeparatorTokensSettings, R> operation) {
+        return operation.apply(nonSeparatorTokens());
+    }
 
     /**
      * @return {@link SortableAttributesSettings} operator
@@ -136,11 +177,19 @@ public interface Settings {
     @Operation(tags = "/indexes/{index_uid}/settings/sortable-attributes")
     SortableAttributesSettings sortableAttributes();
 
+    default <R> R sortableAttributes(Function<SortableAttributesSettings, R> operation) {
+        return operation.apply(sortableAttributes());
+    }
+
     /**
      * @return {@link StopWordsSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/stop-words")
     StopWordsSettings stopWords();
+
+    default <R> R stopWords(Function<StopWordsSettings, R> operation) {
+        return operation.apply(stopWords());
+    }
 
     /**
      * @return {@link SynonymsSettings} operator
@@ -148,10 +197,18 @@ public interface Settings {
     @Operation(tags = "/indexes/{index_uid}/settings/synonyms")
     SynonymsSettings synonyms();
 
+    default <R> R synonyms(Function<SynonymsSettings, R> operation) {
+        return operation.apply(synonyms());
+    }
+
     /**
      * @return {@link TypoToleranceSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/typo-tolerance")
     TypoToleranceSettings typoTolerance();
+
+    default <R> R typoTolerance(Function<TypoToleranceSettings, R> operation) {
+        return operation.apply(typoTolerance());
+    }
 
 }

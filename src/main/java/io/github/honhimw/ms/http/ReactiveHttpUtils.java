@@ -16,6 +16,9 @@ package io.github.honhimw.ms.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.IOUtils;
+import io.github.honhimw.ms.support.StringUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelOption;
@@ -23,11 +26,6 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.cookie.Cookie;
 import lombok.*;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -328,7 +326,7 @@ public class ReactiveHttpUtils {
         HttpClient client = Optional.ofNullable(configurer.config)
             .map(requestConfig -> requestConfig.config(httpClient))
             .orElse(httpClient);
-        if (MapUtils.isNotEmpty(configurer.headers)) {
+        if (CollectionUtils.isNotEmpty(configurer.headers)) {
             client = client.headers(entries -> configurer.headers.forEach(entries::add));
         }
 
@@ -764,7 +762,7 @@ public class ReactiveHttpUtils {
                 if (Objects.isNull(bytesSupplier)) {
                     bytesSupplier = () -> {
                         try {
-                            return FileUtils.readFileToByteArray(file);
+                            return IOUtils.readFileToByteArray(file);
                         } catch (IOException e) {
                             throw new IllegalStateException(e);
                         }
@@ -797,7 +795,7 @@ public class ReactiveHttpUtils {
                 if (Objects.isNull(bytesSupplier)) {
                     bytesSupplier = () -> {
                         try {
-                            return FileUtils.readFileToByteArray(file);
+                            return IOUtils.readFileToByteArray(file);
                         } catch (IOException e) {
                             throw new IllegalStateException(e);
                         }

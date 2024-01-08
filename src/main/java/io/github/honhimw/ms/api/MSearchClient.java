@@ -23,6 +23,7 @@ import io.github.honhimw.ms.model.Version;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author hon_him
@@ -33,9 +34,21 @@ public interface MSearchClient {
 
     Indexes indexes();
 
+    default <R> R indexes(Function<Indexes, R> operation) {
+        return operation.apply(indexes());
+    }
+
     Tasks tasks();
 
+    default <R> R tasks(Function<Tasks, R> operation) {
+        return operation.apply(tasks());
+    }
+
     Keys keys();
+
+    default <R> R keys(Function<Keys, R> operation) {
+        return operation.apply(keys());
+    }
 
     List<SearchResponse> multiSearch(MultiSearchRequest request);
 
@@ -67,6 +80,10 @@ public interface MSearchClient {
     TaskInfo snapshots();
 
     ExperimentalFeaturesSettings experimentalFeatures();
+
+    default <R> R experimentalFeatures(Function<ExperimentalFeaturesSettings, R> operation) {
+        return operation.apply(experimentalFeatures());
+    }
 
     static MSearchClient create(MSearchConfig config) {
         return new MSearchClientImpl(config);

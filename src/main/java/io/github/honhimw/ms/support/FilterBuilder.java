@@ -14,8 +14,6 @@
 
 package io.github.honhimw.ms.support;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.Consumer;
