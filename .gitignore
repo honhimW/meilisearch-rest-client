@@ -3,8 +3,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-gradle.properties
 gradle/wrapper/gradle-8.5-bin.zip
+profile-test.properties
+
 
 .jqwik-database
 
