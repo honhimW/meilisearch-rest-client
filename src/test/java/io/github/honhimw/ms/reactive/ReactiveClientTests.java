@@ -41,7 +41,7 @@ public class ReactiveClientTests {
     protected static JsonHandler jsonHandler;
 
     @BeforeAll
-    static void init() throws IOException {
+    static void init() throws Exception {
         jsonHandler = new JacksonJsonHandler();
         client = ReactiveMSearchClient.create(builder -> builder
             .host(MeiliSearchProperties.getHost())
@@ -50,6 +50,7 @@ public class ReactiveClientTests {
             .jsonHandler(jsonHandler)
         );
         tasks = client.tasks();
+        client.close();
     }
 
     public static final String movies = "[\n" +

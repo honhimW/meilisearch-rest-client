@@ -52,6 +52,7 @@ import io.github.honhimw.ms.model.Version;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hon_him
@@ -82,7 +83,7 @@ public class MSearchClientImpl implements MSearchClient {
     }
 
     @Override
-    public List<SearchResponse> multiSearch(MultiSearchRequest request) {
+    public List<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchRequest request) {
         return reactiveMSearchClient.multiSearch(request).block();
     }
 
@@ -113,4 +114,8 @@ public class MSearchClientImpl implements MSearchClient {
         return new ExperimentalFeaturesSettingsImpl(reactiveMSearchClient.experimentalFeatures());
     }
 
+    @Override
+    public void close() throws Exception {
+        reactiveMSearchClient.close();
+    }
 }

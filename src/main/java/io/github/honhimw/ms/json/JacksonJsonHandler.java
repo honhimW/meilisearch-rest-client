@@ -38,6 +38,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
+import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339;
+import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339_FORMATTER;
+
 /**
  * @author hon_him
  * @since 2023-12-29
@@ -57,8 +60,6 @@ public class JacksonJsonHandler implements JsonHandler {
     }
 
     public static JsonMapper.Builder defaultBuilder() {
-        String RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'";
-        DateTimeFormatter RFC_3339_FORMATTER = DateTimeFormatter.ofPattern(RFC_3339);
         JsonMapper.Builder builder = JsonMapper.builder();
 
         JavaTimeModule javaTimeModule = new JavaTimeModule();

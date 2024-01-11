@@ -111,8 +111,8 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
     }
 
     @Override
-    public Mono<List<SearchResponse>> multiSearch(MultiSearchRequest request) {
-        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), new TypeRef<List<SearchResponse>>() {
+    public Mono<List<SearchResponse<Map<String, Object>>>> multiSearch(MultiSearchRequest request) {
+        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), new TypeRef<List<SearchResponse<Map<String, Object>>>>() {
         });
     }
 
@@ -157,4 +157,8 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
         return simpleReactive;
     }
 
+    @Override
+    public void close() throws Exception {
+        this.httpClient.close();
+    }
 }

@@ -68,11 +68,24 @@ import java.util.function.Supplier;
     "unused",
     "UnusedReturnValue",
 })
-public class ReactiveHttpUtils {
+public class ReactiveHttpUtils implements AutoCloseable {
 
     private static final Logger log = LoggerFactory.getLogger(ReactiveHttpUtils.class);
 
     private ReactiveHttpUtils() {
+    }
+
+    @Override
+    public void close() {
+        synchronized (this) {
+            if (!Objects.equals(connectionProvider, NoopConnectProvider.INSTANCE)) {
+                connectionProvider.dispose();
+                connectionProvider = NoopConnectProvider.INSTANCE;
+                httpClient = HttpClient.create(connectionProvider);
+            } else {
+                throw new IllegalStateException("already closed.");
+            }
+        }
     }
 
     public static final String METHOD_GET = "GET";
@@ -128,6 +141,8 @@ public class ReactiveHttpUtils {
 
     private HttpClient httpClient;
 
+    private ConnectionProvider connectionProvider;
+
     private void init() {
         init(RequestConfig.DEFAULT_CONFIG);
     }
@@ -137,7 +152,8 @@ public class ReactiveHttpUtils {
         connectionProviderBuilder.maxConnections(MAX_TOTAL_CONNECTIONS);
         connectionProviderBuilder.pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS);
 
-        httpClient = HttpClient.create(connectionProviderBuilder.build());
+        connectionProvider = connectionProviderBuilder.build();
+        httpClient = HttpClient.create(connectionProvider);
         httpClient = requestConfig.config(httpClient);
     }
 

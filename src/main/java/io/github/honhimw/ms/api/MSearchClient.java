@@ -22,6 +22,7 @@ import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.Version;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -30,7 +31,7 @@ import java.util.function.Function;
  * @since 2024-01-03
  */
 
-public interface MSearchClient {
+public interface MSearchClient extends AutoCloseable {
 
     Indexes indexes();
 
@@ -50,7 +51,7 @@ public interface MSearchClient {
         return operation.apply(keys());
     }
 
-    List<SearchResponse> multiSearch(MultiSearchRequest request);
+    List<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchRequest request);
 
     default void healthy() {
         throw new IllegalStateException("server status not ['available']");

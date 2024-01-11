@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -32,7 +33,7 @@ import java.util.function.Function;
  * @since 2024-01-03
  */
 
-public interface ReactiveMSearchClient {
+public interface ReactiveMSearchClient extends AutoCloseable {
 
     ReactiveIndexes indexes();
 
@@ -53,7 +54,7 @@ public interface ReactiveMSearchClient {
     }
 
     @Operation(method = "POST", tags = "/multi-search")
-    Mono<List<SearchResponse>> multiSearch(MultiSearchRequest request);
+    Mono<List<SearchResponse<Map<String, Object>>>> multiSearch(MultiSearchRequest request);
 
     @Operation(method = "GET", tags = "/health")
     default Mono<Void> healthy() {

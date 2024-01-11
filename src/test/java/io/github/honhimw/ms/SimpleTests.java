@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms;
 
+import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +39,19 @@ public class SimpleTests {
         assert properties.containsKey("server.port");
         assert properties.containsKey("server.api-key");
         assert !properties.containsKey("server.api-key2") : "not api-key2 property";
+    }
+
+    @Test
+    @SneakyThrows
+    void httpClient() {
+        ReactiveHttpUtils instance = ReactiveHttpUtils.getInstance();
+        {
+            ReactiveHttpUtils.HttpResult httpResult = instance.get("https://httpbin.org/get?hello=world");
+            System.out.println(httpResult.str());
+        }
+        instance.close();
+        ReactiveHttpUtils.HttpResult httpResult = instance.get("https://httpbin.org/get?hello=world");
+        System.out.println(httpResult.str());
     }
 
 }
