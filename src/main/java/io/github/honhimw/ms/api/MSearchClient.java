@@ -97,4 +97,6 @@ public interface MSearchClient extends AutoCloseable {
         return new MSearchClientImpl(config);
     }
 
+    @Override
+    void close();
 }

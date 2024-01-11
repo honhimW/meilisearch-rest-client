@@ -44,27 +44,27 @@ dependencies {
 ## Usage
 
 ```java
-public static void main(String[]args) {
+public static void main(String[] args) {
     JsonHandler jsonHandler = new JacksonJsonHandler();
-    ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
-        .serverUrl("http://{{meilisearch-server-host}}")
-        .jsonHandler(jsonHandler)
-    );
-
-    MSearchClient blockingClient = MSearchClient.create(builder -> builder
+    try (
+        ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
             .serverUrl("http://{{meilisearch-server-host}}")
-            .jsonHandler(jsonHandler)
-        );
-
-    Mono<SearchResponse<Movie>> searchResponse = client.indexes(indexes -> indexes
-        .search("movies", reactiveSearch -> reactiveSearch
-            .find("hello world", Movie.class)));
-    List<Movie> hits = searchResponse.block().getHits();
-    // or
-    Mono<SearchResponse<Movie>> searchResponse2 = client.indexes(indexes1 -> indexes1
-        .search(index, Movie.class, search -> search
-            .find("hello world")));
-    List<Movie> hits2 = searchResponse2.block().getHits();
+            .jsonHandler(jsonHandler));
+        MSearchClient blockingClient = MSearchClient.create(builder -> builder
+            .serverUrl("http://{{meilisearch-server-host}}")
+            .jsonHandler(jsonHandler));
+    ) {
+        String indexUid = "movies";
+        Mono<SearchResponse<Movie>> searchResponse = client.indexes(indexes -> indexes
+            .search(indexUid, reactiveSearch -> reactiveSearch
+                .find("hello world", Movie.class)));
+        List<Movie> hits = searchResponse.block().getHits();
+        // or
+        Mono<SearchResponse<Movie>> searchResponse2 = client.indexes(indexes1 -> indexes1
+            .search(indexUid, Movie.class, search -> search
+                .find("hello world")));
+        List<Movie> hits2 = searchResponse2.block().getHits();
+    }
 }
 ```
 

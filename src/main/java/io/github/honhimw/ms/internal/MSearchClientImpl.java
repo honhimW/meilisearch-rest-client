@@ -115,7 +115,7 @@ public class MSearchClientImpl implements MSearchClient {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         reactiveMSearchClient.close();
     }
 }

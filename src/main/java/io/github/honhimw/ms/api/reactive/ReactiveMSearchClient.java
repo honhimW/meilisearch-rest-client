@@ -104,4 +104,6 @@ public interface ReactiveMSearchClient extends AutoCloseable {
         return new ReactiveMSearchClientImpl(config);
     }
 
+    @Override
+    void close();
 }

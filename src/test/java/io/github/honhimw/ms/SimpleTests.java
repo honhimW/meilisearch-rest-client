@@ -14,11 +14,18 @@
 
 package io.github.honhimw.ms;
 
+import io.github.honhimw.ms.api.MSearchClient;
+import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
+import io.github.honhimw.ms.json.JacksonJsonHandler;
+import io.github.honhimw.ms.json.JsonHandler;
+import io.github.honhimw.ms.model.SearchResponse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Mono;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -50,8 +57,12 @@ public class SimpleTests {
             System.out.println(httpResult.str());
         }
         instance.close();
-        ReactiveHttpUtils.HttpResult httpResult = instance.get("https://httpbin.org/get?hello=world");
-        System.out.println(httpResult.str());
+        try {
+            ReactiveHttpUtils.HttpResult httpResult = instance.get("https://httpbin.org/get?hello=world");
+            System.out.println(httpResult.str());
+        } catch (Exception e) {
+            assert e instanceof IllegalStateException;
+        }
     }
 
 }

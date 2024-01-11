@@ -158,7 +158,7 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         this.httpClient.close();
     }
 }
