@@ -51,7 +51,7 @@ public static void main(String[]args){
         .jsonHandler(jsonHandler)
     );
 
-    MSearchClient blockingClien = MSearchClient.create(builder -> builder
+    MSearchClient blockingClient = MSearchClient.create(builder -> builder
             .serverUrl("http://{{meilisearch-server-host}}")
             .jsonHandler(jsonHandler)
         );
