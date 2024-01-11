@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.reactive;
 
+import io.github.honhimw.ms.MeiliSearchProperties;
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
 import io.github.honhimw.ms.api.reactive.ReactiveTasks;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
@@ -21,6 +22,8 @@ import io.github.honhimw.ms.json.JsonHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * @author hon_him
@@ -38,10 +41,12 @@ public class ReactiveClientTests {
     protected static JsonHandler jsonHandler;
 
     @BeforeAll
-    static void init() {
+    static void init() throws IOException {
         jsonHandler = new JacksonJsonHandler();
         client = ReactiveMSearchClient.create(builder -> builder
-            .serverUrl("http://10.37.1.132:7700")
+            .host(MeiliSearchProperties.getHost())
+            .port(MeiliSearchProperties.getPort())
+            .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
         tasks = client.tasks();

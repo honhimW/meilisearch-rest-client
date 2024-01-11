@@ -29,9 +29,11 @@
 package io.github.honhimw.ms;
 
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
+import io.github.honhimw.ms.http.URIBuilder;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.support.Asserts;
+import io.github.honhimw.ms.support.StringUtils;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -67,6 +69,9 @@ public final class MSearchConfig {
 
     public static class Builder {
         private String serverUrl;
+        private boolean ssl = false;
+        private String host;
+        private int port = 7700;
         private String apiKey;
         private JsonHandler jsonHandler;
         private ReactiveHttpUtils httpClient;
@@ -76,6 +81,21 @@ public final class MSearchConfig {
 
         public Builder serverUrl(String serverUrl) {
             this.serverUrl = serverUrl;
+            return this;
+        }
+
+        public Builder enableSSL(boolean enabled) {
+            this.ssl = enabled;
+            return this;
+        }
+
+        public Builder host(String host) {
+            this.host = host;
+            return this;
+        }
+
+        public Builder port(int port) {
+            this.port = port;
             return this;
         }
 
@@ -95,6 +115,9 @@ public final class MSearchConfig {
         }
 
         public MSearchConfig build() {
+            if (StringUtils.isBlank(serverUrl)) {
+                serverUrl = String.format("%s://%s:%s", ssl ? "https" : "http", host, port);
+            }
             Asserts.status(Objects.nonNull(serverUrl), "serverUrl must not be null");
             Asserts.status(Objects.nonNull(jsonHandler), "jsonHandler must not be null");
             Asserts.status(Objects.nonNull(httpClient), "httpClient must not be null");

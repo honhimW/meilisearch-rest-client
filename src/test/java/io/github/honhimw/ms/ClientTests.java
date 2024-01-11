@@ -38,7 +38,8 @@ public class ClientTests {
     static void init() {
         jsonHandler = new JacksonJsonHandler();
         client = MSearchClient.create(builder -> builder
-            .serverUrl("http://10.37.1.132:7700")
+            .host(MeiliSearchProperties.getHost())
+            .port(MeiliSearchProperties.getPort())
             .jsonHandler(jsonHandler)
         );
     }

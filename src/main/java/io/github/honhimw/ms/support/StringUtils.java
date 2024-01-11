@@ -65,6 +65,14 @@ public class StringUtils {
         return !isEmpty(cs);
     }
 
+    public static String defaultIfBlank(final String cs, String _default) {
+        return isNotBlank(cs) ? cs : _default;
+    }
+
+    public static String defaultIfEmpty(final String cs, String _default) {
+        return isNotEmpty(cs) ? cs : _default;
+    }
+
     public static String removeStart(final String str, final String remove) {
         if (isEmpty(str) || isEmpty(remove)) {
             return str;

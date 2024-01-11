@@ -35,7 +35,8 @@ public class OfficialClientTests {
 
     @BeforeEach
     void init() {
-        Config config = new Config("http://10.37.1.132:7700", "key");
+        String hostUrl = String.format("http://%s:%d", MeiliSearchProperties.getHost(), MeiliSearchProperties.getPort());
+        Config config = new Config(hostUrl);
         client = new Client(config);
     }
 
