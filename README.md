@@ -43,7 +43,7 @@ dependencies {
 
 ## Usage
 
-```jshelllanguage
+```java
 public static void main(String[]args) {
     JsonHandler jsonHandler = new JacksonJsonHandler();
     ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
