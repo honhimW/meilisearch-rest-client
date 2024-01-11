@@ -18,8 +18,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <pre>
@@ -117,5 +118,24 @@ public class Setting implements Serializable {
 
     @Schema(description = "Pagination settings", defaultValue = "default object")
     private Pagination pagination;
-    
+
+    public static Setting defaultObject() {
+        Setting setting = new Setting();
+        setting.setDisplayedAttributes(Stream.of("*").collect(Collectors.toList()));
+        setting.setSearchableAttributes(Stream.of("*").collect(Collectors.toList()));
+        setting.setFilterableAttributes(new ArrayList<>());
+        setting.setSortableAttributes(new ArrayList<>());
+        setting.setRankingRules(Stream.of("words", "typo", "proximity", "attribute", "sort", "exactness").collect(Collectors.toList()));
+        setting.setStopWords(new ArrayList<>());
+        setting.setSeparatorTokens(new ArrayList<>());
+        setting.setNonSeparatorTokens(new ArrayList<>());
+        setting.setDictionary(new ArrayList<>());
+        setting.setSynonyms(new HashMap<>());
+        setting.setDistinctAttribute(null);
+        setting.setTypoTolerance(TypoTolerance.defaultObject());
+        setting.setFaceting(Faceting.defaultObject());
+        setting.setPagination(Pagination.defaultObject());
+        return setting;
+    }
+
 }

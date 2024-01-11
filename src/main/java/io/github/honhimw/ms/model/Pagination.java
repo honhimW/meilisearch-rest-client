@@ -42,5 +42,11 @@ public class Pagination implements Serializable {
     
     @Schema(description = "The maximum number of search results Meilisearch can return", defaultValue = "1000")
     private Integer maxTotalHits;
-    
+
+    public static Pagination defaultObject() {
+        Pagination pagination = new Pagination();
+        pagination.setMaxTotalHits(1000);
+        return pagination;
+    }
+
 }

@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -49,5 +50,14 @@ public class Faceting implements Serializable {
     
     @Schema(description = "Customize facet order to sort by descending value count (count) or ascending alphanumeric order (alpha)", defaultValue = "{\"*\": \"alpha\"}")
     private Map<String, String> sortFacetValuesBy;
+
+    public static Faceting defaultObject() {
+        Faceting faceting = new Faceting();
+        faceting.setMaxValuesPerFacet(100);
+        Map<String, String> sortFacetValuesBy = new HashMap<>();
+        sortFacetValuesBy.put("*", "alpha");
+        faceting.setSortFacetValuesBy(sortFacetValuesBy);
+        return faceting;
+    }
 
 }
