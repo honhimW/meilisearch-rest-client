@@ -14,11 +14,11 @@ public class DateTimeUtils {
     public static final DateTimeFormatter RFC_3339_FORMATTER = DateTimeFormatter.ofPattern(RFC_3339);
 
     public static String format(LocalDateTime time) {
-        return time.format(DateTimeFormatter.RFC_1123_DATE_TIME);
+        return time.format(RFC_3339_FORMATTER);
     }
 
     public static LocalDateTime parse(String time) {
-        return LocalDateTime.parse(time, DateTimeFormatter.RFC_1123_DATE_TIME);
+        return LocalDateTime.parse(time, RFC_3339_FORMATTER);
     }
 
 }
