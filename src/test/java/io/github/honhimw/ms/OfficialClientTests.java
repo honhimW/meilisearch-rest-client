@@ -40,28 +40,4 @@ public class OfficialClientTests {
         client = new Client(config);
     }
 
-    @Test
-    @SneakyThrows
-    void createIndex() {
-        TaskInfo index = client.createIndex("");
-    }
-
-    @Test
-    @SneakyThrows
-    void getIndex() {
-        Index index = client.getIndex("");
-        TaskInfo taskInfo = index.addDocuments("");
-        int taskUid = taskInfo.getTaskUid();
-        client.waitForTask(taskUid);
-    }
-
-    @Test
-    @SneakyThrows
-    void search() {
-        Index index = client.index("");
-        SearchResult search = index.search("");
-        CancelTasksQuery param = new CancelTasksQuery();
-        client.cancelTasks(param);
-    }
-
 }

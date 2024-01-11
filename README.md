@@ -43,8 +43,8 @@ dependencies {
 
 ## Usage
 
-```java
-public static void main(String[]args){
+```jshelllanguage
+public static void main(String[]args) {
     JsonHandler jsonHandler = new JacksonJsonHandler();
     ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
         .serverUrl("http://{{meilisearch-server-host}}")
@@ -66,4 +66,23 @@ public static void main(String[]args){
             .find("hello world")));
     List<Movie> hits2 = searchResponse2.block().getHits();
 }
+```
+
+## Run Tests
+```shell
+# Create file named 'profile-test.properties' under project root directory.
+#############################
+# ./meilisearch-rest-client
+# └── profile-test.properties
+#############################
+# Set properties as fallows:
+# meili-search.host=127.0.0.1
+# meili-search.port=7700
+# meili-search.api-key=
+#############################
+# You may also set `profiles.active` in gradle.properties for loading different properties file such as:
+# profile-alpha.properties: by setting profiles.active=alpha
+# profile-beta.properties: by setting profiles.active=beta
+
+$ gradle test
 ```
