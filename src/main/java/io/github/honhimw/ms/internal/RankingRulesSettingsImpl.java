@@ -18,6 +18,7 @@ import io.github.honhimw.ms.api.RankingRulesSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveRankingRulesSettings;
 import io.github.honhimw.ms.model.RankingRule;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.util.List;
 
@@ -36,16 +37,16 @@ class RankingRulesSettingsImpl implements RankingRulesSettings {
 
     @Override
     public List<RankingRule> get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(List<RankingRule> rankingRules) {
-        return _reactive.update(rankingRules).block();
+        return ReactorUtils.blockNonNull(_reactive.update(rankingRules));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }

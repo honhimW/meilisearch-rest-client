@@ -18,6 +18,7 @@ import io.github.honhimw.ms.api.TypoToleranceSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveTypoToleranceSettings;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.TypoTolerance;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
@@ -34,16 +35,16 @@ class TypoToleranceSettingsImpl implements TypoToleranceSettings {
 
     @Override
     public TypoTolerance get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(TypoTolerance typoTolerance) {
-        return _reactive.update(typoTolerance).block();
+        return ReactorUtils.blockNonNull(_reactive.update(typoTolerance));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }

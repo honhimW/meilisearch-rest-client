@@ -111,7 +111,7 @@ public interface Documents {
      * @param json json formatted array
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    TaskInfo update(@Nullable String json);
+    TaskInfo update(String json);
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(Collection<?> collection);

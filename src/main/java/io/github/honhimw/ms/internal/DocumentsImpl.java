@@ -21,6 +21,7 @@ import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
 import io.github.honhimw.ms.model.FilterableAttributesRequest;
 import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
@@ -42,71 +43,71 @@ class DocumentsImpl implements Documents {
 
     @Override
     public Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit) {
-        return _documents.list(offset, limit).block();
+        return ReactorUtils.blockNonNull(_documents.list(offset, limit));
     }
 
     @Override
     public <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef) {
-        return _documents.list(offset, limit, typeRef).block();
+        return ReactorUtils.blockNonNull(_documents.list(offset, limit, typeRef));
     }
 
     @Override
     public TaskInfo save(@Nullable String json) {
-        return _documents.save(json).block();
+        return ReactorUtils.blockNonNull(_documents.save(json));
     }
 
     @Override
     public TaskInfo save(Collection<?> collection) {
-        return _documents.save(collection).block();
+        return ReactorUtils.blockNonNull(_documents.save(collection));
     }
 
     @Override
-    public TaskInfo update(@Nullable String json) {
-        return _documents.update(json).block();
+    public TaskInfo update(String json) {
+        return ReactorUtils.blockNonNull(_documents.update(json));
     }
 
     @Override
     public TaskInfo update(Collection<?> collection) {
-        return _documents.update(collection).block();
+        return ReactorUtils.blockNonNull(_documents.update(collection));
     }
 
     @Override
     public TaskInfo deleteAll() {
-        return _documents.deleteAll().block();
+        return ReactorUtils.blockNonNull(_documents.deleteAll());
     }
 
     @Override
     public Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch) {
-        return _documents.batchGet(fetch).block();
+        return ReactorUtils.blockNonNull(_documents.batchGet(fetch));
     }
 
     @Override
     public <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef) {
-        return _documents.batchGet(fetch, typeRef).block();
+        return ReactorUtils.blockNonNull(_documents.batchGet(fetch, typeRef));
     }
 
     @Override
     public TaskInfo batchDelete(List<String> ids) {
-        return _documents.batchDelete(ids).block();
+        return ReactorUtils.blockNonNull(_documents.batchDelete(ids));
     }
 
     @Override
     public TaskInfo delete(FilterableAttributesRequest filter) {
-        return _documents.delete(filter).block();
+        return ReactorUtils.blockNonNull(_documents.delete(filter));
     }
 
     @Override
     public Map<String, Object> get(String id, @Nullable String... fields) {
-        return _documents.get(id, fields).block();
+        return ReactorUtils.blockNonNull(_documents.get(id, fields));
     }
 
     @Override
     public <T> T get(String id, TypeRef<T> typeRef, @Nullable String... fields) {
-        return _documents.get(id, typeRef, fields).block();
+        return ReactorUtils.blockNonNull(_documents.get(id, typeRef, fields));
     }
 
     @Override
     public TaskInfo delete(String id) {
-        return _documents.delete(id).block();
+        return ReactorUtils.blockNonNull(_documents.delete(id));
     }
 }

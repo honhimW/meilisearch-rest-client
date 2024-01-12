@@ -18,6 +18,7 @@ import io.github.honhimw.ms.api.PaginationSettings;
 import io.github.honhimw.ms.api.reactive.ReactivePaginationSettings;
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
@@ -34,16 +35,16 @@ class PaginationSettingsImpl implements PaginationSettings {
 
     @Override
     public Pagination get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(Pagination pagination) {
-        return _reactive.update(pagination).block();
+        return ReactorUtils.blockNonNull(_reactive.update(pagination));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }

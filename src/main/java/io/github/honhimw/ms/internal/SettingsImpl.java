@@ -18,6 +18,7 @@ import io.github.honhimw.ms.api.*;
 import io.github.honhimw.ms.api.reactive.ReactiveSettings;
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
 /**
@@ -35,17 +36,17 @@ public class SettingsImpl implements Settings {
 
     @Override
     public Setting get() {
-        return _settings.get().block();
+        return ReactorUtils.blockNonNull(_settings.get());
     }
 
     @Override
     public TaskInfo update(@Nullable Setting setting) {
-        return _settings.update(setting).block();
+        return ReactorUtils.blockNonNull(_settings.update(setting));
     }
 
     @Override
     public TaskInfo reset() {
-        return _settings.reset().block();
+        return ReactorUtils.blockNonNull(_settings.reset());
     }
 
     @Override

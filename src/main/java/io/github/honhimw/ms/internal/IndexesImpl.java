@@ -20,6 +20,7 @@ import io.github.honhimw.ms.api.Search;
 import io.github.honhimw.ms.api.Settings;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
 import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
@@ -40,32 +41,32 @@ class IndexesImpl implements Indexes {
 
     @Override
     public Page<Index> list(@Nullable Integer offset, @Nullable Integer limit) {
-        return _indexes.list(offset, limit).block();
+        return ReactorUtils.blockNonNull(_indexes.list(offset, limit));
     }
 
     @Override
     public Index get(String uid) {
-        return _indexes.get(uid).block();
+        return ReactorUtils.blockNonNull(_indexes.get(uid));
     }
 
     @Override
     public TaskInfo create(String uid, @Nullable String primaryKey) {
-        return _indexes.create(uid, primaryKey).block();
+        return ReactorUtils.blockNonNull(_indexes.create(uid, primaryKey));
     }
 
     @Override
     public TaskInfo update(String uid, String primaryKey) {
-        return _indexes.update(uid, primaryKey).block();
+        return ReactorUtils.blockNonNull(_indexes.update(uid, primaryKey));
     }
 
     @Override
     public TaskInfo delete(String uid) {
-        return _indexes.delete(uid).block();
+        return ReactorUtils.blockNonNull(_indexes.delete(uid));
     }
 
     @Override
     public TaskInfo swap(List<Map.Entry<String, String>> uids) {
-        return _indexes.swap(uids).block();
+        return ReactorUtils.blockNonNull(_indexes.swap(uids));
     }
 
     @Override
@@ -85,11 +86,11 @@ class IndexesImpl implements Indexes {
 
     @Override
     public Stats stats() {
-        return _indexes.stats().block();
+        return ReactorUtils.blockNonNull(_indexes.stats());
     }
 
     @Override
     public IndexStats stats(String uid) {
-        return _indexes.stats(uid).block();
+        return ReactorUtils.blockNonNull(_indexes.stats(uid));
     }
 }

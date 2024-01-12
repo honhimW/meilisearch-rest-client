@@ -17,6 +17,7 @@ package io.github.honhimw.ms.internal;
 import io.github.honhimw.ms.api.FilterableAttributesSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveFilterableAttributesSettings;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.util.List;
 
@@ -35,16 +36,16 @@ class FilterableAttributesSettingsImpl implements FilterableAttributesSettings {
 
     @Override
     public List<String> get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(List<String> filterableAttributes) {
-        return _reactive.update(filterableAttributes).block();
+        return ReactorUtils.blockNonNull(_reactive.update(filterableAttributes));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }

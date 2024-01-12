@@ -17,6 +17,7 @@ package io.github.honhimw.ms.internal;
 import io.github.honhimw.ms.api.DistinctAttributeSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveDistinctAttributeSettings;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
@@ -33,16 +34,16 @@ class DistinctAttributeSettingsImpl implements DistinctAttributeSettings {
 
     @Override
     public String get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(String distinctAttribute) {
-        return _reactive.update(distinctAttribute).block();
+        return ReactorUtils.blockNonNull(_reactive.update(distinctAttribute));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }

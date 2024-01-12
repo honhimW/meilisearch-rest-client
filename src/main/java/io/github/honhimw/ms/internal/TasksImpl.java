@@ -20,6 +20,7 @@ import io.github.honhimw.ms.model.CancelTasksRequest;
 import io.github.honhimw.ms.model.GetTasksRequest;
 import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
@@ -36,22 +37,22 @@ class TasksImpl implements Tasks {
 
     @Override
     public Page<TaskInfo> list(GetTasksRequest request) {
-        return _reactive.list(request).block();
+        return ReactorUtils.blockNonNull(_reactive.list(request));
     }
 
     @Override
     public TaskInfo delete(GetTasksRequest request) {
-        return _reactive.delete(request).block();
+        return ReactorUtils.blockNonNull(_reactive.delete(request));
     }
 
     @Override
     public TaskInfo get(Integer uid) {
-        return _reactive.get(uid).block();
+        return ReactorUtils.blockNonNull(_reactive.get(uid));
     }
 
     @Override
     public TaskInfo cancel(CancelTasksRequest request) {
-        return _reactive.cancel(request).block();
+        return ReactorUtils.blockNonNull(_reactive.cancel(request));
     }
 
     @Override

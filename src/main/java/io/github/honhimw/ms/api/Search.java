@@ -14,12 +14,15 @@
 
 package io.github.honhimw.ms.api;
 
+import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.FacetSearchRequest;
 import io.github.honhimw.ms.model.FacetSearchResponse;
 import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -45,7 +48,15 @@ public interface Search {
      * @return search result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
-    SearchResponse find(String q);
+    SearchResponse<Map<String, Object>> find(String q);
+
+    <T> SearchResponse<T> find(String q, TypeRef<T> typeRef);
+
+    default <T> SearchResponse<T> find(String q, Class<T> type) {
+        // @formatter:off
+        return find(q, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
 
     /**
      * Search for documents matching a specific query in the given index.
@@ -55,13 +66,30 @@ public interface Search {
      * @return search result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
-    SearchResponse find(SearchRequest request);
+    SearchResponse<Map<String, Object>> find(SearchRequest request);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
-    default SearchResponse find(Consumer<SearchRequest.Builder> builder) {
+    default SearchResponse<Map<String, Object>> find(Consumer<SearchRequest.Builder> builder) {
         SearchRequest.Builder _builder = SearchRequest.builder();
         builder.accept(_builder);
         return find(_builder.build());
+    }
+
+    <T> SearchResponse<T> find(SearchRequest request, TypeRef<T> typeRef);
+
+    default <T> SearchResponse<T> find(SearchRequest request, Class<T> type) {
+        // @formatter:off
+        return find(request, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
+
+    default <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, Class<T> type) {
+        SearchRequest.Builder _builder = SearchRequest.builder();
+        builder.accept(_builder);
+        SearchRequest request = _builder.build();
+        // @formatter:off
+        return find(request, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
     }
 
     /**

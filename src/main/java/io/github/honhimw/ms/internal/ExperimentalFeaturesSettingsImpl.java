@@ -17,6 +17,7 @@ package io.github.honhimw.ms.internal;
 import io.github.honhimw.ms.api.ExperimentalFeaturesSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveExperimentalFeaturesSettings;
 import io.github.honhimw.ms.model.ExperimentalFeatures;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
@@ -33,11 +34,11 @@ class ExperimentalFeaturesSettingsImpl implements ExperimentalFeaturesSettings {
 
     @Override
     public ExperimentalFeatures get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public ExperimentalFeatures configure(ExperimentalFeatures configure) {
-        return _reactive.configure(configure).block();
+        return ReactorUtils.blockNonNull(_reactive.configure(configure));
     }
 }

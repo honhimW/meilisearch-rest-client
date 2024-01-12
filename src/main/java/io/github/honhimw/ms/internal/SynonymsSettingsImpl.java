@@ -17,6 +17,7 @@ package io.github.honhimw.ms.internal;
 import io.github.honhimw.ms.api.SynonymsSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveSynonymsSettings;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -36,16 +37,16 @@ class SynonymsSettingsImpl implements SynonymsSettings {
 
     @Override
     public Map<String, List<String>> get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(Map<String, List<String>> synonyms) {
-        return _reactive.update(synonyms).block();
+        return ReactorUtils.blockNonNull(_reactive.update(synonyms));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }

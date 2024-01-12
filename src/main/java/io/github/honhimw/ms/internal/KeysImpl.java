@@ -20,6 +20,7 @@ import io.github.honhimw.ms.model.CreateKeyRequest;
 import io.github.honhimw.ms.model.Key;
 import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.UpdateKeyRequest;
+import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
 /**
@@ -37,22 +38,22 @@ class KeysImpl implements Keys {
 
     @Override
     public Page<Key> list(@Nullable Integer offset, @Nullable Integer limit) {
-        return _reactive.list(offset, limit).block();
+        return ReactorUtils.blockNonNull(_reactive.list(offset, limit));
     }
 
     @Override
     public Key get(String keyOrUid) {
-        return _reactive.list(keyOrUid).block();
+        return ReactorUtils.blockNonNull(_reactive.list(keyOrUid));
     }
 
     @Override
     public Key create(String keyOrUid, CreateKeyRequest request) {
-        return _reactive.create(keyOrUid, request).block();
+        return ReactorUtils.blockNonNull(_reactive.create(keyOrUid, request));
     }
 
     @Override
     public Key update(String keyOrUid, UpdateKeyRequest request) {
-        return _reactive.update(keyOrUid, request).block();
+        return ReactorUtils.blockNonNull(_reactive.update(keyOrUid, request));
     }
 
     @Override

@@ -30,10 +30,14 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.api.Search;
 import io.github.honhimw.ms.api.reactive.ReactiveSearch;
+import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.FacetSearchRequest;
 import io.github.honhimw.ms.model.FacetSearchResponse;
 import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.support.ReactorUtils;
+
+import java.util.Map;
 
 /**
  * @author hon_him
@@ -49,17 +53,27 @@ class SearchImpl implements Search {
     }
 
     @Override
-    public SearchResponse find(String q) {
-        return _search.find(q).block();
+    public SearchResponse<Map<String, Object>> find(String q) {
+        return ReactorUtils.blockNonNull(_search.find(q));
     }
 
     @Override
-    public SearchResponse find(SearchRequest request) {
-        return _search.find(request).block();
+    public <T> SearchResponse<T> find(String q, TypeRef<T> typeRef) {
+        return ReactorUtils.blockNonNull(_search.find(q, typeRef));
+    }
+
+    @Override
+    public SearchResponse<Map<String, Object>> find(SearchRequest request) {
+        return ReactorUtils.blockNonNull(_search.find(request));
+    }
+
+    @Override
+    public <T> SearchResponse<T> find(SearchRequest request, TypeRef<T> typeRef) {
+        return ReactorUtils.blockNonNull(_search.find(request, typeRef));
     }
 
     @Override
     public FacetSearchResponse facetSearch(FacetSearchRequest request) {
-        return _search.facetSearch(request).block();
+        return ReactorUtils.blockNonNull(_search.facetSearch(request));
     }
 }

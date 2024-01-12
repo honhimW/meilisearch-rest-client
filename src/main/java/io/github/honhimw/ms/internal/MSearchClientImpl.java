@@ -49,6 +49,7 @@ import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.Version;
+import io.github.honhimw.ms.support.ReactorUtils;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public class MSearchClientImpl implements MSearchClient {
 
     @Override
     public List<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchRequest request) {
-        return reactiveMSearchClient.multiSearch(request).block();
+        return ReactorUtils.blockNonNull(reactiveMSearchClient.multiSearch(request));
     }
 
     @Override
@@ -94,19 +95,19 @@ public class MSearchClientImpl implements MSearchClient {
 
     @Override
     public Version version() {
-        return reactiveMSearchClient.version().block();
+        return ReactorUtils.blockNonNull(reactiveMSearchClient.version());
     }
 
     @Override
     @Operation(method = "POST", tags = "/dumps")
     public TaskInfo dumps() {
-        return reactiveMSearchClient.dumps().block();
+        return ReactorUtils.blockNonNull(reactiveMSearchClient.dumps());
     }
 
     @Override
     @Operation(method = "POST", tags = "/snapshots")
     public TaskInfo snapshots() {
-        return reactiveMSearchClient.snapshots().block();
+        return ReactorUtils.blockNonNull(reactiveMSearchClient.snapshots());
     }
 
     @Override

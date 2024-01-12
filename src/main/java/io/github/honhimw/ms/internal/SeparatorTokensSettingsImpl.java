@@ -17,6 +17,7 @@ package io.github.honhimw.ms.internal;
 import io.github.honhimw.ms.api.SeparatorTokensSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveSeparatorTokensSettings;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.util.List;
 
@@ -35,16 +36,16 @@ class SeparatorTokensSettingsImpl implements SeparatorTokensSettings {
 
     @Override
     public List<String> get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(List<String> separatorTokens) {
-        return _reactive.update(separatorTokens).block();
+        return ReactorUtils.blockNonNull(_reactive.update(separatorTokens));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }

@@ -18,6 +18,7 @@ import io.github.honhimw.ms.api.FacetingSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveFacetingSettings;
 import io.github.honhimw.ms.model.Faceting;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
@@ -34,16 +35,16 @@ class FacetingSettingsImpl implements FacetingSettings {
 
     @Override
     public Faceting get() {
-        return _reactive.get().block();
+        return ReactorUtils.blockNonNull(_reactive.get());
     }
 
     @Override
     public TaskInfo update(Faceting faceting) {
-        return _reactive.update(faceting).block();
+        return ReactorUtils.blockNonNull(_reactive.update(faceting));
     }
 
     @Override
     public TaskInfo reset() {
-        return _reactive.reset().block();
+        return ReactorUtils.blockNonNull(_reactive.reset());
     }
 }
