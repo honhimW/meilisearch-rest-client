@@ -50,7 +50,6 @@ public class ReactiveClientTests {
             .jsonHandler(jsonHandler)
         );
         tasks = client.tasks();
-        client.close();
     }
 
     public static final String movies = "[\n" +
