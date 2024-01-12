@@ -16,13 +16,7 @@ package io.github.honhimw.ms;
 
 import com.meilisearch.sdk.Client;
 import com.meilisearch.sdk.Config;
-import com.meilisearch.sdk.Index;
-import com.meilisearch.sdk.model.CancelTasksQuery;
-import com.meilisearch.sdk.model.SearchResult;
-import com.meilisearch.sdk.model.TaskInfo;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 /**
  * @author hon_him

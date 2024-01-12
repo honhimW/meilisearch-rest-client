@@ -373,7 +373,7 @@ public final class URIBuilder {
         if (cursor.atEnd()) {
             return Collections.emptyList();
         }
-        if (URIBuilder.PATHSAFE.get(s.charAt(cursor.getPos()))) {
+        if (URIBuilder.PATH_SAFE.get(s.charAt(cursor.getPos()))) {
             cursor.updatePos(cursor.getPos() + 1);
         }
         final List<String> list = new ArrayList<String>();
@@ -384,7 +384,7 @@ public final class URIBuilder {
                 break;
             }
             final char current = s.charAt(cursor.getPos());
-            if (URIBuilder.PATHSAFE.get(current)) {
+            if (URIBuilder.PATH_SAFE.get(current)) {
                 list.add(buf.toString());
                 buf.setLength(0);
             } else {
