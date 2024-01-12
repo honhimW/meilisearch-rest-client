@@ -51,13 +51,24 @@ public final class URIBuilder {
     private String fragment;
     private String encodedFragment;
 
+    public static URIBuilder create() {
+        return new URIBuilder();
+    }
+
+    public static URIBuilder from(final String uri) {
+        return new URIBuilder(uri);
+    }
+
+    public static URIBuilder from(final URI uri) {
+        return new URIBuilder(uri);
+    }
+
     public URIBuilder() {
-        super();
         this.port = -1;
     }
 
-    public URIBuilder(final String string) throws URISyntaxException {
-        this(new URI(string), null);
+    public URIBuilder(final String string) {
+        this(URI.create(string), null);
     }
 
     public URIBuilder(final URI uri) {
@@ -69,7 +80,6 @@ public final class URIBuilder {
     }
 
     public URIBuilder(final URI uri, final Charset charset) {
-        super();
         setCharset(charset);
         digestURI(uri);
     }
