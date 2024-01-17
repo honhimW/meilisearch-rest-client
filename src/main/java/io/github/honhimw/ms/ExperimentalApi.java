@@ -14,24 +14,17 @@
 
 package io.github.honhimw.ms;
 
-import com.meilisearch.sdk.Client;
-import com.meilisearch.sdk.Config;
-import org.junit.jupiter.api.BeforeEach;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author hon_him
- * @since 2024-01-02
+ * @since 2024-01-17
  */
 
-public class OfficialClientTests {
-
-    private Client client;
-
-    @BeforeEach
-    void init() {
-        String hostUrl = String.format("http://%s:%d", MeiliSearchProperties.getHost(), MeiliSearchProperties.getPort());
-        Config config = new Config(hostUrl);
-        client = new Client(config);
-    }
-
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.SOURCE)
+public @interface ExperimentalApi {
 }
