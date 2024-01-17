@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'io.github.honhimw'
-version = '1.5.0.0-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
+version = '1.6.0.0-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
 description = 'Java client for meilisearch.'
 
 def title = 'Meilisearch rest client for java'

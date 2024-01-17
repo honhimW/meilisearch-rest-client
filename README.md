@@ -7,7 +7,8 @@
 ### Version
 The version number of this library is named by appending `.X` to the version number in the official documentation.
 
-- v1.5 Docs: [1.5.0.x,) (current)
+- v1.6 Docs: [1.6.0.x,) (*current)
+- v1.5 Docs: [1.5.0.x, 1.6.0) 
 
 ### Dependencies
 
@@ -28,7 +29,7 @@ $ gradle clean build -x test
 ```groovy
 // Gradle
 dependencies {
-    implementation 'io.github.honhimw:meilisearch-rest-client:1.5.0.0-SNAPSHOT'
+    implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.0-SNAPSHOT'
 }
 ```
 
@@ -37,7 +38,7 @@ dependencies {
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.5.0.0-SNAPSHOT</version>
+    <version>1.6.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
