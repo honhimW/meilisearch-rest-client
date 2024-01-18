@@ -89,6 +89,11 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
     }
 
     @Override
+    public ReactiveProximityPrecisionSettings proximityPrecision() {
+        return null;
+    }
+
+    @Override
     public ReactiveRankingRulesSettings rankingRules() {
         return new ReactiveRankingRulesSettingsImpl(this);
     }

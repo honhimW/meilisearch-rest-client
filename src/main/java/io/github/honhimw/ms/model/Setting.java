@@ -62,7 +62,8 @@ import java.util.stream.Stream;
  *   },
  *   "pagination": {
  *     "maxTotalHits": 1000
- *   }
+ *   },
+ *   "proximityPrecision": "byWord"
  * }
  * </pre>
  *
@@ -118,6 +119,9 @@ public class Setting implements Serializable {
 
     @Schema(description = "Pagination settings", defaultValue = "default object")
     private Pagination pagination;
+    
+    @Schema(description = "Precision level when calculating the proximity ranking rule", defaultValue = "byWord")
+    private String proximityPrecision;
 
     public static Setting defaultObject() {
         Setting setting = new Setting();
@@ -135,6 +139,7 @@ public class Setting implements Serializable {
         setting.setTypoTolerance(TypoTolerance.defaultObject());
         setting.setFaceting(Faceting.defaultObject());
         setting.setPagination(Pagination.defaultObject());
+        setting.setProximityPrecision("byWord");
         return setting;
     }
 

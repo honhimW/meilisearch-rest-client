@@ -80,6 +80,11 @@ public class SettingsImpl implements Settings {
     }
 
     @Override
+    public ProximityPrecisionSettings proximityPrecision() {
+        return new ProximityPrecisionSettingsImpl(_settings.proximityPrecision());
+    }
+
+    @Override
     public RankingRulesSettings rankingRules() {
         return new RankingRulesSettingsImpl(_settings.rankingRules());
     }

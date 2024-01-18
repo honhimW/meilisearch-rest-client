@@ -132,6 +132,16 @@ public interface Settings {
     }
 
     /**
+     * @return {@link ProximityPrecisionSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/pagination")
+    ProximityPrecisionSettings proximityPrecision();
+
+    default <R> R proximityPrecision(Function<ProximityPrecisionSettings, R> operation) {
+        return operation.apply(proximityPrecision());
+    }
+
+    /**
      * @return {@link RankingRulesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")

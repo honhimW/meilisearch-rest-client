@@ -133,6 +133,16 @@ public interface ReactiveSettings {
     }
 
     /**
+     * @return {@link ReactiveProximityPrecisionSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/proximity-precision")
+    ReactiveProximityPrecisionSettings proximityPrecision();
+
+    default <R> R proximityPrecision(Function<ReactiveProximityPrecisionSettings, R> operation) {
+        return operation.apply(proximityPrecision());
+    }
+
+    /**
      * @return {@link ReactiveRankingRulesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")
