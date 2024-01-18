@@ -221,4 +221,14 @@ public interface Settings {
         return operation.apply(typoTolerance());
     }
 
+    /**
+     * @return {@link EmbeddersSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/embedders")
+    EmbeddersSettings embedders();
+
+    default <R> R embedders(Function<EmbeddersSettings, R> operation) {
+        return operation.apply(embedders());
+    }
+
 }

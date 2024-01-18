@@ -12,19 +12,34 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms;
+package io.github.honhimw.ms.model;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.github.honhimw.ms.Experimental;
 
 /**
  * @author hon_him
- * @since 2024-01-17
+ * @since 2024-01-18 V1.6
  */
 
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.SOURCE)
-public @interface ExperimentalApi {
+@Experimental(feature = "vector-search")
+public enum EmbedderSource {
+
+    OPEN_AI("openAi"),
+    HUGGING_FACE("huggingFace"),
+    USER_PROVIDED("userProvided"),
+    ;
+
+    private final String source;
+
+    EmbedderSource(String source) {
+        this.source = source;
+    }
+
+    @JsonValue
+    @Override
+    public String toString() {
+        return this.source;
+    }
+
 }

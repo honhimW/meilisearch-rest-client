@@ -23,6 +23,7 @@ import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -86,7 +87,20 @@ public interface ReactiveDocuments {
     Mono<TaskInfo> save(String json);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> save(Object one) {
+        return save(Collections.singleton(one));
+    }
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(Collection<?> collection);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> saveVectorized(VectorizedDocument one) {
+        return save(Collections.singleton(one));
+    }
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    Mono<TaskInfo> saveVectorized(Collection<VectorizedDocument> collection);
 
     /**
      * Add a list of documents or update them if they already exist.
@@ -106,6 +120,11 @@ public interface ReactiveDocuments {
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(String json);
+
+    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> update(Object one) {
+        return update(Collections.singleton(one));
+    }
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(Collection<?> collection);

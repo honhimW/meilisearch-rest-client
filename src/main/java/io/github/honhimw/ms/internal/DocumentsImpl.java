@@ -17,10 +17,7 @@ package io.github.honhimw.ms.internal;
 import io.github.honhimw.ms.api.Documents;
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
-import io.github.honhimw.ms.model.FilterableAttributesRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
@@ -59,6 +56,11 @@ class DocumentsImpl implements Documents {
     @Override
     public TaskInfo save(Collection<?> collection) {
         return ReactorUtils.blockNonNull(_documents.save(collection));
+    }
+
+    @Override
+    public TaskInfo saveVectorized(Collection<VectorizedDocument> collection) {
+        return ReactorUtils.blockNonNull(_documents.saveVectorized(collection));
     }
 
     @Override

@@ -123,4 +123,9 @@ public class SettingsImpl implements Settings {
     public TypoToleranceSettings typoTolerance() {
         return new TypoToleranceSettingsImpl(_settings.typoTolerance());
     }
+
+    @Override
+    public EmbeddersSettings embedders() {
+        return new EmbeddersSettingsImpl(_settings.embedders());
+    }
 }

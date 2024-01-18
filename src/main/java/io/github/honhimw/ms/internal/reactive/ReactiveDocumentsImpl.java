@@ -17,10 +17,7 @@ package io.github.honhimw.ms.internal.reactive;
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
-import io.github.honhimw.ms.model.FilterableAttributesRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -72,6 +69,12 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
 
     @Override
     public Mono<TaskInfo> save(Collection<?> collection) {
+        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
+        });
+    }
+
+    @Override
+    public Mono<TaskInfo> saveVectorized(Collection<VectorizedDocument> collection) {
         return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
         });
     }

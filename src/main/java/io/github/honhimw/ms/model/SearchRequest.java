@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.model;
 
+import io.github.honhimw.ms.Experimental;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -84,5 +85,13 @@ public class SearchRequest extends FilterableAttributesRequest {
     
     @Schema(description = "Restrict search to the specified attributes", defaultValue = "[\"*\"]")
     private List<String> attributesToSearchOn;
+
+    @Experimental(feature = "vector-search")
+    @Schema(description = "hybrid is an object and accepts two fields: semanticRatio and embedder")
+    private Hybrid hybrid;
+
+    @Experimental(feature = "vector-search")
+    @Schema(description = "must be an array of numbers indicating the search vector. You must generate these yourself when using vector search with user-provided embeddings.")
+    private List<Number> vector;
     
 }

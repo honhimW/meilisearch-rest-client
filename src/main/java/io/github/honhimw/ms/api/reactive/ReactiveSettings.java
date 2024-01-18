@@ -222,4 +222,16 @@ public interface ReactiveSettings {
         return operation.apply(typoTolerance());
     }
 
+    /**
+     * @return {@link ReactiveEmbeddersSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/embedders")
+    ReactiveEmbeddersSettings embedders();
+
+    default <R> R embedders(Function<ReactiveEmbeddersSettings, R> operation) {
+        return operation.apply(embedders());
+    }
+
+
+
 }

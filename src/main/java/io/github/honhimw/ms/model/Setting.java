@@ -122,6 +122,9 @@ public class Setting implements Serializable {
     
     @Schema(description = "Precision level when calculating the proximity ranking rule", defaultValue = "byWord")
     private String proximityPrecision;
+    
+    @Schema(description = "To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.")
+    private Map<String, ? extends Embedder> embedders;
 
     public static Setting defaultObject() {
         Setting setting = new Setting();

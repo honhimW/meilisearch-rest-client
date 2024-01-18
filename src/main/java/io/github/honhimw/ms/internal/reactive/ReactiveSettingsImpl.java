@@ -90,7 +90,7 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
 
     @Override
     public ReactiveProximityPrecisionSettings proximityPrecision() {
-        return null;
+        return new ReactiveProximityPrecisionSettingsImpl(this);
     }
 
     @Override
@@ -131,5 +131,10 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
     @Override
     public ReactiveTypoToleranceSettings typoTolerance() {
         return new ReactiveTypoToleranceSettingsImpl(this);
+    }
+
+    @Override
+    public ReactiveEmbeddersSettings embedders() {
+        return new ReactiveEmbeddersSettingsImpl(this);
     }
 }
