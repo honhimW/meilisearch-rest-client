@@ -19,8 +19,6 @@ The version number of this library is named by appending `.X` to the version num
 
 ## Installation
 
-**Note**: not yet deploy
-
 ```shell
 # build from sources
 $ gradle clean build -x test
