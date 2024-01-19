@@ -14,8 +14,8 @@
 
 package io.github.honhimw.ms.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.github.honhimw.ms.Experimental;
+import io.github.honhimw.ms.json.EnumValue;
 
 /**
  * @author hon_him
@@ -23,7 +23,7 @@ import io.github.honhimw.ms.Experimental;
  */
 
 @Experimental(feature = "vector-search")
-public enum EmbedderSource {
+public enum EmbedderSource implements EnumValue<EmbedderSource> {
 
     OPEN_AI("openAi"),
     HUGGING_FACE("huggingFace"),
@@ -36,9 +36,8 @@ public enum EmbedderSource {
         this.source = source;
     }
 
-    @JsonValue
     @Override
-    public String toString() {
+    public String value() {
         return this.source;
     }
 

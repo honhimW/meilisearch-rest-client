@@ -74,7 +74,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
                     obj.put("uid", uid);
                     Optional.ofNullable(primaryKey)
                         .ifPresent(pk -> obj.put("primaryKey", pk));
-                    raw.json(obj);
+                    raw.json(jsonHandler.toJson(obj));
                 })), new TypeRef<TaskInfo>() {
         });
     }
@@ -86,7 +86,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
                 .raw(raw -> {
                     Map<String, String> obj = new HashMap<>();
                     obj.put("primaryKey", primaryKey);
-                    raw.json(obj);
+                    raw.json(jsonHandler.toJson(obj));
                 })), new TypeRef<TaskInfo>() {
         });
     }

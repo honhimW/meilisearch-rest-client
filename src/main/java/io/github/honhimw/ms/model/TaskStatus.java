@@ -14,14 +14,14 @@
 
 package io.github.honhimw.ms.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import io.github.honhimw.ms.json.EnumValue;
 
 /**
  * @author hon_him
  * @since 2024-01-02
  */
 
-public enum TaskStatus {
+public enum TaskStatus implements EnumValue<TaskStatus> {
     ENQUEUED("enqueued"),
     PROCESSING("processing"),
     SUCCEEDED("succeeded"),
@@ -34,9 +34,8 @@ public enum TaskStatus {
         this.taskStatus = taskStatus;
     }
 
-    @JsonValue
     @Override
-    public String toString() {
+    public String value() {
         return this.taskStatus;
     }
 

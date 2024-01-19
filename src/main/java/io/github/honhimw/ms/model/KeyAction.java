@@ -14,14 +14,14 @@
 
 package io.github.honhimw.ms.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import io.github.honhimw.ms.json.EnumValue;
 
 /**
  * @author hon_him
  * @since 2024-01-02
  */
 
-public enum KeyAction {
+public enum KeyAction implements EnumValue<KeyAction> {
     SEARCH("search", "Provides access to both POST and GET search endpoints"),
     DOCUMENTS_ADD("documents.add", "Provides access to the add documents and update documents endpoints"),
     DOCUMENTS_GET("documents.get", "Provides access to the get one document, get documents with POST, and get documents with GET endpoints endpoints"),
@@ -54,9 +54,8 @@ public enum KeyAction {
         this.description = description;
     }
 
-    @JsonValue
     @Override
-    public String toString() {
+    public String value() {
         return this.keyAction;
     }
 

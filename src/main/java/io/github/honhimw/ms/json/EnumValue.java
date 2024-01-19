@@ -12,29 +12,15 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.model;
-
-import io.github.honhimw.ms.json.EnumValue;
+package io.github.honhimw.ms.json;
 
 /**
  * @author hon_him
- * @since 2024-01-18
+ * @since 2024-01-19
  */
 
-public enum ProximityPrecisionType implements EnumValue<ProximityPrecisionType> {
+public interface EnumValue<T extends Enum<T> & EnumValue<T>> {
 
-    BY_WORD("byWord"),
-    BY_ATTRIBUTE("byAttribute"),
-    ;
+    String value();
 
-    private final String type;
-
-    ProximityPrecisionType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public String value() {
-        return this.type;
-    }
 }

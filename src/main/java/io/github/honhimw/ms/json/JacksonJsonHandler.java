@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -36,6 +37,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339;
@@ -91,14 +94,42 @@ public class JacksonJsonHandler implements JsonHandler {
             }
         });
 
-        SimpleModule longAsStringModule = new SimpleModule();
-        longAsStringModule.addSerializer(Long.class, ToStringSerializer.instance);
-        longAsStringModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+
+        simpleModule.addSerializer(EnumValue.class, new JsonSerializer<EnumValue>() {
+            @Override
+            public void serialize(EnumValue value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+                gen.writeString(value.value());
+            }
+        });
+        simpleModule
+            .setDeserializers(new SimpleDeserializers() {
+                @Override
+                public JsonDeserializer<?> findEnumDeserializer(Class<?> type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
+                    if (EnumValue.class.isAssignableFrom(type)) {
+                        final Map<String, Enum<?>> map = new HashMap<>();
+                        Object[] enumConstants = type.getEnumConstants();
+                        for (Object enumConstant : enumConstants) {
+                            map.put(((EnumValue<?>) enumConstant).value(), (Enum<?>) enumConstant);
+                        }
+                        return new JsonDeserializer<Enum<?>>() {
+                            @Override
+                            public Enum<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+                                String text = p.getText();
+                                return map.get(text);
+                            }
+                        };
+                    }
+                    return super.findEnumDeserializer(type, config, beanDesc);
+                }
+            });
 
         builder
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .defaultDateFormat(new SimpleDateFormat(RFC_3339))
-            .addModules(javaTimeModule, longAsStringModule)
+            .addModules(javaTimeModule, simpleModule)
             .defaultTimeZone(TimeZone.getDefault())
         ;
         return builder;

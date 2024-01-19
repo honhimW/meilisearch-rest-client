@@ -14,8 +14,6 @@
 
 package io.github.honhimw.ms.http;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.IOUtils;
 import io.github.honhimw.ms.support.StringUtils;
@@ -111,10 +109,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
         return reactiveHttpUtils;
     }
 
-    public static void setObjectMapper(ObjectMapper objectMapper) {
-        OBJECT_MAPPER = objectMapper;
-    }
-
     /**
      * max total connections
      */
@@ -136,8 +130,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
     public static final Duration READ_TIMEOUT = Duration.ofSeconds(20);
 
     private static final Charset defaultCharset = StandardCharsets.UTF_8;
-
-    private static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private HttpClient httpClient;
 
@@ -713,18 +705,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 return this;
             }
 
-            public Raw json(Object obj) {
-                if (Objects.isNull(raw) && Objects.nonNull(obj)) {
-                    try {
-                        this.raw = OBJECT_MAPPER.writeValueAsString(obj);
-                    } catch (JsonProcessingException e) {
-                        throw new IllegalArgumentException(e);
-                    }
-                    this.contentType = APPLICATION_JSON;
-                }
-                return this;
-            }
-
             public Raw html(String text) {
                 if (Objects.isNull(raw)) {
                     this.raw = text;
@@ -1048,16 +1028,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
         public String str() {
             return wrap(bytes -> new String(bytes, charset));
-        }
-
-        public <T> T json(Class<T> type) {
-            return wrap(bytes -> {
-                try {
-                    return OBJECT_MAPPER.readValue(bytes, type);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
         }
 
         public <T> T wrap(Function<byte[], T> wrapper) {
