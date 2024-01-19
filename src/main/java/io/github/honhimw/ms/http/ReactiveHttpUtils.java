@@ -39,7 +39,6 @@ import reactor.netty.http.client.HttpClient.ResponseReceiver;
 import reactor.netty.http.client.HttpClientForm;
 import reactor.netty.http.client.HttpClientResponse;
 import reactor.netty.resources.ConnectionProvider;
-import reactor.netty.resources.ConnectionProvider.Builder;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -58,6 +57,57 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * <table>
+ *     <tr style="color:yellow">
+ *         <th>Property</th>
+ *         <th>default value</th>
+ *     </tr>
+ *     <tr>
+ *         <td>connect timeout</td>
+ *         <td>4s</td>
+ *     </tr>
+ *     <tr>
+ *         <td>read timeout</td>
+ *         <td>30s</td>
+ *     </tr>
+ *     <tr>
+ *         <td>HTTP Protocol</td>
+ *         <td>HTTP/1.1, HTTP/2</td>
+ *     </tr>
+ *     <tr>
+ *         <td>follow redirect</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>keepalive</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>proxy with system properties</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>compress</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>retry</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>ssl</td>
+ *         <td>false</td>
+ *     </tr>
+ *     <tr>
+ *         <td>max connections</td>
+ *         <td>1000</td>
+ *     </tr>
+ *     <tr>
+ *         <td>pending acquire max count</td>
+ *         <td>1000</td>
+ *     </tr>
+ * </table>
+ *
  * @author hon_him
  * @see RequestConfig.Builder default request configuration
  * @since 2023-02-22
@@ -127,7 +177,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
     /**
      * read timeout
      */
-    public static final Duration READ_TIMEOUT = Duration.ofSeconds(20);
+    public static final Duration READ_TIMEOUT = Duration.ofSeconds(30);
 
     private static final Charset defaultCharset = StandardCharsets.UTF_8;
 
@@ -140,11 +190,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
     }
 
     private void init(RequestConfig requestConfig) {
-        Builder connectionProviderBuilder = ConnectionProvider.builder("ReactiveHttpUtils");
-        connectionProviderBuilder.maxConnections(MAX_TOTAL_CONNECTIONS);
-        connectionProviderBuilder.pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS);
-
-        connectionProvider = connectionProviderBuilder.build();
+        connectionProvider = requestConfig.connectionProvider;
         httpClient = HttpClient.create(connectionProvider);
         httpClient = requestConfig.config(httpClient);
     }
@@ -408,6 +454,8 @@ public class ReactiveHttpUtils implements AutoCloseable {
         private final boolean enableCompress;
         private final boolean enableRetry;
         private final boolean noSSL;
+        private final ConnectionProvider connectionProvider;
+        private final Consumer<HttpClient> customize;
 
         private HttpClient config(HttpClient httpClient) {
             HttpClient client = httpClient;
@@ -427,6 +475,8 @@ public class ReactiveHttpUtils implements AutoCloseable {
             if (noSSL) {
                 client = client.noSSL();
             }
+            // customize
+            customize.accept(client);
             return client;
         }
 
@@ -476,6 +526,12 @@ public class ReactiveHttpUtils implements AutoCloseable {
             private boolean enableCompress = true;
             private boolean enableRetry = true;
             private boolean noSSL = true;
+            private ConnectionProvider connectionProvider = ConnectionProvider.builder("ReactiveHttpUtils")
+                .maxConnections(MAX_TOTAL_CONNECTIONS)
+                .pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS)
+                .build();
+            private Consumer<HttpClient> customize = _httpClient -> {
+            };
 
             public Builder connectTimeout(Duration connectTimeout) {
                 this.connectTimeout = connectTimeout;
@@ -522,6 +578,16 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 return this;
             }
 
+            public Builder connectionProvider(ConnectionProvider connectionProvider) {
+                this.connectionProvider = connectionProvider;
+                return this;
+            }
+
+            public Builder customize(Consumer<HttpClient> customize) {
+                this.customize = this.customize.andThen(customize);
+                return this;
+            }
+
             public RequestConfig build() {
                 return new RequestConfig(
                     connectTimeout,
@@ -532,7 +598,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
                     proxyWithSystemProperties,
                     enableCompress,
                     enableRetry,
-                    noSSL
+                    noSSL,
+                    connectionProvider,
+                    customize
                 );
             }
         }
@@ -886,7 +954,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
             public FormData inputStream(String name, String filename, InputStream ips, String contentType) {
                 parts.add(form -> {
-                    form.file(name, name, ips, MULTIPART_FORM_DATA);
+                    form.file(name, filename, ips, MULTIPART_FORM_DATA);
                     return form;
                 });
                 return this;
