@@ -12,10 +12,10 @@ The version number of this library is named by appending `.X` to the version num
 
 ### Dependencies
 
-*By default,  this library depends on libraries as fallow:*
+*By default, this library depends on libraries as fallows:*
 
 - reactor-netty-http(required)
-- jackson(replaceable by provide implementation of `io.github.honhimw.ms.JsonHandler`)
+- jackson(replaceable by providing implementation of `io.github.honhimw.ms.JsonHandler`)
 
 ## Installation
 
