@@ -22,7 +22,7 @@ import io.github.honhimw.ms.json.EnumValue;
  * @since 2024-01-18 V1.6
  */
 
-@Experimental(feature = "vector-search")
+@Experimental(features = Experimental.Features.VECTOR_SEARCH)
 public enum EmbedderSource implements EnumValue<EmbedderSource> {
 
     OPEN_AI("openAi"),

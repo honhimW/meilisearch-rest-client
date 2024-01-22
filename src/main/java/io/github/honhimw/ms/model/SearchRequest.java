@@ -86,11 +86,11 @@ public class SearchRequest extends FilterableAttributesRequest {
     @Schema(description = "Restrict search to the specified attributes", defaultValue = "[\"*\"]")
     private List<String> attributesToSearchOn;
 
-    @Experimental(feature = "vector-search")
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Schema(description = "hybrid is an object and accepts two fields: semanticRatio and embedder")
     private Hybrid hybrid;
 
-    @Experimental(feature = "vector-search")
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Schema(description = "must be an array of numbers indicating the search vector. You must generate these yourself when using vector search with user-provided embeddings.")
     private List<Number> vector;
     

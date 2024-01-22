@@ -28,6 +28,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface Experimental {
 
-    String feature() default "";
+    Features[] features() default {};
+
+    enum Features {
+        VECTOR_SEARCH
+    }
 
 }

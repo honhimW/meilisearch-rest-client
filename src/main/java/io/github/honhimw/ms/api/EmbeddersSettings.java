@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Operation;
  * @since 2024-01-18 V1.6
  */
 
-@Experimental(feature = "vector-search")
+@Experimental(features = Experimental.Features.VECTOR_SEARCH)
 public interface EmbeddersSettings {
 
     /**

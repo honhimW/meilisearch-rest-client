@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @since 2024-01-18
  */
 
-@Experimental(feature = "vector-search")
+@Experimental(features = Experimental.Features.VECTOR_SEARCH)
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
