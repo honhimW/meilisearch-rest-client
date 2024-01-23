@@ -15,12 +15,13 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.Experimental;
+import io.github.honhimw.ms.model.Embedder;
 import io.github.honhimw.ms.model.Pagination;
-import io.github.honhimw.ms.model.ProximityPrecision;
-import io.github.honhimw.ms.model.ProximityPrecisionType;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 /**
  * <a href="https://www.meilisearch.com/docs/learn/experimental/vector_search#deactivate-vector-search"><h1>Deactivate vector search</h1></a>
@@ -32,6 +33,22 @@ import reactor.core.publisher.Mono;
 
 @Experimental(features = Experimental.Features.VECTOR_SEARCH)
 public interface ReactiveEmbeddersSettings {
+
+    /**
+     * Get current embedders configuration from your index:
+     *
+     * @return
+     */
+    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/embedders")
+    Mono<Map<String, ? extends Embedder>> get();
+
+    /**
+     * Update all embedder configuration from your index:
+     *
+     * @return update task
+     */
+    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
+    Mono<TaskInfo> update(Map<String, ? extends Embedder> embedders);
 
     /**
      * Manually remove all embedder configuration from your index:

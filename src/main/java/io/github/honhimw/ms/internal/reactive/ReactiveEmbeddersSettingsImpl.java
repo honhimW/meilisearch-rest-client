@@ -16,8 +16,13 @@ package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveEmbeddersSettings;
 import io.github.honhimw.ms.json.TypeRef;
+import io.github.honhimw.ms.model.Embedder;
+import io.github.honhimw.ms.model.EmbedderSource;
 import io.github.honhimw.ms.model.TaskInfo;
 import reactor.core.publisher.Mono;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author hon_him
@@ -36,6 +41,42 @@ class ReactiveEmbeddersSettingsImpl extends AbstractReactiveImpl implements Reac
         super(settings._client);
         this._settings = settings;
         this.path = String.format(PATH, settings.indexUid);
+    }
+
+    @Override
+    public Mono<Map<String, ? extends Embedder>> get() {
+        return get(path, new TypeRef<Map<String, Map<String, Object>>>() {
+        }).map(stringMapMap -> {
+            Map<String, Embedder> map = new HashMap<>();
+            stringMapMap.forEach((s, stringObjectMap) -> {
+                Object source = stringObjectMap.get("source");
+                EmbedderSource embedderSource = EmbedderSource.of(String.valueOf(source));
+                Embedder embedder;
+                String json = jsonHandler.toJson(stringObjectMap);
+                switch (embedderSource) {
+                    case OPEN_AI:
+                        embedder = jsonHandler.fromJson(json, Embedder.OpenAI.class);
+                        break;
+                    case HUGGING_FACE:
+                        embedder = jsonHandler.fromJson(json, Embedder.HuggingFace.class);
+                        break;
+                    case USER_PROVIDED:
+                        embedder = jsonHandler.fromJson(json, Embedder.Custom.class);
+                        break;
+                    default:
+                        embedder = null;
+                        break;
+                }
+                map.put(s, embedder);
+            });
+            return map;
+        });
+    }
+
+    @Override
+    public Mono<TaskInfo> update(Map<String, ? extends Embedder> embedders) {
+        return patch(path, configurer -> json(configurer, embedders), new TypeRef<TaskInfo>() {
+        });
     }
 
     @Override

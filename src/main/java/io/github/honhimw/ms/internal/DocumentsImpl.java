@@ -44,6 +44,11 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
+    public Page<Map<String, Object>> list(GetDocumentRequest page) {
+        return ReactorUtils.blockNonNull(_documents.list(page));
+    }
+
+    @Override
     public <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef) {
         return ReactorUtils.blockNonNull(_documents.list(offset, limit, typeRef));
     }

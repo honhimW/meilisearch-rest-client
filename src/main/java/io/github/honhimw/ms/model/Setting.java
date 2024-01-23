@@ -18,7 +18,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -91,7 +94,7 @@ public class Setting implements Serializable {
     private List<String> sortableAttributes;
     
     @Schema(description = "List of ranking rules in order of importance", defaultValue = "[\"words\",\"typo\",\"proximity\",\"attribute\",\"sort\",\"exactness\"]")
-    private List<String> rankingRules;
+    private List<RankingRule> rankingRules;
     
     @Schema(description = "List of words ignored by Meilisearch when present in search queries", defaultValue = "[]")
     private List<String> stopWords;
@@ -121,7 +124,7 @@ public class Setting implements Serializable {
     private Pagination pagination;
     
     @Schema(description = "Precision level when calculating the proximity ranking rule", defaultValue = "byWord")
-    private String proximityPrecision;
+    private ProximityPrecisionType proximityPrecision;
     
     @Schema(description = "To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.")
     private Map<String, ? extends Embedder> embedders;
@@ -132,7 +135,7 @@ public class Setting implements Serializable {
         setting.setSearchableAttributes(Stream.of("*").collect(Collectors.toList()));
         setting.setFilterableAttributes(new ArrayList<>());
         setting.setSortableAttributes(new ArrayList<>());
-        setting.setRankingRules(Stream.of("words", "typo", "proximity", "attribute", "sort", "exactness").collect(Collectors.toList()));
+        setting.setRankingRules(Stream.of(RankingRule.WORDS, RankingRule.TYPO, RankingRule.PROXIMITY, RankingRule.ATTRIBUTE, RankingRule.SORT, RankingRule.EXACTNESS).collect(Collectors.toList()));
         setting.setStopWords(new ArrayList<>());
         setting.setSeparatorTokens(new ArrayList<>());
         setting.setNonSeparatorTokens(new ArrayList<>());
@@ -142,7 +145,7 @@ public class Setting implements Serializable {
         setting.setTypoTolerance(TypoTolerance.defaultObject());
         setting.setFaceting(Faceting.defaultObject());
         setting.setPagination(Pagination.defaultObject());
-        setting.setProximityPrecision("byWord");
+        setting.setProximityPrecision(ProximityPrecisionType.BY_WORD);
         return setting;
     }
 

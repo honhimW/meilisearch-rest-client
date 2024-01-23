@@ -50,11 +50,14 @@ public interface Documents {
     Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default Page<Map<String, Object>> list(Consumer<PageRequest> page) {
-        PageRequest pageRequest = new PageRequest();
+    default Page<Map<String, Object>> list(Consumer<GetDocumentRequest> page) {
+        GetDocumentRequest pageRequest = new GetDocumentRequest();
         page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
+        return list(pageRequest);
     }
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    Page<Map<String, Object>> list(GetDocumentRequest page);
 
     /**
      * Get documents by batch.

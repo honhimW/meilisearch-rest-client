@@ -16,7 +16,6 @@ package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveProximityPrecisionSettings;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.ProximityPrecision;
 import io.github.honhimw.ms.model.ProximityPrecisionType;
 import io.github.honhimw.ms.model.TaskInfo;
 import reactor.core.publisher.Mono;
@@ -41,8 +40,8 @@ class ReactiveProximityPrecisionSettingsImpl extends AbstractReactiveImpl implem
     }
 
     @Override
-    public Mono<ProximityPrecision> get() {
-        return get(path, new TypeRef<ProximityPrecision>() {
+    public Mono<ProximityPrecisionType> get() {
+        return get(path, new TypeRef<ProximityPrecisionType>() {
         });
     }
 

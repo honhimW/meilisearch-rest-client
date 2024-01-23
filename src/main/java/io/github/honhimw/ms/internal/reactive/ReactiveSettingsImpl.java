@@ -48,7 +48,7 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
         if (Objects.isNull(setting)) {
             return reset();
         }
-        return patch(String.format("/indexes/%s/settings", indexUid), new TypeRef<TaskInfo>() {
+        return patch(String.format("/indexes/%s/settings", indexUid), configurer -> json(configurer, jsonHandler.toJson(setting)), new TypeRef<TaskInfo>() {
         });
     }
 

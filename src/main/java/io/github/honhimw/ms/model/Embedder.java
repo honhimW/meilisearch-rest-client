@@ -40,11 +40,17 @@ public class Embedder implements Serializable {
 
     @Data
     @EqualsAndHashCode(callSuper = true)
-    @AllArgsConstructor
     public static class OpenAI extends Embedder {
 
         public OpenAI() {
             super(EmbedderSource.OPEN_AI);
+        }
+
+        public OpenAI(String apiKey, String model, String documentTemplate) {
+            this();
+            this.apiKey = apiKey;
+            this.model = model;
+            this.documentTemplate = documentTemplate;
         }
 
         @Schema(description = "It is mandatory to pass an OpenAI API key through the OPENAI_API_KEY environment variable or the apiKey field when using an OpenAI embedder. Generate an API key from your OpenAI account. Use tier 2 keys or above for optimal performance.")
@@ -68,11 +74,16 @@ public class Embedder implements Serializable {
 
     @Data
     @EqualsAndHashCode(callSuper = true)
-    @AllArgsConstructor
     public static class HuggingFace extends Embedder {
 
         public HuggingFace() {
             super(EmbedderSource.HUGGING_FACE);
+        }
+
+        public HuggingFace(String model, String documentTemplate) {
+            this();
+            this.model = model;
+            this.documentTemplate = documentTemplate;
         }
 
         @Schema(description = "model", example = "bge-base-en-v1.5")
@@ -93,11 +104,15 @@ public class Embedder implements Serializable {
 
     @Data
     @EqualsAndHashCode(callSuper = true)
-    @AllArgsConstructor
     public static class Custom extends Embedder {
 
         public Custom() {
             super(EmbedderSource.USER_PROVIDED);
+        }
+
+        public Custom(Integer dimensions) {
+            this();
+            this.dimensions = dimensions;
         }
 
         @Schema(description = "dimensions")

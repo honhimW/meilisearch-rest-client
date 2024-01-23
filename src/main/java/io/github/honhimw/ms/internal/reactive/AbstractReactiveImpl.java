@@ -111,7 +111,10 @@ public abstract class AbstractReactiveImpl {
                 if (code < 200 || 300 <= code) {
                     sink.error(new IllegalStateException(String.format("failure with status code: [%d] [%s] %s, %s", code, httpClientResponse.method(), httpClientResponse.resourceUrl(), s)));
                 } else {
-                    sink.next(jsonHandler.fromJson(s, typeRef));
+                    T t = jsonHandler.fromJson(s, typeRef);
+                    if (Objects.nonNull(t)) {
+                        sink.next(t);
+                    }
                 }
             }));
     }

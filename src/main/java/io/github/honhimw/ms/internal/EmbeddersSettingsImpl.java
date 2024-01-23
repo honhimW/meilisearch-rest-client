@@ -16,8 +16,12 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.api.EmbeddersSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveEmbeddersSettings;
+import io.github.honhimw.ms.model.Embedder;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.ReactorUtils;
+import jakarta.annotation.Nullable;
+
+import java.util.Map;
 
 /**
  * @author hon_him
@@ -30,6 +34,17 @@ class EmbeddersSettingsImpl implements EmbeddersSettings {
 
     EmbeddersSettingsImpl(ReactiveEmbeddersSettings reactive) {
         _reactive = reactive;
+    }
+
+    @Nullable
+    @Override
+    public Map<String, ? extends Embedder> get() {
+        return _reactive.get().block();
+    }
+
+    @Override
+    public TaskInfo update(Map<String, ? extends Embedder> embedders) {
+        return ReactorUtils.blockNonNull(_reactive.update(embedders));
     }
 
     @Override

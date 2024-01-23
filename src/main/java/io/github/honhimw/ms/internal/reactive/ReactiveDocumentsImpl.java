@@ -18,6 +18,8 @@ import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.StringUtils;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -46,6 +48,25 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
         return get(String.format("/indexes/%s/documents", indexUid), configurer -> configurer
                 .param("offset", _offset)
                 .param("limit", _limit),
+            new TypeRef<Page<Map<String, Object>>>() {
+            });
+    }
+
+    @Override
+    public Mono<Page<Map<String, Object>>> list(GetDocumentRequest page) {
+        return get(String.format("/indexes/%s/documents", indexUid), configurer -> {
+                List<String> fields = page.getFields();
+                if (CollectionUtils.isNotEmpty(fields)) {
+                    configurer.param("fields", String.join(",", fields));
+                }
+                String filter = page.getFilter();
+                if (StringUtils.isNotEmpty(filter)) {
+                    configurer.param("filter", filter);
+                }
+                configurer
+                    .param("offset", String.valueOf(page.toOffset()))
+                    .param("limit", String.valueOf(page.toLimit()));
+            },
             new TypeRef<Page<Map<String, Object>>>() {
             });
     }

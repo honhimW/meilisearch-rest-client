@@ -16,6 +16,7 @@ package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.EnumValue;
+import io.github.honhimw.ms.support.StringUtils;
 
 /**
  * @author hon_him
@@ -39,6 +40,15 @@ public enum EmbedderSource implements EnumValue<EmbedderSource> {
     @Override
     public String value() {
         return this.source;
+    }
+
+    public static EmbedderSource of(String name) {
+        for (EmbedderSource value : values()) {
+            if (StringUtils.equal(value.value(), name)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException(String.format("unknown Embedder Source: [%s]", name));
     }
 
 }

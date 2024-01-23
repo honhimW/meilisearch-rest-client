@@ -35,7 +35,7 @@ class ProximityPrecisionSettingsImpl implements ProximityPrecisionSettings {
     }
 
     @Override
-    public ProximityPrecision get() {
+    public ProximityPrecisionType get() {
         return ReactorUtils.blockNonNull(_reactive.get());
     }
 

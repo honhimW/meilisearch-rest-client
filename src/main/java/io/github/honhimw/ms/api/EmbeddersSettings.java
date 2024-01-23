@@ -15,9 +15,13 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.Experimental;
+import io.github.honhimw.ms.model.Embedder;
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.Nullable;
+
+import java.util.Map;
 
 /**
  * <a href="https://www.meilisearch.com/docs/learn/experimental/vector_search#deactivate-vector-search"><h1>Deactivate vector search</h1></a>
@@ -29,6 +33,21 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @Experimental(features = Experimental.Features.VECTOR_SEARCH)
 public interface EmbeddersSettings {
+
+    /**
+     * Get current embedders configuration from your index:
+     */
+    @Nullable
+    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/embedders")
+    Map<String, ? extends Embedder> get();
+
+    /**
+     * Update all embedder configuration from your index:
+     *
+     * @return update task
+     */
+    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
+    TaskInfo update(Map<String, ? extends Embedder> embedders);
 
     /**
      * Manually remove all embedder configuration from your index:

@@ -43,13 +43,8 @@ public interface ProximityPrecisionSettings {
      * @return current index proximity-precision
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/proximity-precision")
-    ProximityPrecision get();
+    ProximityPrecisionType get();
 
-    /**
-     * Update the proximity precision settings for an index.
-     *
-     * @return update task
-     */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/proximity-precision")
     TaskInfo update(ProximityPrecisionType type);
 

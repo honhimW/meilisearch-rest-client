@@ -30,17 +30,20 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder(builderClassName = "Builder")
 public class ExperimentalFeatures implements Serializable {
-    
+
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean metrics;
-    
+
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean scoreDetails;
-    
+
+    /**
+     * <a href="https://github.com/meilisearch/documentation/pull/2647">documentation ISSUE #2647</a>
+     */
     @Schema(description = "true if feature is active, false otherwise")
-    private Boolean vectorSearch;
-    
+    private Boolean vectorStore;
+
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean exportPuffinReports;
-    
+
 }

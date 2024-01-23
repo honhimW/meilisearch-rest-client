@@ -16,6 +16,7 @@ package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.Nullable;
 
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#distinct-attribute"><h1>Distinct attribute</h1></a>
@@ -39,6 +40,7 @@ public interface DistinctAttributeSettings {
      *
      * @return current index distinct attributes
      */
+    @Nullable
     @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/distinct-attribute")
     String get();
 

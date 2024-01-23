@@ -44,7 +44,7 @@ public interface ReactiveProximityPrecisionSettings {
      * @return current index proximity-precision
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/proximity-precision")
-    Mono<ProximityPrecision> get();
+    Mono<ProximityPrecisionType> get();
 
     /**
      * Update the proximity precision settings for an index.
