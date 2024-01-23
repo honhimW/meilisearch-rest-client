@@ -18,10 +18,12 @@ import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.model.Embedder;
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.MapBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * <a href="https://www.meilisearch.com/docs/learn/experimental/vector_search#deactivate-vector-search"><h1>Deactivate vector search</h1></a>
@@ -49,6 +51,13 @@ public interface ReactiveEmbeddersSettings {
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
     Mono<TaskInfo> update(Map<String, ? extends Embedder> embedders);
+
+    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
+    default Mono<TaskInfo> update(Consumer<MapBuilder<String, ? extends Embedder>> embedders) {
+        MapBuilder<String, Embedder> builder = MapBuilder.builder();
+        embedders.accept(builder);
+        return update(builder.build());
+    }
 
     /**
      * Manually remove all embedder configuration from your index:
