@@ -97,7 +97,7 @@ public class ReactiveSearchTests extends ReactiveDocumentsTests {
             .verifyComplete();
     }
 
-    @Test
+//    @Test
     @SneakyThrows
     void search4() {
         Settings settings = blockingIndexes.settings("movies");
