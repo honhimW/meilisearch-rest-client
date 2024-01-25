@@ -185,6 +185,15 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
     private ConnectionProvider connectionProvider;
 
+    @Getter
+    private final List<Consumer<Configurer>> requestInterceptors = new ArrayList<>();
+
+    public ReactiveHttpUtils addInterceptor(Consumer<Configurer> interceptor) {
+        Objects.requireNonNull(interceptor);
+        requestInterceptors.add(interceptor);
+        return this;
+    }
+
     private void init() {
         init(RequestConfig.DEFAULT_CONFIG);
     }
@@ -193,6 +202,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         connectionProvider = requestConfig.connectionProvider;
         httpClient = HttpClient.create(connectionProvider);
         httpClient = requestConfig.config(httpClient);
+        addInterceptor(requestConfig.requestInterceptor);
     }
 
     public HttpResult get(String url) {
@@ -331,6 +341,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
             .method(method)
             .charset(defaultCharset)
             .url(url);
+        for (Consumer<Configurer> requestInterceptor : requestInterceptors) {
+            configurer = configurer.andThen(requestInterceptor);
+        }
         configurer.accept(requestConfigurer);
         HttpResult httpResult = request(requestConfigurer);
         return resultMapper.apply(httpResult);
@@ -365,6 +378,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
             .charset(defaultCharset)
             .url(url)
             .config(RequestConfig.DEFAULT_CONFIG.copy().build());
+        for (Consumer<Configurer> requestInterceptor : requestInterceptors) {
+            configurer = configurer.andThen(requestInterceptor);
+        }
         configurer.accept(requestConfigurer);
         ResponseReceiver<?> responseReceiver = _request(requestConfigurer);
         return new ReactiveHttpResult(responseReceiver);
@@ -456,6 +472,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         private final boolean noSSL;
         private final ConnectionProvider connectionProvider;
         private final Consumer<HttpClient> customize;
+        private final Consumer<Configurer> requestInterceptor;
 
         private HttpClient config(HttpClient httpClient) {
             HttpClient client = httpClient;
@@ -481,17 +498,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         }
 
         private Builder copy() {
-            Builder builder = RequestConfig.builder();
-            builder.connectTimeout(this.connectTimeout);
-            builder.readTimeout(this.readTimeout);
-            builder.httpProtocol(this.httpProtocols);
-            builder.followRedirect(this.followRedirect);
-            builder.keepalive(this.keepalive);
-            builder.proxyWithSystemProperties(this.proxyWithSystemProperties);
-            builder.enableCompress(this.enableCompress);
-            builder.enableRetry(this.enableRetry);
-            builder.noSSL(this.noSSL);
-            return builder;
+            return copy(this);
         }
 
         private static Builder copy(RequestConfig config) {
@@ -505,6 +512,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
             builder.enableCompress(config.enableCompress);
             builder.enableRetry(config.enableRetry);
             builder.noSSL(config.noSSL);
+            builder.connectionProvider(config.connectionProvider);
+            builder.customize(config.customize);
+            builder.requestInterceptor(config.requestInterceptor);
             return builder;
         }
 
@@ -531,6 +541,8 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 .pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS)
                 .build();
             private Consumer<HttpClient> customize = _httpClient -> {
+            };
+            private Consumer<Configurer> requestInterceptor = configurer -> {
             };
 
             public Builder connectTimeout(Duration connectTimeout) {
@@ -588,6 +600,11 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 return this;
             }
 
+            public Builder requestInterceptor(Consumer<Configurer> interceptor) {
+                this.requestInterceptor = this.requestInterceptor.andThen(interceptor);
+                return this;
+            }
+
             public RequestConfig build() {
                 return new RequestConfig(
                     connectTimeout,
@@ -600,7 +617,8 @@ public class ReactiveHttpUtils implements AutoCloseable {
                     enableRetry,
                     noSSL,
                     connectionProvider,
-                    customize
+                    customize,
+                    requestInterceptor
                 );
             }
         }

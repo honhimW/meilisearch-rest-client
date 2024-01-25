@@ -15,10 +15,15 @@
 package io.github.honhimw.ms.reactive;
 
 import io.github.honhimw.ms.Movie;
+import io.github.honhimw.ms.api.Settings;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
 import io.github.honhimw.ms.api.reactive.ReactiveSearch;
+import io.github.honhimw.ms.api.reactive.ReactiveTypedSearch;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.StringUtils;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -90,6 +95,35 @@ public class ReactiveSearchTests extends ReactiveDocumentsTests {
                 }
             })
             .verifyComplete();
+    }
+
+    @Test
+    @SneakyThrows
+    void search4() {
+        Settings settings = blockingIndexes.settings("movies");
+        TaskInfo update = settings.pagination().update(Integer.MAX_VALUE);
+        await(update);
+        ReactiveTypedSearch<Movie> movies1 = indexes.search("movies", new TypeRef<Movie>() {
+        });
+        SearchResponse<Movie> block1 = movies1.find("who").block();
+        System.out.println(block1.getEstimatedTotalHits());
+        Mono<SearchResponse<Movie>> who = movies1.find(builder -> builder
+            .q(" who ")
+            .page(1)
+            .hitsPerPage(10000)
+//            .limit(20)
+//            .offset(0)
+        );
+
+        SearchResponse<Movie> block = who.block();
+        System.out.println(block.getTotalHits());
+        for (Movie hit : block.getHits()) {
+            String string = hit.toString();
+            if (!StringUtils.containsIgnoreCase(string, "who")) {
+                System.out.println(string);
+            }
+        }
+
     }
 
 }

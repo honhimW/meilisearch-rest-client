@@ -118,6 +118,20 @@ public class StringUtils {
         return regionMatches(str, ignoreCase, 0, prefix, 0, preLen);
     }
 
+    public static boolean containsIgnoreCase(final CharSequence str, final CharSequence searchStr) {
+        if (str == null || searchStr == null) {
+            return false;
+        }
+        final int len = searchStr.length();
+        final int max = str.length() - len;
+        for (int i = 0; i <= max; i++) {
+            if (regionMatches(str, true, i, searchStr, 0, len)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     static boolean regionMatches(final CharSequence cs, final boolean ignoreCase, final int thisStart,
                                  final CharSequence substring, final int start, final int length)    {
         if (cs instanceof String && substring instanceof String) {

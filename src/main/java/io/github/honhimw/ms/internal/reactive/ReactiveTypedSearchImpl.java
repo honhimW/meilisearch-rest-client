@@ -47,27 +47,19 @@ class ReactiveTypedSearchImpl<T> extends AbstractReactiveImpl implements Reactiv
 
     @Override
     public Mono<SearchResponse<T>> find(String q) {
-        return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
-                .body(payload -> payload.raw(raw -> {
-                    Map<String, String> obj = new HashMap<>();
-                    obj.put("q", q);
-                    raw.json(jsonHandler.toJson(obj));
-                }))
-            , complexTypeRef);
+        Map<String, String> obj = new HashMap<>();
+        obj.put("q", q);
+        return post(String.format("/indexes/%s/search", indexUid), configurer -> json(configurer, jsonHandler.toJson(obj)), complexTypeRef);
     }
 
     @Override
     public Mono<SearchResponse<T>> find(SearchRequest request) {
-        return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
-                .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
-            , complexTypeRef);
+        return post(String.format("/indexes/%s/search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), complexTypeRef);
     }
 
     @Override
     public Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request) {
-        return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> configurer
-                .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
-            , new TypeRef<FacetSearchResponse>() {
-            });
+        return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), new TypeRef<FacetSearchResponse>() {
+        });
     }
 }

@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -62,9 +63,11 @@ public class JacksonJsonHandler implements JsonHandler {
         this.objectMapper = objectMapper;
     }
 
+    @SuppressWarnings("rawtypes")
     public static JsonMapper.Builder defaultBuilder() {
         JsonMapper.Builder builder = JsonMapper.builder();
 
+        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ISO_DATE)); //yyyy-MM-dd
         javaTimeModule.addDeserializer(LocalDate.class,

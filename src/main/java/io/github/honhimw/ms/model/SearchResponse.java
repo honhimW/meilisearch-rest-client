@@ -24,6 +24,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * <h2>Exhaustive and estimated total number of search results</h2>
+ * <p>
+ * By default, Meilisearch only returns an estimate of the total number of search results in a query: estimatedTotalHits. This happens because Meilisearch prioritizes relevancy and performance over providing an exhaustive number of search results. When working with estimatedTotalHits, use offset and limit to navigate between search results.
+ * <p>
+ * If you require the total number of search results, use the hitsPerPage and page search parameters in your query. The response to this query replaces estimatedTotalHits with totalHits and includes an extra field with number of search results pages based on your hitsPerPage: totalPages. Using totalHits and totalPages may result in slightly reduced performance, but is recommended when creating UI elements such as numbered page selectors.
+ * <p>
+ * Neither estimatedTotalHits nor totalHits can exceed the limit configured in the maxTotalHits index setting.
+ * <p>
+ * You can <a href="https://www.meilisearch.com/docs/learn/front_end/pagination">read more about pagination in our dedicated guide.</a>
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -36,38 +46,38 @@ public class SearchResponse<T> implements Serializable {
 
     @Schema(description = "Results of the query")
     private List<T> hits;
-    
+
     @Schema(description = "Number of documents skipped")
     private Integer offset;
-    
+
     @Schema(description = "Number of documents to take")
     private Integer limit;
-    
+
     @Schema(description = "Estimated total number of matches")
     private Integer estimatedTotalHits;
-    
+
     @Schema(description = "Exhaustive total number of matches")
     private Integer totalHits;
-    
+
     @Schema(description = "Exhaustive total number of search result pages")
     private Integer totalPages;
-    
+
     @Schema(description = "Number of results on each page")
     private Integer hitsPerPage;
-    
+
     @Schema(description = "Current search results page")
     private Integer page;
 
     @Schema(description = "Distribution of the given facets")
     private Object facetDistribution;
-    
+
     @Schema(description = "The numeric min and max values per facet")
     private Object facetStats;
-    
+
     @Schema(description = "Processing time of the query")
     private Long processingTimeMs;
-    
+
     @Schema(description = "Query originating the response")
     private String query;
-    
+
 }
