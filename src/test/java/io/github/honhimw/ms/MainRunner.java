@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms;
 
+import io.github.honhimw.ms.api.MSearchClient;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
@@ -43,6 +44,28 @@ public class MainRunner {
     public static <T> TypeRef<SearchResponse<T>> type(TypeRef<T> typeRef) {
         return new ComplexTypeRef<SearchResponse<T>>(typeRef) {
         };
+    }
+
+    public static void blocking(String[] args) {
+        JsonHandler jsonHandler = new JacksonJsonHandler();
+        try (
+            MSearchClient client = MSearchClient.create(builder -> builder
+                .enableSSL(false)                    // true: https, false: http
+                .host("{{meilisearch-server-host}}") // server host
+                .port(7700)                          // server port
+                .jsonHandler(jsonHandler));
+        ) {
+            String indexUid = "movies";
+            SearchResponse<Movie> searchResponse = client.indexes(indexes -> indexes
+                .search(indexUid, reactiveSearch -> reactiveSearch
+                    .find("hello world", Movie.class)));
+            List<Movie> hits = searchResponse.getHits();
+            // or
+            SearchResponse<Movie> searchResponse2 = client.indexes(indexes1 -> indexes1
+                .search(indexUid, Movie.class, search -> search
+                    .find("hello world")));
+            List<Movie> hits2 = searchResponse2.getHits();
+        }
     }
 
 }

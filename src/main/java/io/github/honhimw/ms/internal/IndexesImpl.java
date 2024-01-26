@@ -14,11 +14,9 @@
 
 package io.github.honhimw.ms.internal;
 
-import io.github.honhimw.ms.api.Documents;
-import io.github.honhimw.ms.api.Indexes;
-import io.github.honhimw.ms.api.Search;
-import io.github.honhimw.ms.api.Settings;
+import io.github.honhimw.ms.api.*;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
+import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
@@ -75,8 +73,18 @@ class IndexesImpl implements Indexes {
     }
 
     @Override
+    public <T> TypedDocuments<T> documents(String uid, TypeRef<T> typeRef) {
+        return null;
+    }
+
+    @Override
     public Search search(String uid) {
         return new SearchImpl(_indexes.search(uid));
+    }
+
+    @Override
+    public <T> TypedSearch<T> search(String uid, TypeRef<T> typeRef) {
+        return new TypedSearchImpl<>(_indexes.search(uid, typeRef));
     }
 
     @Override
