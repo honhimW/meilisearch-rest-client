@@ -11,7 +11,7 @@ plugins {
 
 group = 'io.github.honhimw'
 version = '1.6.0.1-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
-description = 'Java client for meilisearch.'
+description = 'Reactive meilisearch rest client power by reactor-netty-http.'
 
 def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.1'
@@ -44,6 +44,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'org.slf4j:slf4j-api:2.0.7'
+
+    implementation 'io.github.raissi:simple-meili-java:'
 
     compileOnly "com.google.code.gson:gson:${gsonVersion}"
 
@@ -96,8 +98,20 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/honhimW/meilisearch-rest-client")
             credentials {
-                username = findProperty("gpr.user") as String
-                password = findProperty("gpr.key") as String
+                username = githubProperties().getProperty("gpr.user") as String
+                password = githubProperties().getProperty("gpr.key") as String
+            }
+        }
+        maven {
+            name = "sonatype"
+            if (snapshots) {
+                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            } else {
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            }
+            credentials {
+                username = sonatypeProperties().getProperty("sonatype.username") as String
+                password = sonatypeProperties().getProperty("sonatype.password") as String
             }
         }
     }
@@ -107,7 +121,8 @@ publishing {
             from components.java
             pom {
                 name.set(title)
-                url.set("")
+                description.set(project.description)
+                url.set("https://github.com/honhimW/meilisearch-rest-client")
                 licenses {
                     license {
                         name.set('The Apache License, Version 2.0')
@@ -146,6 +161,26 @@ Properties loadProfileProperties() {
     def properties = new Properties()
 
     def file = file("profile-${findProperty('profiles.active')}.properties")
+    if (file.exists()) {
+        file.withInputStream { properties.load(it) }
+    }
+    return properties
+}
+
+Properties githubProperties() {
+    def properties = new Properties()
+
+    def file = file("github.properties")
+    if (file.exists()) {
+        file.withInputStream { properties.load(it) }
+    }
+    return properties
+}
+
+Properties sonatypeProperties() {
+    def properties = new Properties()
+
+    def file = file("sonatype.properties")
     if (file.exists()) {
         file.withInputStream { properties.load(it) }
     }
