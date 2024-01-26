@@ -56,7 +56,7 @@ public class JacksonJsonHandler implements JsonHandler {
     private final ObjectMapper objectMapper;
 
     public JacksonJsonHandler() {
-        this.objectMapper = defaultBuilder().build();
+        this(defaultBuilder().build());
     }
 
     public JacksonJsonHandler(ObjectMapper objectMapper) {

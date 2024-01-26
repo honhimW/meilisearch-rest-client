@@ -40,7 +40,7 @@ public class GsonJsonHandler implements JsonHandler {
     private final Gson gson;
 
     public GsonJsonHandler() {
-        this.gson = defaultBuilder().create();
+        this(defaultBuilder().create());
     }
 
     public GsonJsonHandler(Gson gson) {

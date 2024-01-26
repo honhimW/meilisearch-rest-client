@@ -16,6 +16,8 @@ description = 'Java client for meilisearch.'
 def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.1'
 def jacksonVersion = '2.15.3'
+def gsonVersion = '2.10.1'
+def yassonVersion = '2.0.4'
 def lombokVersion = '1.18.26'
 def snapshots = version.toString().endsWith('SNAPSHOT')
 
@@ -43,7 +45,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'org.slf4j:slf4j-api:2.0.7'
 
-    compileOnly 'com.google.code.gson:gson:2.10.1'
+    compileOnly "com.google.code.gson:gson:${gsonVersion}"
 
     compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.19'
@@ -57,7 +59,8 @@ dependencies {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'com.google.code.gson:gson:2.10.1'
+
+    testImplementation "com.google.code.gson:gson:${gsonVersion}"
 //    testImplementation 'com.meilisearch.sdk:meilisearch-java:0.11.5'
     testCompileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
