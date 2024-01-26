@@ -27,7 +27,7 @@ $ gradle clean build -x test
 ```groovy
 // Gradle
 dependencies {
-    implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.1-SNAPSHOT'
+    implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.2'
 }
 ```
 
@@ -36,20 +36,18 @@ dependencies {
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.6.0.1-SNAPSHOT</version>
+    <version>1.6.0.2</version>
 </dependency>
 ```
 
 ## Usage
 
+#### Reactive(reactor)
 ```java
 public static void main(String[] args) {
     JsonHandler jsonHandler = new JacksonJsonHandler();
     try (
         ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
-            .serverUrl("http://{{meilisearch-server-host}}")
-            .jsonHandler(jsonHandler));
-        MSearchClient blockingClient = MSearchClient.create(builder -> builder
             .serverUrl("http://{{meilisearch-server-host}}")
             .jsonHandler(jsonHandler));
     ) {
@@ -63,6 +61,31 @@ public static void main(String[] args) {
             .search(indexUid, Movie.class, search -> search
                 .find("hello world")));
         List<Movie> hits2 = searchResponse2.block().getHits();
+    }
+}
+```
+
+#### Blocking
+```java
+public static void main(String[] args) {
+    JsonHandler jsonHandler = new JacksonJsonHandler();
+    try (
+        MSearchClient client = MSearchClient.create(builder -> builder
+            .enableSSL(false)                    // true: https, false: http
+            .host("{{meilisearch-server-host}}") // server host
+            .port(7700)                          // server port
+            .jsonHandler(jsonHandler));
+    ) {
+        String indexUid = "movies";
+        SearchResponse<Movie> searchResponse = client.indexes(indexes -> indexes
+            .search(indexUid, reactiveSearch -> reactiveSearch
+                .find("hello world", Movie.class)));
+        List<Movie> hits = searchResponse.getHits();
+        // or
+        SearchResponse<Movie> searchResponse2 = client.indexes(indexes1 -> indexes1
+            .search(indexUid, Movie.class, search -> search
+                .find("hello world")));
+        List<Movie> hits2 = searchResponse2.getHits();
     }
 }
 ```
