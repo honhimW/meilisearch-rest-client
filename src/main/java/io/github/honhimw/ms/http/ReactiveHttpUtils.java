@@ -471,7 +471,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         private final boolean enableRetry;
         private final boolean noSSL;
         private final ConnectionProvider connectionProvider;
-        private final Consumer<HttpClient> customize;
+        private final Function<HttpClient, HttpClient> customize;
         private final Consumer<Configurer> requestInterceptor;
 
         private HttpClient config(HttpClient httpClient) {
@@ -493,7 +493,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 client = client.noSSL();
             }
             // customize
-            customize.accept(client);
+            client = customize.apply(client);
+            Objects.requireNonNull(client);
+
             return client;
         }
 
@@ -540,8 +542,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 .maxConnections(MAX_TOTAL_CONNECTIONS)
                 .pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS)
                 .build();
-            private Consumer<HttpClient> customize = _httpClient -> {
-            };
+            private Function<HttpClient, HttpClient> customize = _httpClient -> _httpClient;
             private Consumer<Configurer> requestInterceptor = configurer -> {
             };
 
@@ -595,7 +596,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 return this;
             }
 
-            public Builder customize(Consumer<HttpClient> customize) {
+            public Builder customize(Function<HttpClient, HttpClient> customize) {
                 this.customize = this.customize.andThen(customize);
                 return this;
             }
