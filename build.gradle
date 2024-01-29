@@ -49,7 +49,7 @@ dependencies {
     compileOnly "com.google.code.gson:gson:${gsonVersion}"
 
     compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
-    compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.19'
+    compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.20'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
