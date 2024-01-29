@@ -74,18 +74,24 @@ public static void main(String[] args) {
             .enableSSL(false)                    // true: https, false: http
             .host("{{meilisearch-server-host}}") // server host
             .port(7700)                          // server port
-            .jsonHandler(jsonHandler));
+            .jsonHandler(jsonHandler))
+            .httpClient(ReactiveHttpUtils.getInstance(http -> http.readTimeout(Duration.ofMillis(100)))))
     ) {
         String indexUid = "movies";
         SearchResponse<Movie> searchResponse = client.indexes(indexes -> indexes
-            .search(indexUid, reactiveSearch -> reactiveSearch
+            .search(indexUid, search -> search
                 .find("hello world", Movie.class)));
         List<Movie> hits = searchResponse.getHits();
         // or
-        SearchResponse<Movie> searchResponse2 = client.indexes(indexes1 -> indexes1
+        List<Movie> hits2 = client.indexes(indexes -> indexes
             .search(indexUid, Movie.class, search -> search
-                .find("hello world")));
-        List<Movie> hits2 = searchResponse2.getHits();
+                .find(q -> q
+                    .q("hello world")
+                    .limit(1)
+                )
+                .getHits()
+            )
+        );
     }
 }
 ```
