@@ -14,7 +14,7 @@
 
 package io.github.honhimw.ms.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import io.github.honhimw.ms.json.EnumValue;
 
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#ranking-rules-array">Ranking rules array</a>
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @since 2024-01-02
  */
 
-public enum RankingRule {
+public enum RankingRule implements EnumValue<RankingRule> {
     /**
      * Sorts results by decreasing number of matched query terms
      */
@@ -54,9 +54,8 @@ public enum RankingRule {
         this.name = name;
     }
 
-    @JsonValue
     @Override
-    public String toString() {
+    public String value() {
         return this.name;
     }
 

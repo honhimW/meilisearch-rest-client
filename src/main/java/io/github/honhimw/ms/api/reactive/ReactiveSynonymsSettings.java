@@ -15,11 +15,13 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.MapBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#synonyms"><h1>Synonyms</h1></a>
@@ -52,6 +54,13 @@ public interface ReactiveSynonymsSettings {
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
     Mono<TaskInfo> update(Map<String, List<String>> synonyms);
+
+    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
+    default Mono<TaskInfo> update(Consumer<MapBuilder<String, List<String>>> synonyms) {
+        MapBuilder<String, List<String>> builder = MapBuilder.builder();
+        synonyms.accept(builder);
+        return update(builder.build());
+    }
 
     /**
      * Reset the list of synonyms of an index to its default value.

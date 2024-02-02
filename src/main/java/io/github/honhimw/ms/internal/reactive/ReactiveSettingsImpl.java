@@ -48,7 +48,7 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
         if (Objects.isNull(setting)) {
             return reset();
         }
-        return patch(String.format("/indexes/%s/settings", indexUid), new TypeRef<TaskInfo>() {
+        return patch(String.format("/indexes/%s/settings", indexUid), configurer -> json(configurer, jsonHandler.toJson(setting)), new TypeRef<TaskInfo>() {
         });
     }
 
@@ -89,6 +89,11 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
     }
 
     @Override
+    public ReactiveProximityPrecisionSettings proximityPrecision() {
+        return new ReactiveProximityPrecisionSettingsImpl(this);
+    }
+
+    @Override
     public ReactiveRankingRulesSettings rankingRules() {
         return new ReactiveRankingRulesSettingsImpl(this);
     }
@@ -126,5 +131,10 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
     @Override
     public ReactiveTypoToleranceSettings typoTolerance() {
         return new ReactiveTypoToleranceSettingsImpl(this);
+    }
+
+    @Override
+    public ReactiveEmbeddersSettings embedders() {
+        return new ReactiveEmbeddersSettingsImpl(this);
     }
 }

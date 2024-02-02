@@ -80,6 +80,11 @@ public class SettingsImpl implements Settings {
     }
 
     @Override
+    public ProximityPrecisionSettings proximityPrecision() {
+        return new ProximityPrecisionSettingsImpl(_settings.proximityPrecision());
+    }
+
+    @Override
     public RankingRulesSettings rankingRules() {
         return new RankingRulesSettingsImpl(_settings.rankingRules());
     }
@@ -117,5 +122,10 @@ public class SettingsImpl implements Settings {
     @Override
     public TypoToleranceSettings typoTolerance() {
         return new TypoToleranceSettingsImpl(_settings.typoTolerance());
+    }
+
+    @Override
+    public EmbeddersSettings embedders() {
+        return new EmbeddersSettingsImpl(_settings.embedders());
     }
 }

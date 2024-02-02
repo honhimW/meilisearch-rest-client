@@ -15,13 +15,19 @@
 package io.github.honhimw.ms.reactive;
 
 import io.github.honhimw.ms.MeiliSearchProperties;
+import io.github.honhimw.ms.api.MSearchClient;
+import io.github.honhimw.ms.api.Tasks;
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
 import io.github.honhimw.ms.api.reactive.ReactiveTasks;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
+import io.github.honhimw.ms.model.TaskInfo;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
+
+import java.util.*;
 
 /**
  * @author hon_him
@@ -32,22 +38,60 @@ public class ReactiveClientTests {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    protected static ReactiveMSearchClient client;
+    protected static ReactiveMSearchClient reactiveClient;
+    protected static MSearchClient blockingClient;
 
-    protected static ReactiveTasks tasks;
+    protected static ReactiveTasks reactiveTasks;
+    protected static Tasks blockingTasks;
 
     protected static JsonHandler jsonHandler;
 
     @BeforeAll
     static void init() throws Exception {
         jsonHandler = new JacksonJsonHandler();
-        client = ReactiveMSearchClient.create(builder -> builder
+        reactiveClient = ReactiveMSearchClient.create(builder -> builder
             .host(MeiliSearchProperties.getHost())
             .port(MeiliSearchProperties.getPort())
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
-        tasks = client.tasks();
+        reactiveTasks = reactiveClient.tasks();
+        blockingClient = MSearchClient.create(builder -> builder
+            .host(MeiliSearchProperties.getHost())
+            .port(MeiliSearchProperties.getPort())
+            .apiKey(MeiliSearchProperties.getApiKey())
+            .jsonHandler(jsonHandler)
+        );
+        blockingTasks = blockingClient.tasks();
+    }
+
+    protected static Mono<Void> await(Mono<TaskInfo> taskInfo) {
+        return taskInfo.flatMap(taskInfo1 -> reactiveTasks.waitForTask(taskInfo1.getTaskUid()));
+    }
+
+    protected static void await(TaskInfo taskInfo) {
+        blockingTasks.waitForTask(taskInfo.getTaskUid());
+    }
+
+    @SafeVarargs
+    protected static <T> List<T> toList(T... elements) {
+        if (Objects.isNull(elements) || elements.length == 0) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(Arrays.asList(elements));
+    }
+
+    protected static <K, V> Map<K, V> toMap(List<K> keys, List<V> values) {
+        Objects.requireNonNull(keys);
+        Objects.requireNonNull(values);
+        assert keys.size() == values.size();
+        Map<K, V> map = new HashMap<>();
+        for (int i = 0; i < keys.size(); i++) {
+            K key = keys.get(i);
+            V value = values.get(i);
+            map.put(key, value);
+        }
+        return map;
     }
 
     public static final String movies = "[\n" +

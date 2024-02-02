@@ -7,18 +7,17 @@
 ### Version
 The version number of this library is named by appending `.X` to the version number in the official documentation.
 
-- v1.5 Docs: [1.5.0.x,) (current)
+- v1.6 Docs: [1.6.0.x,) (*current)
+- v1.5 Docs: [1.5.0.x, 1.6.0) 
 
 ### Dependencies
 
-*By default,  this library depends on libraries as fallow:*
+*By default, this library depends on libraries as fallows:*
 
 - reactor-netty-http(required)
-- jackson(replaceable by provide implementation of `io.github.honhimw.ms.JsonHandler`)
+- jackson(replaceable by providing implementation of `io.github.honhimw.ms.JsonHandler`)
 
 ## Installation
-
-**Note**: not yet deploy
 
 ```shell
 # build from sources
@@ -28,7 +27,7 @@ $ gradle clean build -x test
 ```groovy
 // Gradle
 dependencies {
-    implementation 'io.github.honhimw:meilisearch-rest-client:1.5.0.0-SNAPSHOT'
+    implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.2'
 }
 ```
 
@@ -37,33 +36,70 @@ dependencies {
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.5.0.0-SNAPSHOT</version>
+    <version>1.6.0.2</version>
 </dependency>
 ```
 
 ## Usage
 
+#### Reactive(reactor)
 ```java
 public static void main(String[] args) {
     JsonHandler jsonHandler = new JacksonJsonHandler();
     try (
         ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
-            .serverUrl("http://{{meilisearch-server-host}}")
-            .jsonHandler(jsonHandler));
-        MSearchClient blockingClient = MSearchClient.create(builder -> builder
-            .serverUrl("http://{{meilisearch-server-host}}")
-            .jsonHandler(jsonHandler));
+            .enableSSL(false)                    // true: https, false: http
+            .host("{{meilisearch-server-host}}") // server host
+            .port(7700)                          // server port
+            .jsonHandler(jsonHandler)
+            .httpClient(ReactiveHttpUtils.getInstance(http -> http.readTimeout(Duration.ofMillis(100)))))
     ) {
         String indexUid = "movies";
         Mono<SearchResponse<Movie>> searchResponse = client.indexes(indexes -> indexes
-            .search(indexUid, reactiveSearch -> reactiveSearch
+            .search(indexUid, search -> search
                 .find("hello world", Movie.class)));
         List<Movie> hits = searchResponse.block().getHits();
         // or
-        Mono<SearchResponse<Movie>> searchResponse2 = client.indexes(indexes1 -> indexes1
+        List<Movie> hits2 = client.indexes(indexes -> indexes
             .search(indexUid, Movie.class, search -> search
-                .find("hello world")));
-        List<Movie> hits2 = searchResponse2.block().getHits();
+                .find(q -> q
+                    .q("hello world")
+                    .limit(1)
+                )
+                .map(SearchResponse::getHits)
+            )
+        ).block();
+    }
+}
+```
+
+#### Blocking
+```java
+public static void main(String[] args) {
+    JsonHandler jsonHandler = new JacksonJsonHandler();
+    try (
+        MSearchClient client = MSearchClient.create(builder -> builder
+            .enableSSL(false)                    // true: https, false: http
+            .host("{{meilisearch-server-host}}") // server host
+            .port(7700)                          // server port
+            .jsonHandler(jsonHandler))
+            .httpClient(ReactiveHttpUtils.getInstance(http -> http.readTimeout(Duration.ofMillis(100)))))
+    ) {
+        String indexUid = "movies";
+        SearchResponse<Movie> searchResponse = client.indexes(indexes -> indexes
+            .search(indexUid, search -> search
+                .find("hello world", Movie.class)));
+        List<Movie> hits = searchResponse.getHits();
+        // or
+        List<Movie> hits2 = client.indexes(indexes -> indexes
+            .search(indexUid, Movie.class, search -> search
+                .find(q -> q
+                    .q("hello world")
+                    .limit(1)
+                )
+                .getHits()
+            )
+        );
     }
 }
 ```

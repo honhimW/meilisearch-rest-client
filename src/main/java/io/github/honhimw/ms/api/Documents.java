@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -49,11 +50,14 @@ public interface Documents {
     Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default Page<Map<String, Object>> list(Consumer<PageRequest> page) {
-        PageRequest pageRequest = new PageRequest();
+    default Page<Map<String, Object>> list(Consumer<GetDocumentRequest> page) {
+        GetDocumentRequest pageRequest = new GetDocumentRequest();
         page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
+        return list(pageRequest);
     }
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    Page<Map<String, Object>> list(GetDocumentRequest page);
 
     /**
      * Get documents by batch.
@@ -92,7 +96,22 @@ public interface Documents {
     TaskInfo save(@Nullable String json);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default TaskInfo save(@Nullable Object one) {
+        return save(Collections.singleton(one));
+    }
+
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(Collection<?> collection);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default TaskInfo saveVectorized(VectorizedDocument one) {
+        return save(Collections.singleton(one));
+    }
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    TaskInfo saveVectorized(Collection<VectorizedDocument> collection);
+
 
     /**
      * Add a list of documents or update them if they already exist.
@@ -112,6 +131,11 @@ public interface Documents {
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(String json);
+
+    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default TaskInfo update(Object one) {
+        return update(Collections.singleton(one));
+    }
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(Collection<?> collection);

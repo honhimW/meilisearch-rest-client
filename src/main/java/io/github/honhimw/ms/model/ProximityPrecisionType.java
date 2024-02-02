@@ -12,19 +12,29 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms;
+package io.github.honhimw.ms.model;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import io.github.honhimw.ms.json.EnumValue;
 
 /**
  * @author hon_him
- * @since 2024-01-17
+ * @since 2024-01-18
  */
 
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.SOURCE)
-public @interface ExperimentalApi {
+public enum ProximityPrecisionType implements EnumValue<ProximityPrecisionType> {
+
+    BY_WORD("byWord"),
+    BY_ATTRIBUTE("byAttribute"),
+    ;
+
+    private final String type;
+
+    ProximityPrecisionType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public String value() {
+        return this.type;
+    }
 }

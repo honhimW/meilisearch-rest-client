@@ -18,6 +18,7 @@ import io.github.honhimw.ms.api.DistinctAttributeSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveDistinctAttributeSettings;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.ReactorUtils;
+import jakarta.annotation.Nullable;
 
 /**
  * @author hon_him
@@ -32,9 +33,10 @@ class DistinctAttributeSettingsImpl implements DistinctAttributeSettings {
         _reactive = reactive;
     }
 
+    @Nullable
     @Override
     public String get() {
-        return ReactorUtils.blockNonNull(_reactive.get());
+        return _reactive.get().block();
     }
 
     @Override

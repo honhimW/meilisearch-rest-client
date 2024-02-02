@@ -14,14 +14,14 @@
 
 package io.github.honhimw.ms.model;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import io.github.honhimw.ms.json.EnumValue;
 
 /**
  * @author hon_him
  * @since 2024-01-02
  */
 
-public enum TaskType {
+public enum TaskType implements EnumValue<TaskType> {
     INDEX_CREATION("indexCreation"),
     INDEX_UPDATE("indexUpdate"),
     INDEX_DELETION("indexDeletion"),
@@ -40,9 +40,8 @@ public enum TaskType {
         this.tasksType = tasksType;
     }
 
-    @JsonValue
     @Override
-    public String toString() {
+    public String value() {
         return this.tasksType;
     }
 

@@ -49,7 +49,7 @@ public class SimpleTests {
     @Test
     @SneakyThrows
     void httpClient() {
-        ReactiveHttpUtils instance = ReactiveHttpUtils.getInstance();
+        ReactiveHttpUtils instance = ReactiveHttpUtils.getInstance(builder -> builder.requestInterceptor(configurer -> configurer.param("foo", "bar")));
         HttpServer httpServer = HttpServer.create();
         ServerSocket serverSocket = new ServerSocket(0);
         int randomPort = serverSocket.getLocalPort();
@@ -57,13 +57,18 @@ public class SimpleTests {
         String helloWorld = "hello world";
         DisposableServer disposableServer = httpServer
             .route(httpServerRoutes -> httpServerRoutes
-                .get("/", (req, resp) -> resp.sendString(Mono.just(helloWorld))))
+                .get("/api", (req, resp) -> {
+                    String uri = req.uri();
+                    URIBuilder.from(uri).getQueryParams().forEach(e -> resp.addHeader(e.getKey(), e.getValue()));
+                    return resp.sendString(Mono.just(helloWorld));
+                }))
             .port(randomPort)
             .bindNow();
-        String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(randomPort).setPath("/").build().toString();
+        String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(randomPort).setPath("/api").build().toString();
         {
             ReactiveHttpUtils.HttpResult httpResult = instance.get(uri);
             System.out.println(httpResult.str());
+            assert "bar".equals(httpResult.getHeader("foo"));
             assert helloWorld.equals(httpResult.str());
         }
         instance.close();

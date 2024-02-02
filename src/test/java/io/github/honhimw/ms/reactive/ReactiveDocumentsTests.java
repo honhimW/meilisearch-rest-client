@@ -16,16 +16,15 @@ package io.github.honhimw.ms.reactive;
 
 import io.github.honhimw.ms.Movie;
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
+import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author hon_him
@@ -37,12 +36,38 @@ import java.util.Map;
 @Order(2)
 public class ReactiveDocumentsTests extends ReactiveIndexesTests {
 
+    protected ReactiveIndexes indexes;
+
+    protected String index = "movie_test";
+
+    protected ReactiveDocuments documents;
+
+    @BeforeEach
+    void initIndexes() {
+        super.initIndexes();
+        indexes = reactiveClient.indexes();
+        documents = indexes.documents(index);
+    }
+
     @Order(100)
     @Test
     void save() {
-        Mono<TaskInfo> save = indexes.documents(index).save(movies);
+        Mono<TaskInfo> save = documents.save(movies);
         Duration duration = StepVerifier.create(save
-                .flatMap(taskInfo -> tasks.waitForTask(taskInfo.getTaskUid())))
+                .flatMap(taskInfo -> reactiveTasks.waitForTask(taskInfo.getTaskUid())))
+            .verifyComplete();
+        log.info("save document task wait for: {}", duration);
+    }
+
+    @Order(100)
+    @Test
+    void save2() {
+        Movie one = new Movie();
+        one.setId(30);
+        one.setTitle("hello world");
+        Mono<TaskInfo> save = documents.save(one);
+        Duration duration = StepVerifier.create(save
+                .flatMap(taskInfo -> reactiveTasks.waitForTask(taskInfo.getTaskUid())))
             .verifyComplete();
         log.info("save document task wait for: {}", duration);
     }
@@ -50,8 +75,7 @@ public class ReactiveDocumentsTests extends ReactiveIndexesTests {
     @Order(101)
     @Test
     void listDocuments() {
-        ReactiveDocuments movies = indexes.documents(index);
-        StepVerifier.create(movies.list(null, null))
+        StepVerifier.create(documents.list(null, null))
             .assertNext(mapPage -> {
                 assert mapPage.getLimit() == 20;
                 assert mapPage.getOffset() == 0;
@@ -66,56 +90,63 @@ public class ReactiveDocumentsTests extends ReactiveIndexesTests {
     @Order(102)
     @Test
     void getOne() {
-        ReactiveDocuments movies = indexes.documents(index);
-        StepVerifier.create(movies.get("2"))
+        StepVerifier.create(documents.get("2", "title"))
             .assertNext(map -> {
                 assert map != null;
-                log.info(jsonHandler.toJson(map));
+                assert map.get("title").equals("Ariel");
+                assert Objects.isNull(map.get("poster"));
+            })
+            .verifyComplete();
+    }
+
+    @Order(102)
+    @Test
+    void getOne2() {
+        StepVerifier.create(documents.get("2", Movie.class, "title"))
+            .assertNext(map -> {
+                assert map != null;
+                assert map.getTitle().equals("Ariel");
+                assert Objects.isNull(map.getPoster());
+            })
+            .verifyComplete();
+    }
+
+    @Order(102)
+    @Test
+    void getOne3() {
+        StepVerifier.create(documents.get("2", new TypeRef<Movie>() {
+            }, "title"))
+            .assertNext(map -> {
+                assert map != null;
+                assert map.getTitle().equals("Ariel");
+                assert Objects.isNull(map.getPoster());
             })
             .verifyComplete();
     }
 
     @Order(103)
     @Test
-    void search() {
-        StepVerifier.create(indexes.search(index).find("2"))
-            .assertNext(searchResponse -> {
-                log.info(jsonHandler.toJson(searchResponse.getHits()));
-                assert !searchResponse.getHits().isEmpty();
+    void update() {
+        Mono<Movie> movieMono = documents.get("30", Movie.class);
+        StepVerifier.create(movieMono)
+            .assertNext(movie -> {
+                assert movie.getTitle().equals("hello world");
+            })
+            .verifyComplete();
+        Movie one = new Movie();
+        one.setId(30);
+        one.setTitle("foo bar");
+        Mono<TaskInfo> update = documents.update(one);
+        StepVerifier.create(update
+                .flatMap(taskInfo -> reactiveTasks.waitForTask(taskInfo.getTaskUid())))
+            .verifyComplete();
+        Mono<Movie> movieMono2 = documents.get("30", Movie.class);
+        StepVerifier.create(movieMono2)
+            .assertNext(movie -> {
+                assert movie.getTitle().equals("foo bar");
             })
             .verifyComplete();
 
-        Mono<SearchResponse<Map<String, Object>>> indexes2 = client.indexes(indexes1 -> indexes1.search("movies", reactiveSearch -> reactiveSearch.find("hello world")));
-        List<Map<String, Object>> hits = indexes2.block().getHits();
-    }
-
-    @Order(104)
-    @Test
-    void search2() {
-        Mono<List<Movie>> mono = indexes.search(index).find("2", Movie.class)
-            .map(SearchResponse::getHits);
-        StepVerifier.create(mono)
-            .assertNext(movies1 -> {
-                for (Movie movie : movies1) {
-                    log.info(jsonHandler.toJson(movie));
-                }
-            })
-            .verifyComplete();
-    }
-
-    @Order(105)
-    @Test
-    void search3() {
-        Mono<List<Movie>> mono = indexes.search(index, new TypeRef<Movie>() {
-            }).find("2")
-            .map(SearchResponse::getHits);
-        StepVerifier.create(mono)
-            .assertNext(movies1 -> {
-                for (Movie movie : movies1) {
-                    log.info(jsonHandler.toJson(movie));
-                }
-            })
-            .verifyComplete();
     }
 
 }

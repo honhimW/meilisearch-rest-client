@@ -44,7 +44,7 @@ public class TaskInfo implements Serializable {
     private TaskStatus status;
     
     @Schema(description = "Type of task")
-    private String type;
+    private TaskType type;
     
     @Schema(description = "Represents the date and time in the RFC 3339 format when the task has been enqueued")
     private LocalDateTime enqueuedAt;

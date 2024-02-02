@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.api.reactive;
 
+import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,9 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -49,17 +52,20 @@ public interface ReactiveDocuments {
     Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default Mono<Page<Map<String, Object>>> list(Consumer<PageRequest> page) {
-        PageRequest pageRequest = new PageRequest();
+    default Mono<Page<Map<String, Object>>> list(Consumer<GetDocumentRequest> page) {
+        GetDocumentRequest pageRequest = new GetDocumentRequest();
         page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
+        return list(pageRequest);
     }
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    Mono<Page<Map<String, Object>>> list(GetDocumentRequest page);
 
     /**
      * Get documents by batch.
      *
-     * @param offset default 0
-     * @param limit  default 20
+     * @param offset  default 0
+     * @param limit   default 20
      * @param typeRef document type
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
@@ -86,7 +92,22 @@ public interface ReactiveDocuments {
     Mono<TaskInfo> save(String json);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> save(Object one) {
+        return save(Collections.singleton(one));
+    }
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(Collection<?> collection);
+
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> saveVectorized(VectorizedDocument one) {
+        return save(Collections.singleton(one));
+    }
+
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    Mono<TaskInfo> saveVectorized(Collection<VectorizedDocument> collection);
 
     /**
      * Add a list of documents or update them if they already exist.
@@ -106,6 +127,11 @@ public interface ReactiveDocuments {
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(String json);
+
+    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> update(Object one) {
+        return update(Collections.singleton(one));
+    }
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(Collection<?> collection);
@@ -165,6 +191,13 @@ public interface ReactiveDocuments {
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     <T> Mono<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    default <T> Mono<T> get(String id, Class<T> type, @Nullable String... fields) {
+        // @formatter:off
+        return get(id, new TypeRef<T>() { @Override public Type getType() { return type; }}, fields);
+        // @formatter:on
+    }
 
     /**
      * Delete one document based on its unique id.

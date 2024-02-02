@@ -133,6 +133,16 @@ public interface ReactiveSettings {
     }
 
     /**
+     * @return {@link ReactiveProximityPrecisionSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/proximity-precision")
+    ReactiveProximityPrecisionSettings proximityPrecision();
+
+    default <R> R proximityPrecision(Function<ReactiveProximityPrecisionSettings, R> operation) {
+        return operation.apply(proximityPrecision());
+    }
+
+    /**
      * @return {@link ReactiveRankingRulesSettings} operator
      */
     @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")
@@ -211,5 +221,17 @@ public interface ReactiveSettings {
     default <R> R typoTolerance(Function<ReactiveTypoToleranceSettings, R> operation) {
         return operation.apply(typoTolerance());
     }
+
+    /**
+     * @return {@link ReactiveEmbeddersSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/embedders")
+    ReactiveEmbeddersSettings embedders();
+
+    default <R> R embedders(Function<ReactiveEmbeddersSettings, R> operation) {
+        return operation.apply(embedders());
+    }
+
+
 
 }

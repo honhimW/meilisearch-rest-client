@@ -14,10 +14,12 @@
 
 package io.github.honhimw.ms.api;
 
+import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -127,6 +129,22 @@ public interface Indexes {
         return operation.apply(documents(uid));
     }
 
+    <T> TypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
+
+    default <T> TypedDocuments<T> documents(String uid, Class<T> type) {
+        // @formatter:off
+        return documents(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
+
+    default <T, R> R documents(String uid, TypeRef<T> typeRef, Function<TypedDocuments<T>, R> operation) {
+        return operation.apply(documents(uid, typeRef));
+    }
+
+    default <T, R> R documents(String uid, Class<T> type, Function<TypedDocuments<T>, R> operation) {
+        return operation.apply(documents(uid, type));
+    }
+
     /**
      * Meilisearch exposes 3 routes to perform document searches:
      * <ul>
@@ -143,6 +161,22 @@ public interface Indexes {
 
     default <R> R search(String uid, Function<Search, R> operation) {
         return operation.apply(search(uid));
+    }
+
+    <T> TypedSearch<T> search(String uid, TypeRef<T> typeRef);
+
+    default <T> TypedSearch<T> search(String uid, Class<T> type) {
+        // @formatter:off
+        return search(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
+
+    default <T, R> R search(String uid, TypeRef<T> typeRef, Function<TypedSearch<T>, R> operation) {
+        return operation.apply(search(uid, typeRef));
+    }
+
+    default <T, R> R search(String uid, Class<T> type, Function<TypedSearch<T>, R> operation) {
+        return operation.apply(search(uid, type));
     }
 
     @Operation(tags = "/indexes/{indexUid}/settings")

@@ -75,6 +75,7 @@ public class TypoTolerance implements Serializable {
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
     @AllArgsConstructor
+    @lombok.Builder(builderClassName = "Builder")
     public static class MinWordSizeForTypos implements Serializable {
         
         @Schema(description = "The minimum word size for accepting 1 typo; must be between 0 and twoTypos", defaultValue = "5")

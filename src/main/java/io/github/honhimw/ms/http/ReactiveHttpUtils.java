@@ -14,8 +14,6 @@
 
 package io.github.honhimw.ms.http;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.IOUtils;
 import io.github.honhimw.ms.support.StringUtils;
@@ -41,7 +39,6 @@ import reactor.netty.http.client.HttpClient.ResponseReceiver;
 import reactor.netty.http.client.HttpClientForm;
 import reactor.netty.http.client.HttpClientResponse;
 import reactor.netty.resources.ConnectionProvider;
-import reactor.netty.resources.ConnectionProvider.Builder;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -60,6 +57,57 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * <table>
+ *     <tr style="color:yellow">
+ *         <th>Property</th>
+ *         <th>default value</th>
+ *     </tr>
+ *     <tr>
+ *         <td>connect timeout</td>
+ *         <td>4s</td>
+ *     </tr>
+ *     <tr>
+ *         <td>read timeout</td>
+ *         <td>30s</td>
+ *     </tr>
+ *     <tr>
+ *         <td>HTTP Protocol</td>
+ *         <td>HTTP/1.1, HTTP/2</td>
+ *     </tr>
+ *     <tr>
+ *         <td>follow redirect</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>keepalive</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>proxy with system properties</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>compress</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>retry</td>
+ *         <td>true</td>
+ *     </tr>
+ *     <tr>
+ *         <td>ssl</td>
+ *         <td>false</td>
+ *     </tr>
+ *     <tr>
+ *         <td>max connections</td>
+ *         <td>1000</td>
+ *     </tr>
+ *     <tr>
+ *         <td>pending acquire max count</td>
+ *         <td>1000</td>
+ *     </tr>
+ * </table>
+ *
  * @author hon_him
  * @see RequestConfig.Builder default request configuration
  * @since 2023-02-22
@@ -111,10 +159,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
         return reactiveHttpUtils;
     }
 
-    public static void setObjectMapper(ObjectMapper objectMapper) {
-        OBJECT_MAPPER = objectMapper;
-    }
-
     /**
      * max total connections
      */
@@ -133,28 +177,32 @@ public class ReactiveHttpUtils implements AutoCloseable {
     /**
      * read timeout
      */
-    public static final Duration READ_TIMEOUT = Duration.ofSeconds(20);
+    public static final Duration READ_TIMEOUT = Duration.ofSeconds(30);
 
     private static final Charset defaultCharset = StandardCharsets.UTF_8;
-
-    private static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private HttpClient httpClient;
 
     private ConnectionProvider connectionProvider;
+
+    @Getter
+    private final List<Consumer<Configurer>> requestInterceptors = new ArrayList<>();
+
+    public ReactiveHttpUtils addInterceptor(Consumer<Configurer> interceptor) {
+        Objects.requireNonNull(interceptor);
+        requestInterceptors.add(interceptor);
+        return this;
+    }
 
     private void init() {
         init(RequestConfig.DEFAULT_CONFIG);
     }
 
     private void init(RequestConfig requestConfig) {
-        Builder connectionProviderBuilder = ConnectionProvider.builder("ReactiveHttpUtils");
-        connectionProviderBuilder.maxConnections(MAX_TOTAL_CONNECTIONS);
-        connectionProviderBuilder.pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS);
-
-        connectionProvider = connectionProviderBuilder.build();
+        connectionProvider = requestConfig.connectionProvider;
         httpClient = HttpClient.create(connectionProvider);
         httpClient = requestConfig.config(httpClient);
+        addInterceptor(requestConfig.requestInterceptor);
     }
 
     public HttpResult get(String url) {
@@ -293,6 +341,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
             .method(method)
             .charset(defaultCharset)
             .url(url);
+        for (Consumer<Configurer> requestInterceptor : requestInterceptors) {
+            configurer = configurer.andThen(requestInterceptor);
+        }
         configurer.accept(requestConfigurer);
         HttpResult httpResult = request(requestConfigurer);
         return resultMapper.apply(httpResult);
@@ -327,6 +378,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
             .charset(defaultCharset)
             .url(url)
             .config(RequestConfig.DEFAULT_CONFIG.copy().build());
+        for (Consumer<Configurer> requestInterceptor : requestInterceptors) {
+            configurer = configurer.andThen(requestInterceptor);
+        }
         configurer.accept(requestConfigurer);
         ResponseReceiver<?> responseReceiver = _request(requestConfigurer);
         return new ReactiveHttpResult(responseReceiver);
@@ -416,6 +470,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
         private final boolean enableCompress;
         private final boolean enableRetry;
         private final boolean noSSL;
+        private final ConnectionProvider connectionProvider;
+        private final Function<HttpClient, HttpClient> customize;
+        private final Consumer<Configurer> requestInterceptor;
 
         private HttpClient config(HttpClient httpClient) {
             HttpClient client = httpClient;
@@ -435,21 +492,15 @@ public class ReactiveHttpUtils implements AutoCloseable {
             if (noSSL) {
                 client = client.noSSL();
             }
+            // customize
+            client = customize.apply(client);
+            Objects.requireNonNull(client);
+
             return client;
         }
 
         private Builder copy() {
-            Builder builder = RequestConfig.builder();
-            builder.connectTimeout(this.connectTimeout);
-            builder.readTimeout(this.readTimeout);
-            builder.httpProtocol(this.httpProtocols);
-            builder.followRedirect(this.followRedirect);
-            builder.keepalive(this.keepalive);
-            builder.proxyWithSystemProperties(this.proxyWithSystemProperties);
-            builder.enableCompress(this.enableCompress);
-            builder.enableRetry(this.enableRetry);
-            builder.noSSL(this.noSSL);
-            return builder;
+            return copy(this);
         }
 
         private static Builder copy(RequestConfig config) {
@@ -463,6 +514,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
             builder.enableCompress(config.enableCompress);
             builder.enableRetry(config.enableRetry);
             builder.noSSL(config.noSSL);
+            builder.connectionProvider(config.connectionProvider);
+            builder.customize(config.customize);
+            builder.requestInterceptor(config.requestInterceptor);
             return builder;
         }
 
@@ -484,6 +538,13 @@ public class ReactiveHttpUtils implements AutoCloseable {
             private boolean enableCompress = true;
             private boolean enableRetry = true;
             private boolean noSSL = true;
+            private ConnectionProvider connectionProvider = ConnectionProvider.builder("ReactiveHttpUtils")
+                .maxConnections(MAX_TOTAL_CONNECTIONS)
+                .pendingAcquireMaxCount(MAX_TOTAL_CONNECTIONS)
+                .build();
+            private Function<HttpClient, HttpClient> customize = _httpClient -> _httpClient;
+            private Consumer<Configurer> requestInterceptor = configurer -> {
+            };
 
             public Builder connectTimeout(Duration connectTimeout) {
                 this.connectTimeout = connectTimeout;
@@ -530,6 +591,21 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 return this;
             }
 
+            public Builder connectionProvider(ConnectionProvider connectionProvider) {
+                this.connectionProvider = connectionProvider;
+                return this;
+            }
+
+            public Builder customize(Function<HttpClient, HttpClient> customize) {
+                this.customize = this.customize.andThen(customize);
+                return this;
+            }
+
+            public Builder requestInterceptor(Consumer<Configurer> interceptor) {
+                this.requestInterceptor = this.requestInterceptor.andThen(interceptor);
+                return this;
+            }
+
             public RequestConfig build() {
                 return new RequestConfig(
                     connectTimeout,
@@ -540,7 +616,10 @@ public class ReactiveHttpUtils implements AutoCloseable {
                     proxyWithSystemProperties,
                     enableCompress,
                     enableRetry,
-                    noSSL
+                    noSSL,
+                    connectionProvider,
+                    customize,
+                    requestInterceptor
                 );
             }
         }
@@ -708,18 +787,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
             public Raw json(String text) {
                 if (Objects.isNull(raw)) {
                     this.raw = text;
-                    this.contentType = APPLICATION_JSON;
-                }
-                return this;
-            }
-
-            public Raw json(Object obj) {
-                if (Objects.isNull(raw) && Objects.nonNull(obj)) {
-                    try {
-                        this.raw = OBJECT_MAPPER.writeValueAsString(obj);
-                    } catch (JsonProcessingException e) {
-                        throw new IllegalArgumentException(e);
-                    }
                     this.contentType = APPLICATION_JSON;
                 }
                 return this;
@@ -906,7 +973,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
             public FormData inputStream(String name, String filename, InputStream ips, String contentType) {
                 parts.add(form -> {
-                    form.file(name, name, ips, MULTIPART_FORM_DATA);
+                    form.file(name, filename, ips, MULTIPART_FORM_DATA);
                     return form;
                 });
                 return this;
@@ -1048,16 +1115,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
         public String str() {
             return wrap(bytes -> new String(bytes, charset));
-        }
-
-        public <T> T json(Class<T> type) {
-            return wrap(bytes -> {
-                try {
-                    return OBJECT_MAPPER.readValue(bytes, type);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
         }
 
         public <T> T wrap(Function<byte[], T> wrapper) {

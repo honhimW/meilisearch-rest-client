@@ -10,12 +10,15 @@ plugins {
 }
 
 group = 'io.github.honhimw'
-version = '1.5.0.0-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
-description = 'Java client for meilisearch.'
+//version = '1.6.0.2-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
+version = '1.6.0.2' // API docs version plus '.x(-SNAPSHOT)?'
+description = 'Reactive meilisearch rest client power by reactor-netty-http.'
 
 def title = 'Meilisearch rest client for java'
-def reactorVersion = '2023.0.1'
+def reactorVersion = '2023.0.2'
 def jacksonVersion = '2.15.3'
+def gsonVersion = '2.10.1'
+def yassonVersion = '2.0.4'
 def lombokVersion = '1.18.26'
 def snapshots = version.toString().endsWith('SNAPSHOT')
 
@@ -41,10 +44,12 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.slf4j:slf4j-api:2.0.11'
+
+    compileOnly "com.google.code.gson:gson:${gsonVersion}"
 
     compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
-    compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.19'
+    compileOnly 'io.swagger.core.v3:swagger-annotations-jakarta:2.2.20'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
@@ -53,15 +58,17 @@ dependencies {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation platform('org.junit:junit-bom:5.10.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    testImplementation "com.google.code.gson:gson:${gsonVersion}"
 //    testImplementation 'com.meilisearch.sdk:meilisearch-java:0.11.5'
     testCompileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.slf4j:slf4j-simple:2.0.9'
+    testImplementation 'org.slf4j:slf4j-simple:2.0.11'
 }
 
 java {
@@ -84,12 +91,38 @@ processTestResources {
 }
 
 publishing {
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/honhimW/meilisearch-rest-client")
+            credentials {
+                username = githubProperties().getProperty("gpr.user") as String
+                password = githubProperties().getProperty("gpr.key") as String
+            }
+        }
+        maven {
+            name = "sonatype"
+            if (snapshots) {
+                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            } else {
+//                url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            }
+            credentials {
+                username = sonatypeProperties().getProperty("sonatype.username") as String
+                password = sonatypeProperties().getProperty("sonatype.password") as String
+            }
+        }
+    }
+
     publications {
-        create('library', MavenPublication) {
+        create('gpr', MavenPublication) {
             from components.java
             pom {
                 name.set(title)
-                url.set("")
+                description.set(project.description)
+                url.set("https://github.com/honhimW/meilisearch-rest-client")
                 licenses {
                     license {
                         name.set('The Apache License, Version 2.0')
@@ -107,20 +140,6 @@ publishing {
         }
     }
 
-    repositories {
-        maven {
-            name = "sonatype"
-            if (snapshots) {
-                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            } else {
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            }
-            credentials {
-                username = findProperty("SONATYPE_USERNAME") as String
-                password = findProperty("SONATYPE_PASSWORD") as String
-            }
-        }
-    }
 }
 
 jar {
@@ -142,6 +161,26 @@ Properties loadProfileProperties() {
     def properties = new Properties()
 
     def file = file("profile-${findProperty('profiles.active')}.properties")
+    if (file.exists()) {
+        file.withInputStream { properties.load(it) }
+    }
+    return properties
+}
+
+Properties githubProperties() {
+    def properties = new Properties()
+
+    def file = file("github.properties")
+    if (file.exists()) {
+        file.withInputStream { properties.load(it) }
+    }
+    return properties
+}
+
+Properties sonatypeProperties() {
+    def properties = new Properties()
+
+    def file = file("sonatype.properties")
     if (file.exists()) {
         file.withInputStream { properties.load(it) }
     }

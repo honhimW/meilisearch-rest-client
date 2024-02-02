@@ -21,6 +21,29 @@ package io.github.honhimw.ms.support;
 
 public class StringUtils {
 
+    public static boolean equal(final CharSequence cs1, final CharSequence cs2) {
+        if (cs1 == cs2) {
+            return true;
+        }
+        if (cs1 == null || cs2 == null) {
+            return false;
+        }
+        if (cs1.length() != cs2.length()) {
+            return false;
+        }
+        if (cs1 instanceof String && cs2 instanceof String) {
+            return cs1.equals(cs2);
+        }
+        // Step-wise comparison
+        final int length = cs1.length();
+        for (int i = 0; i < length; i++) {
+            if (cs1.charAt(i) != cs2.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static int length(final CharSequence cs) {
         return cs == null ? 0 : cs.length();
     }
@@ -93,6 +116,20 @@ public class StringUtils {
             return false;
         }
         return regionMatches(str, ignoreCase, 0, prefix, 0, preLen);
+    }
+
+    public static boolean containsIgnoreCase(final CharSequence str, final CharSequence searchStr) {
+        if (str == null || searchStr == null) {
+            return false;
+        }
+        final int len = searchStr.length();
+        final int max = str.length() - len;
+        for (int i = 0; i <= max; i++) {
+            if (regionMatches(str, true, i, searchStr, 0, len)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static boolean regionMatches(final CharSequence cs, final boolean ignoreCase, final int thisStart,

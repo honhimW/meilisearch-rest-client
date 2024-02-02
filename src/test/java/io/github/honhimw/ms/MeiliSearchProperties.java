@@ -19,7 +19,9 @@ import jakarta.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Load properties from gradle.properties or profile-{xxx}.properties
@@ -30,14 +32,21 @@ import java.util.Properties;
 
 public class MeiliSearchProperties {
 
+    private static final AtomicReference<Properties> ref = new AtomicReference<>();
+
     public static Properties getProperties() {
+        Properties properties = ref.get();
+        if (Objects.nonNull(properties)) {
+            return properties;
+        }
         InputStream config = ClassLoader.getSystemResourceAsStream("meili-search.properties");
-        Properties properties = new Properties();
+        properties = new Properties();
         try {
             properties.load(config);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        ref.set(properties);
         properties.list(System.err);
         assert properties.containsKey("server.host");
         assert properties.containsKey("server.port");
