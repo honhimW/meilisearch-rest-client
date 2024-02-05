@@ -1,8 +1,17 @@
 # Meilisearch Rest Client
 
+---
+
+<h4 align="center">
+  <a href="https://github.com/meilisearch/documentation">Doc Repository</a> |
+  <a href="https://www.meilisearch.com/docs">Documentation</a>
+</h4>
+
 [Meilisearch](https://github.com/meilisearch/meilisearch) is a lightning-fast search engine that fits effortlessly into your apps, websites, and workflow.
 
 > The goal of this library is to provide a `object-oriented`, `semantic`, `reactive`, and `streamlined` meilisearch-rest-client, supporting reactivity through reactor-netty-http.
+
+---
 
 ### Version
 The version number of this library is named by appending `.X` to the version number in the official documentation.
