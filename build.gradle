@@ -19,7 +19,7 @@ def reactorVersion = '2023.0.2'
 def jacksonVersion = '2.15.3'
 def gsonVersion = '2.10.1'
 def yassonVersion = '2.0.4'
-def lombokVersion = '1.18.26'
+def lombokVersion = '1.18.30'
 def snapshots = version.toString().endsWith('SNAPSHOT')
 
 apply plugin: 'idea'
