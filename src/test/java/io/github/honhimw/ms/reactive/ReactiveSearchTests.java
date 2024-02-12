@@ -63,9 +63,6 @@ public class ReactiveSearchTests extends ReactiveDocumentsTests {
                 assert !searchResponse.getHits().isEmpty();
             })
             .verifyComplete();
-
-        Mono<SearchResponse<Map<String, Object>>> indexes2 = reactiveClient.indexes(indexes1 -> indexes1.search("movies", reactiveSearch -> reactiveSearch.find("hello world")));
-        List<Map<String, Object>> hits = indexes2.block().getHits();
     }
 
     @Order(104)
