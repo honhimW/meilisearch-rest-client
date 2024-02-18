@@ -1,5 +1,10 @@
 # Meilisearch Rest Client
 
+[![License](https://img.shields.io/badge/license-Apache2-blue.svg)](https://github.com/honhimW/meilisearch-rest-client?tab=Apache-2.0-1-ov-file#readme)
+[![Maven](https://img.shields.io/maven-central/v/io.github.honhimw/meilisearch-rest-client)](https://central.sonatype.com/artifact/io.github.honhimw/meilisearch-rest-client)
+
+---
+
 <h4 align="center">
   <a href="https://github.com/meilisearch/documentation">Doc Repository</a> |
   <a href="https://www.meilisearch.com/docs">Documentation</a>
