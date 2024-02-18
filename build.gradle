@@ -18,7 +18,6 @@ def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.2'
 def jacksonVersion = '2.16.1'
 def gsonVersion = '2.10.1'
-def yassonVersion = '2.0.4'
 def lombokVersion = '1.18.30'
 def snapshots = version.toString().endsWith('SNAPSHOT')
 
@@ -62,7 +61,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
     testImplementation "com.google.code.gson:gson:${gsonVersion}"
-//    testImplementation 'com.meilisearch.sdk:meilisearch-java:0.11.5'
     testCompileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 
