@@ -28,13 +28,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Start MeiliSearch
+      run: docker run -d -p 7700:7700 -e MEILI_ENV='development' getmeili/meilisearch:v1.6.2
+
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@ec92e829475ac0c2315ea8f9eced72db85bb337a # v3.0.0
 
     - name: Build with Gradle Wrapper
-      run: bash ./gradlew build -x test
+      run: bash ./gradlew build
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
