@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache2-blue.svg)](https://github.com/honhimW/meilisearch-rest-client?tab=Apache-2.0-1-ov-file#readme)
 [![Maven](https://img.shields.io/maven-central/v/io.github.honhimw/meilisearch-rest-client)](https://central.sonatype.com/artifact/io.github.honhimw/meilisearch-rest-client)
+[![CI](https://github.com/honhimW/meilisearch-rest-client/actions/workflows/gradle.yml/badge.svg)](https://github.com/honhimW/meilisearch-rest-client/actions)
 
 ---
 
