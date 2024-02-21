@@ -7,6 +7,7 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
+    id 'jacoco'
 }
 
 group = 'io.github.honhimw'
@@ -25,6 +26,7 @@ apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
 
 repositories {
     mavenLocal()
@@ -156,6 +158,17 @@ test {
 
     testLogging {
         events 'passed', 'skipped', 'failed'
+    }
+
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.setRequired true
+        csv.setRequired false
+        html.setOutputLocation layout.buildDirectory.dir('jacocoHtml')
     }
 }
 
