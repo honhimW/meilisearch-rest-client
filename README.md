@@ -1,5 +1,18 @@
 # Meilisearch Rest Client
 
+[![License](https://img.shields.io/badge/license-Apache2-blue.svg)](https://github.com/honhimW/meilisearch-rest-client?tab=Apache-2.0-1-ov-file#readme)
+[![Maven](https://img.shields.io/maven-central/v/io.github.honhimw/meilisearch-rest-client)](https://central.sonatype.com/artifact/io.github.honhimw/meilisearch-rest-client)
+[![CI](https://github.com/honhimW/meilisearch-rest-client/actions/workflows/gradle.yml/badge.svg)](https://github.com/honhimW/meilisearch-rest-client/actions)
+[![Codecov](https://img.shields.io/codecov/c/github/honhimw/meilisearch-rest-client)](https://app.codecov.io/github/honhimW/meilisearch-rest-client)
+
+
+---
+
+<h4 align="center">
+  <a href="https://github.com/meilisearch/documentation">Doc Repository</a> |
+  <a href="https://www.meilisearch.com/docs">Documentation</a>
+</h4>
+
 [Meilisearch](https://github.com/meilisearch/meilisearch) is a lightning-fast search engine that fits effortlessly into your apps, websites, and workflow.
 
 > The goal of this library is to provide a `object-oriented`, `semantic`, `reactive`, and `streamlined` meilisearch-rest-client, supporting reactivity through reactor-netty-http.
@@ -26,9 +39,7 @@ $ gradle clean build -x test
 
 ```groovy
 // Gradle
-dependencies {
-    implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.2'
-}
+implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.3'
 ```
 
 ```xml
@@ -36,9 +47,11 @@ dependencies {
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.6.0.2</version>
+    <version>1.6.0.3</version>
 </dependency>
 ```
+
+**[Copy Snippets here.](https://central.sonatype.com/artifact/io.github.honhimw/meilisearch-rest-client)**
 
 ## Usage
 

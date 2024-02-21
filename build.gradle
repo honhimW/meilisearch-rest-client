@@ -7,25 +7,26 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
+    id 'jacoco'
 }
 
 group = 'io.github.honhimw'
-//version = '1.6.0.2-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
-version = '1.6.0.2' // API docs version plus '.x(-SNAPSHOT)?'
-description = 'Reactive meilisearch rest client power by reactor-netty-http.'
+version = '1.6.0.3' // API docs version plus '.x(-SNAPSHOT)?'
+//version = version + '-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
+description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
 def title = 'Meilisearch rest client for java'
-def reactorVersion = '2023.0.2'
-def jacksonVersion = '2.15.3'
+def reactorVersion = '2023.0.3'
+def jacksonVersion = '2.16.1'
 def gsonVersion = '2.10.1'
-def yassonVersion = '2.0.4'
-def lombokVersion = '1.18.26'
+def lombokVersion = '1.18.30'
 def snapshots = version.toString().endsWith('SNAPSHOT')
 
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
 
 repositories {
     mavenLocal()
@@ -44,7 +45,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'org.slf4j:slf4j-api:2.0.11'
+    implementation 'org.slf4j:slf4j-api:2.0.12'
 
     compileOnly "com.google.code.gson:gson:${gsonVersion}"
 
@@ -58,17 +59,16 @@ dependencies {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.1')
+    testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
     testImplementation "com.google.code.gson:gson:${gsonVersion}"
-//    testImplementation 'com.meilisearch.sdk:meilisearch-java:0.11.5'
     testCompileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.slf4j:slf4j-simple:2.0.11'
+    testImplementation 'org.slf4j:slf4j-simple:2.0.12'
 }
 
 java {
@@ -155,11 +155,36 @@ tasks.withType(JavaCompile).configureEach {
 
 test {
     useJUnitPlatform()
+
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.setRequired true
+        csv.setRequired false
+        html.setOutputLocation layout.buildDirectory.dir('jacocoHtml')
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "io/github/honhimw/ms/model/*",
+            ])
+        }))
+    }
 }
 
 Properties loadProfileProperties() {
     def properties = new Properties()
-
+    properties.put('meili-search.host', '127.0.0.1')
+    properties.put('meili-search.port', '7700')
+    properties.put('meili-search.api-key', '')
     def file = file("profile-${findProperty('profiles.active')}.properties")
     if (file.exists()) {
         file.withInputStream { properties.load(it) }

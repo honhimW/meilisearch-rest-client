@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive;
+package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.MeiliSearchProperties;
 import io.github.honhimw.ms.api.MSearchClient;
@@ -34,20 +34,21 @@ import java.util.*;
  * @since 2023-12-29
  */
 
-public class ReactiveClientTests {
+public class TestBase {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
+    protected static final String INDEX = "movie_test";
     protected static ReactiveMSearchClient reactiveClient;
     protected static MSearchClient blockingClient;
 
-    protected static ReactiveTasks reactiveTasks;
-    protected static Tasks blockingTasks;
+    private static ReactiveTasks reactiveTasks;
+    private static Tasks blockingTasks;
 
     protected static JsonHandler jsonHandler;
 
     @BeforeAll
-    static void init() throws Exception {
+    public static void init() {
         jsonHandler = new JacksonJsonHandler();
         reactiveClient = ReactiveMSearchClient.create(builder -> builder
             .host(MeiliSearchProperties.getHost())
@@ -55,22 +56,20 @@ public class ReactiveClientTests {
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
-        reactiveTasks = reactiveClient.tasks();
         blockingClient = MSearchClient.create(builder -> builder
             .host(MeiliSearchProperties.getHost())
             .port(MeiliSearchProperties.getPort())
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
-        blockingTasks = blockingClient.tasks();
     }
 
     protected static Mono<Void> await(Mono<TaskInfo> taskInfo) {
-        return taskInfo.flatMap(taskInfo1 -> reactiveTasks.waitForTask(taskInfo1.getTaskUid()));
+        return taskInfo.flatMap(taskInfo1 -> getReactiveTasks().waitForTask(taskInfo1.getTaskUid()));
     }
 
     protected static void await(TaskInfo taskInfo) {
-        blockingTasks.waitForTask(taskInfo.getTaskUid());
+        getBlockingTasks().waitForTask(taskInfo.getTaskUid());
     }
 
     @SafeVarargs
@@ -92,6 +91,37 @@ public class ReactiveClientTests {
             map.put(key, value);
         }
         return map;
+    }
+
+    protected static ReactiveTasks getReactiveTasks() {
+        if (Objects.isNull(reactiveTasks)) {
+            reactiveTasks = reactiveClient.tasks();
+        }
+        return reactiveTasks;
+    }
+
+    protected static Tasks getBlockingTasks() {
+        if (Objects.isNull(blockingTasks)) {
+            blockingTasks = blockingClient.tasks();
+        }
+        return blockingTasks;
+    }
+
+    protected static void cleanData() {
+        TaskInfo delete = blockingClient.indexes().delete(INDEX);
+        await(delete);
+    }
+
+    protected static void prepareIndex() {
+        TaskInfo createIndex = blockingClient.indexes().create(INDEX);
+        await(createIndex);
+    }
+
+    protected static void prepareData() {
+        cleanData();
+        prepareIndex();
+        TaskInfo task = blockingClient.indexes().documents(INDEX).save(movies);
+        await(task);
     }
 
     public static final String movies = "[\n" +

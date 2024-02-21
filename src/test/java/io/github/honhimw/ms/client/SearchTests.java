@@ -12,46 +12,35 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive;
+package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
-import io.github.honhimw.ms.api.Settings;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
 import io.github.honhimw.ms.api.reactive.ReactiveSearch;
-import io.github.honhimw.ms.api.reactive.ReactiveTypedSearch;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.SearchResponse;
-import io.github.honhimw.ms.model.TaskInfo;
-import io.github.honhimw.ms.support.StringUtils;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author hon_him
  * @since 2024-01-03
  */
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(3)
-public class ReactiveSearchTests extends ReactiveDocumentsTests {
+public class SearchTests extends TestBase {
 
     protected ReactiveIndexes indexes;
-
-    protected String index = "movie_test";
-
     protected ReactiveSearch search;
 
     @BeforeEach
     void initIndexes() {
-        super.initIndexes();
+        prepareData();
         indexes = reactiveClient.indexes();
-        search = indexes.search(index);
+        search = indexes.search(INDEX);
     }
 
     @Order(103)
@@ -63,9 +52,6 @@ public class ReactiveSearchTests extends ReactiveDocumentsTests {
                 assert !searchResponse.getHits().isEmpty();
             })
             .verifyComplete();
-
-        Mono<SearchResponse<Map<String, Object>>> indexes2 = reactiveClient.indexes(indexes1 -> indexes1.search("movies", reactiveSearch -> reactiveSearch.find("hello world")));
-        List<Map<String, Object>> hits = indexes2.block().getHits();
     }
 
     @Order(104)
@@ -85,7 +71,7 @@ public class ReactiveSearchTests extends ReactiveDocumentsTests {
     @Order(105)
     @Test
     void search3() {
-        Mono<List<Movie>> mono = indexes.search(index, new TypeRef<Movie>() {
+        Mono<List<Movie>> mono = indexes.search(INDEX, new TypeRef<Movie>() {
             }).find("2")
             .map(SearchResponse::getHits);
         StepVerifier.create(mono)
@@ -95,35 +81,6 @@ public class ReactiveSearchTests extends ReactiveDocumentsTests {
                 }
             })
             .verifyComplete();
-    }
-
-//    @Test
-    @SneakyThrows
-    void search4() {
-        Settings settings = blockingIndexes.settings("movies");
-        TaskInfo update = settings.pagination().update(Integer.MAX_VALUE);
-        await(update);
-        ReactiveTypedSearch<Movie> movies1 = indexes.search("movies", new TypeRef<Movie>() {
-        });
-        SearchResponse<Movie> block1 = movies1.find("who").block();
-        System.out.println(block1.getEstimatedTotalHits());
-        Mono<SearchResponse<Movie>> who = movies1.find(builder -> builder
-            .q(" who ")
-            .page(1)
-            .hitsPerPage(10000)
-//            .limit(20)
-//            .offset(0)
-        );
-
-        SearchResponse<Movie> block = who.block();
-        System.out.println(block.getTotalHits());
-        for (Movie hit : block.getHits()) {
-            String string = hit.toString();
-            if (!StringUtils.containsIgnoreCase(string, "who")) {
-                System.out.println(string);
-            }
-        }
-
     }
 
 }

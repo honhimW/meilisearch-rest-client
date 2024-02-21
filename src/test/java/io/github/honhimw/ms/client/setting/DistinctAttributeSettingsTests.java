@@ -26,18 +26,28 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive.settings;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import io.github.honhimw.ms.api.RankingRulesSettings;
-import io.github.honhimw.ms.api.reactive.ReactiveRankingRulesSettings;
-import io.github.honhimw.ms.model.RankingRule;
+package io.github.honhimw.ms.client.setting;
+
+import io.github.honhimw.ms.api.DistinctAttributeSettings;
+import io.github.honhimw.ms.api.reactive.ReactiveDistinctAttributeSettings;
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.github.honhimw.ms.reactive.ReactiveSettingsTests;
 import org.junit.jupiter.api.*;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -45,52 +55,43 @@ import java.util.Objects;
  * @since 2024-01-03
  */
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(5)
-public class RankingRulesSettingsTests extends ReactiveSettingsTests {
+public class DistinctAttributeSettingsTests extends SettingTestBase {
 
-    private ReactiveRankingRulesSettings _reactive;
-    private RankingRulesSettings _blokcing;
+    private ReactiveDistinctAttributeSettings _reactive;
+    private DistinctAttributeSettings _blocking;
     private Object _DEFAULT;
 
     @BeforeEach
-    @Override
     protected void initIndexes() {
-        super.initIndexes();
-        _reactive = reactiveSettings.rankingRules();
-        _blokcing = blockingSettings.rankingRules();
-        List<RankingRule> rankingRules = Setting.defaultObject().getRankingRules();
-        Collections.sort(rankingRules);
-        _DEFAULT = rankingRules;
+        _reactive = reactiveSettings.distinctAttribute();
+        _blocking = blockingSettings.distinctAttribute();
+        _DEFAULT = Setting.defaultObject().getDistinctAttribute();
     }
 
     @Order(0)
     @Test
     void get() {
-        List<RankingRule> current = _blokcing.get();
-        Collections.sort(current);
+        String current = _blocking.get();
         assert Objects.equals(current, _DEFAULT);
     }
 
     @Order(1)
     @Test
     void update() {
-        List<RankingRule> newSetting = toList(RankingRule.TYPO, RankingRule.EXACTNESS);
-        TaskInfo update = _blokcing.update(newSetting);
+        String newSetting = "title";
+        TaskInfo update = _blocking.update(newSetting);
         await(update);
-        List<RankingRule> current = _blokcing.get();
-        Collections.sort(current);
-        Collections.sort(newSetting);
+        String current = _blocking.get();
         assert Objects.equals(current, newSetting);
     }
 
     @Order(2)
     @Test
     void reset() {
-        TaskInfo reset = _blokcing.reset();
+        TaskInfo reset = _blocking.reset();
         await(reset);
-        List<RankingRule> current = _blokcing.get();
+        String current = _blocking.get();
         assert Objects.equals(current, _DEFAULT);
     }
 

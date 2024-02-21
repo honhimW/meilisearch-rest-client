@@ -35,32 +35,75 @@ import java.util.function.Function;
 
 public interface ReactiveMSearchClient extends AutoCloseable {
 
+    /**
+     * @return Indexes operator
+     */
     ReactiveIndexes indexes();
 
+    /**
+     * @return Indexes operator
+     */
     default <R> R indexes(Function<ReactiveIndexes, R> operation) {
         return operation.apply(indexes());
     }
 
+    /**
+     * @return Tasks operator
+     */
     ReactiveTasks tasks();
 
+    /**
+     * @return Tasks operator
+     */
     default <R> R tasks(Function<ReactiveTasks, R> operation) {
         return operation.apply(tasks());
     }
 
+    /**
+     * @return Keys operator
+     */
     ReactiveKeys keys();
 
+    /**
+     * @return Keys operator
+     */
     default <R> R keys(Function<ReactiveKeys, R> operation) {
         return operation.apply(keys());
     }
 
+    /**
+     * The /multi-search route allows you
+     * to perform multiple search queries on one or more indexes by bundling them into a single HTTP request.
+     * Multi-search is also known as federated search.
+     * <p>
+     * Perform a multi-search
+     * <p>
+     * Bundle multiple search queries in a single API request. Use this endpoint to search through multiple indexes at once.
+     * <h2 style="color:orange">WARNING</h2>
+     * <pre>
+     * If Meilisearch encounters an error when handling any of the queries in a multi-search request, it immediately stops processing the request and returns an error message. The returned message will only address the first error encountered.
+     * </pre>
+     *
+     * @return multi-search result
+     */
     @Operation(method = "POST", tags = "/multi-search")
     Mono<List<SearchResponse<Map<String, Object>>>> multiSearch(MultiSearchRequest request);
 
+    /**
+     * The /health route allows you to verify the status and availability of a Meilisearch instance.
+     * <p>
+     * Get health of Meilisearch server.
+     */
     @Operation(method = "GET", tags = "/health")
     default Mono<Void> healthy() {
         throw new IllegalStateException("server status not ['available']");
     }
 
+    /**
+     * The /version route allows you to check the version of a running Meilisearch instance.
+     *
+     * @return Meilisearch server version information.
+     */
     @Operation(method = "GET", tags = "/version")
     Mono<Version> version();
 
@@ -87,16 +130,32 @@ public interface ReactiveMSearchClient extends AutoCloseable {
     @Operation(method = "POST", tags = "/snapshots")
     Mono<TaskInfo> snapshots();
 
+    /**
+     * @return ExperimentalFeaturesSettings operator
+     */
     ReactiveExperimentalFeaturesSettings experimentalFeatures();
 
+    /**
+     * @return ExperimentalFeaturesSettings operator
+     */
     default <R> R experimentalFeatures(Function<ReactiveExperimentalFeaturesSettings, R> operation) {
         return operation.apply(experimentalFeatures());
     }
 
+    /**
+     * Create a non-blocking-client.
+     * @param config client configuration
+     * @return non-blocking-client
+     */
     static ReactiveMSearchClient create(MSearchConfig config) {
         return new ReactiveMSearchClientImpl(config);
     }
 
+    /**
+     * Create a non-blocking-client with default config.
+     * @param configure client configure
+     * @return non-blocking-client
+     */
     static ReactiveMSearchClient create(Consumer<MSearchConfig.Builder> configure) {
         MSearchConfig.Builder builder = MSearchConfig.withDefault();
         configure.accept(builder);
@@ -104,6 +163,9 @@ public interface ReactiveMSearchClient extends AutoCloseable {
         return new ReactiveMSearchClientImpl(config);
     }
 
+    /**
+     * Close current client.
+     */
     @Override
     void close();
 }

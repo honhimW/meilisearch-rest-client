@@ -26,13 +26,26 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive.settings;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import io.github.honhimw.ms.api.FilterableAttributesSettings;
-import io.github.honhimw.ms.api.reactive.ReactiveFilterableAttributesSettings;
+package io.github.honhimw.ms.client.setting;
+
+import io.github.honhimw.ms.api.NonSeparatorTokensSettings;
+import io.github.honhimw.ms.api.reactive.ReactiveNonSeparatorTokensSettings;
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.github.honhimw.ms.reactive.ReactiveSettingsTests;
 import org.junit.jupiter.api.*;
 
 import java.util.Collections;
@@ -44,22 +57,18 @@ import java.util.Objects;
  * @since 2024-01-03
  */
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(5)
-public class FilterableAttributesSettingsTests extends ReactiveSettingsTests {
+public class NonSeparatorTokensSettingsTests extends SettingTestBase {
 
-    private ReactiveFilterableAttributesSettings _reactive;
-    private FilterableAttributesSettings _blokcing;
+    private ReactiveNonSeparatorTokensSettings _reactive;
+    private NonSeparatorTokensSettings _blokcing;
     private Object _DEFAULT;
 
     @BeforeEach
-    @Override
     protected void initIndexes() {
-        super.initIndexes();
-        _reactive = reactiveSettings.filterableAttributes();
-        _blokcing = blockingSettings.filterableAttributes();
-        _DEFAULT = Setting.defaultObject().getFilterableAttributes();
+        _reactive = reactiveSettings.nonSeparatorTokens();
+        _blokcing = blockingSettings.nonSeparatorTokens();
+        _DEFAULT = Setting.defaultObject().getNonSeparatorTokens();
     }
 
     @Order(0)
@@ -72,7 +81,7 @@ public class FilterableAttributesSettingsTests extends ReactiveSettingsTests {
     @Order(1)
     @Test
     void update() {
-        List<String> newSetting = toList("title", "release_date");
+        List<String> newSetting = toList("@", "#");
         TaskInfo update = _blokcing.update(newSetting);
         await(update);
         List<String> current = _blokcing.get();
