@@ -49,6 +49,8 @@ implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.3'
 </dependency>
 ```
 
+**[Copy Snippets here.](https://central.sonatype.com/artifact/io.github.honhimw/meilisearch-rest-client)**
+
 ## Usage
 
 #### Reactive(reactor)
