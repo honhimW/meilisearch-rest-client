@@ -170,6 +170,14 @@ jacocoTestReport {
         csv.setRequired false
         html.setOutputLocation layout.buildDirectory.dir('jacocoHtml')
     }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "io/github/honhimw/ms/model/*",
+            ])
+        }))
+    }
 }
 
 Properties loadProfileProperties() {
