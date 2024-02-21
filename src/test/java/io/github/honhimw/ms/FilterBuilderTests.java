@@ -15,6 +15,7 @@
 package io.github.honhimw.ms;
 
 import io.github.honhimw.ms.support.FilterBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -22,133 +23,134 @@ import org.junit.jupiter.api.Test;
  * @since 2024-01-05
  */
 
+@Slf4j
 public class FilterBuilderTests {
 
     @Test
     void stringEqual() {
         String filter = FilterBuilder.builder(expression -> expression.equal("genres", "action")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("genres = 'action'");
     }
 
     @Test
     void numberEqual() {
         String filter = FilterBuilder.builder(expression -> expression.equal("id", 1)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("id = 1");
     }
 
     @Test
     void stringUnequal() {
         String filter = FilterBuilder.builder(expression -> expression.unequal("genres", "action")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("genres != 'action'");
     }
 
     @Test
     void numberUnequal() {
         String filter = FilterBuilder.builder(expression -> expression.unequal("id", 1)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("id != 1");
     }
 
     @Test
     void gt() {
         String filter = FilterBuilder.builder(expression -> expression.gt("rating.users", 85)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("rating.users > 85");
     }
 
     @Test
     void ge() {
         String filter = FilterBuilder.builder(expression -> expression.ge("rating.users", 85)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("rating.users >= 85");
     }
 
     @Test
     void lt() {
         String filter = FilterBuilder.builder(expression -> expression.lt("rating.users", 90)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("rating.users < 90");
     }
 
     @Test
     void le() {
         String filter = FilterBuilder.builder(expression -> expression.le("rating.users", 90)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("rating.users <= 90");
     }
 
     @Test
     void to() {
         String filter = FilterBuilder.builder(expression -> expression.to("rating.users", 80, 89)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("rating.users 80 TO 89");
     }
 
     @Test
     void exists() {
         String filter = FilterBuilder.builder(expression -> expression.exists("release_date")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("release_date EXISTS");
     }
 
     @Test
     void notExists() {
         String filter = FilterBuilder.builder(expression -> expression.notExists("release_date")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("release_date NOT EXISTS");
     }
 
     @Test
     void isEmpty() {
         String filter = FilterBuilder.builder(expression -> expression.isEmpty("release_date")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("release_date IS EMPTY");
     }
 
     @Test
     void notEmpty() {
         String filter = FilterBuilder.builder(expression -> expression.notEmpty("release_date")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("release_date NOT EMPTY");
     }
 
     @Test
     void isNull() {
         String filter = FilterBuilder.builder(expression -> expression.isNull("release_date")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("release_date IS NULL");
     }
 
     @Test
     void notNull() {
         String filter = FilterBuilder.builder(expression -> expression.notNull("release_date")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("release_date NOT NULL");
         filter = FilterBuilder.builder(expression -> expression.isNull("release_date").not()).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("NOT release_date IS NULL");
     }
 
     @Test
     void in() {
         String filter = FilterBuilder.builder(expression -> expression.in("genres", "horror", "comedy")).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("genres IN ['horror', 'comedy']");
         filter = FilterBuilder.builder(expression -> expression.in("id", 1, 10)).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("id IN [1, 10]");
     }
 
     @Test
     void not() {
         String filter = FilterBuilder.builder(expression -> expression.in("genres", "horror", "comedy").not()).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("NOT genres IN ['horror', 'comedy']");
         filter = FilterBuilder.builder(expression -> expression.in("genres", "horror", "comedy").not().not()).build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("genres IN ['horror', 'comedy']");
     }
 
@@ -157,7 +159,7 @@ public class FilterBuilderTests {
         String filter = FilterBuilder.builder(expression -> expression.in("genres", "horror", "comedy"))
             .and(expression -> expression.equal("director", "Jordan Peele"))
             .build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("genres IN ['horror', 'comedy'] AND director = 'Jordan Peele'");
     }
 
@@ -166,7 +168,7 @@ public class FilterBuilderTests {
         String filter = FilterBuilder.builder(expression -> expression.in("genres", "horror", "comedy"))
             .or(expression -> expression.equal("director", "Jordan Peele"))
             .build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("genres IN ['horror', 'comedy'] OR director = 'Jordan Peele'");
     }
 
@@ -178,7 +180,7 @@ public class FilterBuilderTests {
                 .or(expression -> expression.equal("genres", "horror")))
             .and(expression -> expression.unequal("director", "Jordan Peele"))
             .build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("(genres = 'comedy' OR genres = 'horror') AND director != 'Jordan Peele'");
     }
 
@@ -192,7 +194,7 @@ public class FilterBuilderTests {
                 .base(expression -> expression.unequal("director", "Jordan Peele"))
                 .or(expression -> expression.unequal("director", "honhimw")))
             .build();
-        System.out.println(filter);
+        log.info(filter);
         assert filter.equals("(genres = 'comedy' OR genres = 'horror') OR (director != 'Jordan Peele' OR director != 'honhimw')");
     }
 

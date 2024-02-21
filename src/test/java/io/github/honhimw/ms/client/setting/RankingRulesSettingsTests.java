@@ -26,13 +26,27 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive.settings;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import io.github.honhimw.ms.api.SortableAttributesSettings;
-import io.github.honhimw.ms.api.reactive.ReactiveSortableAttributesSettings;
+package io.github.honhimw.ms.client.setting;
+
+import io.github.honhimw.ms.api.RankingRulesSettings;
+import io.github.honhimw.ms.api.reactive.ReactiveRankingRulesSettings;
+import io.github.honhimw.ms.model.RankingRule;
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.github.honhimw.ms.reactive.ReactiveSettingsTests;
 import org.junit.jupiter.api.*;
 
 import java.util.Collections;
@@ -44,38 +58,37 @@ import java.util.Objects;
  * @since 2024-01-03
  */
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(5)
-public class SortableAttributesSettingsTests extends ReactiveSettingsTests {
+public class RankingRulesSettingsTests extends SettingTestBase {
 
-    private ReactiveSortableAttributesSettings _reactive;
-    private SortableAttributesSettings _blokcing;
+    private ReactiveRankingRulesSettings _reactive;
+    private RankingRulesSettings _blokcing;
     private Object _DEFAULT;
 
     @BeforeEach
-    @Override
     protected void initIndexes() {
-        super.initIndexes();
-        _reactive = reactiveSettings.sortableAttributes();
-        _blokcing = blockingSettings.sortableAttributes();
-        _DEFAULT = Setting.defaultObject().getSortableAttributes();
+        _reactive = reactiveSettings.rankingRules();
+        _blokcing = blockingSettings.rankingRules();
+        List<RankingRule> rankingRules = Setting.defaultObject().getRankingRules();
+        Collections.sort(rankingRules);
+        _DEFAULT = rankingRules;
     }
 
     @Order(0)
     @Test
     void get() {
-        List<String> current = _blokcing.get();
+        List<RankingRule> current = _blokcing.get();
+        Collections.sort(current);
         assert Objects.equals(current, _DEFAULT);
     }
 
     @Order(1)
     @Test
     void update() {
-        List<String> newSetting = toList("title", "release_date");
+        List<RankingRule> newSetting = toList(RankingRule.TYPO, RankingRule.EXACTNESS);
         TaskInfo update = _blokcing.update(newSetting);
         await(update);
-        List<String> current = _blokcing.get();
+        List<RankingRule> current = _blokcing.get();
         Collections.sort(current);
         Collections.sort(newSetting);
         assert Objects.equals(current, newSetting);
@@ -86,7 +99,7 @@ public class SortableAttributesSettingsTests extends ReactiveSettingsTests {
     void reset() {
         TaskInfo reset = _blokcing.reset();
         await(reset);
-        List<String> current = _blokcing.get();
+        List<RankingRule> current = _blokcing.get();
         assert Objects.equals(current, _DEFAULT);
     }
 

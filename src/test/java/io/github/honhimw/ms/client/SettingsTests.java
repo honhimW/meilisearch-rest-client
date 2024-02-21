@@ -12,12 +12,10 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive;
+package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.api.Indexes;
 import io.github.honhimw.ms.api.Settings;
-import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
-import io.github.honhimw.ms.api.reactive.ReactiveSettings;
 import io.github.honhimw.ms.model.RankingRule;
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
@@ -33,45 +31,34 @@ import java.util.stream.Stream;
  * @since 2024-01-03
  */
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(4)
-public class ReactiveSettingsTests extends ReactiveIndexesTests {
+public class SettingsTests extends TestBase {
 
-    protected ReactiveIndexes reactiveIndexes;
     protected Indexes blokcingIndexes;
 
-    protected String index = "movie_test";
-
-    protected ReactiveSettings reactiveSettings;
     protected Settings blockingSettings;
 
     @BeforeEach
     protected void initIndexes() {
-        super.initIndexes();
-        reactiveIndexes = reactiveClient.indexes();
-        reactiveSettings = reactiveIndexes.settings(index);
-
         blokcingIndexes = blockingClient.indexes();
-        blockingSettings = blokcingIndexes.settings(index);
+        blockingSettings = blokcingIndexes.settings(INDEX);
     }
 
     @Order(0)
     @Test
     void get() {
-        Setting current = reactiveSettings.get().block();
+        Setting current = blockingSettings.get();
         assert Objects.equals(current, Setting.defaultObject());
     }
 
     @Order(1)
     @Test
     void update() {
-        TaskInfo block = reactiveSettings.update(builder -> builder
+        TaskInfo block = blockingSettings.update(builder -> builder
                 .rankingRules(Stream.of(RankingRule.TYPO, RankingRule.WORDS).collect(Collectors.toList()))
-                .searchableAttributes(Stream.of("title", "overview").collect(Collectors.toList())))
-            .block();
+                .searchableAttributes(Stream.of("title", "overview").collect(Collectors.toList())));
         reactiveClient.tasks().waitForTask(block.getTaskUid()).block();
-        Setting current = reactiveSettings.get().block();
+        Setting current = blockingSettings.get();
         List<RankingRule> rankingRules = current.getRankingRules();
         assert rankingRules.size() == 2;
         assert rankingRules.contains(RankingRule.TYPO);
@@ -86,11 +73,11 @@ public class ReactiveSettingsTests extends ReactiveIndexesTests {
     @Order(2)
     @Test
     void reset() {
-        Setting current = reactiveSettings.get().block();
+        Setting current = blockingSettings.get();
         assert !Objects.equals(current, Setting.defaultObject());
-        TaskInfo block = reactiveSettings.reset().block();
+        TaskInfo block = blockingSettings.reset();
         await(block);
-        current = reactiveSettings.get().block();
+        current = blockingSettings.get();
         assert Objects.equals(current, Setting.defaultObject());
     }
 

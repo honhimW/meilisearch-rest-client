@@ -12,11 +12,14 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive;
+package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.api.Indexes;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
-import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.model.Index;
+import io.github.honhimw.ms.model.IndexStats;
+import io.github.honhimw.ms.model.Page;
+import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
@@ -32,15 +35,11 @@ import java.util.stream.Stream;
  * @since 2024-01-03
  */
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(1)
-public class ReactiveIndexesTests extends ReactiveClientTests {
+public class IndexesTests extends TestBase {
 
     protected ReactiveIndexes reactiveIndexes;
     protected Indexes blockingIndexes;
-
-    protected String index = "movie_test";
 
     @BeforeEach
     void initIndexes() {
@@ -51,9 +50,7 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
     @Order(-1)
     @Test
     void delete() {
-        Duration duration = StepVerifier.create(reactiveIndexes.delete(index)
-                .map(TaskInfo::getTaskUid)
-                .flatMap(integer -> reactiveTasks.waitForTask(integer)))
+        Duration duration = StepVerifier.create(await(reactiveIndexes.delete(INDEX)))
             .verifyComplete();
         log.info("delete index task wait for: {}", duration);
     }
@@ -61,11 +58,8 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
     @Order(0)
     @Test
     void create() {
-        Mono<TaskInfo> id = reactiveIndexes.create(index, "id");
-        Mono<Void> voidMono = id
-            .map(TaskInfo::getTaskUid)
-            .flatMap(integer -> reactiveTasks.waitForTask(integer));
-        Duration duration = StepVerifier.create(voidMono)
+        Mono<TaskInfo> id = reactiveIndexes.create(INDEX, "id");
+        Duration duration = StepVerifier.create(await(id))
             .verifyComplete();
         log.info("create task wait for: {}", duration);
     }
@@ -78,7 +72,7 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
             .assertNext(indexPage -> {
                 assert indexPage.getLimit() == 20;
                 assert indexPage.getOffset() == 0;
-                assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(index);
+                assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(INDEX);
                 if (log.isDebugEnabled()) {
                     log.debug(jsonHandler.toJson(indexPage));
                 }
@@ -94,7 +88,7 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
             .assertNext(indexPage -> {
                 assert indexPage.getLimit() == 10;
                 assert indexPage.getOffset() == 0;
-                assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(index);
+                assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(INDEX);
                 if (log.isDebugEnabled()) {
                     log.debug(jsonHandler.toJson(indexPage));
                 }
@@ -105,7 +99,7 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
     @Order(2)
     @Test
     void getOne() {
-        Mono<Index> movies = reactiveIndexes.get(index);
+        Mono<Index> movies = reactiveIndexes.get(INDEX);
         StepVerifier.create(movies)
             .assertNext(index -> {
                 assert index != null;
@@ -117,7 +111,7 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
     @Order(2)
     @Test
     void getOne2() {
-        Mono<Index> movies = reactiveClient.indexes(indexes1 -> indexes1.get(index));
+        Mono<Index> movies = reactiveClient.indexes(indexes1 -> indexes1.get(INDEX));
         StepVerifier.create(movies)
             .assertNext(index -> {
                 assert index != null;
@@ -131,9 +125,9 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
     void update() {
         List<String> pks = Stream.of("release_date", "id").collect(Collectors.toList());
         for (String newPk : pks) {
-            Mono<String> updateTask = reactiveClient.indexes().update(index, newPk)
+            Mono<String> updateTask = reactiveClient.indexes().update(INDEX, newPk)
                 .flatMap(taskInfo -> reactiveClient.tasks().waitForTask(taskInfo.getTaskUid()))
-                .then(reactiveClient.indexes().get(index).map(Index::getPrimaryKey));
+                .then(reactiveClient.indexes().get(INDEX).map(Index::getPrimaryKey));
 
             StepVerifier.create(updateTask)
                 .assertNext(pk -> {
@@ -146,7 +140,7 @@ public class ReactiveIndexesTests extends ReactiveClientTests {
     @Order(4)
     @Test
     void stats() {
-        Mono<Boolean> indexing = reactiveClient.indexes().stats(index).map(IndexStats::getIsIndexing);
+        Mono<Boolean> indexing = reactiveClient.indexes().stats(INDEX).map(IndexStats::getIsIndexing);
         StepVerifier.create(indexing).assertNext(aBoolean -> {
                 assert !aBoolean : "currently should not in indexing stats.";
             })

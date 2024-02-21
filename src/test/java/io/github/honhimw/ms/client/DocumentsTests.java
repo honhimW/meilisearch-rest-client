@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.reactive;
+package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
@@ -31,30 +31,24 @@ import java.util.Objects;
  * @since 2024-01-03
  */
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(2)
-public class ReactiveDocumentsTests extends ReactiveIndexesTests {
+public class DocumentsTests extends TestBase {
 
     protected ReactiveIndexes indexes;
-
-    protected String index = "movie_test";
 
     protected ReactiveDocuments documents;
 
     @BeforeEach
     void initIndexes() {
-        super.initIndexes();
         indexes = reactiveClient.indexes();
-        documents = indexes.documents(index);
+        documents = indexes.documents(INDEX);
     }
 
     @Order(100)
     @Test
     void save() {
         Mono<TaskInfo> save = documents.save(movies);
-        Duration duration = StepVerifier.create(save
-                .flatMap(taskInfo -> reactiveTasks.waitForTask(taskInfo.getTaskUid())))
+        Duration duration = StepVerifier.create(await(save))
             .verifyComplete();
         log.info("save document task wait for: {}", duration);
     }
@@ -66,8 +60,7 @@ public class ReactiveDocumentsTests extends ReactiveIndexesTests {
         one.setId(30);
         one.setTitle("hello world");
         Mono<TaskInfo> save = documents.save(one);
-        Duration duration = StepVerifier.create(save
-                .flatMap(taskInfo -> reactiveTasks.waitForTask(taskInfo.getTaskUid())))
+        Duration duration = StepVerifier.create(await(save))
             .verifyComplete();
         log.info("save document task wait for: {}", duration);
     }
@@ -137,8 +130,7 @@ public class ReactiveDocumentsTests extends ReactiveIndexesTests {
         one.setId(30);
         one.setTitle("foo bar");
         Mono<TaskInfo> update = documents.update(one);
-        StepVerifier.create(update
-                .flatMap(taskInfo -> reactiveTasks.waitForTask(taskInfo.getTaskUid())))
+        StepVerifier.create(await(update))
             .verifyComplete();
         Mono<Movie> movieMono2 = documents.get("30", Movie.class);
         StepVerifier.create(movieMono2)
