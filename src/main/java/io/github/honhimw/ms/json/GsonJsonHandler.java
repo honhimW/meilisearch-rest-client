@@ -147,4 +147,9 @@ public class GsonJsonHandler implements JsonHandler {
     public <T> T fromJson(String json, TypeRef<T> typeRef) {
         return gson.fromJson(json, typeRef.getType());
     }
+
+    @Override
+    public <T> T transform(Object o, TypeRef<T> typeRef) {
+        return gson.fromJson(gson.toJsonTree(o), typeRef.getType());
+    }
 }

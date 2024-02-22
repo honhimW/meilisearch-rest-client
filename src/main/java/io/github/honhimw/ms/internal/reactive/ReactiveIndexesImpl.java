@@ -137,6 +137,11 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
     }
 
     @Override
+    public <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef) {
+        return new ReactiveTypedDetailsSearchImpl<>(this, uid, typeRef);
+    }
+
+    @Override
     public ReactiveSettings settings(String uid) {
         return new ReactiveSettingsImpl(this, uid);
     }

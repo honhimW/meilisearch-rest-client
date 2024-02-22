@@ -114,7 +114,7 @@ public class FilterBuilderTests {
     void notEmpty() {
         String filter = FilterBuilder.builder(expression -> expression.notEmpty("release_date")).build();
         log.info(filter);
-        assert filter.equals("release_date NOT EMPTY");
+        assert filter.equals("release_date IS NOT EMPTY");
     }
 
     @Test
@@ -128,7 +128,7 @@ public class FilterBuilderTests {
     void notNull() {
         String filter = FilterBuilder.builder(expression -> expression.notNull("release_date")).build();
         log.info(filter);
-        assert filter.equals("release_date NOT NULL");
+        assert filter.equals("release_date IS NOT NULL");
         filter = FilterBuilder.builder(expression -> expression.isNull("release_date").not()).build();
         log.info(filter);
         assert filter.equals("NOT release_date IS NULL");

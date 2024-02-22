@@ -169,4 +169,18 @@ public class JacksonJsonHandler implements JsonHandler {
             throw new IllegalArgumentException("json decode exception", e);
         }
     }
+
+    @Override
+    public <T> T transform(Object o, TypeRef<T> typeRef) {
+        try {
+            return objectMapper.convertValue(o, new TypeReference<T>() {
+                @Override
+                public Type getType() {
+                    return typeRef.getType();
+                }
+            });
+        } catch (Exception e) {
+            throw new IllegalArgumentException("json decode exception", e);
+        }
+    }
 }

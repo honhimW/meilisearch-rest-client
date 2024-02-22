@@ -179,6 +179,22 @@ public interface Indexes {
         return operation.apply(search(uid, type));
     }
 
+    <T> TypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
+
+    default <T> TypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type) {
+        // @formatter:off
+        return searchWithDetails(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
+
+    default <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<TypedDetailsSearch<T>, R> operation) {
+        return operation.apply(searchWithDetails(uid, typeRef));
+    }
+
+    default <T, R> R searchWithDetails(String uid, Class<T> type, Function<TypedDetailsSearch<T>, R> operation) {
+        return operation.apply(searchWithDetails(uid, type));
+    }
+
     @Operation(tags = "/indexes/{indexUid}/settings")
     Settings settings(String uid);
 

@@ -15,15 +15,20 @@
 package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
+import io.github.honhimw.ms.api.Indexes;
+import io.github.honhimw.ms.api.Search;
+import io.github.honhimw.ms.api.TypedDetailsSearch;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
 import io.github.honhimw.ms.api.reactive.ReactiveSearch;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.CollectionUtils;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author hon_him
@@ -33,20 +38,24 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SearchTests extends TestBase {
 
-    protected ReactiveIndexes indexes;
-    protected ReactiveSearch search;
+    protected ReactiveIndexes reactiveIndexes;
+    protected ReactiveSearch reactiveSearch;
+    protected Indexes blockingIndexes;
+    protected Search blockingSearch;
 
     @BeforeEach
     void initIndexes() {
         prepareData();
-        indexes = reactiveClient.indexes();
-        search = indexes.search(INDEX);
+        reactiveIndexes = reactiveClient.indexes();
+        reactiveSearch = reactiveIndexes.search(INDEX);
+        blockingIndexes = blockingClient.indexes();
+        blockingSearch = blockingIndexes.search(INDEX);
     }
 
-    @Order(103)
+    @Order(1)
     @Test
     void search() {
-        StepVerifier.create(search.find("2"))
+        StepVerifier.create(reactiveSearch.find("2"))
             .assertNext(searchResponse -> {
                 log.info(jsonHandler.toJson(searchResponse.getHits()));
                 assert !searchResponse.getHits().isEmpty();
@@ -54,10 +63,10 @@ public class SearchTests extends TestBase {
             .verifyComplete();
     }
 
-    @Order(104)
+    @Order(2)
     @Test
     void search2() {
-        Mono<List<Movie>> mono = search.find("2", Movie.class)
+        Mono<List<Movie>> mono = reactiveSearch.find("2", Movie.class)
             .map(SearchResponse::getHits);
         StepVerifier.create(mono)
             .assertNext(movies1 -> {
@@ -68,10 +77,10 @@ public class SearchTests extends TestBase {
             .verifyComplete();
     }
 
-    @Order(105)
+    @Order(3)
     @Test
     void search3() {
-        Mono<List<Movie>> mono = indexes.search(INDEX, new TypeRef<Movie>() {
+        Mono<List<Movie>> mono = reactiveIndexes.search(INDEX, new TypeRef<Movie>() {
             }).find("2")
             .map(SearchResponse::getHits);
         StepVerifier.create(mono)
@@ -81,6 +90,56 @@ public class SearchTests extends TestBase {
                 }
             })
             .verifyComplete();
+    }
+
+    @Order(4)
+    @Test
+    void searchWithScore() {
+        ExperimentalFeatures configure = blockingClient.experimentalFeatures().configure(builder -> builder.scoreDetails(true));
+        assert configure.getScoreDetails();
+
+        TaskInfo update = blockingIndexes.settings(INDEX).filterableAttributes().update(toList("title", "genres", "director"));
+        await(update);
+
+        TypedDetailsSearch<Movie> movieTypedDetailsSearch = blockingIndexes.searchWithDetails(INDEX, Movie.class);
+        SearchDetailsResponse<Movie> response = movieTypedDetailsSearch.find(builder -> builder
+            .q("2")
+            .showRankingScore(true)
+            .showRankingScoreDetails(true)
+            .facets(toList("title", "genres", "director"))
+        );
+        List<HitDetails<Movie>> hits = response.getHits();
+        assert CollectionUtils.isNotEmpty(hits);
+
+        Double rankingScore = hits.get(0).getDetails().get_rankingScore();
+        assert 0 <= rankingScore && rankingScore <= 1;
+
+    }
+
+    @Order(5)
+    @Test
+    void searchWithHighlight() {
+        ExperimentalFeatures configure = blockingClient.experimentalFeatures().configure(builder -> builder.scoreDetails(true));
+        assert configure.getScoreDetails();
+
+        TaskInfo update = blockingIndexes.settings(INDEX).filterableAttributes().update(toList("title", "genres", "director"));
+        await(update);
+
+        TypedDetailsSearch<Movie> movieTypedDetailsSearch = blockingIndexes.searchWithDetails(INDEX, Movie.class);
+        SearchDetailsResponse<Movie> response = movieTypedDetailsSearch.find(builder -> builder
+            .q("2")
+            .highlightPreTag("<em>")
+            .highlightPostTag("</em>")
+            .attributesToHighlight(toList("id", "title"))
+        );
+        List<HitDetails<Movie>> hits = response.getHits();
+        assert Objects.nonNull(hits.get(0).getDetails().get_formatted());
+    }
+
+    @AfterEach
+    void resetSetting() {
+        TaskInfo reset = blockingIndexes.settings(INDEX).reset();
+        await(reset);
     }
 
 }

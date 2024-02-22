@@ -181,6 +181,22 @@ public interface ReactiveIndexes {
         return operation.apply(search(uid, type));
     }
 
+    <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
+
+    default <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type) {
+        // @formatter:off
+        return searchWithDetails(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
+        // @formatter:on
+    }
+
+    default <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
+        return operation.apply(searchWithDetails(uid, typeRef));
+    }
+
+    default <T, R> R searchWithDetails(String uid, Class<T> type, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
+        return operation.apply(searchWithDetails(uid, type));
+    }
+
     @Operation(tags = "/indexes/{indexUid}/settings")
     ReactiveSettings settings(String uid);
 

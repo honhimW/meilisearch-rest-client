@@ -14,15 +14,8 @@
 
 package io.github.honhimw.ms.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <h2>Exhaustive and estimated total number of search results</h2>
@@ -36,61 +29,11 @@ import java.util.Map;
  * You can <a href="https://www.meilisearch.com/docs/learn/front_end/pagination">read more about pagination in our dedicated guide.</a>
  *
  * @author hon_him
- * @since 2024-01-02
+ * @since 2024-02-22 v1.7.0.0
  */
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
-@AllArgsConstructor
-public class SearchResponse<T> implements Serializable {
-
-    @Schema(description = "Results of the query")
-    private List<T> hits;
-
-    @Schema(description = "Number of documents skipped")
-    private Integer offset;
-
-    @Schema(description = "Number of documents to take")
-    private Integer limit;
-
-    @Schema(description = "Estimated total number of matches")
-    private Integer estimatedTotalHits;
-
-    @Schema(description = "Exhaustive total number of matches")
-    private Integer totalHits;
-
-    @Schema(description = "Exhaustive total number of search result pages")
-    private Integer totalPages;
-
-    @Schema(description = "Number of results on each page")
-    private Integer hitsPerPage;
-
-    @Schema(description = "Current search results page")
-    private Integer page;
-
-    @Schema(description = "Processing time of the query")
-    private Long processingTimeMs;
-
-    @Schema(description = "Query originating the response")
-    private String query;
-
-    @Schema(description = "Distribution of the given facets")
-    private Map<String, Map<String, Integer>> facetDistribution;
-
-    @Schema(description = "The numeric min and max values per facet")
-    private Map<String, FacetStats> facetStats;
-
-    @Data
-    @EqualsAndHashCode(callSuper = false)
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FacetStats implements Serializable {
-        @Schema(description = "lowest numerical value")
-        private Number min;
-
-        @Schema(description = "highest numerical value")
-        private Number max;
-    }
+public class SearchDetailsResponse<T> extends SearchResponse<HitDetails<T>> {
 
 }

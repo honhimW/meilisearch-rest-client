@@ -20,18 +20,23 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author hon_him
- * @since 2024-01-02
+ * @since 2024-02-22
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchWithIndexRequest extends SearchRequest {
-    
-    @Schema(description = "uid of the requested index")
-    private String indexUid;
+public class HitDetails<T> implements Serializable {
+
+    @Schema(description = "hit document source")
+    private T source;
+
+    @Schema(description = "hit details", nullable = true)
+    private SearchDetails details;
 
 }

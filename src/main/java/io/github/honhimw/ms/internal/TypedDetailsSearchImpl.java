@@ -26,28 +26,41 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.json;
+package io.github.honhimw.ms.internal;
+
+import io.github.honhimw.ms.api.TypedDetailsSearch;
+import io.github.honhimw.ms.api.reactive.ReactiveTypedDetailsSearch;
+import io.github.honhimw.ms.model.FacetSearchRequest;
+import io.github.honhimw.ms.model.FacetSearchResponse;
+import io.github.honhimw.ms.model.SearchDetailsResponse;
+import io.github.honhimw.ms.model.SearchRequest;
+import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
- * @since 2023-07-25
+ * @since 2024-01-26
  */
 
-public interface JsonHandler {
+class TypedDetailsSearchImpl<T> implements TypedDetailsSearch<T> {
 
-    String toJson(Object o);
+    private final ReactiveTypedDetailsSearch<T> _search;
 
-    <T> T fromJson(String json, Class<T> tClass);
-
-    <T> T fromJson(String json, TypeRef<T> typeRef);
-
-    default <T> T transform(Object o, Class<T> tClass) {
-        return transform(o, TypeRef.of(tClass));
+    public TypedDetailsSearchImpl(ReactiveTypedDetailsSearch<T> search) {
+        _search = search;
     }
 
-    default <T> T transform(Object o, TypeRef<T> typeRef) {
-        String json = toJson(o);
-        return fromJson(json, typeRef);
+    @Override
+    public SearchDetailsResponse<T> find(String q) {
+        return ReactorUtils.blockNonNull(_search.find(q));
     }
 
+    @Override
+    public SearchDetailsResponse<T> find(SearchRequest request) {
+        return ReactorUtils.blockNonNull(_search.find(request));
+    }
+
+    @Override
+    public FacetSearchResponse facetSearch(FacetSearchRequest request) {
+        return ReactorUtils.blockNonNull(_search.facetSearch(request));
+    }
 }

@@ -44,6 +44,7 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.api.*;
+import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
 import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
@@ -108,6 +109,11 @@ public class MSearchClientImpl implements MSearchClient {
     @Operation(method = "POST", tags = "/snapshots")
     public TaskInfo snapshots() {
         return ReactorUtils.blockNonNull(reactiveMSearchClient.snapshots());
+    }
+
+    @Override
+    public Logs logs() {
+        return new LogsImpl(reactiveMSearchClient.logs());
     }
 
     @Override

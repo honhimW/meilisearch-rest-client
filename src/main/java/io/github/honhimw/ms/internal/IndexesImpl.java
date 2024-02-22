@@ -74,7 +74,7 @@ class IndexesImpl implements Indexes {
 
     @Override
     public <T> TypedDocuments<T> documents(String uid, TypeRef<T> typeRef) {
-        return null;
+        return new TypedDocumentImpl<>(_indexes.documents(uid, typeRef));
     }
 
     @Override
@@ -85,6 +85,11 @@ class IndexesImpl implements Indexes {
     @Override
     public <T> TypedSearch<T> search(String uid, TypeRef<T> typeRef) {
         return new TypedSearchImpl<>(_indexes.search(uid, typeRef));
+    }
+
+    @Override
+    public <T> TypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef) {
+        return new TypedDetailsSearchImpl<>(_indexes.searchWithDetails(uid, typeRef));
     }
 
     @Override
