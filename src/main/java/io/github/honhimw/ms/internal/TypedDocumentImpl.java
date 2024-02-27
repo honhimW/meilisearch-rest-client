@@ -38,7 +38,7 @@ import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 /**
  * @author hon_him
@@ -89,7 +89,7 @@ class TypedDocumentImpl<T> implements TypedDocuments<T> {
     }
 
     @Override
-    public TaskInfo batchDelete(List<String> ids) {
+    public TaskInfo batchDelete(Collection<String> ids) {
         return ReactorUtils.blockNonNull(_document.batchDelete(ids));
     }
 
@@ -99,8 +99,8 @@ class TypedDocumentImpl<T> implements TypedDocuments<T> {
     }
 
     @Override
-    public T get(String id, @Nullable String... fields) {
-        return ReactorUtils.blockNonNull(_document.get(id, fields));
+    public Optional<T> get(String id, @Nullable String... fields) {
+        return _document.get(id, fields).blockOptional();
     }
 
     @Override

@@ -16,10 +16,7 @@ package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.api.Indexes;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
-import io.github.honhimw.ms.model.Index;
-import io.github.honhimw.ms.model.IndexStats;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
@@ -145,6 +142,24 @@ public class IndexesTests extends TestBase {
                 assert !aBoolean : "currently should not in indexing stats.";
             })
             .verifyComplete();
+    }
+
+    @Order(5)
+    @Test
+    void swap() {
+        TaskInfo save = blockingIndexes.documents(INDEX).save(movies);
+        await(save);
+        IndexStats stats = blockingIndexes.stats(INDEX);
+        assert stats.getNumberOfDocuments() > 0;
+        String ANOTHER_INDEX = "movie_test2";
+        TaskInfo taskInfo = blockingIndexes.create(ANOTHER_INDEX);
+        await(taskInfo);
+        TaskInfo swap = blockingIndexes.swap(entryList -> entryList.add(INDEX, ANOTHER_INDEX));
+        await(swap);
+        stats = blockingIndexes.stats(INDEX);
+        assert stats.getNumberOfDocuments() == 0;
+        TaskInfo delete = blockingIndexes.delete(ANOTHER_INDEX);
+        await(delete);
     }
 
 }

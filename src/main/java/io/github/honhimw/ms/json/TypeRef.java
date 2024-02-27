@@ -44,4 +44,13 @@ public abstract class TypeRef<T> {
         };
     }
 
+    public static <T> TypeRef<T> of(Class<T> type) {
+        return new TypeRef<T>() {
+            @Override
+            public Type getType() {
+                return type;
+            }
+        };
+    }
+
 }

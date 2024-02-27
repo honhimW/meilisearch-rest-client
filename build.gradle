@@ -175,6 +175,7 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "io/github/honhimw/ms/model/*",
+                    "io/github/honhimw/ms/json/ParameterizedTypeImpl.class",
             ])
         }))
     }

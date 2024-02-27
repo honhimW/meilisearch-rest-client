@@ -22,6 +22,7 @@ import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -73,6 +74,11 @@ public interface ReactiveTypedDocuments<T> {
     Mono<TaskInfo> save(String json);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> save(T t) {
+        return save(Collections.singleton(t));
+    }
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(Collection<? extends T> collection);
 
     /**
@@ -95,6 +101,11 @@ public interface ReactiveTypedDocuments<T> {
     Mono<TaskInfo> update(String json);
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    default Mono<TaskInfo> update(T t) {
+        return update(Collections.singleton(t));
+    }
+
+    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(Collection<? extends T> collection);
 
     /**
@@ -115,7 +126,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
-    Mono<TaskInfo> batchDelete(List<String> ids);
+    Mono<TaskInfo> batchDelete(Collection<String> ids);
 
     /**
      * Delete a set of documents based on a filter.

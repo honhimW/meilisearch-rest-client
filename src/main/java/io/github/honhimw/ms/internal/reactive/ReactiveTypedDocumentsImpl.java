@@ -15,17 +15,19 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveTypedDocuments;
+import io.github.honhimw.ms.http.HttpFailureException;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
+import io.github.honhimw.ms.model.FilterableAttributesRequest;
+import io.github.honhimw.ms.model.Page;
+import io.github.honhimw.ms.model.TaskInfo;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -46,11 +48,6 @@ class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements Reac
         this.typeRef = typeRef;
         this.complexTypeRef = new ComplexTypeRef<Page<T>>(typeRef) {
         };
-    }
-
-    @Override
-    public Mono<Page<T>> list(Consumer<PageRequest> page) {
-        return ReactiveTypedDocuments.super.list(page);
     }
 
     @Override
@@ -100,7 +97,7 @@ class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements Reac
     }
 
     @Override
-    public Mono<TaskInfo> batchDelete(List<String> ids) {
+    public Mono<TaskInfo> batchDelete(Collection<String> ids) {
         return post(String.format("/indexes/%s/documents/delete-batch", indexUid), configurer -> json(configurer, ids), new TypeRef<TaskInfo>() {
         });
     }
@@ -120,7 +117,15 @@ class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements Reac
             _fields = String.join(",", fields);
         }
         return get(String.format("/indexes/%s/documents/%s", indexUid, id), configurer -> configurer
-            .param("fields", _fields), typeRef);
+            .param("fields", _fields), typeRef)
+            .onErrorResume(throwable -> {
+                if (throwable instanceof HttpFailureException) {
+                    HttpFailureException httpFailureException = (HttpFailureException) throwable;
+                    return httpFailureException.getStatusCode() == 404;
+                } else {
+                    return false;
+                }
+            }, throwable -> Mono.empty());
     }
 
     @Override

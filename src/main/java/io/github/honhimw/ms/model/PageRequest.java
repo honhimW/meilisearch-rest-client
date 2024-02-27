@@ -32,10 +32,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class PageRequest implements Serializable {
 
-    @Schema(description = "page no")
+    @Schema(description = "page no, >= 0")
     private Integer no;
 
-    @Schema(description = "page size")
+    @Schema(description = "page size, > 0")
     private Integer size;
 
     public PageRequest() {
@@ -60,12 +60,12 @@ public class PageRequest implements Serializable {
         return this;
     }
 
-    public int toLimit() {
-        return size;
-    }
-
     public int toOffset() {
         return no * size;
+    }
+
+    public int toLimit() {
+        return size;
     }
 
 }

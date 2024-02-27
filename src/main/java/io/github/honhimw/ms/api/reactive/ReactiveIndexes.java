@@ -109,7 +109,7 @@ public interface ReactiveIndexes {
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     default Mono<TaskInfo> swap(Consumer<EntryList> consumer) {
-        EntryList entryList = new EntryList();
+        EntryList entryList = EntryList.newInstance();
         consumer.accept(entryList);
         return swap(entryList.getList());
     }

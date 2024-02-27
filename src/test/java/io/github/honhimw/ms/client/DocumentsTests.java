@@ -15,16 +15,25 @@
 package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
+import io.github.honhimw.ms.api.TypedDocuments;
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
+import io.github.honhimw.ms.api.reactive.ReactiveTypedDocuments;
 import io.github.honhimw.ms.json.TypeRef;
+import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
+import io.github.honhimw.ms.model.FilterableAttributesRequest;
+import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author hon_him
@@ -38,13 +47,16 @@ public class DocumentsTests extends TestBase {
 
     protected ReactiveDocuments documents;
 
+    protected TypedDocuments<Movie> typedDocuments;
+
     @BeforeEach
     void initIndexes() {
         indexes = reactiveClient.indexes();
         documents = indexes.documents(INDEX);
+        typedDocuments = blockingClient.indexes().documents(INDEX, Movie.class);
     }
 
-    @Order(100)
+    @Order(1)
     @Test
     void save() {
         Mono<TaskInfo> save = documents.save(movies);
@@ -53,7 +65,7 @@ public class DocumentsTests extends TestBase {
         log.info("save document task wait for: {}", duration);
     }
 
-    @Order(100)
+    @Order(2)
     @Test
     void save2() {
         Movie one = new Movie();
@@ -65,7 +77,7 @@ public class DocumentsTests extends TestBase {
         log.info("save document task wait for: {}", duration);
     }
 
-    @Order(101)
+    @Order(3)
     @Test
     void listDocuments() {
         StepVerifier.create(documents.list(null, null))
@@ -80,7 +92,7 @@ public class DocumentsTests extends TestBase {
         ;
     }
 
-    @Order(102)
+    @Order(4)
     @Test
     void getOne() {
         StepVerifier.create(documents.get("2", "title"))
@@ -92,7 +104,7 @@ public class DocumentsTests extends TestBase {
             .verifyComplete();
     }
 
-    @Order(102)
+    @Order(5)
     @Test
     void getOne2() {
         StepVerifier.create(documents.get("2", Movie.class, "title"))
@@ -104,7 +116,7 @@ public class DocumentsTests extends TestBase {
             .verifyComplete();
     }
 
-    @Order(102)
+    @Order(6)
     @Test
     void getOne3() {
         StepVerifier.create(documents.get("2", new TypeRef<Movie>() {
@@ -117,7 +129,7 @@ public class DocumentsTests extends TestBase {
             .verifyComplete();
     }
 
-    @Order(103)
+    @Order(7)
     @Test
     void update() {
         Mono<Movie> movieMono = documents.get("30", Movie.class);
@@ -141,4 +153,79 @@ public class DocumentsTests extends TestBase {
 
     }
 
+    @Order(8)
+    @Test
+    void typedSave() {
+        Movie movie = new Movie();
+        movie.setId(40);
+        String typedMovie = "typed movie";
+        movie.setTitle(typedMovie);
+        TaskInfo save = typedDocuments.save(movie);
+        await(save);
+        String title = typedDocuments.get("40", "title").map(Movie::getTitle).orElse(null);
+        assert StringUtils.equal(title, typedMovie);
+    }
+
+    @Order(9)
+    @Test
+    void typedList() {
+        Page<Movie> list = typedDocuments.list(pageRequest -> pageRequest.no(0).size(20));
+        assert CollectionUtils.isNotEmpty(list.getResults());
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+    }
+
+    @Order(9)
+    @Test
+    void typedBatchGet() {
+        Page<Movie> list = typedDocuments.batchGet(BatchGetDocumentsRequest.builder().offset(0).limit(20)
+            .fields(toList("title"))
+            .build());
+        assert CollectionUtils.isNotEmpty(list.getResults());
+        list.getResults().forEach(movie -> {
+            assert StringUtils.isNotEmpty(movie.getTitle());
+            assert movie.getId() == null;
+        });
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+    }
+
+    @Order(10)
+    @Test
+    void typedUpdate() {
+        Movie movie = new Movie();
+        movie.setId(40);
+        String typedMovie = "update typed movie";
+        movie.setTitle(typedMovie);
+        TaskInfo update = typedDocuments.update(movie);
+        await(update);
+        String title = typedDocuments.get("40", "title").map(Movie::getTitle).orElse(null);
+        assert StringUtils.equal(title, typedMovie);
+    }
+
+    @Order(11)
+    @Test
+    void typedDelete() {
+        Movie movie = new Movie();
+        movie.setId(40);
+        TaskInfo delete = typedDocuments.delete("40");
+        TaskInfo batchDelete = typedDocuments.batchDelete(Collections.singleton("41"));
+        TaskInfo deleteByFilter = typedDocuments.delete(FilterableAttributesRequest.builder(filterBuilder -> filterBuilder.base(expression -> expression.isNull("poster"))));
+        await(delete);
+        await(batchDelete);
+        await(deleteByFilter);
+        Optional<Movie> movie40 = typedDocuments.get("40");
+        assert !movie40.isPresent();
+        Optional<Movie> movie41 = typedDocuments.get("41");
+        assert !movie41.isPresent();
+    }
+
+    @Order(100)
+    @Test
+    void deleteAll() {
+        TaskInfo deleteAll = typedDocuments.deleteAll();
+        await(deleteAll);
+        Page<Movie> list = typedDocuments.list(0, 20);
+        assert list.getTotal() == 0;
+    }
 }

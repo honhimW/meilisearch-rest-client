@@ -100,7 +100,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
 
     @Override
     public Mono<TaskInfo> swap(List<Map.Entry<String, String>> uids) {
-        return delete("/swap-indexes", configurer -> configurer
+        return post("/swap-indexes", configurer -> configurer
             .body(payload -> payload.raw(raw -> {
                 List<Map<String, List<String>>> list = new ArrayList<>();
                 for (Map.Entry<String, String> uid : uids) {

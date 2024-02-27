@@ -21,10 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -197,7 +194,7 @@ public interface Documents {
      *               Default *.
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
-    Map<String, Object> get(String id, @Nullable String... fields);
+    Optional<Map<String, Object>> get(String id, @Nullable String... fields);
 
     /**
      * Get one document using its unique id.
@@ -208,7 +205,7 @@ public interface Documents {
      *               Default *.
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
-    <T> T get(String id, TypeRef<T> typeRef, @Nullable String... fields);
+    <T> Optional<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields);
 
     /**
      * Delete one document based on its unique id.

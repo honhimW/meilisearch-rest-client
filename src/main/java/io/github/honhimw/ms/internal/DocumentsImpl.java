@@ -24,6 +24,7 @@ import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author hon_him
@@ -104,13 +105,13 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
-    public Map<String, Object> get(String id, @Nullable String... fields) {
-        return ReactorUtils.blockNonNull(_documents.get(id, fields));
+    public Optional<Map<String, Object>> get(String id, @Nullable String... fields) {
+        return _documents.get(id, fields).blockOptional();
     }
 
     @Override
-    public <T> T get(String id, TypeRef<T> typeRef, @Nullable String... fields) {
-        return ReactorUtils.blockNonNull(_documents.get(id, typeRef, fields));
+    public <T> Optional<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields) {
+        return _documents.get(id, typeRef, fields).blockOptional();
     }
 
     @Override

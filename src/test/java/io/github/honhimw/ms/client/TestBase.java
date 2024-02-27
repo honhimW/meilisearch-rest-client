@@ -51,14 +51,14 @@ public class TestBase {
     public static void init() {
         jsonHandler = new JacksonJsonHandler();
         reactiveClient = ReactiveMSearchClient.create(builder -> builder
+            .enableSSL(false)
             .host(MeiliSearchProperties.getHost())
             .port(MeiliSearchProperties.getPort())
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
         blockingClient = MSearchClient.create(builder -> builder
-            .host(MeiliSearchProperties.getHost())
-            .port(MeiliSearchProperties.getPort())
+            .serverUrl(String.format("http://%s:%d", MeiliSearchProperties.getHost(), MeiliSearchProperties.getPort()))
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
@@ -91,6 +91,10 @@ public class TestBase {
             map.put(key, value);
         }
         return map;
+    }
+
+    public static String jsonQuote(String json) {
+        return json.replaceAll("'", "\"");
     }
 
     protected static ReactiveTasks getReactiveTasks() {
