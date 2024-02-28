@@ -100,7 +100,6 @@ publishing {
             }
         }
         maven {
-            version = version + '-SNAPSHOT'
             name = "sonatype-snapshots"
             url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
             credentials {
@@ -118,7 +117,6 @@ publishing {
         }
         maven {
             name = "sonatype-rc"
-            version = version + '-RC.' + 0
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
                 username = sonatypeProperties().getProperty("sonatype.username") as String
@@ -127,7 +125,6 @@ publishing {
         }
         maven {
             name = "sonatype-central"
-            version = version
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
                 username = sonatypeProperties().getProperty("sonatype.username") as String
@@ -203,6 +200,21 @@ jacocoTestReport {
             ])
         }))
     }
+}
+
+tasks.register('publish-snapshot') {
+    version = version + '-SNAPSHOT'
+    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-snapshotsRepository')
+}
+tasks.register('publish-rc') {
+    version = version + '-RC.' + 0
+    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-rcRepository')
+}
+tasks.register('publish-release') {
+    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-releasesRepository')
+}
+tasks.register('publish-central') {
+    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-centralRepository')
 }
 
 Properties loadProfileProperties() {
