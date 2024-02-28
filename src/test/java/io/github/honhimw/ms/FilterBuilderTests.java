@@ -125,6 +125,13 @@ public class FilterBuilderTests {
     }
 
     @Test
+    void isNullOrNotExists() {
+        String filter = FilterBuilder.builder(expression -> expression.isNullOrNotExists("release_date")).build();
+        log.info(filter);
+        assert filter.equals("(release_date NOT EXISTS OR release_date IS NULL)");
+    }
+
+    @Test
     void notNull() {
         String filter = FilterBuilder.builder(expression -> expression.notNull("release_date")).build();
         log.info(filter);

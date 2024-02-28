@@ -23,7 +23,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -45,13 +44,21 @@ public interface ReactiveTypedDocuments<T> {
      * @param limit  default 20
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit);
+    default Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit) {
+        return list(request -> {
+            request.setOffset(offset);
+            request.setLimit(limit);
+        });
+    }
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default Mono<Page<T>> list(Consumer<PageRequest> page) {
-        PageRequest pageRequest = new PageRequest();
+    Mono<Page<T>> list(GetDocumentRequest page);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    default Mono<Page<T>> list(Consumer<GetDocumentRequest> page) {
+        GetDocumentRequest pageRequest = new GetDocumentRequest();
         page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
+        return list(pageRequest);
     }
 
     /**

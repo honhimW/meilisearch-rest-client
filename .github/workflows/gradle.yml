@@ -29,7 +29,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Start MeiliSearch
-      run: docker run -d -p 7700:7700 -e MEILI_ENV='development' getmeili/meilisearch:v1.6.2
+      run: docker run -d -p 7700:7700 -e MEILI_ENV='development' getmeili/meilisearch:v1.7.0-rc.1
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md

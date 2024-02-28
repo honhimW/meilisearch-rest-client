@@ -78,6 +78,7 @@ public class HttpClientTests {
         disposableServer.disposeNow();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     @SneakyThrows
     void post() {
@@ -97,6 +98,7 @@ public class HttpClientTests {
         disposableServer.disposeNow();
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     @SneakyThrows
     void put() {

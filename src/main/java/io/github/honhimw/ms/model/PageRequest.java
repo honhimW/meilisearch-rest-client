@@ -18,9 +18,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author hon_him
@@ -32,11 +32,20 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class PageRequest implements Serializable {
 
+    public static final int DEFAULT_OFFSET = 0;
+    public static final int DEFAULT_LIMIT = 20;
+
     @Schema(description = "page no, >= 0")
     private Integer no;
 
     @Schema(description = "page size, > 0")
     private Integer size;
+
+    @Schema(description = "page no, >= 0")
+    private Integer limit;
+
+    @Schema(description = "page size, > 0")
+    private Integer offset;
 
     public PageRequest() {
         this.no = 0;
@@ -60,12 +69,33 @@ public class PageRequest implements Serializable {
         return this;
     }
 
+    public PageRequest offset(int offset) {
+        setOffset(offset);
+        return this;
+    }
+
+    public PageRequest limit(int limit) {
+        setLimit(limit);
+        return this;
+    }
+
     public int toOffset() {
+        if (Objects.nonNull(this.offset)) {
+            return offset;
+        }
         return no * size;
     }
 
     public int toLimit() {
+        if (Objects.nonNull(this.limit)) {
+            return limit;
+        }
         return size;
+    }
+
+    public void useDefault() {
+        this.offset = DEFAULT_OFFSET;
+        this.limit = DEFAULT_LIMIT;
     }
 
 }

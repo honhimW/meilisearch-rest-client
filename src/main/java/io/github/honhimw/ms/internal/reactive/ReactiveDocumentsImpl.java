@@ -15,6 +15,7 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
+import io.github.honhimw.ms.http.HttpFailureException;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
@@ -32,6 +33,8 @@ import java.util.*;
 
 class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocuments {
 
+    private static final TypeRef<Map<String, Object>> MAP_TYPE_REF = new TypeRef<Map<String, Object>>() {
+    };
     private final ReactiveIndexesImpl indexes;
     private final String indexUid;
 
@@ -42,33 +45,8 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
     }
 
     @Override
-    public Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit) {
-        String _offset = Optional.ofNullable(offset).map(String::valueOf).orElse("0");
-        String _limit = Optional.ofNullable(limit).map(String::valueOf).orElse("20");
-        return get(String.format("/indexes/%s/documents", indexUid), configurer -> configurer
-                .param("offset", _offset)
-                .param("limit", _limit),
-            new TypeRef<Page<Map<String, Object>>>() {
-            });
-    }
-
-    @Override
     public Mono<Page<Map<String, Object>>> list(GetDocumentRequest page) {
-        return get(String.format("/indexes/%s/documents", indexUid), configurer -> {
-                List<String> fields = page.getFields();
-                if (CollectionUtils.isNotEmpty(fields)) {
-                    configurer.param("fields", String.join(",", fields));
-                }
-                String filter = page.getFilter();
-                if (StringUtils.isNotEmpty(filter)) {
-                    configurer.param("filter", filter);
-                }
-                configurer
-                    .param("offset", String.valueOf(page.toOffset()))
-                    .param("limit", String.valueOf(page.toLimit()));
-            },
-            new TypeRef<Page<Map<String, Object>>>() {
-            });
+        return list(page, MAP_TYPE_REF);
     }
 
     @Override
@@ -80,6 +58,24 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
                 .param("limit", _limit),
             new ComplexTypeRef<Page<T>>(typeRef) {
             });
+    }
+
+    @Override
+    public <T> Mono<Page<T>> list(GetDocumentRequest page, TypeRef<T> typeRef) {
+        return get(String.format("/indexes/%s/documents", indexUid), configurer -> {
+            List<String> fields = page.getFields();
+            if (CollectionUtils.isNotEmpty(fields)) {
+                configurer.param("fields", String.join(",", fields));
+            }
+            String filter = page.getFilter();
+            if (StringUtils.isNotEmpty(filter)) {
+                configurer.param("filter", filter);
+            }
+            configurer
+                .param("offset", String.valueOf(page.toOffset()))
+                .param("limit", String.valueOf(page.toLimit()));
+        }, new ComplexTypeRef<Page<T>>(typeRef) {
+        });
     }
 
     @Override
@@ -145,15 +141,7 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
 
     @Override
     public Mono<Map<String, Object>> get(String id, @Nullable String... fields) {
-        String _fields;
-        if (Objects.isNull(fields) || fields.length == 0) {
-            _fields = "*";
-        } else {
-            _fields = String.join(",", fields);
-        }
-        return get(String.format("/indexes/%s/documents/%s", indexUid, id), configurer -> configurer
-            .param("fields", _fields), new TypeRef<Map<String, Object>>() {
-        });
+        return get(id, MAP_TYPE_REF, fields);
     }
 
     @Override
@@ -165,7 +153,15 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
             _fields = String.join(",", fields);
         }
         return get(String.format("/indexes/%s/documents/%s", indexUid, id), configurer -> configurer
-            .param("fields", _fields), typeRef);
+            .param("fields", _fields), typeRef)
+            .onErrorResume(throwable -> {
+                if (throwable instanceof HttpFailureException) {
+                    HttpFailureException httpFailureException = (HttpFailureException) throwable;
+                    return httpFailureException.getStatusCode() == 404;
+                } else {
+                    return false;
+                }
+            }, throwable -> Mono.empty());
     }
 
     @Override

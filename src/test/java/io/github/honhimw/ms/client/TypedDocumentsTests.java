@@ -15,15 +15,14 @@
 package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
-import io.github.honhimw.ms.api.Documents;
 import io.github.honhimw.ms.api.Indexes;
 import io.github.honhimw.ms.api.Settings;
+import io.github.honhimw.ms.api.TypedDocuments;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -33,16 +32,16 @@ import java.util.Optional;
  */
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DocumentsTests extends TestBase {
+public class TypedDocumentsTests extends TestBase {
 
     protected Indexes indexes;
 
-    protected Documents documents;
+    protected TypedDocuments<Movie> typedDocuments;
 
     @BeforeEach
     void initIndexes() {
         indexes = blockingClient.indexes();
-        documents = indexes.documents(INDEX);
+        typedDocuments = indexes.documents(INDEX, Movie.class);
 
         Settings settings = indexes.settings(INDEX);
         TaskInfo makeFilterable = settings.filterableAttributes().update(toList("id", "poster"));
@@ -52,7 +51,7 @@ public class DocumentsTests extends TestBase {
     @Order(1)
     @Test
     void save() {
-        TaskInfo save = documents.save(movies);
+        TaskInfo save = typedDocuments.save(movies);
         await(save);
         TaskInfo taskInfo = getBlockingTasks().get(save.getTaskUid());
         assert taskInfo.getStatus() == TaskStatus.SUCCEEDED;
@@ -65,18 +64,18 @@ public class DocumentsTests extends TestBase {
         one.setId(30);
         String helloWorld = "hello world";
         one.setTitle(helloWorld);
-        TaskInfo save = documents.save(one);
+        TaskInfo save = typedDocuments.save(one);
         await(save);
-        assert documents.get("30", "title").map(map -> map.get("title")).filter(s -> s.equals(helloWorld)).isPresent();
+        assert typedDocuments.get("30", "title").map(Movie::getTitle).filter(s -> s.equals(helloWorld)).isPresent();
     }
 
     @Order(2)
     @Test
     void save3() {
         String json = jsonQuote("[{'id':31,'title':'foo bar'}]");
-        TaskInfo save = documents.save(json);
+        TaskInfo save = typedDocuments.save(json);
         await(save);
-        assert documents.get("31", "title").map(map -> map.get("title")).filter(s -> s.equals("foo bar")).isPresent();
+        assert typedDocuments.get("31", "title").map(Movie::getTitle).filter(s -> s.equals("foo bar")).isPresent();
     }
 
     @Order(2)
@@ -89,16 +88,16 @@ public class DocumentsTests extends TestBase {
         two.setId(33);
         two.setTitle("bar");
 
-        TaskInfo save = documents.save(toList(one, two));
+        TaskInfo save = typedDocuments.save(toList(one, two));
         await(save);
-        assert documents.get("32", "title").map(map -> map.get("title")).filter(s -> s.equals("foo")).isPresent();
-        assert documents.get("33", "title").map(map -> map.get("title")).filter(s -> s.equals("bar")).isPresent();
+        assert typedDocuments.get("32", "title").map(Movie::getTitle).filter(s -> s.equals("foo")).isPresent();
+        assert typedDocuments.get("33", "title").map(Movie::getTitle).filter(s -> s.equals("bar")).isPresent();
     }
 
     @Order(3)
     @Test
     void listDocuments() {
-        Page<?> list = documents.list(0, null);
+        Page<Movie> list = typedDocuments.list(0, null);
         assert list.getOffset() == 0;
         assert list.getLimit() == 20;
 
@@ -107,16 +106,7 @@ public class DocumentsTests extends TestBase {
     @Order(3)
     @Test
     void listDocuments2() {
-        Page<Movie> list = documents.list(0, null, Movie.class);
-        assert list.getOffset() == 0;
-        assert list.getLimit() == 20;
-
-    }
-
-    @Order(3)
-    @Test
-    void listDocuments3() {
-        Page<?> list = documents.list(pageRequest -> {
+        Page<Movie> list = typedDocuments.list(pageRequest -> {
             pageRequest.filter("id EXISTS");
             pageRequest.fields(toList("id"));
         });
@@ -126,8 +116,8 @@ public class DocumentsTests extends TestBase {
 
     @Order(3)
     @Test
-    void listDocuments4() {
-        Page<?> list = documents.list(new GetDocumentRequest());
+    void listDocuments3() {
+        Page<Movie> list = typedDocuments.list(new GetDocumentRequest());
         assert list.getOffset() == 0;
         assert list.getLimit() == 20;
     }
@@ -135,17 +125,7 @@ public class DocumentsTests extends TestBase {
     @Order(4)
     @Test
     void getOne() {
-        Optional<Map<String, Object>> title = documents.get("2", "title");
-        assert title.isPresent();
-        Map<String, Object> movie = title.get();
-        assert movie.get("title").equals("Ariel");
-        assert Objects.isNull(movie.get("poster"));
-    }
-
-    @Order(4)
-    @Test
-    void getOne2() {
-        Optional<Movie> title = documents.get("2", Movie.class, "title");
+        Optional<Movie> title = typedDocuments.get("2", "title");
         assert title.isPresent();
         Movie movie = title.get();
         assert movie.getTitle().equals("Ariel");
@@ -158,29 +138,30 @@ public class DocumentsTests extends TestBase {
         Movie movie = new Movie();
         movie.setId(30);
         movie.setTitle("hello world");
-        TaskInfo save = documents.save(movie);
+        TaskInfo save = typedDocuments.save(movie);
         await(save);
         movie.setTitle("foo bar");
-        TaskInfo update = documents.update(movie);
+        TaskInfo update = typedDocuments.update(movie);
         await(update);
-        Optional<Map<String, Object>> result = documents.get("30", "title");
+        Optional<Movie> result = typedDocuments.get("30", "title");
         assert result.isPresent();
-        Map<String, Object> _result = result.get();
-        assert _result.get("title").equals("foo bar");
+        Movie _result = result.get();
+        assert _result.getTitle().equals("foo bar");
     }
 
     @Order(5)
     @Test
     void update2() {
         Movie movie = new Movie();
-        movie.setId(30);
+        movie.setId(31);
         movie.setTitle("hello world");
-        TaskInfo save = documents.save(movie);
+        TaskInfo save = typedDocuments.save(movie);
         await(save);
         movie.setTitle("foo bar");
-        TaskInfo update = documents.update(movie);
+        String json = jsonHandler.toJson(toList(movie));
+        TaskInfo update = typedDocuments.update(json);
         await(update);
-        Optional<Movie> result = documents.get("30", Movie.class, "title");
+        Optional<Movie> result = typedDocuments.get("31", "title");
         assert result.isPresent();
         Movie _result = result.get();
         assert _result.getTitle().equals("foo bar");
@@ -190,15 +171,14 @@ public class DocumentsTests extends TestBase {
     @Test
     void update3() {
         Movie movie = new Movie();
-        movie.setId(31);
+        movie.setId(32);
         movie.setTitle("hello world");
-        TaskInfo save = documents.save(movie);
+        TaskInfo save = typedDocuments.save(movie);
         await(save);
         movie.setTitle("foo bar");
-        String json = jsonHandler.toJson(toList(movie));
-        TaskInfo update = documents.update(json);
+        TaskInfo update = typedDocuments.update(toList(movie));
         await(update);
-        Optional<Movie> result = documents.get("31", Movie.class, "title");
+        Optional<Movie> result = typedDocuments.get("32", "title");
         assert result.isPresent();
         Movie _result = result.get();
         assert _result.getTitle().equals("foo bar");
@@ -207,39 +187,9 @@ public class DocumentsTests extends TestBase {
     @Order(6)
     @Test
     void batchGet() {
-        Page<Map<String, Object>> list = documents.batchGet(BatchGetDocumentsRequest.builder().offset(0).limit(20)
+        Page<Movie> list = typedDocuments.batchGet(BatchGetDocumentsRequest.builder().offset(0).limit(20)
             .fields(toList("title"))
             .build());
-        assert CollectionUtils.isNotEmpty(list.getResults());
-        list.getResults().forEach(movie -> {
-            assert StringUtils.isNotEmpty((CharSequence) movie.get("title"));
-            assert movie.get("id") == null;
-        });
-        assert list.getOffset() == 0;
-        assert list.getLimit() == 20;
-    }
-
-    @Order(6)
-    @Test
-    void batchGet2() {
-        Page<Movie> list = documents.batchGet(BatchGetDocumentsRequest.builder().offset(0).limit(20)
-            .fields(toList("title"))
-            .build(), Movie.class);
-        assert CollectionUtils.isNotEmpty(list.getResults());
-        list.getResults().forEach(movie -> {
-            assert StringUtils.isNotEmpty(movie.getTitle());
-            assert movie.getId() == null;
-        });
-        assert list.getOffset() == 0;
-        assert list.getLimit() == 20;
-    }
-
-    @Order(6)
-    @Test
-    void batchGet3() {
-        Page<Movie> list = documents.batchGet(builder -> builder.offset(0).limit(20)
-            .fields(toList("title"))
-            .build(), Movie.class);
         assert CollectionUtils.isNotEmpty(list.getResults());
         list.getResults().forEach(movie -> {
             assert StringUtils.isNotEmpty(movie.getTitle());
@@ -254,47 +204,47 @@ public class DocumentsTests extends TestBase {
     void delete() {
         Movie movie = new Movie();
         movie.setId(40);
-        TaskInfo save = documents.save(movie);
+        TaskInfo save = typedDocuments.save(movie);
         await(save);
-        assert documents.get("40").isPresent();
-        TaskInfo delete = documents.delete("40");
+        assert typedDocuments.get("40").isPresent();
+        TaskInfo delete = typedDocuments.delete("40");
         await(delete);
-        Optional<?> movie40 = documents.get("40");
+        Optional<Movie> movie40 = typedDocuments.get("40");
         assert !movie40.isPresent();
     }
 
     @Order(8)
     @Test
     void batchDelete() {
-        TaskInfo save = documents.save(jsonQuote("[{'id':40},{'id':41}]"));
+        TaskInfo save = typedDocuments.save(jsonQuote("[{'id':40},{'id':41}]"));
         await(save);
         BatchGetDocumentsRequest batchGetDocumentsRequest = new BatchGetDocumentsRequest();
         batchGetDocumentsRequest.filter(filterBuilder -> filterBuilder.base(expression -> expression.in("id", "40", "41")));
-        assert documents.batchGet(batchGetDocumentsRequest).getTotal() == 2;
-        TaskInfo batchDelete = documents.batchDelete(toList("40", "41"));
+        assert typedDocuments.batchGet(batchGetDocumentsRequest).getTotal() == 2;
+        TaskInfo batchDelete = typedDocuments.batchDelete(toList("40", "41"));
         await(batchDelete);
-        assert documents.batchGet(batchGetDocumentsRequest).getTotal() == 0;
+        assert typedDocuments.batchGet(batchGetDocumentsRequest).getTotal() == 0;
     }
 
     @Order(9)
     @Test
     void deleteByFilter() {
-        TaskInfo save = documents.save(jsonQuote("[{'id':40,'poster':'http://0.0.0.0/poster'},{'id':41}]"));
+        TaskInfo save = typedDocuments.save(jsonQuote("[{'id':40,'poster':'http://0.0.0.0/poster'},{'id':41}]"));
         await(save);
         BatchGetDocumentsRequest batchGetDocumentsRequest = new BatchGetDocumentsRequest();
         batchGetDocumentsRequest.filter(filterBuilder -> filterBuilder.base(expression -> expression.isNullOrNotExists("poster")));
-        assert documents.batchGet(batchGetDocumentsRequest).getTotal() > 0;
-        TaskInfo deleteByFilter = documents.delete(batchGetDocumentsRequest);
+        assert typedDocuments.batchGet(batchGetDocumentsRequest).getTotal() > 0;
+        TaskInfo deleteByFilter = typedDocuments.delete(batchGetDocumentsRequest);
         await(deleteByFilter);
-        assert documents.batchGet(batchGetDocumentsRequest).getTotal() == 0;
+        assert typedDocuments.batchGet(batchGetDocumentsRequest).getTotal() == 0;
     }
 
     @Order(100)
     @Test
     void deleteAll() {
-        TaskInfo deleteAll = documents.deleteAll();
+        TaskInfo deleteAll = typedDocuments.deleteAll();
         await(deleteAll);
-        Page<?> list = documents.list(0, 20);
+        Page<Movie> list = typedDocuments.list(0, 20);
         assert list.getTotal() == 0;
     }
 }

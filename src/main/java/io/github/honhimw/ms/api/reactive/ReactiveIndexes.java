@@ -133,9 +133,7 @@ public interface ReactiveIndexes {
     <T> ReactiveTypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
 
     default <T> ReactiveTypedDocuments<T> documents(String uid, Class<T> type) {
-        // @formatter:off
-        return documents(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return documents(uid, TypeRef.of(type));
     }
 
     default <T, R> R documents(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDocuments<T>, R> operation) {
@@ -168,9 +166,7 @@ public interface ReactiveIndexes {
     <T> ReactiveTypedSearch<T> search(String uid, TypeRef<T> typeRef);
 
     default <T> ReactiveTypedSearch<T> search(String uid, Class<T> type) {
-        // @formatter:off
-        return search(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return search(uid, TypeRef.of(type));
     }
 
     default <T, R> R search(String uid, TypeRef<T> typeRef, Function<ReactiveTypedSearch<T>, R> operation) {
@@ -184,9 +180,7 @@ public interface ReactiveIndexes {
     <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
 
     default <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type) {
-        // @formatter:off
-        return searchWithDetails(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return searchWithDetails(uid, TypeRef.of(type));
     }
 
     default <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDetailsSearch<T>, R> operation) {

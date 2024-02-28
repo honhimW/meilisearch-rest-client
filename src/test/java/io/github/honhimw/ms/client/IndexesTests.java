@@ -16,7 +16,10 @@ package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.api.Indexes;
 import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
-import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.model.Index;
+import io.github.honhimw.ms.model.IndexStats;
+import io.github.honhimw.ms.model.Page;
+import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 import reactor.core.publisher.Mono;

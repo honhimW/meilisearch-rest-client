@@ -16,15 +16,13 @@ package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
 import io.github.honhimw.ms.api.Indexes;
-import io.github.honhimw.ms.api.Search;
 import io.github.honhimw.ms.api.TypedDetailsSearch;
-import io.github.honhimw.ms.json.TypeRef;
+import io.github.honhimw.ms.api.TypedSearch;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -33,83 +31,36 @@ import java.util.Objects;
  */
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SearchTests extends TestBase {
+public class TypedSearchTests extends TestBase {
 
     protected Indexes indexes;
-    protected Search search;
+    protected TypedSearch<Movie> typedSearch;
 
     @BeforeEach
     void initIndexes() {
         prepareData();
         indexes = blockingClient.indexes();
-        search = indexes.search(INDEX);
+        typedSearch = indexes.search(INDEX, Movie.class);
     }
 
     @Order(1)
     @Test
     void search() {
-        assert !search.find("2").getHits().isEmpty();
+        assert !typedSearch.find("2").getHits().isEmpty();
     }
 
     @Order(1)
     @Test
     void search2() {
-        SearchResponse<Movie> movieSearchResponse = search.find("2", Movie.class);
+        SearchResponse<Movie> movieSearchResponse = typedSearch.find(builder -> builder.q("2"));
         assert movieSearchResponse.getHits().get(0).getId() > 0;
     }
 
     @Order(1)
     @Test
     void search3() {
-        SearchResponse<Movie> movieSearchResponse = search.find("2", new TypeRef<Movie>() {
-        });
-        assert movieSearchResponse.getHits().get(0).getId() > 0;
-    }
-
-    @Order(1)
-    @Test
-    void search4() {
         SearchRequest searchRequest = SearchRequest.builder().q("2").build();
-        SearchResponse<Map<String, Object>> movieSearchResponse = search.find(searchRequest);
-        assert (Integer) movieSearchResponse.getHits().get(0).get("id") > 0;
-    }
-
-    @Order(1)
-    @Test
-    void search5() {
-        SearchResponse<Map<String, Object>> movieSearchResponse = search.find(builder -> builder.q("2"));
-        assert (Integer) movieSearchResponse.getHits().get(0).get("id") > 0;
-    }
-
-    @Order(1)
-    @Test
-    void search6() {
-        SearchRequest searchRequest = SearchRequest.builder().q("2").build();
-        SearchResponse<Movie> movieSearchResponse = search.find(searchRequest, Movie.class);
-        assert movieSearchResponse.getHits().get(0).getId() > 0;
-    }
-
-    @Order(1)
-    @Test
-    void search7() {
-        SearchRequest searchRequest = SearchRequest.builder().q("2").build();
-        SearchResponse<Movie> movieSearchResponse = search.find(searchRequest, new TypeRef<Movie>() {
-        });
-        assert movieSearchResponse.getHits().get(0).getId() > 0;
-    }
-
-    @Order(1)
-    @Test
-    void search8() {
-        SearchResponse<Movie> movieSearchResponse = search.find(builder -> builder.q("2"), new TypeRef<Movie>() {
-        });
-        assert movieSearchResponse.getHits().get(0).getId() > 0;
-    }
-
-    @Order(1)
-    @Test
-    void search9() {
-        SearchResponse<Movie> movieSearchResponse = search.find(builder -> builder.q("2"), Movie.class);
+        SearchResponse<Movie> movieSearchResponse = typedSearch.find(searchRequest);
         assert movieSearchResponse.getHits().get(0).getId() > 0;
     }
 

@@ -21,7 +21,6 @@ import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -50,47 +49,29 @@ public interface Search {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(String q);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(String q, TypeRef<T> typeRef);
 
-    default <T> SearchResponse<T> find(String q, Class<T> type) {
-        // @formatter:off
-        return find(q, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
-    }
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    <T> SearchResponse<T> find(String q, Class<T> type);
 
-    /**
-     * Search for documents matching a specific query in the given index.
-     * This is the preferred route to perform search when an API key is required, as it allows for preflight requests to be cached. Caching preflight requests improves considerably the speed of the search.
-     *
-     * @param request SearchRequest
-     * @return search result
-     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(SearchRequest request);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
-    default SearchResponse<Map<String, Object>> find(Consumer<SearchRequest.Builder> builder) {
-        SearchRequest.Builder _builder = SearchRequest.builder();
-        builder.accept(_builder);
-        return find(_builder.build());
-    }
+    SearchResponse<Map<String, Object>> find(Consumer<SearchRequest.Builder> builder);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(SearchRequest request, TypeRef<T> typeRef);
 
-    default <T> SearchResponse<T> find(SearchRequest request, Class<T> type) {
-        // @formatter:off
-        return find(request, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
-    }
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    <T> SearchResponse<T> find(SearchRequest request, Class<T> type);
 
-    default <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, Class<T> type) {
-        SearchRequest.Builder _builder = SearchRequest.builder();
-        builder.accept(_builder);
-        SearchRequest request = _builder.build();
-        // @formatter:off
-        return find(request, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
-    }
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, TypeRef<T> typeRef);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, Class<T> type);
 
     /**
      * Search for facet values matching a specific query for a facet. When many values exist for a facet,
@@ -103,10 +84,6 @@ public interface Search {
     FacetSearchResponse facetSearch(FacetSearchRequest request);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
-    default FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
-        FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();
-        builder.accept(_builder);
-        return facetSearch(_builder.build());
-    }
+    FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder);
 
 }

@@ -17,7 +17,6 @@ package io.github.honhimw.ms.internal;
 import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.api.reactive.ReactiveLogs;
 import io.github.honhimw.ms.model.LogStreamRequest;
-import io.github.honhimw.ms.support.ReactorUtils;
 
 /**
  * @author hon_him
@@ -34,16 +33,16 @@ class LogsImpl implements Logs {
 
     @Override
     public void update(LogStreamRequest request) {
-        ReactorUtils.blockNonNull(_logs.update(request));
+        _logs.update(request).block();
     }
 
     @Override
     public void stderr(LogStreamRequest request) {
-        ReactorUtils.blockNonNull(_logs.stderr(request));
+        _logs.stderr(request).block();
     }
 
     @Override
     public void reset() {
-        ReactorUtils.blockNonNull(_logs.reset());
+        _logs.reset().block();
     }
 }

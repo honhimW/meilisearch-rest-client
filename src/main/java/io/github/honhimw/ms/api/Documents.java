@@ -21,7 +21,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -41,17 +44,12 @@ public interface Documents {
      *
      * @param offset default 0
      * @param limit  default 20
-     * @return
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default Page<Map<String, Object>> list(Consumer<GetDocumentRequest> page) {
-        GetDocumentRequest pageRequest = new GetDocumentRequest();
-        page.accept(pageRequest);
-        return list(pageRequest);
-    }
+    Page<Map<String, Object>> list(Consumer<GetDocumentRequest> page);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(GetDocumentRequest page);
@@ -67,11 +65,13 @@ public interface Documents {
     <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default <T> Page<T> list(Consumer<PageRequest> page, TypeRef<T> typeRef) {
-        PageRequest pageRequest = new PageRequest();
-        page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit(), typeRef);
-    }
+    <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, Class<T> type);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    <T> Page<T> list(Consumer<GetDocumentRequest> page, TypeRef<T> typeRef);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    <T> Page<T> list(Consumer<GetDocumentRequest> page, Class<T> type);
 
     /**
      * Add a list of documents or replace them if they already exist.
@@ -93,18 +93,13 @@ public interface Documents {
     TaskInfo save(@Nullable String json);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    default TaskInfo save(@Nullable Object one) {
-        return save(Collections.singleton(one));
-    }
-
+    TaskInfo save(Object one);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(Collection<?> collection);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    default TaskInfo saveVectorized(VectorizedDocument one) {
-        return save(Collections.singleton(one));
-    }
+    TaskInfo saveVectorized(VectorizedDocument one);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo saveVectorized(Collection<VectorizedDocument> collection);
@@ -130,9 +125,7 @@ public interface Documents {
     TaskInfo update(String json);
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    default TaskInfo update(Object one) {
-        return update(Collections.singleton(one));
-    }
+    TaskInfo update(Object one);
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(Collection<?> collection);
@@ -150,11 +143,7 @@ public interface Documents {
     Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
-    default Page<Map<String, Object>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder) {
-        BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
-        builder.accept(_builder);
-        return batchGet(_builder.build());
-    }
+    Page<Map<String, Object>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder);
 
     /**
      * Get documents by batch.
@@ -163,11 +152,13 @@ public interface Documents {
     <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
-    default <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef) {
-        BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
-        builder.accept(_builder);
-        return batchGet(_builder.build(), typeRef);
-    }
+    <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, Class<T> type);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, Class<T> type);
 
     /**
      * Delete a set of documents based on an array of document ids.
@@ -196,16 +187,11 @@ public interface Documents {
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     Optional<Map<String, Object>> get(String id, @Nullable String... fields);
 
-    /**
-     * Get one document using its unique id.
-     *
-     * @param id     Document id of the requested document
-     * @param fields Comma-separated list of fields to display for an API resource.
-     *               By default it contains all fields of an API resource.
-     *               Default *.
-     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     <T> Optional<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    <T> Optional<T> get(String id, Class<T> type, @Nullable String... fields);
 
     /**
      * Delete one document based on its unique id.

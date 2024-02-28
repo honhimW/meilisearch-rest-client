@@ -20,8 +20,9 @@
 ### Version
 The version number of this library is named by appending `.X` to the version number in the official documentation.
 
-- v1.6 Docs: [1.6.0.x,) (*current)
-- v1.5 Docs: [1.5.0.x, 1.6.0) 
+- v1.7 Docs: [1.7.0.x,) (*current)
+- v1.6 Docs: [1.6.0.x, 1.7.0.0)
+- v1.5 Docs: [1.5.0.x, 1.6.0.0) 
 
 ### Dependencies
 

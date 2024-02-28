@@ -132,9 +132,7 @@ public interface Indexes {
     <T> TypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
 
     default <T> TypedDocuments<T> documents(String uid, Class<T> type) {
-        // @formatter:off
-        return documents(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return documents(uid, TypeRef.of(type));
     }
 
     default <T, R> R documents(String uid, TypeRef<T> typeRef, Function<TypedDocuments<T>, R> operation) {
@@ -166,9 +164,7 @@ public interface Indexes {
     <T> TypedSearch<T> search(String uid, TypeRef<T> typeRef);
 
     default <T> TypedSearch<T> search(String uid, Class<T> type) {
-        // @formatter:off
-        return search(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return search(uid, TypeRef.of(type));
     }
 
     default <T, R> R search(String uid, TypeRef<T> typeRef, Function<TypedSearch<T>, R> operation) {
@@ -182,9 +178,7 @@ public interface Indexes {
     <T> TypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
 
     default <T> TypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type) {
-        // @formatter:off
-        return searchWithDetails(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return searchWithDetails(uid, TypeRef.of(type));
     }
 
     default <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<TypedDetailsSearch<T>, R> operation) {

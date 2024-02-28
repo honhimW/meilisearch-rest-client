@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -45,6 +46,11 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
+    public Page<Map<String, Object>> list(Consumer<GetDocumentRequest> page) {
+        return ReactorUtils.blockNonNull(_documents.list(page));
+    }
+
+    @Override
     public Page<Map<String, Object>> list(GetDocumentRequest page) {
         return ReactorUtils.blockNonNull(_documents.list(page));
     }
@@ -55,13 +61,38 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
+    public <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, Class<T> type) {
+        return ReactorUtils.blockNonNull(_documents.list(offset, limit, type));
+    }
+
+    @Override
+    public <T> Page<T> list(Consumer<GetDocumentRequest> page, TypeRef<T> typeRef) {
+        return ReactorUtils.blockNonNull(_documents.list(page, typeRef));
+    }
+
+    @Override
+    public <T> Page<T> list(Consumer<GetDocumentRequest> page, Class<T> type) {
+        return ReactorUtils.blockNonNull(_documents.list(page, type));
+    }
+
+    @Override
     public TaskInfo save(@Nullable String json) {
         return ReactorUtils.blockNonNull(_documents.save(json));
     }
 
     @Override
+    public TaskInfo save(Object one) {
+        return ReactorUtils.blockNonNull(_documents.save(one));
+    }
+
+    @Override
     public TaskInfo save(Collection<?> collection) {
         return ReactorUtils.blockNonNull(_documents.save(collection));
+    }
+
+    @Override
+    public TaskInfo saveVectorized(VectorizedDocument one) {
+        return ReactorUtils.blockNonNull(_documents.saveVectorized(one));
     }
 
     @Override
@@ -72,6 +103,11 @@ class DocumentsImpl implements Documents {
     @Override
     public TaskInfo update(String json) {
         return ReactorUtils.blockNonNull(_documents.update(json));
+    }
+
+    @Override
+    public TaskInfo update(Object one) {
+        return ReactorUtils.blockNonNull(_documents.update(one));
     }
 
     @Override
@@ -90,8 +126,28 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
+    public Page<Map<String, Object>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_documents.batchGet(builder));
+    }
+
+    @Override
     public <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef) {
         return ReactorUtils.blockNonNull(_documents.batchGet(fetch, typeRef));
+    }
+
+    @Override
+    public <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef) {
+        return ReactorUtils.blockNonNull(_documents.batchGet(builder, typeRef));
+    }
+
+    @Override
+    public <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, Class<T> type) {
+        return ReactorUtils.blockNonNull(_documents.batchGet(fetch, type));
+    }
+
+    @Override
+    public <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, Class<T> type) {
+        return ReactorUtils.blockNonNull(_documents.batchGet(builder, type));
     }
 
     @Override
@@ -112,6 +168,11 @@ class DocumentsImpl implements Documents {
     @Override
     public <T> Optional<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields) {
         return _documents.get(id, typeRef, fields).blockOptional();
+    }
+
+    @Override
+    public <T> Optional<T> get(String id, Class<T> type, @Nullable String... fields) {
+        return _documents.get(id, type, fields).blockOptional();
     }
 
     @Override

@@ -18,16 +18,15 @@ import io.github.honhimw.ms.api.reactive.ReactiveTypedDocuments;
 import io.github.honhimw.ms.http.HttpFailureException;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
-import io.github.honhimw.ms.model.FilterableAttributesRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.StringUtils;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @author hon_him
@@ -51,13 +50,20 @@ class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements Reac
     }
 
     @Override
-    public Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit) {
-        String _offset = Optional.ofNullable(offset).map(String::valueOf).orElse("0");
-        String _limit = Optional.ofNullable(limit).map(String::valueOf).orElse("20");
-        return get(String.format("/indexes/%s/documents", indexUid), configurer -> configurer
-                .param("offset", _offset)
-                .param("limit", _limit),
-            complexTypeRef);
+    public Mono<Page<T>> list(GetDocumentRequest page) {
+        return get(String.format("/indexes/%s/documents", indexUid), configurer -> {
+            List<String> fields = page.getFields();
+            if (CollectionUtils.isNotEmpty(fields)) {
+                configurer.param("fields", String.join(",", fields));
+            }
+            String filter = page.getFilter();
+            if (StringUtils.isNotEmpty(filter)) {
+                configurer.param("filter", filter);
+            }
+            configurer
+                .param("offset", String.valueOf(page.toOffset()))
+                .param("limit", String.valueOf(page.toLimit()));
+        }, complexTypeRef);
     }
 
     @Override

@@ -11,8 +11,7 @@ plugins {
 }
 
 group = 'io.github.honhimw'
-version = '1.7.0.0' // API docs version plus '.x(-SNAPSHOT)?'
-version = version + '-SNAPSHOT' // API docs version plus '.x(-SNAPSHOT)?'
+version = '1.7.0.0' // API docs version plus '.x(-SNAPSHOT/RC.x)?'
 description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
 def title = 'Meilisearch rest client for java'
@@ -20,7 +19,6 @@ def reactorVersion = '2023.0.3'
 def jacksonVersion = '2.16.1'
 def gsonVersion = '2.10.1'
 def lombokVersion = '1.18.30'
-def snapshots = version.toString().endsWith('SNAPSHOT')
 
 apply plugin: 'idea'
 apply plugin: 'java'
@@ -102,13 +100,35 @@ publishing {
             }
         }
         maven {
-            name = "sonatype"
-            if (snapshots) {
-                url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            } else {
-//                url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
-                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            version = version + '-SNAPSHOT'
+            name = "sonatype-snapshots"
+            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            credentials {
+                username = sonatypeProperties().getProperty("sonatype.username") as String
+                password = sonatypeProperties().getProperty("sonatype.password") as String
             }
+        }
+        maven {
+            name = "sonatype-releases"
+            url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
+            credentials {
+                username = sonatypeProperties().getProperty("sonatype.username") as String
+                password = sonatypeProperties().getProperty("sonatype.password") as String
+            }
+        }
+        maven {
+            name = "sonatype-rc"
+            version = version + '-RC.' + 0
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = sonatypeProperties().getProperty("sonatype.username") as String
+                password = sonatypeProperties().getProperty("sonatype.password") as String
+            }
+        }
+        maven {
+            name = "sonatype-central"
+            version = version
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
                 username = sonatypeProperties().getProperty("sonatype.username") as String
                 password = sonatypeProperties().getProperty("sonatype.password") as String
@@ -174,8 +194,12 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    "io/github/honhimw/ms/model/*",
-                    "io/github/honhimw/ms/json/ParameterizedTypeImpl.class",
+                    'io/github/honhimw/ms/model/*',
+                    'io/github/honhimw/ms/json/ParameterizedTypeImpl.class',
+                    'io/github/honhimw/ms/http/URIBuilder.class',
+                    'io/github/honhimw/ms/http/URIBuilder$TokenParser.class',
+                    'io/github/honhimw/ms/support/StringUtils.class',
+                    'io/github/honhimw/ms/support/IOUtils.class',
             ])
         }))
     }

@@ -21,8 +21,6 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -48,11 +46,10 @@ public interface TypedDocuments<T> {
     Page<T> list(@Nullable Integer offset, @Nullable Integer limit);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default Page<T> list(Consumer<PageRequest> page) {
-        PageRequest pageRequest = new PageRequest();
-        page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
-    }
+    Page<T> list(Consumer<GetDocumentRequest> page);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    Page<T> list(GetDocumentRequest page);
 
     /**
      * Add a list of documents or replace them if they already exist.
@@ -74,9 +71,7 @@ public interface TypedDocuments<T> {
     TaskInfo save(String json);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    default TaskInfo save(T t) {
-        return save(Collections.singleton(t));
-    }
+    TaskInfo save(T t);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(Collection<? extends T> collection);
@@ -101,9 +96,7 @@ public interface TypedDocuments<T> {
     TaskInfo update(String json);
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
-    default TaskInfo update(T t) {
-        return update(Collections.singleton(t));
-    }
+    TaskInfo update(T t);
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(Collection<? extends T> collection);
