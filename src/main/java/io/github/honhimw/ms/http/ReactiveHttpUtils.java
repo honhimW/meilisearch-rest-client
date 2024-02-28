@@ -314,6 +314,10 @@ public class ReactiveHttpUtils implements AutoCloseable {
         return receiver(METHOD_PUT, url, configurer);
     }
 
+    public ReactiveHttpResult rPatch(String url, Consumer<Configurer> configurer) {
+        return receiver(METHOD_PATCH, url, configurer);
+    }
+
     public ReactiveHttpResult rDelete(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_DELETE, url, configurer);
     }
@@ -376,8 +380,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         Configurer requestConfigurer = new Configurer()
             .method(method)
             .charset(defaultCharset)
-            .url(url)
-            .config(RequestConfig.DEFAULT_CONFIG.copy().build());
+            .url(url);
         for (Consumer<Configurer> requestInterceptor : requestInterceptors) {
             configurer = configurer.andThen(requestInterceptor);
         }
@@ -689,7 +692,12 @@ public class ReactiveHttpUtils implements AutoCloseable {
         }
 
         public Configurer config(Consumer<RequestConfig.Builder> consumer) {
-            RequestConfig.Builder copy = RequestConfig.copy(config);
+            RequestConfig.Builder copy;
+            if (Objects.isNull(config)) {
+                copy = RequestConfig.DEFAULT_CONFIG.copy();
+            } else {
+                copy = config.copy();
+            }
             consumer.accept(copy);
             this.config = copy.build();
             return this;
