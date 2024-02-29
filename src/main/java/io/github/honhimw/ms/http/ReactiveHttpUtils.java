@@ -185,6 +185,8 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
     private ConnectionProvider connectionProvider;
 
+    private RequestConfig _defaultRequestConfig;
+
     @Getter
     private final List<Consumer<Configurer>> requestInterceptors = new ArrayList<>();
 
@@ -203,6 +205,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         httpClient = HttpClient.create(connectionProvider);
         httpClient = requestConfig.config(httpClient);
         addInterceptor(requestConfig.requestInterceptor);
+        _defaultRequestConfig = requestConfig;
     }
 
     public HttpResult get(String url) {
@@ -341,7 +344,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
                          Function<HttpResult, T> resultMapper) {
         _assertState(StringUtils.isNotBlank(url), "URL should not be blank");
         _assertState(Objects.nonNull(configurer), "String should not be null");
-        Configurer requestConfigurer = new Configurer()
+        Configurer requestConfigurer = new Configurer(_defaultRequestConfig)
             .method(method)
             .charset(defaultCharset)
             .url(url);
@@ -377,7 +380,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
     public ReactiveHttpResult receiver(String method, String url, Consumer<Configurer> configurer) {
         _assertState(StringUtils.isNotBlank(url), "URL should not be blank");
         _assertState(Objects.nonNull(configurer), "String should not be null");
-        Configurer requestConfigurer = new Configurer()
+        Configurer requestConfigurer = new Configurer(_defaultRequestConfig)
             .method(method)
             .charset(defaultCharset)
             .url(url);
@@ -629,8 +632,13 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public final static class Configurer {
+
+        private final RequestConfig currentDefaultConfig;
+
+        private Configurer(RequestConfig currentDefaultConfig) {
+            this.currentDefaultConfig = currentDefaultConfig;
+        }
 
         private String method;
 
@@ -694,7 +702,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         public Configurer config(Consumer<RequestConfig.Builder> consumer) {
             RequestConfig.Builder copy;
             if (Objects.isNull(config)) {
-                copy = RequestConfig.DEFAULT_CONFIG.copy();
+                copy = currentDefaultConfig.copy();
             } else {
                 copy = config.copy();
             }
