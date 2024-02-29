@@ -849,6 +849,14 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 return this;
             }
 
+            public Binary publisher(Publisher<? extends ByteBuf> publisher, String contentType) {
+                if (Objects.isNull(byteBufPublisher)) {
+                    this.byteBufPublisher = publisher;
+                }
+                this.contentType = contentType;
+                return this;
+            }
+
             public Binary file(File file) {
                 if (Objects.isNull(bytesSupplier)) {
                     bytesSupplier = () -> {

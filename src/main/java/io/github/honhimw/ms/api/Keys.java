@@ -18,6 +18,7 @@ import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -54,21 +55,17 @@ public interface Keys {
      * @param keyOrUid key value of the requested API key, uid of the requested API key
      */
     @Operation(method = "GET", tags = "/keys/{key_or_uid}")
-    Key get(String keyOrUid);
+    Optional<Key> get(String keyOrUid);
 
     /**
      * Create an API key with the provided description, permissions, and expiration date.
      *
      */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
-    Key create(String keyOrUid, CreateKeyRequest request);
+    Key create(CreateKeyRequest request);
 
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
-    default Key create(String keyOrUid, Consumer<CreateKeyRequest.Builder> builder) {
-        CreateKeyRequest.Builder _builder = CreateKeyRequest.builder();
-        builder.accept(_builder);
-        return create(keyOrUid, _builder.build());
-    }
+    Key create(Consumer<CreateKeyRequest.Builder> builder);
 
     /**
      * A valid API key or uid is required.
@@ -80,11 +77,7 @@ public interface Keys {
     Key update(String keyOrUid, UpdateKeyRequest request);
 
     @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
-    default Key update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder) {
-        UpdateKeyRequest.Builder _builder = UpdateKeyRequest.builder();
-        builder.accept(_builder);
-        return update(keyOrUid, _builder.build());
-    }
+    Key update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder);
 
     @Operation(method = "DELETE", tags = "/keys/{key_or_uid}")
     void delete(String keyOrUid);

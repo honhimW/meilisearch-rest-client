@@ -12,11 +12,28 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.http;
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+package io.github.honhimw.ms.httpclient;
+
+import io.github.honhimw.ms.http.ReactiveHttpUtils;
+import io.github.honhimw.ms.http.URIBuilder;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.support.StringUtils;
+import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.SneakyThrows;
@@ -29,6 +46,7 @@ import reactor.netty.http.server.HttpServerRoutes;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -177,6 +195,36 @@ public class HttpClientTests {
         assert isOK(httpClient.rOptions(uri, configurer -> configurer.header("method", "OPTIONS")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
         assert isOK(httpClient.rHead(uri, configurer -> configurer.header("method", "HEAD")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
         assert isOK(httpClient.rDelete(uri, configurer -> configurer.header("method", "DELETE")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+
+        httpClient.close();
+        disposableServer.disposeNow();
+    }
+
+    @Test
+    @SneakyThrows
+    void raw() {
+        ReactiveHttpUtils httpClient = ReactiveHttpUtils.getInstance();
+        DisposableServer disposableServer = createClient(httpServerRoutes -> httpServerRoutes.route(req -> true, (req, resp) -> {
+            String _charset = "utf-16";
+            Charset charset = Charset.forName(_charset);
+            String path = req.path();
+            resp.addHeader("content-type", "text/plain;charset=" + charset);
+            assert req.requestHeaders().get("content-type").equalsIgnoreCase(path);
+            return resp.sendString(Mono.just(MESSAGE), charset);
+        }));
+
+        URIBuilder uriBuilder = new URIBuilder().setScheme("http").setHost("localhost").setPort(disposableServer.port());
+        assert StringUtils.equal(httpClient.post(uriBuilder.setPath("application/json").toString(), configurer -> configurer.body(payload -> payload
+            .raw(raw -> raw.json("{}")))).str(), MESSAGE);
+        assert StringUtils.equal(httpClient.post(uriBuilder.setPath("text/plain").toString(), configurer -> configurer.body(payload -> payload
+            .raw(raw -> raw.text("")))).str(), MESSAGE);
+        assert StringUtils.equal(httpClient.post(uriBuilder.setPath("text/xml").toString(), configurer -> configurer.body(payload -> payload
+            .raw(raw -> raw.xml("<xml/>")))).str(), MESSAGE);
+        assert StringUtils.equal(httpClient.post(uriBuilder.setPath("text/html").toString(), configurer -> configurer.body(payload -> payload
+            .raw(raw -> raw.html("<html/>")))).str(), MESSAGE);
+
+        httpClient.close();
+        disposableServer.disposeNow();
     }
 
     @Test
@@ -192,16 +240,90 @@ public class HttpClientTests {
         }));
         String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(disposableServer.port()).build().toString();
         byte[] bytes = MESSAGE.getBytes(StandardCharsets.UTF_8);
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.publisher(Mono.just(Unpooled.wrappedBuffer(bytes)))))).str(), MESSAGE);
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.publisher(Mono.just(Unpooled.wrappedBuffer(bytes)), "text/plain")))).str(), MESSAGE);
         assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.bytes(bytes)))).str(), MESSAGE);
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.bytes(bytes, "text/plain")))).str(), MESSAGE);
         File tempFile = File.createTempFile("__mrc", "mrc__");
         Files.write(tempFile.toPath(), bytes);
 
         assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.file(tempFile)))).str(), MESSAGE);
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.file(tempFile, "text/plain")))).str(), MESSAGE);
         try (FileInputStream ips = new FileInputStream(tempFile)) {
             assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.inputStream(ips)))).str(), MESSAGE);
         }
+        try (FileInputStream ips = new FileInputStream(tempFile)) {
+            assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.binary(binary -> binary.inputStream(ips, "text/plain")))).str(), MESSAGE);
+        }
 
         tempFile.delete();
+
+        httpClient.close();
+        disposableServer.disposeNow();
+    }
+
+    @Test
+    @SneakyThrows
+    void formData() {
+        ReactiveHttpUtils httpClient = ReactiveHttpUtils.getInstance();
+        DisposableServer disposableServer = createClient(httpServerRoutes -> httpServerRoutes.route(req -> true, (req, resp) -> {
+            String _charset = "utf-16";
+            Charset charset = Charset.forName(_charset);
+            resp.addHeader("content-type", "text/plain;charset=" + charset);
+            return resp.sendString(req.receiveForm()
+                .map(httpData -> {
+                    assert Objects.nonNull(httpData);
+                    assert StringUtils.equal(httpData.getName(), "_bytes");
+                    try {
+                        return new String(httpData.get(), StandardCharsets.UTF_8);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }), charset);
+        }));
+        String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(disposableServer.port()).build().toString();
+        byte[] bytes = MESSAGE.getBytes(StandardCharsets.UTF_8);
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.formData(formData -> formData.text("_bytes", MESSAGE)))).str(), MESSAGE);
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.formData(formData -> formData.bytes("_bytes", bytes)))).str(), MESSAGE);
+        File tempFile = File.createTempFile("__mrc", "mrc__");
+        Files.write(tempFile.toPath(), bytes);
+
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.formData(formData -> formData.file("_bytes", tempFile)))).str(), MESSAGE);
+        try (FileInputStream ips = new FileInputStream(tempFile)) {
+            assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.formData(formData -> formData.inputStream("_bytes", ips)))).str(), MESSAGE);
+        }
+
+        tempFile.delete();
+
+        httpClient.close();
+        disposableServer.disposeNow();
+    }
+
+    @Test
+    @SneakyThrows
+    void formUrlEncoded() {
+        ReactiveHttpUtils httpClient = ReactiveHttpUtils.getInstance();
+        DisposableServer disposableServer = createClient(httpServerRoutes -> httpServerRoutes.route(req -> true, (req, resp) -> {
+            String _charset = "utf-16";
+            Charset charset = Charset.forName(_charset);
+            resp.addHeader("content-type", "text/plain;charset=" + charset);
+
+            return resp.sendString(req.receiveForm()
+                .map(httpData -> {
+                    assert Objects.nonNull(httpData);
+                    assert StringUtils.equal(httpData.getName(), "message");
+                    try {
+                        return new String(httpData.get(), StandardCharsets.UTF_8);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }), charset);
+        }));
+        String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(disposableServer.port()).build().toString();
+        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.body(payload -> payload.formUrlEncoded(formData -> formData.text("message", MESSAGE)))).str(), MESSAGE);
+
+        httpClient.close();
+        disposableServer.disposeNow();
     }
 
     private static String jsonQuote(String json) {

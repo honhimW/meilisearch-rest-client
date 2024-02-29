@@ -221,7 +221,7 @@ Properties loadProfileProperties() {
     def properties = new Properties()
     properties.put('meili-search.host', '127.0.0.1')
     properties.put('meili-search.port', '7700')
-    properties.put('meili-search.api-key', '')
+    properties.put('meili-search.api-key', 'MASTER_KEY')
     def file = file("profile-${findProperty('profiles.active')}.properties")
     if (file.exists()) {
         file.withInputStream { properties.load(it) }

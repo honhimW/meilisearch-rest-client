@@ -15,7 +15,6 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
-import io.github.honhimw.ms.http.HttpFailureException;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
@@ -153,15 +152,7 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
             _fields = String.join(",", fields);
         }
         return get(String.format("/indexes/%s/documents/%s", indexUid, id), configurer -> configurer
-            .param("fields", _fields), typeRef)
-            .onErrorResume(throwable -> {
-                if (throwable instanceof HttpFailureException) {
-                    HttpFailureException httpFailureException = (HttpFailureException) throwable;
-                    return httpFailureException.getStatusCode() == 404;
-                } else {
-                    return false;
-                }
-            }, throwable -> Mono.empty());
+            .param("fields", _fields), typeRef);
     }
 
     @Override

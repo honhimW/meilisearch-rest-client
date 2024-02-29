@@ -27,6 +27,12 @@ import org.junit.jupiter.api.Test;
 public class FilterBuilderTests {
 
     @Test
+    void single() {
+        String exp = FilterBuilder.singleExpression(expression -> expression.equal("genres", "action"));
+        assert exp.equals("genres = 'action'");
+    }
+
+    @Test
     void stringEqual() {
         String filter = FilterBuilder.builder(expression -> expression.equal("genres", "action")).build();
         log.info(filter);
@@ -185,10 +191,12 @@ public class FilterBuilderTests {
             .baseGroup(filterBuilder -> filterBuilder
                 .base(expression -> expression.equal("genres", "comedy"))
                 .or(expression -> expression.equal("genres", "horror")))
-            .and(expression -> expression.unequal("director", "Jordan Peele"))
+            .andGroup(filterBuilder -> filterBuilder
+                .base(expression -> expression.unequal("director", "Jordan Peele"))
+                .or(expression -> expression.unequal("director", "honhimw")))
             .build();
         log.info(filter);
-        assert filter.equals("(genres = 'comedy' OR genres = 'horror') AND director != 'Jordan Peele'");
+        assert filter.equals("(genres = 'comedy' OR genres = 'horror') AND (director != 'Jordan Peele' OR director != 'honhimw')");
     }
 
     @Test

@@ -12,7 +12,7 @@ import java.time.temporal.ChronoField;
 @SuppressWarnings("unused")
 public class DateTimeUtils {
 
-    public static final String RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'";
+    public static final String RFC_3339 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final DateTimeFormatter RFC_3339_FORMATTER = new DateTimeFormatterBuilder()
         .appendPattern("yyyy-MM-dd")
         .appendLiteral('T')

@@ -48,7 +48,12 @@ public interface ReactiveIndexes {
     default Mono<Page<Index>> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
         page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
+        return list(pageRequest);
+    }
+
+    @Operation(method = "GET", tags = "/indexes")
+    default Mono<Page<Index>> list(PageRequest page) {
+        return list(page.toOffset(), page.toLimit());
     }
 
     /**

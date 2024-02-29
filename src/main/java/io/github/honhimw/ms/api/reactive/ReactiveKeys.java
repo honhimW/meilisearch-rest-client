@@ -55,20 +55,20 @@ public interface ReactiveKeys {
      * @param keyOrUid key value of the requested API key, uid of the requested API key
      */
     @Operation(method = "GET", tags = "/keys/{key_or_uid}")
-    Mono<Key> list(String keyOrUid);
+    Mono<Key> get(String keyOrUid);
 
     /**
      * Create an API key with the provided description, permissions, and expiration date.
      *
      */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
-    Mono<Key> create(String keyOrUid, CreateKeyRequest request);
+    Mono<Key> create(CreateKeyRequest request);
 
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
-    default Mono<Key> create(String keyOrUid, Consumer<CreateKeyRequest.Builder> builder) {
+    default Mono<Key> create(Consumer<CreateKeyRequest.Builder> builder) {
         CreateKeyRequest.Builder _builder = CreateKeyRequest.builder();
         builder.accept(_builder);
-        return create(keyOrUid, _builder.build());
+        return create(_builder.build());
     }
 
     /**

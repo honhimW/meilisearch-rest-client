@@ -23,6 +23,9 @@ import io.github.honhimw.ms.model.UpdateKeyRequest;
 import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 /**
  * @author hon_him
  * @since 2024-01-04
@@ -42,18 +45,28 @@ class KeysImpl implements Keys {
     }
 
     @Override
-    public Key get(String keyOrUid) {
-        return ReactorUtils.blockNonNull(_reactive.list(keyOrUid));
+    public Optional<Key> get(String keyOrUid) {
+        return _reactive.get(keyOrUid).blockOptional();
     }
 
     @Override
-    public Key create(String keyOrUid, CreateKeyRequest request) {
-        return ReactorUtils.blockNonNull(_reactive.create(keyOrUid, request));
+    public Key create(CreateKeyRequest request) {
+        return ReactorUtils.blockNonNull(_reactive.create(request));
+    }
+
+    @Override
+    public Key create(Consumer<CreateKeyRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_reactive.create(builder));
     }
 
     @Override
     public Key update(String keyOrUid, UpdateKeyRequest request) {
         return ReactorUtils.blockNonNull(_reactive.update(keyOrUid, request));
+    }
+
+    @Override
+    public Key update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_reactive.update(keyOrUid, builder));
     }
 
     @Override

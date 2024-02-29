@@ -81,7 +81,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
 
     @Override
     public Mono<TaskInfo> update(String uid, String primaryKey) {
-        return post(String.format("/indexes/%s", uid), configurer -> configurer
+        return patch(String.format("/indexes/%s", uid), configurer -> configurer
             .body(payload -> payload
                 .raw(raw -> {
                     Map<String, String> obj = new HashMap<>();

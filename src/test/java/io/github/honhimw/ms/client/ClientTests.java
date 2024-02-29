@@ -15,14 +15,17 @@
 package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.api.ExperimentalFeaturesSettings;
+import io.github.honhimw.ms.api.Keys;
 import io.github.honhimw.ms.api.reactive.Logs;
-import io.github.honhimw.ms.model.ExperimentalFeatures;
-import io.github.honhimw.ms.model.Version;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * @author hon_him
@@ -53,6 +56,29 @@ public class ClientTests extends TestBase {
         assert configure.getLogsRoute();
         Logs logs = blockingClient.logs();
         logs.reset();
+    }
+
+    @Order(2)
+    @Test
+    void keys() {
+        Keys keys = blockingClient.keys();
+        LocalDateTime now = LocalDateTime.now();
+        Key key = keys.create(builder -> builder
+            .name("rest-client-test")
+            .actions(toList(KeyAction.SEARCH))
+            .indexes(toList(INDEX))
+            .expiresAt(now.plusHours(1)));
+        assert key.getExpiresAt().isEqual(now.plusHours(1));
+        Page<Key> list = keys.list(null, null);
+        assert list.getTotal() > 0;
+        Optional<Key> optionalKey = keys.get(key.getKey());
+        assert optionalKey.isPresent();
+        assert optionalKey.get().getUid().equals(key.getUid());
+        Key update = keys.update(key.getUid(), builder -> builder.name("rest-client-tests"));
+        assert update.getName().equals("rest-client-tests");
+        keys.delete(key.getUid());
+        assert !keys.get(key.getUid()).isPresent();
+
     }
 
 }
