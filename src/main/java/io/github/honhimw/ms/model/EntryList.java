@@ -28,10 +28,12 @@ public class EntryList {
 
     private List<Map.Entry<String, String>> list;
 
+    private EntryList() {
+        this.list = new ArrayList<>();
+    }
+
     public static EntryList newInstance() {
-        EntryList entryList = new EntryList();
-        entryList.list = new ArrayList<>();
-        return entryList;
+        return new EntryList();
     }
 
     public EntryList add(String key, String value) {

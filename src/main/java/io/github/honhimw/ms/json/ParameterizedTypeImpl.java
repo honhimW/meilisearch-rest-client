@@ -22,10 +22,12 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
+ * @see sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
  * @author hon_him
  * @since 2024-01-08
  */
 
+@SuppressWarnings("all")
 public class ParameterizedTypeImpl implements ParameterizedType {
     private final Type[] actualTypeArguments;
     private final Class<?> rawType;

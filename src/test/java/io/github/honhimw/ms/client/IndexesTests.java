@@ -15,7 +15,6 @@
 package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.api.Indexes;
-import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
 import io.github.honhimw.ms.model.Index;
 import io.github.honhimw.ms.model.IndexStats;
 import io.github.honhimw.ms.model.Page;
@@ -27,6 +26,7 @@ import reactor.test.StepVerifier;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,103 +38,67 @@ import java.util.stream.Stream;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class IndexesTests extends TestBase {
 
-    protected ReactiveIndexes reactiveIndexes;
-    protected Indexes blockingIndexes;
+    protected Indexes indexes;
 
     @BeforeEach
     void initIndexes() {
-        reactiveIndexes = reactiveClient.indexes();
-        blockingIndexes = blockingClient.indexes();
+        indexes = blockingClient.indexes();
     }
 
     @Order(-1)
     @Test
     void delete() {
-        Duration duration = StepVerifier.create(await(reactiveIndexes.delete(INDEX)))
-            .verifyComplete();
-        log.info("delete index task wait for: {}", duration);
+        TaskInfo delete = indexes.delete(INDEX);
+        await(delete);
+        assert !indexes.get(INDEX).isPresent();
     }
 
     @Order(0)
     @Test
     void create() {
-        Mono<TaskInfo> id = reactiveIndexes.create(INDEX, "id");
-        Duration duration = StepVerifier.create(await(id))
-            .verifyComplete();
-        log.info("create task wait for: {}", duration);
+        TaskInfo taskInfo = indexes.create(INDEX, "id");
+        await(taskInfo);
+        assert taskInfo.getIndexUid().equals(INDEX);
     }
 
     @Order(1)
     @Test
     void listIndexes() {
-        Mono<Page<Index>> list = reactiveIndexes.list(null, null);
-        StepVerifier.create(list)
-            .assertNext(indexPage -> {
-                assert indexPage.getLimit() == 20;
-                assert indexPage.getOffset() == 0;
-                assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(INDEX);
-                if (log.isDebugEnabled()) {
-                    log.debug(jsonHandler.toJson(indexPage));
-                }
-            })
-            .verifyComplete();
+        Page<Index> indexPage = indexes.list(null, null);
+        assert indexPage.getOffset() == 0;
+        assert indexPage.getLimit() == 20;
+        assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(INDEX);
     }
 
     @Order(1)
     @Test
     void listIndexesByPageRequest() {
-        Mono<Page<Index>> list = reactiveIndexes.list(pageRequest -> pageRequest.no(0).size(10));
-        StepVerifier.create(list)
-            .assertNext(indexPage -> {
-                assert indexPage.getLimit() == 10;
-                assert indexPage.getOffset() == 0;
-                assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(INDEX);
-                if (log.isDebugEnabled()) {
-                    log.debug(jsonHandler.toJson(indexPage));
-                }
-            })
-            .verifyComplete();
+        Page<Index> indexPage = indexes.list(pageRequest -> pageRequest.no(0).size(10));
+        assert indexPage.getOffset() == 0;
+        assert indexPage.getLimit() == 10;
+        assert indexPage.getResults().stream().map(Index::getUid).collect(Collectors.toList()).contains(INDEX);
     }
 
     @Order(2)
     @Test
     void getOne() {
-        Mono<Index> movies = reactiveIndexes.get(INDEX);
-        StepVerifier.create(movies)
-            .assertNext(index -> {
-                assert index != null;
-                log.info(jsonHandler.toJson(index));
-            })
-            .verifyComplete();
-    }
-
-    @Order(2)
-    @Test
-    void getOne2() {
-        Mono<Index> movies = reactiveClient.indexes(indexes1 -> indexes1.get(INDEX));
-        StepVerifier.create(movies)
-            .assertNext(index -> {
-                assert index != null;
-                log.info(jsonHandler.toJson(index));
-            })
-            .verifyComplete();
+        Optional<Index> index = indexes.get(INDEX);
+        assert index.isPresent();
     }
 
     @Order(3)
     @Test
     void update() {
-        List<String> pks = Stream.of("release_date", "id").collect(Collectors.toList());
-        for (String newPk : pks) {
-            Mono<String> updateTask = reactiveClient.indexes().update(INDEX, newPk)
-                .flatMap(taskInfo -> reactiveClient.tasks().waitForTask(taskInfo.getTaskUid()))
-                .then(reactiveClient.indexes().get(INDEX).map(Index::getPrimaryKey));
-
-            StepVerifier.create(updateTask)
-                .assertNext(pk -> {
-                    assert StringUtils.equal(pk, pk);
-                })
-                .verifyComplete();
-        }
+        TaskInfo update = indexes.update(INDEX, "title");
+        await(update);
+        Optional<Index> index = indexes.get(INDEX);
+        assert index.isPresent();
+        assert index.get().getPrimaryKey().equals("title");
+        TaskInfo update1 = indexes.update(INDEX, "id");
+        await(update1);
+        Optional<Index> index1 = indexes.get(INDEX);
+        assert index1.isPresent();
+        assert index1.get().getPrimaryKey().equals("id");
     }
 
     @Order(4)
@@ -145,6 +109,24 @@ public class IndexesTests extends TestBase {
                 assert !aBoolean : "currently should not in indexing stats.";
             })
             .verifyComplete();
+    }
+
+    @Order(5)
+    @Test
+    void swap() {
+        TaskInfo save = indexes.documents(INDEX).save(movies);
+        await(save);
+        IndexStats stats = indexes.stats(INDEX);
+        assert stats.getNumberOfDocuments() > 0;
+        String ANOTHER_INDEX = "movie_test2";
+        TaskInfo taskInfo = indexes.create(ANOTHER_INDEX);
+        await(taskInfo);
+        TaskInfo swap = indexes.swap(entryList -> entryList.add(INDEX, ANOTHER_INDEX));
+        await(swap);
+        stats = indexes.stats(INDEX);
+        assert stats.getNumberOfDocuments() == 0;
+        TaskInfo delete = indexes.delete(ANOTHER_INDEX);
+        await(delete);
     }
 
 }

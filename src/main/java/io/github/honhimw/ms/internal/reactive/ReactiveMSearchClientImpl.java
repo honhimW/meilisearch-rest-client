@@ -146,6 +146,11 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
     }
 
     @Override
+    public ReactiveLogs logs() {
+        return new ReactiveLogsImpl(this);
+    }
+
+    @Override
     public ReactiveExperimentalFeaturesSettings experimentalFeatures() {
         return new ReactiveExperimentalFeaturesSettingsImpl(this);
     }

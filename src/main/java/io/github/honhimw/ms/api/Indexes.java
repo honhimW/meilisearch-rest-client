@@ -19,9 +19,9 @@ import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -44,11 +44,10 @@ public interface Indexes {
     Page<Index> list(@Nullable Integer offset, @Nullable Integer limit);
 
     @Operation(method = "GET", tags = "/indexes")
-    default Page<Index> list(Consumer<PageRequest> page) {
-        PageRequest pageRequest = new PageRequest();
-        page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
-    }
+    Page<Index> list(Consumer<PageRequest> page);
+
+    @Operation(method = "GET", tags = "/indexes")
+    Page<Index> list(PageRequest page);
 
     /**
      * Get information about an index.
@@ -56,7 +55,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}")
-    Index get(String uid);
+    Optional<Index> get(String uid);
 
     /**
      * Create an index.
@@ -69,9 +68,7 @@ public interface Indexes {
     TaskInfo create(String uid, @Nullable String primaryKey);
 
     @Operation(method = "POST", tags = "/indexes")
-    default TaskInfo create(String uid) {
-        return create(uid, null);
-    }
+    TaskInfo create(String uid);
 
     /**
      * Update an index. Specify a primaryKey if it doesn't already exists yet.
@@ -107,11 +104,7 @@ public interface Indexes {
      * @param consumer entryList configurer
      */
     @Operation(method = "POST", tags = "/swap-indexes")
-    default TaskInfo swap(Consumer<EntryList> consumer) {
-        EntryList entryList = new EntryList();
-        consumer.accept(entryList);
-        return swap(entryList.getList());
-    }
+    TaskInfo swap(Consumer<EntryList> consumer);
 
     /**
      * Documents are objects composed of fields that can store any type of data.
@@ -125,25 +118,15 @@ public interface Indexes {
     @Operation(tags = "/indexes/{index_uid}/documents")
     Documents documents(String uid);
 
-    default <R> R documents(String uid, Function<Documents, R> operation) {
-        return operation.apply(documents(uid));
-    }
+    <R> R documents(String uid, Function<Documents, R> operation);
 
     <T> TypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
 
-    default <T> TypedDocuments<T> documents(String uid, Class<T> type) {
-        // @formatter:off
-        return documents(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
-    }
+    <T> TypedDocuments<T> documents(String uid, Class<T> type);
 
-    default <T, R> R documents(String uid, TypeRef<T> typeRef, Function<TypedDocuments<T>, R> operation) {
-        return operation.apply(documents(uid, typeRef));
-    }
+    <T, R> R documents(String uid, TypeRef<T> typeRef, Function<TypedDocuments<T>, R> operation);
 
-    default <T, R> R documents(String uid, Class<T> type, Function<TypedDocuments<T>, R> operation) {
-        return operation.apply(documents(uid, type));
-    }
+    <T, R> R documents(String uid, Class<T> type, Function<TypedDocuments<T>, R> operation);
 
     /**
      * Meilisearch exposes 3 routes to perform document searches:
@@ -159,32 +142,28 @@ public interface Indexes {
     @Operation(tags = "/indexes/{index_uid}/search")
     Search search(String uid);
 
-    default <R> R search(String uid, Function<Search, R> operation) {
-        return operation.apply(search(uid));
-    }
+    <R> R search(String uid, Function<Search, R> operation);
 
     <T> TypedSearch<T> search(String uid, TypeRef<T> typeRef);
 
-    default <T> TypedSearch<T> search(String uid, Class<T> type) {
-        // @formatter:off
-        return search(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
-    }
+    <T> TypedSearch<T> search(String uid, Class<T> type);
 
-    default <T, R> R search(String uid, TypeRef<T> typeRef, Function<TypedSearch<T>, R> operation) {
-        return operation.apply(search(uid, typeRef));
-    }
+    <T, R> R search(String uid, TypeRef<T> typeRef, Function<TypedSearch<T>, R> operation);
 
-    default <T, R> R search(String uid, Class<T> type, Function<TypedSearch<T>, R> operation) {
-        return operation.apply(search(uid, type));
-    }
+    <T, R> R search(String uid, Class<T> type, Function<TypedSearch<T>, R> operation);
+
+    <T> TypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
+
+    <T> TypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type);
+
+    <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<TypedDetailsSearch<T>, R> operation);
+
+    <T, R> R searchWithDetails(String uid, Class<T> type, Function<TypedDetailsSearch<T>, R> operation);
 
     @Operation(tags = "/indexes/{indexUid}/settings")
     Settings settings(String uid);
 
-    default <R> R settings(String uid, Function<Settings, R> operation) {
-        return operation.apply(settings(uid));
-    }
+    <R> R settings(String uid, Function<Settings, R> operation);
 
     /**
      * Get stats of all indexes.

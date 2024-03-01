@@ -51,22 +51,26 @@ class ReactiveKeysImpl extends AbstractReactiveImpl implements ReactiveKeys {
     }
 
     @Override
-    public Mono<Key> list(String keyOrUid) {
-        return null;
+    public Mono<Key> get(String keyOrUid) {
+        return get("/keys/" + keyOrUid, new TypeRef<Key>() {
+        });
     }
 
     @Override
-    public Mono<Key> create(String keyOrUid, CreateKeyRequest request) {
-        return null;
+    public Mono<Key> create(CreateKeyRequest request) {
+        return post("/keys", configurer -> json(configurer, request), new TypeRef<Key>() {
+        });
     }
 
     @Override
     public Mono<Key> update(String keyOrUid, UpdateKeyRequest request) {
-        return null;
+        return patch("/keys/" + keyOrUid, configurer -> json(configurer, request), new TypeRef<Key>() {
+        });
     }
 
     @Override
     public Mono<Void> delete(String keyOrUid) {
-        return null;
+        return delete("/keys/" + keyOrUid, new TypeRef<Void>() {
+        });
     }
 }

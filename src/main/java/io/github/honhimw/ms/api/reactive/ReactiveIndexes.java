@@ -48,7 +48,12 @@ public interface ReactiveIndexes {
     default Mono<Page<Index>> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
         page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
+        return list(pageRequest);
+    }
+
+    @Operation(method = "GET", tags = "/indexes")
+    default Mono<Page<Index>> list(PageRequest page) {
+        return list(page.toOffset(), page.toLimit());
     }
 
     /**
@@ -109,7 +114,7 @@ public interface ReactiveIndexes {
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     default Mono<TaskInfo> swap(Consumer<EntryList> consumer) {
-        EntryList entryList = new EntryList();
+        EntryList entryList = EntryList.newInstance();
         consumer.accept(entryList);
         return swap(entryList.getList());
     }
@@ -133,9 +138,7 @@ public interface ReactiveIndexes {
     <T> ReactiveTypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
 
     default <T> ReactiveTypedDocuments<T> documents(String uid, Class<T> type) {
-        // @formatter:off
-        return documents(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return documents(uid, TypeRef.of(type));
     }
 
     default <T, R> R documents(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDocuments<T>, R> operation) {
@@ -168,9 +171,7 @@ public interface ReactiveIndexes {
     <T> ReactiveTypedSearch<T> search(String uid, TypeRef<T> typeRef);
 
     default <T> ReactiveTypedSearch<T> search(String uid, Class<T> type) {
-        // @formatter:off
-        return search(uid, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return search(uid, TypeRef.of(type));
     }
 
     default <T, R> R search(String uid, TypeRef<T> typeRef, Function<ReactiveTypedSearch<T>, R> operation) {
@@ -179,6 +180,20 @@ public interface ReactiveIndexes {
 
     default <T, R> R search(String uid, Class<T> type, Function<ReactiveTypedSearch<T>, R> operation) {
         return operation.apply(search(uid, type));
+    }
+
+    <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
+
+    default <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type) {
+        return searchWithDetails(uid, TypeRef.of(type));
+    }
+
+    default <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
+        return operation.apply(searchWithDetails(uid, typeRef));
+    }
+
+    default <T, R> R searchWithDetails(String uid, Class<T> type, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
+        return operation.apply(searchWithDetails(uid, type));
     }
 
     @Operation(tags = "/indexes/{indexUid}/settings")

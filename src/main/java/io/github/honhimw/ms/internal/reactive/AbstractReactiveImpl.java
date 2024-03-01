@@ -14,9 +14,11 @@
 
 package io.github.honhimw.ms.internal.reactive;
 
+import io.github.honhimw.ms.http.HttpFailureException;
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.json.TypeRef;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
@@ -104,19 +106,33 @@ public abstract class AbstractReactiveImpl {
     }
 
     protected <T> Mono<T> extract(ReactiveHttpUtils.ReactiveHttpResult receiver, TypeRef<T> typeRef) {
-        return receiver.responseSingle((httpClientResponse, byteBufMono) -> byteBufMono.asByteArray()
-            .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
-            .handle((s, sink) -> {
-                int code = httpClientResponse.status().code();
+        return receiver.responseSingle((httpClientResponse, byteBufMono) -> {
+                HttpResponseStatus status = httpClientResponse.status();
+                int code = status.code();
                 if (code < 200 || 300 <= code) {
-                    sink.error(new IllegalStateException(String.format("failure with status code: [%d] [%s] %s, %s", code, httpClientResponse.method(), httpClientResponse.resourceUrl(), s)));
+                    return byteBufMono.asByteArray()
+                        .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+                        .switchIfEmpty(Mono.just(status.reasonPhrase()))
+                        .handle((s, sink) -> {
+                            HttpFailureException httpFailureException = new HttpFailureException(code, s);
+                            httpFailureException.setMethod(httpClientResponse.method().name());
+                            httpFailureException.setUri(httpClientResponse.resourceUrl());
+                            sink.error(httpFailureException);
+                        });
                 } else {
-                    T t = jsonHandler.fromJson(s, typeRef);
-                    if (Objects.nonNull(t)) {
-                        sink.next(t);
-                    }
+                    return byteBufMono.asByteArray()
+                        .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+                        .mapNotNull(s -> jsonHandler.fromJson(s, typeRef));
                 }
-            }));
+            })
+            .onErrorResume(throwable -> {
+                if (throwable instanceof HttpFailureException) {
+                    HttpFailureException httpFailureException = (HttpFailureException) throwable;
+                    return httpFailureException.getStatusCode() == 404;
+                } else {
+                    return false;
+                }
+            }, throwable -> Mono.empty());
     }
 
     protected void json(ReactiveHttpUtils.Configurer configurer, Object object) {

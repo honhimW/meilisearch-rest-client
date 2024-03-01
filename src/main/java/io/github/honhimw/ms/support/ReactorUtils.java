@@ -41,9 +41,7 @@ public class ReactorUtils {
     @Nonnull
     public static <R> List<R> blockNonNull(@Nonnull Flux<R> flux) {
         List<R> result = flux.collectList().block();
-        if (Objects.isNull(result)) {
-            throw new NoSuchElementException("blocking with an empty result.");
-        }
+        Asserts.status(Objects.nonNull(result), "Flux#collectList will never be null.");
         return result;
     }
 

@@ -54,9 +54,7 @@ public interface ReactiveSearch {
     <T> Mono<SearchResponse<T>> find(String q, TypeRef<T> typeRef);
 
     default <T> Mono<SearchResponse<T>> find(String q, Class<T> type) {
-        // @formatter:off
-        return find(q, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return find(q, TypeRef.of(type));
     }
 
     /**
@@ -79,18 +77,18 @@ public interface ReactiveSearch {
     <T> Mono<SearchResponse<T>> find(SearchRequest request, TypeRef<T> typeRef);
 
     default <T> Mono<SearchResponse<T>> find(SearchRequest request, Class<T> type) {
-        // @formatter:off
-        return find(request, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return find(request, TypeRef.of(type));
     }
 
-    default <T> Mono<SearchResponse<T>> find(Consumer<SearchRequest.Builder> builder, Class<T> type) {
+    default <T> Mono<SearchResponse<T>> find(Consumer<SearchRequest.Builder> builder, TypeRef<T> typeRef) {
         SearchRequest.Builder _builder = SearchRequest.builder();
         builder.accept(_builder);
         SearchRequest request = _builder.build();
-        // @formatter:off
-        return find(request, new TypeRef<T>() { @Override public Type getType() { return type; }});
-        // @formatter:on
+        return find(request, typeRef);
+    }
+
+    default <T> Mono<SearchResponse<T>> find(Consumer<SearchRequest.Builder> builder, Class<T> type) {
+        return find(builder, TypeRef.of(type));
     }
 
     /**

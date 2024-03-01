@@ -21,6 +21,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -146,5 +147,10 @@ public class GsonJsonHandler implements JsonHandler {
     @Override
     public <T> T fromJson(String json, TypeRef<T> typeRef) {
         return gson.fromJson(json, typeRef.getType());
+    }
+
+    @Override
+    public <T> T transform(Object o, TypeRef<T> typeRef) {
+        return gson.fromJson(gson.toJsonTree(o), typeRef.getType());
     }
 }

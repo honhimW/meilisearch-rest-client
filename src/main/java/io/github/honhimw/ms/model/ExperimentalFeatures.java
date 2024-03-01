@@ -34,9 +34,6 @@ public class ExperimentalFeatures implements Serializable {
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean metrics;
 
-    @Schema(description = "true if feature is active, false otherwise")
-    private Boolean scoreDetails;
-
     /**
      * <a href="https://github.com/meilisearch/documentation/pull/2647">documentation ISSUE #2647</a>
      */
@@ -45,5 +42,13 @@ public class ExperimentalFeatures implements Serializable {
 
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean exportPuffinReports;
+
+    /**
+     * @deprecated this feature was stabilized since v1.7 (auto-enabled)
+     */
+    @Deprecated
+    @Schema(description = "true if feature is active, false otherwise", deprecated = true)
+    private Boolean scoreDetails;
+
 
 }

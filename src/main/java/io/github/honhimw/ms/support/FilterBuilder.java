@@ -207,8 +207,25 @@ public class FilterBuilder {
             return this;
         }
 
+        /**
+         * If you trying to determine whether a parameter has a value, you may mean to use {@link #isNullOrNotExists(String)}.
+         */
         public Expression isNull(String attribute) {
             this.expression = String.format("%s %s", attribute, Operator.IS_NULL.symbol());
+            return this;
+        }
+
+        /**
+         * Using 'xxx IS NULL' will return documents that doesn't contain the attribute,
+         * it may cause some confusing results.
+         * <p>
+         * Basically, this method generate a filter expression as fallow:
+         * <pre>
+         * "(xxx NOT EXISTS OR xxx IS NULL)"
+         * </pre>
+         */
+        public Expression isNullOrNotExists(String attribute) {
+            this.expression = String.format("(%s %s %s %s %s)", attribute, Operator.NOT_EXISTS.symbol(), Operator.OR.symbol(), attribute, Operator.IS_NULL.symbol());
             return this;
         }
 
@@ -265,9 +282,9 @@ public class FilterBuilder {
         EXISTS("EXISTS"),
         NOT_EXISTS("NOT EXISTS"),
         IS_EMPTY("IS EMPTY"),
-        NOT_EMPTY("NOT EMPTY"),
+        NOT_EMPTY("IS NOT EMPTY"),
         IS_NULL("IS NULL"),
-        NOT_NULL("NOT NULL"),
+        NOT_NULL("IS NOT NULL"),
         IN("IN"),
         NOT_IN("NOT IN"),
         NOT("NOT"),

@@ -29,7 +29,6 @@
 package io.github.honhimw.ms;
 
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
-import io.github.honhimw.ms.http.URIBuilder;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.support.Asserts;
@@ -62,7 +61,7 @@ public final class MSearchConfig {
     }
 
     public static Builder withDefault() {
-        return new Builder()
+        return builder()
             .jsonHandler(new JacksonJsonHandler())
             .httpClient(ReactiveHttpUtils.getInstance());
     }

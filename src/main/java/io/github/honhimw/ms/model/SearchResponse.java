@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <h2>Exhaustive and estimated total number of search results</h2>
@@ -68,16 +69,28 @@ public class SearchResponse<T> implements Serializable {
     @Schema(description = "Current search results page")
     private Integer page;
 
-    @Schema(description = "Distribution of the given facets")
-    private Object facetDistribution;
-
-    @Schema(description = "The numeric min and max values per facet")
-    private Object facetStats;
-
     @Schema(description = "Processing time of the query")
     private Long processingTimeMs;
 
     @Schema(description = "Query originating the response")
     private String query;
+
+    @Schema(description = "Distribution of the given facets")
+    private Map<String, Map<String, Integer>> facetDistribution;
+
+    @Schema(description = "The numeric min and max values per facet")
+    private Map<String, FacetStats> facetStats;
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FacetStats implements Serializable {
+        @Schema(description = "lowest numerical value")
+        private Number min;
+
+        @Schema(description = "highest numerical value")
+        private Number max;
+    }
 
 }

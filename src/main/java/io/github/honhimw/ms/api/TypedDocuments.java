@@ -19,10 +19,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
-import reactor.core.publisher.Mono;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -47,11 +46,10 @@ public interface TypedDocuments<T> {
     Page<T> list(@Nullable Integer offset, @Nullable Integer limit);
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    default Page<T> list(Consumer<PageRequest> page) {
-        PageRequest pageRequest = new PageRequest();
-        page.accept(pageRequest);
-        return list(pageRequest.toOffset(), pageRequest.toLimit());
-    }
+    Page<T> list(Consumer<GetDocumentRequest> page);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    Page<T> list(GetDocumentRequest page);
 
     /**
      * Add a list of documents or replace them if they already exist.
@@ -71,6 +69,9 @@ public interface TypedDocuments<T> {
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(String json);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    TaskInfo save(T t);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(Collection<? extends T> collection);
@@ -95,6 +96,9 @@ public interface TypedDocuments<T> {
     TaskInfo update(String json);
 
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    TaskInfo update(T t);
+
+    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(Collection<? extends T> collection);
 
     /**
@@ -115,7 +119,7 @@ public interface TypedDocuments<T> {
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
-    TaskInfo batchDelete(List<String> ids);
+    TaskInfo batchDelete(Collection<String> ids);
 
     /**
      * Delete a set of documents based on a filter.
@@ -134,7 +138,7 @@ public interface TypedDocuments<T> {
      *               Default *.
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
-    T get(String id, @Nullable String... fields);
+    Optional<T> get(String id, @Nullable String... fields);
 
     /**
      * Delete one document based on its unique id.

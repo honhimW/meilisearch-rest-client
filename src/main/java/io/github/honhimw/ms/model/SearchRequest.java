@@ -15,10 +15,15 @@
 package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.Experimental;
+import io.github.honhimw.ms.support.FilterBuilder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -29,7 +34,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class SearchRequest extends FilterableAttributesRequest {
 
     @Schema(description = "Query string")
@@ -83,6 +87,9 @@ public class SearchRequest extends FilterableAttributesRequest {
     @Schema(description = "Display the global ranking score of a document", defaultValue = "false")
     private Boolean showRankingScore;
 
+    @Schema(description = "Display the global ranking score of a document", defaultValue = "false")
+    private Boolean showRankingScoreDetails;
+
     @Schema(description = "Restrict search to the specified attributes", defaultValue = "[\"*\"]")
     private List<String> attributesToSearchOn;
 
@@ -93,4 +100,180 @@ public class SearchRequest extends FilterableAttributesRequest {
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Schema(description = "must be an array of numbers indicating the search vector. You must generate these yourself when using vector search with user-provided embeddings.")
     private List<Number> vector;
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private String filter;
+        private String q;
+        private Integer offset;
+        private Integer limit;
+        private Integer hitsPerPage;
+        private Integer page;
+        private List<String> facets;
+        private List<String> attributesToRetrieve;
+        private List<String> attributesToCrop;
+        private Integer cropLength;
+        private String cropMarker;
+        private List<String> attributesToHighlight;
+        private String highlightPreTag;
+        private String highlightPostTag;
+        private Boolean showMatchesPosition;
+        private List<String> sort;
+        private String matchingStrategy;
+        private Boolean showRankingScore;
+        private Boolean showRankingScoreDetails;
+        private List<String> attributesToSearchOn;
+        private Hybrid hybrid;
+        private List<Number> vector;
+
+        private Builder() {
+        }
+
+        public Builder filter(String filter) {
+            this.filter = filter;
+            return this;
+        }
+
+        public Builder filter(Consumer<FilterBuilder> consumer) {
+            FilterBuilder filterBuilder = FilterBuilder.builder();
+            consumer.accept(filterBuilder);
+            this.filter = filterBuilder.build();
+            return this;
+        }
+
+        public Builder q(String q) {
+            this.q = q;
+            return this;
+        }
+
+        public Builder offset(Integer offset) {
+            this.offset = offset;
+            return this;
+        }
+
+        public Builder limit(Integer limit) {
+            this.limit = limit;
+            return this;
+        }
+
+        public Builder hitsPerPage(Integer hitsPerPage) {
+            this.hitsPerPage = hitsPerPage;
+            return this;
+        }
+
+        public Builder page(Integer page) {
+            this.page = page;
+            return this;
+        }
+
+        public Builder facets(List<String> facets) {
+            this.facets = facets;
+            return this;
+        }
+
+        public Builder attributesToRetrieve(List<String> attributesToRetrieve) {
+            this.attributesToRetrieve = attributesToRetrieve;
+            return this;
+        }
+
+        public Builder attributesToCrop(List<String> attributesToCrop) {
+            this.attributesToCrop = attributesToCrop;
+            return this;
+        }
+
+        public Builder cropLength(Integer cropLength) {
+            this.cropLength = cropLength;
+            return this;
+        }
+
+        public Builder cropMarker(String cropMarker) {
+            this.cropMarker = cropMarker;
+            return this;
+        }
+
+        public Builder attributesToHighlight(List<String> attributesToHighlight) {
+            this.attributesToHighlight = attributesToHighlight;
+            return this;
+        }
+
+        public Builder highlightPreTag(String highlightPreTag) {
+            this.highlightPreTag = highlightPreTag;
+            return this;
+        }
+
+        public Builder highlightPostTag(String highlightPostTag) {
+            this.highlightPostTag = highlightPostTag;
+            return this;
+        }
+
+        public Builder showMatchesPosition(Boolean showMatchesPosition) {
+            this.showMatchesPosition = showMatchesPosition;
+            return this;
+        }
+
+        public Builder sort(List<String> sort) {
+            this.sort = sort;
+            return this;
+        }
+
+        public Builder matchingStrategy(String matchingStrategy) {
+            this.matchingStrategy = matchingStrategy;
+            return this;
+        }
+
+        public Builder showRankingScore(Boolean showRankingScore) {
+            this.showRankingScore = showRankingScore;
+            return this;
+        }
+
+        public Builder showRankingScoreDetails(Boolean showRankingScoreDetails) {
+            this.showRankingScoreDetails = showRankingScoreDetails;
+            return this;
+        }
+
+        public Builder attributesToSearchOn(List<String> attributesToSearchOn) {
+            this.attributesToSearchOn = attributesToSearchOn;
+            return this;
+        }
+
+        public Builder hybrid(Hybrid hybrid) {
+            this.hybrid = hybrid;
+            return this;
+        }
+
+        public Builder vector(List<Number> vector) {
+            this.vector = vector;
+            return this;
+        }
+
+        public SearchRequest build() {
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.setFilter(filter);
+            searchRequest.setQ(q);
+            searchRequest.setOffset(offset);
+            searchRequest.setLimit(limit);
+            searchRequest.setHitsPerPage(hitsPerPage);
+            searchRequest.setPage(page);
+            searchRequest.setFacets(facets);
+            searchRequest.setAttributesToRetrieve(attributesToRetrieve);
+            searchRequest.setAttributesToCrop(attributesToCrop);
+            searchRequest.setCropLength(cropLength);
+            searchRequest.setCropMarker(cropMarker);
+            searchRequest.setAttributesToHighlight(attributesToHighlight);
+            searchRequest.setHighlightPreTag(highlightPreTag);
+            searchRequest.setHighlightPostTag(highlightPostTag);
+            searchRequest.setShowMatchesPosition(showMatchesPosition);
+            searchRequest.setSort(sort);
+            searchRequest.setMatchingStrategy(matchingStrategy);
+            searchRequest.setShowRankingScore(showRankingScore);
+            searchRequest.setShowRankingScoreDetails(showRankingScoreDetails);
+            searchRequest.setAttributesToSearchOn(attributesToSearchOn);
+            searchRequest.setHybrid(hybrid);
+            searchRequest.setVector(vector);
+            return searchRequest;
+        }
+    }
 }

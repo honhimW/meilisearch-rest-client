@@ -16,10 +16,8 @@ package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.support.FilterBuilder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -54,4 +52,8 @@ public class FilterableAttributesRequest implements Serializable {
         return filterableAttributesRequest;
     }
 
+    public FilterableAttributesRequest filter(String filter) {
+        this.filter = filter;
+        return this;
+    }
 }

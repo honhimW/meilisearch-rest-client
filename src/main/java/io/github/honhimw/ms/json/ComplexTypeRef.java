@@ -17,6 +17,9 @@ package io.github.honhimw.ms.json;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author hon_him
@@ -25,10 +28,26 @@ import java.lang.reflect.Type;
 
 public abstract class ComplexTypeRef<T> extends TypeRef<T> {
 
-    private final TypeRef<?> another;
+    private final List<TypeRef<?>> refs = new ArrayList<>();
 
-    public ComplexTypeRef(TypeRef<?> another) {
-        this.another = another;
+    public ComplexTypeRef(TypeRef<?> ref, TypeRef<?>... refs) {
+        this.refs.add(ref);
+        this.refs.addAll(Arrays.asList(refs));
+    }
+
+    public ComplexTypeRef(TypeRef<?> ref) {
+        this.refs.add(ref);
+    }
+
+    public ComplexTypeRef(Class<?> type, Class<?>... types) {
+        this.refs.add(TypeRef.of(type));
+        for (Class<?> aClass : types) {
+            this.refs.add(TypeRef.of(aClass));
+        }
+    }
+
+    public ComplexTypeRef(Class<?> type) {
+        this.refs.add(TypeRef.of(type));
     }
 
     @Override
@@ -38,13 +57,13 @@ public abstract class ComplexTypeRef<T> extends TypeRef<T> {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type rawType = parameterizedType.getRawType();
             if (rawType instanceof Class) {
-                Type anotherType = another.getType();
-                return ParameterizedTypeImpl.make((Class<?>) rawType, new Type[]{anotherType}, null);
+                Type[] types = refs.stream().map(TypeRef::getType).toArray(Type[]::new);
+                return ParameterizedTypeImpl.make((Class<?>) rawType, types, null);
             }
             return type;
         } else if (type instanceof Class) {
-            Type anotherType = another.getType();
-            return ParameterizedTypeImpl.make((Class<?>) type, new Type[]{anotherType}, null);
+            Type[] types = refs.stream().map(TypeRef::getType).toArray(Type[]::new);
+            return ParameterizedTypeImpl.make((Class<?>) type, types, null);
         } else {
             throw new IllegalArgumentException("unknown type");
         }

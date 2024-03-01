@@ -38,6 +38,7 @@ import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -63,8 +64,18 @@ class SearchImpl implements Search {
     }
 
     @Override
+    public <T> SearchResponse<T> find(String q, Class<T> type) {
+        return ReactorUtils.blockNonNull(_search.find(q, type));
+    }
+
+    @Override
     public SearchResponse<Map<String, Object>> find(SearchRequest request) {
         return ReactorUtils.blockNonNull(_search.find(request));
+    }
+
+    @Override
+    public SearchResponse<Map<String, Object>> find(Consumer<SearchRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_search.find(builder));
     }
 
     @Override
@@ -73,7 +84,27 @@ class SearchImpl implements Search {
     }
 
     @Override
+    public <T> SearchResponse<T> find(SearchRequest request, Class<T> type) {
+        return ReactorUtils.blockNonNull(_search.find(request, type));
+    }
+
+    @Override
+    public <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, Class<T> type) {
+        return ReactorUtils.blockNonNull(_search.find(builder, type));
+    }
+
+    @Override
+    public <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, TypeRef<T> typeRef) {
+        return ReactorUtils.blockNonNull(_search.find(builder, typeRef));
+    }
+
+    @Override
     public FacetSearchResponse facetSearch(FacetSearchRequest request) {
         return ReactorUtils.blockNonNull(_search.facetSearch(request));
+    }
+
+    @Override
+    public FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_search.facetSearch(builder));
     }
 }

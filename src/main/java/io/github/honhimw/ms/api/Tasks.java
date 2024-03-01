@@ -20,6 +20,7 @@ import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 
+import java.time.Duration;
 import java.util.function.Consumer;
 
 /**
@@ -87,5 +88,7 @@ public interface Tasks {
     }
 
     void waitForTask(int uid);
+
+    void waitForTask(int uid, int maxAttempts, Duration fixedDelay);
 
 }

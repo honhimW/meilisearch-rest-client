@@ -34,31 +34,31 @@ import java.util.stream.Stream;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SettingsTests extends TestBase {
 
-    protected Indexes blokcingIndexes;
+    protected Indexes indexes;
 
-    protected Settings blockingSettings;
+    protected Settings settings;
 
     @BeforeEach
     protected void initIndexes() {
-        blokcingIndexes = blockingClient.indexes();
-        blockingSettings = blokcingIndexes.settings(INDEX);
+        indexes = blockingClient.indexes();
+        settings = indexes.settings(INDEX);
     }
 
     @Order(0)
     @Test
     void get() {
-        Setting current = blockingSettings.get();
+        Setting current = settings.get();
         assert Objects.equals(current, Setting.defaultObject());
     }
 
     @Order(1)
     @Test
     void update() {
-        TaskInfo block = blockingSettings.update(builder -> builder
+        TaskInfo block = settings.update(builder -> builder
                 .rankingRules(Stream.of(RankingRule.TYPO, RankingRule.WORDS).collect(Collectors.toList()))
                 .searchableAttributes(Stream.of("title", "overview").collect(Collectors.toList())));
         reactiveClient.tasks().waitForTask(block.getTaskUid()).block();
-        Setting current = blockingSettings.get();
+        Setting current = settings.get();
         List<RankingRule> rankingRules = current.getRankingRules();
         assert rankingRules.size() == 2;
         assert rankingRules.contains(RankingRule.TYPO);
@@ -73,11 +73,11 @@ public class SettingsTests extends TestBase {
     @Order(2)
     @Test
     void reset() {
-        Setting current = blockingSettings.get();
+        Setting current = settings.get();
         assert !Objects.equals(current, Setting.defaultObject());
-        TaskInfo block = blockingSettings.reset();
+        TaskInfo block = settings.reset();
         await(block);
-        current = blockingSettings.get();
+        current = settings.get();
         assert Objects.equals(current, Setting.defaultObject());
     }
 
