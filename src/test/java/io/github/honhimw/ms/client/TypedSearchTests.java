@@ -75,6 +75,7 @@ public class TypedSearchTests extends TestBase {
     @Order(4)
     @Test
     void searchWithScore() {
+        blockingClient.experimentalFeatures(experimentalFeaturesSettings -> experimentalFeaturesSettings.configure(builder -> builder.scoreDetails(true)));
         TaskInfo update = indexes.settings(INDEX).filterableAttributes().update(toList("title", "genres", "director"));
         await(update);
 
@@ -90,7 +91,7 @@ public class TypedSearchTests extends TestBase {
 
         Double rankingScore = hits.get(0).getDetails().get_rankingScore();
         assert 0 <= rankingScore && rankingScore <= 1;
-
+        blockingClient.experimentalFeatures(experimentalFeaturesSettings -> experimentalFeaturesSettings.configure(builder -> builder.scoreDetails(false)));
     }
 
     @Order(5)
