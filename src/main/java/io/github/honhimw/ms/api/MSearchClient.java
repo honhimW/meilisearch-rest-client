@@ -15,6 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.MSearchConfig;
+import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.internal.MSearchClientImpl;
 import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
@@ -123,6 +124,11 @@ public interface MSearchClient extends AutoCloseable {
      * Snapshot tasks take priority over other tasks in the queue.
      */
     TaskInfo snapshots();
+
+    /**
+     * @return Logs operator
+     */
+    Logs logs();
 
     /**
      * @return ExperimentalFeaturesSettings operator

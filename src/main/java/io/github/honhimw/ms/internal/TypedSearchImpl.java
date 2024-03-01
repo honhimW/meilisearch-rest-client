@@ -38,6 +38,7 @@ import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -63,7 +64,17 @@ class TypedSearchImpl<T> implements TypedSearch<T> {
     }
 
     @Override
+    public SearchResponse<T> find(Consumer<SearchRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_search.find(builder));
+    }
+
+    @Override
     public FacetSearchResponse facetSearch(FacetSearchRequest request) {
         return ReactorUtils.blockNonNull(_search.facetSearch(request));
+    }
+
+    @Override
+    public FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_search.facetSearch(builder));
     }
 }

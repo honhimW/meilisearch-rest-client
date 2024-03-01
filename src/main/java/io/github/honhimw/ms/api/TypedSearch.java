@@ -19,7 +19,6 @@ import io.github.honhimw.ms.model.FacetSearchResponse;
 import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
 
@@ -59,11 +58,7 @@ public interface TypedSearch<T> {
     SearchResponse<T> find(SearchRequest request);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
-    default SearchResponse<T> find(Consumer<SearchRequest.Builder> builder) {
-        SearchRequest.Builder _builder = SearchRequest.builder();
-        builder.accept(_builder);
-        return find(_builder.build());
-    }
+    SearchResponse<T> find(Consumer<SearchRequest.Builder> builder);
 
     /**
      * Search for facet values matching a specific query for a facet. When many values exist for a facet,
@@ -76,10 +71,6 @@ public interface TypedSearch<T> {
     FacetSearchResponse facetSearch(FacetSearchRequest request);
 
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
-    default FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
-        FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();
-        builder.accept(_builder);
-        return facetSearch(_builder.build());
-    }
+    FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder);
 
 }

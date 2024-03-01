@@ -15,15 +15,17 @@
 package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
-import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
-import io.github.honhimw.ms.api.reactive.ReactiveSearch;
+import io.github.honhimw.ms.api.Indexes;
+import io.github.honhimw.ms.api.Search;
+import io.github.honhimw.ms.api.TypedDetailsSearch;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.CollectionUtils;
 import org.junit.jupiter.api.*;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author hon_him
@@ -33,54 +35,134 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SearchTests extends TestBase {
 
-    protected ReactiveIndexes indexes;
-    protected ReactiveSearch search;
+    protected Indexes indexes;
+    protected Search search;
 
     @BeforeEach
     void initIndexes() {
         prepareData();
-        indexes = reactiveClient.indexes();
+        indexes = blockingClient.indexes();
         search = indexes.search(INDEX);
     }
 
-    @Order(103)
+    @Order(1)
     @Test
     void search() {
-        StepVerifier.create(search.find("2"))
-            .assertNext(searchResponse -> {
-                log.info(jsonHandler.toJson(searchResponse.getHits()));
-                assert !searchResponse.getHits().isEmpty();
-            })
-            .verifyComplete();
+        assert !search.find("2").getHits().isEmpty();
     }
 
-    @Order(104)
+    @Order(1)
     @Test
     void search2() {
-        Mono<List<Movie>> mono = search.find("2", Movie.class)
-            .map(SearchResponse::getHits);
-        StepVerifier.create(mono)
-            .assertNext(movies1 -> {
-                for (Movie movie : movies1) {
-                    log.info(jsonHandler.toJson(movie));
-                }
-            })
-            .verifyComplete();
+        SearchResponse<Movie> movieSearchResponse = search.find("2", Movie.class);
+        assert movieSearchResponse.getHits().get(0).getId() > 0;
     }
 
-    @Order(105)
+    @Order(1)
     @Test
     void search3() {
-        Mono<List<Movie>> mono = indexes.search(INDEX, new TypeRef<Movie>() {
-            }).find("2")
-            .map(SearchResponse::getHits);
-        StepVerifier.create(mono)
-            .assertNext(movies1 -> {
-                for (Movie movie : movies1) {
-                    log.info(jsonHandler.toJson(movie));
-                }
-            })
-            .verifyComplete();
+        SearchResponse<Movie> movieSearchResponse = search.find("2", new TypeRef<Movie>() {
+        });
+        assert movieSearchResponse.getHits().get(0).getId() > 0;
+    }
+
+    @Order(1)
+    @Test
+    void search4() {
+        SearchRequest searchRequest = SearchRequest.builder().q("2").build();
+        SearchResponse<Map<String, Object>> movieSearchResponse = search.find(searchRequest);
+        assert (Integer) movieSearchResponse.getHits().get(0).get("id") > 0;
+    }
+
+    @Order(1)
+    @Test
+    void search5() {
+        SearchResponse<Map<String, Object>> movieSearchResponse = search.find(builder -> builder.q("2"));
+        assert (Integer) movieSearchResponse.getHits().get(0).get("id") > 0;
+    }
+
+    @Order(1)
+    @Test
+    void search6() {
+        SearchRequest searchRequest = SearchRequest.builder().q("2").build();
+        SearchResponse<Movie> movieSearchResponse = search.find(searchRequest, Movie.class);
+        assert movieSearchResponse.getHits().get(0).getId() > 0;
+    }
+
+    @Order(1)
+    @Test
+    void search7() {
+        SearchRequest searchRequest = SearchRequest.builder().q("2").build();
+        SearchResponse<Movie> movieSearchResponse = search.find(searchRequest, new TypeRef<Movie>() {
+        });
+        assert movieSearchResponse.getHits().get(0).getId() > 0;
+    }
+
+    @Order(1)
+    @Test
+    void search8() {
+        SearchResponse<Movie> movieSearchResponse = search.find(builder -> builder.q("2"), new TypeRef<Movie>() {
+        });
+        assert movieSearchResponse.getHits().get(0).getId() > 0;
+    }
+
+    @Order(1)
+    @Test
+    void search9() {
+        SearchResponse<Movie> movieSearchResponse = search.find(builder -> builder.q("2"), Movie.class);
+        assert movieSearchResponse.getHits().get(0).getId() > 0;
+    }
+
+    /**
+     * TODO
+     */
+    @Order(2)
+    @Test
+    void facetSearch() {
+    }
+
+    @Order(4)
+    @Test
+    void searchWithScore() {
+        TaskInfo update = indexes.settings(INDEX).filterableAttributes().update(toList("title", "genres", "director"));
+        await(update);
+
+        TypedDetailsSearch<Movie> movieTypedDetailsSearch = indexes.searchWithDetails(INDEX, Movie.class);
+        SearchDetailsResponse<Movie> response = movieTypedDetailsSearch.find(builder -> builder
+            .q("2")
+            .showRankingScore(true)
+            .showRankingScoreDetails(true)
+            .facets(toList("title", "genres", "director"))
+        );
+        List<HitDetails<Movie>> hits = response.getHits();
+        assert CollectionUtils.isNotEmpty(hits);
+
+        Double rankingScore = hits.get(0).getDetails().get_rankingScore();
+        assert 0 <= rankingScore && rankingScore <= 1;
+
+    }
+
+    @Order(5)
+    @Test
+    void searchWithHighlight() {
+        TaskInfo update = indexes.settings(INDEX).filterableAttributes().update(toList("title", "genres", "director"));
+        await(update);
+
+        TypedDetailsSearch<Movie> movieTypedDetailsSearch = indexes.searchWithDetails(INDEX, Movie.class);
+        SearchDetailsResponse<Movie> response = movieTypedDetailsSearch.find(builder -> builder
+            .q("2")
+            .highlightPreTag("<em>")
+            .highlightPostTag("</em>")
+            .attributesToHighlight(toList("id", "title"))
+        );
+        List<HitDetails<Movie>> hits = response.getHits();
+        assert Objects.nonNull(hits.get(0).getDetails().get_formatted());
+    }
+
+    @AfterEach
+    void resetSetting() {
+        TaskInfo reset = indexes.settings(INDEX).reset();
+        await(reset);
     }
 
 }

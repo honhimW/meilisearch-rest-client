@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +48,12 @@ public interface ReactiveDocuments {
      * @param limit  default 20
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
-    Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit);
+    default Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit) {
+        return list(request -> {
+            request.setOffset(offset);
+            request.setLimit(limit);
+        });
+    }
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default Mono<Page<Map<String, Object>>> list(Consumer<GetDocumentRequest> page) {
@@ -61,15 +65,28 @@ public interface ReactiveDocuments {
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Mono<Page<Map<String, Object>>> list(GetDocumentRequest page);
 
-    /**
-     * Get documents by batch.
-     *
-     * @param offset  default 0
-     * @param limit   default 20
-     * @param typeRef document type
-     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    default <T> Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit, Class<T> type) {
+        return list(offset, limit, TypeRef.of(type));
+    }
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    <T> Mono<Page<T>> list(GetDocumentRequest page, TypeRef<T> typeRef);
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    default <T> Mono<Page<T>> list(Consumer<GetDocumentRequest> page, TypeRef<T> typeRef) {
+        GetDocumentRequest pageRequest = new GetDocumentRequest();
+        page.accept(pageRequest);
+        return list(pageRequest, typeRef);
+    }
+
+    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    default <T> Mono<Page<T>> list(Consumer<GetDocumentRequest> page, Class<T> type) {
+        return list(page, TypeRef.of(type));
+    }
 
 
     /**
@@ -148,11 +165,37 @@ public interface ReactiveDocuments {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Mono<Page<Map<String, Object>>> batchGet(BatchGetDocumentsRequest fetch);
 
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    default Mono<Page<Map<String, Object>>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder) {
+        BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
+        builder.accept(_builder);
+        return batchGet(_builder.build());
+    }
+
     /**
      * Get documents by batch.
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    default <T> Mono<Page<T>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef) {
+        BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
+        builder.accept(_builder);
+        return batchGet(_builder.build(), typeRef);
+    }
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    default <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, Class<T> type) {
+        return batchGet(fetch, TypeRef.of(type));
+    }
+
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    default <T> Mono<Page<T>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, Class<T> type) {
+        BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
+        builder.accept(_builder);
+        return batchGet(_builder.build(), TypeRef.of(type));
+    }
 
     /**
      * Delete a set of documents based on an array of document ids.
@@ -194,9 +237,7 @@ public interface ReactiveDocuments {
 
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     default <T> Mono<T> get(String id, Class<T> type, @Nullable String... fields) {
-        // @formatter:off
-        return get(id, new TypeRef<T>() { @Override public Type getType() { return type; }}, fields);
-        // @formatter:on
+        return get(id, TypeRef.of(type), fields);
     }
 
     /**

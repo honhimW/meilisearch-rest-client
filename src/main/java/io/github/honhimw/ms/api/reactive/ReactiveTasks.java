@@ -87,15 +87,18 @@ public interface ReactiveTasks {
     }
 
     default Mono<Void> waitForTask(int uid) {
+        return waitForTask(uid, 100, Duration.ofMillis(50));
+    }
+
+    default Mono<Void> waitForTask(int uid, int maxAttempts, Duration fixedDelay) {
         return get(uid)
             .doOnNext(taskInfo -> {
                 if (taskInfo.getStatus() != TaskStatus.SUCCEEDED && taskInfo.getStatus() != TaskStatus.FAILED) {
                     throw new IllegalStateException("task not completed");
                 }
             })
-            .retryWhen(RetrySpec.fixedDelay(100, Duration.ofMillis(50)))
+            .retryWhen(RetrySpec.fixedDelay(maxAttempts, fixedDelay))
             .then();
-
     }
 
 }

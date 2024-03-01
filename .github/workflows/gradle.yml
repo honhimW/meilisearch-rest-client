@@ -9,9 +9,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "v1.6" ]
+    branches: [ "v1.7" ]
   pull_request:
-    branches: [ "v1.6" ]
+    branches: [ "v1.7" ]
 
 jobs:
   build:
@@ -22,14 +22,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    - name: Set up JDK 8
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '8'
         distribution: 'temurin'
 
     - name: Start MeiliSearch
-      run: docker run -d -p 7700:7700 -e MEILI_ENV='development' getmeili/meilisearch:v1.6.2
+      run: docker run -d -p 7700:7700 -e MEILI_ENV='development' -e MEILI_MASTER_KEY='MASTER_KEY' getmeili/meilisearch:v1.7.0-rc.1
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
@@ -43,7 +43,7 @@ jobs:
       run: bash ./gradlew test
 
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4.0.1
+      uses: codecov/codecov-action@v4.0.2
       env:
         token: ${{ secrets.CODECOV_TOKEN }}
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

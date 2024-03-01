@@ -15,16 +15,17 @@
 package io.github.honhimw.ms.client;
 
 import io.github.honhimw.ms.Movie;
-import io.github.honhimw.ms.api.reactive.ReactiveDocuments;
-import io.github.honhimw.ms.api.reactive.ReactiveIndexes;
-import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.api.Documents;
+import io.github.honhimw.ms.api.Indexes;
+import io.github.honhimw.ms.api.Settings;
+import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
-import java.time.Duration;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author hon_him
@@ -34,111 +35,266 @@ import java.util.Objects;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DocumentsTests extends TestBase {
 
-    protected ReactiveIndexes indexes;
+    protected Indexes indexes;
 
-    protected ReactiveDocuments documents;
+    protected Documents documents;
 
     @BeforeEach
     void initIndexes() {
-        indexes = reactiveClient.indexes();
+        indexes = blockingClient.indexes();
         documents = indexes.documents(INDEX);
+
+        Settings settings = indexes.settings(INDEX);
+        TaskInfo makeFilterable = settings.filterableAttributes().update(toList("id", "poster"));
+        await(makeFilterable);
     }
 
-    @Order(100)
+    @Order(1)
     @Test
     void save() {
-        Mono<TaskInfo> save = documents.save(movies);
-        Duration duration = StepVerifier.create(await(save))
-            .verifyComplete();
-        log.info("save document task wait for: {}", duration);
+        TaskInfo save = documents.save(movies);
+        await(save);
+        TaskInfo taskInfo = getBlockingTasks().get(save.getTaskUid());
+        assert taskInfo.getStatus() == TaskStatus.SUCCEEDED;
     }
 
-    @Order(100)
+    @Order(2)
     @Test
     void save2() {
         Movie one = new Movie();
         one.setId(30);
-        one.setTitle("hello world");
-        Mono<TaskInfo> save = documents.save(one);
-        Duration duration = StepVerifier.create(await(save))
-            .verifyComplete();
-        log.info("save document task wait for: {}", duration);
+        String helloWorld = "hello world";
+        one.setTitle(helloWorld);
+        TaskInfo save = documents.save(one);
+        await(save);
+        assert documents.get("30", "title").map(map -> map.get("title")).filter(s -> s.equals(helloWorld)).isPresent();
     }
 
-    @Order(101)
+    @Order(2)
+    @Test
+    void save3() {
+        String json = jsonQuote("[{'id':31,'title':'foo bar'}]");
+        TaskInfo save = documents.save(json);
+        await(save);
+        assert documents.get("31", "title").map(map -> map.get("title")).filter(s -> s.equals("foo bar")).isPresent();
+    }
+
+    @Order(2)
+    @Test
+    void save4() {
+        Movie one = new Movie();
+        one.setId(32);
+        one.setTitle("foo");
+        Movie two = new Movie();
+        two.setId(33);
+        two.setTitle("bar");
+
+        TaskInfo save = documents.save(toList(one, two));
+        await(save);
+        assert documents.get("32", "title").map(map -> map.get("title")).filter(s -> s.equals("foo")).isPresent();
+        assert documents.get("33", "title").map(map -> map.get("title")).filter(s -> s.equals("bar")).isPresent();
+    }
+
+    @Order(3)
     @Test
     void listDocuments() {
-        StepVerifier.create(documents.list(null, null))
-            .assertNext(mapPage -> {
-                assert mapPage.getLimit() == 20;
-                assert mapPage.getOffset() == 0;
-                if (log.isDebugEnabled()) {
-                    log.debug(jsonHandler.toJson(mapPage));
-                }
-            })
-            .verifyComplete()
-        ;
+        Page<?> list = documents.list(0, null);
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+
     }
 
-    @Order(102)
+    @Order(3)
+    @Test
+    void listDocuments2() {
+        Page<Movie> list = documents.list(0, null, Movie.class);
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+
+    }
+
+    @Order(3)
+    @Test
+    void listDocuments3() {
+        Page<?> list = documents.list(pageRequest -> {
+            pageRequest.filter("id EXISTS");
+            pageRequest.fields(toList("id"));
+        });
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+    }
+
+    @Order(3)
+    @Test
+    void listDocuments4() {
+        Page<?> list = documents.list(new GetDocumentRequest());
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+    }
+
+    @Order(4)
     @Test
     void getOne() {
-        StepVerifier.create(documents.get("2", "title"))
-            .assertNext(map -> {
-                assert map != null;
-                assert map.get("title").equals("Ariel");
-                assert Objects.isNull(map.get("poster"));
-            })
-            .verifyComplete();
+        Optional<Map<String, Object>> title = documents.get("2", "title");
+        assert title.isPresent();
+        Map<String, Object> movie = title.get();
+        assert movie.get("title").equals("Ariel");
+        assert Objects.isNull(movie.get("poster"));
     }
 
-    @Order(102)
+    @Order(4)
     @Test
     void getOne2() {
-        StepVerifier.create(documents.get("2", Movie.class, "title"))
-            .assertNext(map -> {
-                assert map != null;
-                assert map.getTitle().equals("Ariel");
-                assert Objects.isNull(map.getPoster());
-            })
-            .verifyComplete();
+        Optional<Movie> title = documents.get("2", Movie.class, "title");
+        assert title.isPresent();
+        Movie movie = title.get();
+        assert movie.getTitle().equals("Ariel");
+        assert Objects.isNull(movie.getPoster());
     }
 
-    @Order(102)
-    @Test
-    void getOne3() {
-        StepVerifier.create(documents.get("2", new TypeRef<Movie>() {
-            }, "title"))
-            .assertNext(map -> {
-                assert map != null;
-                assert map.getTitle().equals("Ariel");
-                assert Objects.isNull(map.getPoster());
-            })
-            .verifyComplete();
-    }
-
-    @Order(103)
+    @Order(5)
     @Test
     void update() {
-        Mono<Movie> movieMono = documents.get("30", Movie.class);
-        StepVerifier.create(movieMono)
-            .assertNext(movie -> {
-                assert movie.getTitle().equals("hello world");
-            })
-            .verifyComplete();
-        Movie one = new Movie();
-        one.setId(30);
-        one.setTitle("foo bar");
-        Mono<TaskInfo> update = documents.update(one);
-        StepVerifier.create(await(update))
-            .verifyComplete();
-        Mono<Movie> movieMono2 = documents.get("30", Movie.class);
-        StepVerifier.create(movieMono2)
-            .assertNext(movie -> {
-                assert movie.getTitle().equals("foo bar");
-            })
-            .verifyComplete();
-
+        Movie movie = new Movie();
+        movie.setId(30);
+        movie.setTitle("hello world");
+        TaskInfo save = documents.save(movie);
+        await(save);
+        movie.setTitle("foo bar");
+        TaskInfo update = documents.update(movie);
+        await(update);
+        Optional<Map<String, Object>> result = documents.get("30", "title");
+        assert result.isPresent();
+        Map<String, Object> _result = result.get();
+        assert _result.get("title").equals("foo bar");
     }
 
+    @Order(5)
+    @Test
+    void update2() {
+        Movie movie = new Movie();
+        movie.setId(30);
+        movie.setTitle("hello world");
+        TaskInfo save = documents.save(movie);
+        await(save);
+        movie.setTitle("foo bar");
+        TaskInfo update = documents.update(movie);
+        await(update);
+        Optional<Movie> result = documents.get("30", Movie.class, "title");
+        assert result.isPresent();
+        Movie _result = result.get();
+        assert _result.getTitle().equals("foo bar");
+    }
+
+    @Order(5)
+    @Test
+    void update3() {
+        Movie movie = new Movie();
+        movie.setId(31);
+        movie.setTitle("hello world");
+        TaskInfo save = documents.save(movie);
+        await(save);
+        movie.setTitle("foo bar");
+        String json = jsonHandler.toJson(toList(movie));
+        TaskInfo update = documents.update(json);
+        await(update);
+        Optional<Movie> result = documents.get("31", Movie.class, "title");
+        assert result.isPresent();
+        Movie _result = result.get();
+        assert _result.getTitle().equals("foo bar");
+    }
+
+    @Order(6)
+    @Test
+    void batchGet() {
+        Page<Map<String, Object>> list = documents.batchGet(BatchGetDocumentsRequest.builder().offset(0).limit(20)
+            .fields(toList("title"))
+            .build());
+        assert CollectionUtils.isNotEmpty(list.getResults());
+        list.getResults().forEach(movie -> {
+            assert StringUtils.isNotEmpty((CharSequence) movie.get("title"));
+            assert movie.get("id") == null;
+        });
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+    }
+
+    @Order(6)
+    @Test
+    void batchGet2() {
+        Page<Movie> list = documents.batchGet(BatchGetDocumentsRequest.builder().offset(0).limit(20)
+            .fields(toList("title"))
+            .build(), Movie.class);
+        assert CollectionUtils.isNotEmpty(list.getResults());
+        list.getResults().forEach(movie -> {
+            assert StringUtils.isNotEmpty(movie.getTitle());
+            assert movie.getId() == null;
+        });
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+    }
+
+    @Order(6)
+    @Test
+    void batchGet3() {
+        Page<Movie> list = documents.batchGet(builder -> builder.offset(0).limit(20)
+            .fields(toList("title"))
+            .build(), Movie.class);
+        assert CollectionUtils.isNotEmpty(list.getResults());
+        list.getResults().forEach(movie -> {
+            assert StringUtils.isNotEmpty(movie.getTitle());
+            assert movie.getId() == null;
+        });
+        assert list.getOffset() == 0;
+        assert list.getLimit() == 20;
+    }
+
+    @Order(7)
+    @Test
+    void delete() {
+        Movie movie = new Movie();
+        movie.setId(40);
+        TaskInfo save = documents.save(movie);
+        await(save);
+        assert documents.get("40").isPresent();
+        TaskInfo delete = documents.delete("40");
+        await(delete);
+        Optional<?> movie40 = documents.get("40");
+        assert !movie40.isPresent();
+    }
+
+    @Order(8)
+    @Test
+    void batchDelete() {
+        TaskInfo save = documents.save(jsonQuote("[{'id':40},{'id':41}]"));
+        await(save);
+        BatchGetDocumentsRequest batchGetDocumentsRequest = new BatchGetDocumentsRequest();
+        batchGetDocumentsRequest.filter(filterBuilder -> filterBuilder.base(expression -> expression.in("id", "40", "41")));
+        assert documents.batchGet(batchGetDocumentsRequest).getTotal() == 2;
+        TaskInfo batchDelete = documents.batchDelete(toList("40", "41"));
+        await(batchDelete);
+        assert documents.batchGet(batchGetDocumentsRequest).getTotal() == 0;
+    }
+
+    @Order(9)
+    @Test
+    void deleteByFilter() {
+        TaskInfo save = documents.save(jsonQuote("[{'id':40,'poster':'http://0.0.0.0/poster'},{'id':41}]"));
+        await(save);
+        BatchGetDocumentsRequest batchGetDocumentsRequest = new BatchGetDocumentsRequest();
+        batchGetDocumentsRequest.filter(filterBuilder -> filterBuilder.base(expression -> expression.isNullOrNotExists("poster")));
+        assert documents.batchGet(batchGetDocumentsRequest).getTotal() > 0;
+        TaskInfo deleteByFilter = documents.delete(batchGetDocumentsRequest);
+        await(deleteByFilter);
+        assert documents.batchGet(batchGetDocumentsRequest).getTotal() == 0;
+    }
+
+    @Order(100)
+    @Test
+    void deleteAll() {
+        TaskInfo deleteAll = documents.deleteAll();
+        await(deleteAll);
+        Page<?> list = documents.list(0, 20);
+        assert list.getTotal() == 0;
+    }
 }

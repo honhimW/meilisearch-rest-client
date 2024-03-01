@@ -41,4 +41,13 @@ public interface JsonHandler {
 
     <T> T fromJson(String json, TypeRef<T> typeRef);
 
+    default <T> T transform(Object o, Class<T> tClass) {
+        return transform(o, TypeRef.of(tClass));
+    }
+
+    default <T> T transform(Object o, TypeRef<T> typeRef) {
+        String json = toJson(o);
+        return fromJson(json, typeRef);
+    }
+
 }

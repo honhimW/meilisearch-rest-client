@@ -22,6 +22,8 @@ import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.ReactorUtils;
 
+import java.time.Duration;
+
 /**
  * @author hon_him
  * @since 2024-01-04
@@ -58,5 +60,10 @@ class TasksImpl implements Tasks {
     @Override
     public void waitForTask(int uid) {
         _reactive.waitForTask(uid).block();
+    }
+
+    @Override
+    public void waitForTask(int uid, int maxAttempts, Duration fixedDelay) {
+        _reactive.waitForTask(uid, maxAttempts, fixedDelay).block();
     }
 }

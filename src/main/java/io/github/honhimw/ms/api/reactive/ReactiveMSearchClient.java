@@ -131,6 +131,11 @@ public interface ReactiveMSearchClient extends AutoCloseable {
     Mono<TaskInfo> snapshots();
 
     /**
+     * @return ReactiveLogs operator
+     */
+    ReactiveLogs logs();
+
+    /**
      * @return ExperimentalFeaturesSettings operator
      */
     ReactiveExperimentalFeaturesSettings experimentalFeatures();

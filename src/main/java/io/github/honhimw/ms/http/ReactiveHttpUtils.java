@@ -185,6 +185,8 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
     private ConnectionProvider connectionProvider;
 
+    private RequestConfig _defaultRequestConfig;
+
     @Getter
     private final List<Consumer<Configurer>> requestInterceptors = new ArrayList<>();
 
@@ -203,6 +205,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         httpClient = HttpClient.create(connectionProvider);
         httpClient = requestConfig.config(httpClient);
         addInterceptor(requestConfig.requestInterceptor);
+        _defaultRequestConfig = requestConfig;
     }
 
     public HttpResult get(String url) {
@@ -314,6 +317,10 @@ public class ReactiveHttpUtils implements AutoCloseable {
         return receiver(METHOD_PUT, url, configurer);
     }
 
+    public ReactiveHttpResult rPatch(String url, Consumer<Configurer> configurer) {
+        return receiver(METHOD_PATCH, url, configurer);
+    }
+
     public ReactiveHttpResult rDelete(String url, Consumer<Configurer> configurer) {
         return receiver(METHOD_DELETE, url, configurer);
     }
@@ -337,7 +344,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
                          Function<HttpResult, T> resultMapper) {
         _assertState(StringUtils.isNotBlank(url), "URL should not be blank");
         _assertState(Objects.nonNull(configurer), "String should not be null");
-        Configurer requestConfigurer = new Configurer()
+        Configurer requestConfigurer = new Configurer(_defaultRequestConfig)
             .method(method)
             .charset(defaultCharset)
             .url(url);
@@ -373,11 +380,10 @@ public class ReactiveHttpUtils implements AutoCloseable {
     public ReactiveHttpResult receiver(String method, String url, Consumer<Configurer> configurer) {
         _assertState(StringUtils.isNotBlank(url), "URL should not be blank");
         _assertState(Objects.nonNull(configurer), "String should not be null");
-        Configurer requestConfigurer = new Configurer()
+        Configurer requestConfigurer = new Configurer(_defaultRequestConfig)
             .method(method)
             .charset(defaultCharset)
-            .url(url)
-            .config(RequestConfig.DEFAULT_CONFIG.copy().build());
+            .url(url);
         for (Consumer<Configurer> requestInterceptor : requestInterceptors) {
             configurer = configurer.andThen(requestInterceptor);
         }
@@ -626,8 +632,13 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public final static class Configurer {
+
+        private final RequestConfig currentDefaultConfig;
+
+        private Configurer(RequestConfig currentDefaultConfig) {
+            this.currentDefaultConfig = currentDefaultConfig;
+        }
 
         private String method;
 
@@ -689,7 +700,12 @@ public class ReactiveHttpUtils implements AutoCloseable {
         }
 
         public Configurer config(Consumer<RequestConfig.Builder> consumer) {
-            RequestConfig.Builder copy = RequestConfig.copy(config);
+            RequestConfig.Builder copy;
+            if (Objects.isNull(config)) {
+                copy = currentDefaultConfig.copy();
+            } else {
+                copy = config.copy();
+            }
             consumer.accept(copy);
             this.config = copy.build();
             return this;
@@ -838,6 +854,14 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 if (Objects.isNull(byteBufPublisher)) {
                     this.byteBufPublisher = publisher;
                 }
+                return this;
+            }
+
+            public Binary publisher(Publisher<? extends ByteBuf> publisher, String contentType) {
+                if (Objects.isNull(byteBufPublisher)) {
+                    this.byteBufPublisher = publisher;
+                }
+                this.contentType = contentType;
                 return this;
             }
 
@@ -1075,7 +1099,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         }
 
         public String getHeader(String name) {
-            List<String> list = headers.get(name);
+            List<String> list = getAllHeaders().get(name);
             if (CollectionUtils.isNotEmpty(list)) {
                 return list.get(0);
             }

@@ -51,14 +51,14 @@ public class TestBase {
     public static void init() {
         jsonHandler = new JacksonJsonHandler();
         reactiveClient = ReactiveMSearchClient.create(builder -> builder
+            .enableSSL(false)
             .host(MeiliSearchProperties.getHost())
             .port(MeiliSearchProperties.getPort())
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
         blockingClient = MSearchClient.create(builder -> builder
-            .host(MeiliSearchProperties.getHost())
-            .port(MeiliSearchProperties.getPort())
+            .serverUrl(String.format("http://%s:%d", MeiliSearchProperties.getHost(), MeiliSearchProperties.getPort()))
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
@@ -73,14 +73,14 @@ public class TestBase {
     }
 
     @SafeVarargs
-    protected static <T> List<T> toList(T... elements) {
+    public static <T> List<T> toList(T... elements) {
         if (Objects.isNull(elements) || elements.length == 0) {
             return new ArrayList<>();
         }
         return new ArrayList<>(Arrays.asList(elements));
     }
 
-    protected static <K, V> Map<K, V> toMap(List<K> keys, List<V> values) {
+    public static <K, V> Map<K, V> toMap(List<K> keys, List<V> values) {
         Objects.requireNonNull(keys);
         Objects.requireNonNull(values);
         assert keys.size() == values.size();
@@ -91,6 +91,10 @@ public class TestBase {
             map.put(key, value);
         }
         return map;
+    }
+
+    public static String jsonQuote(String json) {
+        return json.replaceAll("'", "\"");
     }
 
     protected static ReactiveTasks getReactiveTasks() {
@@ -125,7 +129,7 @@ public class TestBase {
     }
 
     public static final String movies = "[\n" +
-        "{\"id\":2,\"title\":\"Ariel\",\"overview\":\"Taisto Kasurinen is a Finnish coal miner whose father has just committed suicide and who is framed for a crime he did not commit. In jail, he starts to dream about leaving the country and starting a new life. He escapes from prison but things don't go as planned...\",\"genres\":[\"Drama\",\"Crime\",\"Comedy\"],\"poster\":\"https://image.tmdb.org/t/p/w500/ojDg0PGvs6R9xYFodRct2kdI6wC.jpg\",\"release_date\":593395200},\n" +
+        "{\"id\":2,\"title\":\"Ariel\",\"overview\":\"Taisto Kasurinen is a Finnish coal miner whose father has just committed suicide and who is framed for a crime he did not commit. In jail, he starts to dream about leaving the country and starting a new life. He escapes from prison but things don't go as planned...\",\"genres\":[\"Drama\",\"Crime\",\"Comedy\"],\"poster\":\"https://image.tmdb.org/t/p/w500/ojDg0PGvs6R9xYFodRct2kdI6wC.jpg\",\"release_date\":593395200,\"director\":{\"name\":\"hello\",\"gender\":\"male\"}},\n" +
         "{\"id\":5,\"title\":\"Four Rooms\",\"overview\":\"It's Ted the Bellhop's first night on the job...and the hotel's very unusual guests are about to place him in some outrageous predicaments. It seems that this evening's room service is serving up one unbelievable happening after another.\",\"genres\":[\"Crime\",\"Comedy\"],\"poster\":\"https://image.tmdb.org/t/p/w500/75aHn1NOYXh4M7L5shoeQ6NGykP.jpg\",\"release_date\":818467200},\n" +
         "{\"id\":6,\"title\":\"Judgment Night\",\"overview\":\"While racing to a boxing match, Frank, Mike, John and Rey get more than they bargained for. A wrong turn lands them directly in the path of Fallon, a vicious, wise-cracking drug lord. After accidentally witnessing Fallon murder a disloyal henchman, the four become his unwilling prey in a savage game of cat & mouse as they are mercilessly stalked through the urban jungle in this taut suspense drama\",\"genres\":[\"Action\",\"Thriller\",\"Crime\"],\"poster\":\"https://image.tmdb.org/t/p/w500/rYFAvSPlQUCebayLcxyK79yvtvV.jpg\",\"release_date\":750643200},\n" +
         "{\"id\":11,\"title\":\"Star Wars\",\"overview\":\"Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire.\",\"genres\":[\"Adventure\",\"Action\",\"Science Fiction\"],\"poster\":\"https://image.tmdb.org/t/p/w500/6FfCtAuVAW8XJjZ7eWeLibRLWTw.jpg\",\"release_date\":233366400},\n" +
@@ -137,7 +141,7 @@ public class TestBase {
         "{\"id\":17,\"title\":\"The Dark\",\"overview\":\"Adèle and her daughter Sarah are traveling on the Welsh coastline to see her husband James when Sarah disappears. A different but similar looking girl appears who says she died in a past time. Adèle tries to discover what happened to her daughter as she is tormented by Celtic mythology from the past.\",\"genres\":[\"Horror\",\"Thriller\",\"Mystery\"],\"poster\":\"https://image.tmdb.org/t/p/w500/wZeBHVnCvaS2bwkb8jFQ0PwZwXq.jpg\",\"release_date\":1127865600},\n" +
         "{\"id\":18,\"title\":\"The Fifth Element\",\"overview\":\"In 2257, a taxi driver is unintentionally given the task of saving a young girl who is part of the key that will ensure the survival of humanity.\",\"genres\":[\"Adventure\",\"Fantasy\",\"Action\",\"Thriller\",\"Science Fiction\"],\"poster\":\"https://image.tmdb.org/t/p/w500/fPtlCO1yQtnoLHOwKtWz7db6RGU.jpg\",\"release_date\":862531200},\n" +
         "{\"id\":19,\"title\":\"Metropolis\",\"overview\":\"In a futuristic city sharply divided between the working class and the city planners, the son of the city's mastermind falls in love with a working class prophet who predicts the coming of a savior to mediate their differences.\",\"genres\":[\"Drama\",\"Science Fiction\"],\"poster\":\"https://image.tmdb.org/t/p/w500/hUK9rewffKGqtXynH5SW3v9hzcu.jpg\",\"release_date\":-1353888000},\n" +
-        "{\"id\":20,\"title\":\"My Life Without Me\",\"overview\":\"A fatally ill mother with only two months to live creates a list of things she wants to do before she dies without telling her family of her illness.\",\"genres\":[\"Drama\",\"Romance\"],\"poster\":\"https://image.tmdb.org/t/p/w500/sFSkn5rrQqXJkRNa2rMWqzmEuhR.jpg\",\"release_date\":1046995200}\n" +
+        "{\"id\":20,\"title\":\"My Life Without Me\",\"overview\":\"A fatally ill mother with only two months to live creates a list of things she wants to do before she dies without telling her family of her illness.\",\"genres\":[\"Drama\",\"Romance\"],\"poster\":\"https://image.tmdb.org/t/p/w500/sFSkn5rrQqXJkRNa2rMWqzmEuhR.jpg\",\"release_date\":1046995200,\"director\":{\"name\":\"world\",\"gender\":\"female\"}}\n" +
         "]\n";
 
 }

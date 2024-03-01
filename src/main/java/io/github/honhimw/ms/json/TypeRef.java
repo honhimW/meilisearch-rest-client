@@ -35,4 +35,22 @@ public abstract class TypeRef<T> {
         return _type;
     }
 
+    public static <T> TypeRef<T> of(Type type) {
+        return new TypeRef<T>() {
+            @Override
+            public Type getType() {
+                return type;
+            }
+        };
+    }
+
+    public static <T> TypeRef<T> of(Class<T> type) {
+        return new TypeRef<T>() {
+            @Override
+            public Type getType() {
+                return type;
+            }
+        };
+    }
+
 }

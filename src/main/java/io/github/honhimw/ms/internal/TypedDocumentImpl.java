@@ -30,15 +30,13 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.api.TypedDocuments;
 import io.github.honhimw.ms.api.reactive.ReactiveTypedDocuments;
-import io.github.honhimw.ms.model.BatchGetDocumentsRequest;
-import io.github.honhimw.ms.model.FilterableAttributesRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -59,8 +57,23 @@ class TypedDocumentImpl<T> implements TypedDocuments<T> {
     }
 
     @Override
+    public Page<T> list(Consumer<GetDocumentRequest> page) {
+        return ReactorUtils.blockNonNull(_document.list(page));
+    }
+
+    @Override
+    public Page<T> list(GetDocumentRequest page) {
+        return ReactorUtils.blockNonNull(_document.list(page));
+    }
+
+    @Override
     public TaskInfo save(String json) {
         return ReactorUtils.blockNonNull(_document.save(json));
+    }
+
+    @Override
+    public TaskInfo save(T t) {
+        return ReactorUtils.blockNonNull(_document.save(t));
     }
 
     @Override
@@ -71,6 +84,11 @@ class TypedDocumentImpl<T> implements TypedDocuments<T> {
     @Override
     public TaskInfo update(String json) {
         return ReactorUtils.blockNonNull(_document.update(json));
+    }
+
+    @Override
+    public TaskInfo update(T t) {
+        return ReactorUtils.blockNonNull(_document.update(t));
     }
 
     @Override
@@ -89,7 +107,7 @@ class TypedDocumentImpl<T> implements TypedDocuments<T> {
     }
 
     @Override
-    public TaskInfo batchDelete(List<String> ids) {
+    public TaskInfo batchDelete(Collection<String> ids) {
         return ReactorUtils.blockNonNull(_document.batchDelete(ids));
     }
 
@@ -99,8 +117,8 @@ class TypedDocumentImpl<T> implements TypedDocuments<T> {
     }
 
     @Override
-    public T get(String id, @Nullable String... fields) {
-        return ReactorUtils.blockNonNull(_document.get(id, fields));
+    public Optional<T> get(String id, @Nullable String... fields) {
+        return _document.get(id, fields).blockOptional();
     }
 
     @Override

@@ -27,6 +27,12 @@ import org.junit.jupiter.api.Test;
 public class FilterBuilderTests {
 
     @Test
+    void single() {
+        String exp = FilterBuilder.singleExpression(expression -> expression.equal("genres", "action"));
+        assert exp.equals("genres = 'action'");
+    }
+
+    @Test
     void stringEqual() {
         String filter = FilterBuilder.builder(expression -> expression.equal("genres", "action")).build();
         log.info(filter);
@@ -114,7 +120,7 @@ public class FilterBuilderTests {
     void notEmpty() {
         String filter = FilterBuilder.builder(expression -> expression.notEmpty("release_date")).build();
         log.info(filter);
-        assert filter.equals("release_date NOT EMPTY");
+        assert filter.equals("release_date IS NOT EMPTY");
     }
 
     @Test
@@ -125,10 +131,17 @@ public class FilterBuilderTests {
     }
 
     @Test
+    void isNullOrNotExists() {
+        String filter = FilterBuilder.builder(expression -> expression.isNullOrNotExists("release_date")).build();
+        log.info(filter);
+        assert filter.equals("(release_date NOT EXISTS OR release_date IS NULL)");
+    }
+
+    @Test
     void notNull() {
         String filter = FilterBuilder.builder(expression -> expression.notNull("release_date")).build();
         log.info(filter);
-        assert filter.equals("release_date NOT NULL");
+        assert filter.equals("release_date IS NOT NULL");
         filter = FilterBuilder.builder(expression -> expression.isNull("release_date").not()).build();
         log.info(filter);
         assert filter.equals("NOT release_date IS NULL");
@@ -178,10 +191,12 @@ public class FilterBuilderTests {
             .baseGroup(filterBuilder -> filterBuilder
                 .base(expression -> expression.equal("genres", "comedy"))
                 .or(expression -> expression.equal("genres", "horror")))
-            .and(expression -> expression.unequal("director", "Jordan Peele"))
+            .andGroup(filterBuilder -> filterBuilder
+                .base(expression -> expression.unequal("director", "Jordan Peele"))
+                .or(expression -> expression.unequal("director", "honhimw")))
             .build();
         log.info(filter);
-        assert filter.equals("(genres = 'comedy' OR genres = 'horror') AND director != 'Jordan Peele'");
+        assert filter.equals("(genres = 'comedy' OR genres = 'horror') AND (director != 'Jordan Peele' OR director != 'honhimw')");
     }
 
     @Test
