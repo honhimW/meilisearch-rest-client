@@ -43,6 +43,7 @@ public class TypedDetailsSearchTests extends TestBase {
         prepareData();
         indexes = blockingClient.indexes();
         typedDetailsSearch = indexes.searchWithDetails(INDEX, Movie.class);
+        blockingClient.experimentalFeatures(experimentalFeaturesSettings -> experimentalFeaturesSettings.configure(builder -> builder.scoreDetails(true)));
     }
 
     @Order(1)
@@ -107,6 +108,7 @@ public class TypedDetailsSearchTests extends TestBase {
     void resetSetting() {
         TaskInfo reset = indexes.settings(INDEX).reset();
         await(reset);
+        blockingClient.experimentalFeatures(experimentalFeaturesSettings -> experimentalFeaturesSettings.configure(builder -> builder.scoreDetails(false)));
     }
 
 }
