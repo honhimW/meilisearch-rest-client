@@ -35,7 +35,7 @@ The version number of this library is named by appending `.X` to the version num
 
 ```shell
 # build from sources
-$ gradle clean build -x test
+$ gradlew clean build -x test
 ```
 
 ```groovy
@@ -121,7 +121,7 @@ public static void main(String[] args) {
 ## Run Tests
 
 ```shell
-$ gradle test
+$ gradlew test
 ```
 
 Create file named `profile-test.properties` under project root directory.
