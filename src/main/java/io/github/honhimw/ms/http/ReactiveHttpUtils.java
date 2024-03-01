@@ -1099,7 +1099,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         }
 
         public String getHeader(String name) {
-            List<String> list = headers.get(name);
+            List<String> list = getAllHeaders().get(name);
             if (CollectionUtils.isNotEmpty(list)) {
                 return list.get(0);
             }

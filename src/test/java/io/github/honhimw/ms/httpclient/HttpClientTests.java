@@ -52,6 +52,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -166,20 +167,25 @@ public class HttpClientTests {
         DisposableServer disposableServer = createClient(httpServerRoutes -> httpServerRoutes.route(req -> {
             HttpMethod method = req.method();
             String name = method.name();
-            return StringUtils.equal(req.requestHeaders().get("method"), name);
+            List<Map.Entry<String, String>> queryParams = URIBuilder.from(req.uri()).getQueryParams();
+            assert queryParams.get(0).getKey().equals("method");
+            assert name.equals(queryParams.get(0).getValue());
+            return true;
         }, (req, resp) -> {
             String charset = "utf-16";
             resp.addHeader("content-type", "text/plain;charset=" + charset);
             return resp.sendString(Mono.just(MESSAGE), Charset.forName(charset));
         }));
         String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(disposableServer.port()).build().toString();
-        assert StringUtils.equal(httpClient.get(uri, configurer -> configurer.header("method", "GET")).str(), MESSAGE);
-        assert StringUtils.equal(httpClient.post(uri, configurer -> configurer.headers(Collections.singletonMap("method", "POST"))).str(), MESSAGE);
-        assert StringUtils.equal(httpClient.put(uri, configurer -> configurer.header("method", "PUT")).str(), MESSAGE);
-        assert StringUtils.equal(httpClient.patch(uri, configurer -> configurer.header("method", "PATCH")).str(), MESSAGE);
-        assert StringUtils.equal(httpClient.options(uri, configurer -> configurer.header("method", "OPTIONS")).str(), MESSAGE);
-        assert httpClient.head(uri, configurer -> configurer.header("method", "HEAD")).isOK();
-        assert StringUtils.equal(httpClient.delete(uri, configurer -> configurer.header("method", "DELETE").config(builder -> builder.enableCompress(true))).str(), MESSAGE);
+        ReactiveHttpUtils.HttpResult getResult = httpClient.get(uri + "?method=GET");
+        assert StringUtils.equal(getResult.str(), MESSAGE);
+        assert StringUtils.equal(getResult.getHeader("content-type"), "text/plain;charset=utf-16");
+        assert StringUtils.equal(httpClient.post(uri + "?method=POST").str(), MESSAGE);
+        assert StringUtils.equal(httpClient.put(uri + "?method=PUT").str(), MESSAGE);
+        assert StringUtils.equal(httpClient.patch(uri + "?method=PATCH").str(), MESSAGE);
+        assert StringUtils.equal(httpClient.options(uri + "?method=OPTIONS").str(), MESSAGE);
+        assert httpClient.head(uri + "?method=HEAD").isOK();
+        assert StringUtils.equal(httpClient.delete(uri + "?method=DELETE").str(), MESSAGE);
         Exception e = null;
         try {
             httpClient.request("HELLO", uri, configurer -> configurer.header("method", "HELLO"));
@@ -188,13 +194,13 @@ public class HttpClientTests {
         }
         assert Objects.nonNull(e);
 
-        assert isOK(httpClient.rGet(uri, configurer -> configurer.header("method", "GET")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
-        assert isOK(httpClient.rPost(uri, configurer -> configurer.header("method", "POST")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
-        assert isOK(httpClient.rPut(uri, configurer -> configurer.header("method", "PUT")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
-        assert isOK(httpClient.rPatch(uri, configurer -> configurer.header("method", "PATCH")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
-        assert isOK(httpClient.rOptions(uri, configurer -> configurer.header("method", "OPTIONS")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
-        assert isOK(httpClient.rHead(uri, configurer -> configurer.header("method", "HEAD")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
-        assert isOK(httpClient.rDelete(uri, configurer -> configurer.header("method", "DELETE")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+        assert isOK(httpClient.rGet(uri, configurer -> configurer.param("method", "GET")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+        assert isOK(httpClient.rPost(uri, configurer -> configurer.param("method", "POST")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+        assert isOK(httpClient.rPut(uri, configurer -> configurer.param("method", "PUT")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+        assert isOK(httpClient.rPatch(uri, configurer -> configurer.param("method", "PATCH")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+        assert isOK(httpClient.rOptions(uri, configurer -> configurer.param("method", "OPTIONS")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+        assert isOK(httpClient.rHead(uri, configurer -> configurer.param("method", "HEAD")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
+        assert isOK(httpClient.rDelete(uri, configurer -> configurer.param("method", "DELETE")).response().map(HttpClientResponse::status).map(HttpResponseStatus::code).block());
 
         httpClient.close();
         disposableServer.disposeNow();

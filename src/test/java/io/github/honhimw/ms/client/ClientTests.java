@@ -14,8 +14,6 @@
 
 package io.github.honhimw.ms.client;
 
-import io.github.honhimw.ms.api.ExperimentalFeaturesSettings;
-import io.github.honhimw.ms.api.Keys;
 import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.StringUtils;
@@ -51,9 +49,8 @@ public class ClientTests extends TestBase {
     @Order(1)
     @Test
     void resetLogs() {
-        ExperimentalFeaturesSettings experimentalFeaturesSettings = blockingClient.experimentalFeatures();
-        ExperimentalFeatures configure = experimentalFeaturesSettings.configure(builder -> builder.logsRoute(true));
-        assert configure.getLogsRoute();
+        ExperimentalFeatures experimentalFeatures = blockingClient.experimentalFeatures(experimentalFeaturesSettings -> experimentalFeaturesSettings.configure(builder -> builder.logsRoute(true)));
+        assert experimentalFeatures.getLogsRoute();
         Logs logs = blockingClient.logs();
         logs.reset();
     }
@@ -61,24 +58,37 @@ public class ClientTests extends TestBase {
     @Order(2)
     @Test
     void keys() {
-        Keys keys = blockingClient.keys();
-        LocalDateTime now = LocalDateTime.now();
-        Key key = keys.create(builder -> builder
-            .name("rest-client-test")
-            .actions(toList(KeyAction.SEARCH))
-            .indexes(toList(INDEX))
-            .expiresAt(now.plusHours(1)));
-        assert key.getExpiresAt().isEqual(now.plusHours(1));
-        Page<Key> list = keys.list(null, null);
-        assert list.getTotal() > 0;
-        Optional<Key> optionalKey = keys.get(key.getKey());
-        assert optionalKey.isPresent();
-        assert optionalKey.get().getUid().equals(key.getUid());
-        Key update = keys.update(key.getUid(), builder -> builder.name("rest-client-tests"));
-        assert update.getName().equals("rest-client-tests");
-        keys.delete(key.getUid());
-        assert !keys.get(key.getUid()).isPresent();
-
+        Boolean result = blockingClient.keys(keys -> {
+            LocalDateTime now = LocalDateTime.now();
+            Key key = keys.create(builder -> builder
+                .name("rest-client-test")
+                .actions(toList(KeyAction.SEARCH))
+                .indexes(toList(INDEX))
+                .expiresAt(now.plusHours(1)));
+            assert key.getExpiresAt().isEqual(now.plusHours(1));
+            Page<Key> list = keys.list(null, null);
+            assert list.getTotal() > 0;
+            Optional<Key> optionalKey = keys.get(key.getKey());
+            assert optionalKey.isPresent();
+            assert optionalKey.get().getUid().equals(key.getUid());
+            Key update = keys.update(key.getUid(), builder -> builder.name("rest-client-tests"));
+            assert update.getName().equals("rest-client-tests");
+            keys.delete(key.getUid());
+            assert !keys.get(key.getUid()).isPresent();
+            return true;
+        });
+        assert result;
     }
+
+    @Order(3)
+    @Test
+    void tasks() {
+        TaskInfo deleteSucceededTasks = blockingClient.tasks(tasks -> tasks.delete(builder -> builder.statuses(toList(TaskStatus.SUCCEEDED))));
+        await(deleteSucceededTasks);
+        Page<TaskInfo> getSucceededTasks = blockingClient.tasks(tasks -> tasks.list(builder -> builder.statuses(toList(TaskStatus.SUCCEEDED))));
+        assert getSucceededTasks.getTotal() == 1;
+        assert getSucceededTasks.getLimit() == 20;
+    }
+
 
 }

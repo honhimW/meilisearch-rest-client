@@ -116,7 +116,7 @@ publishing {
             }
         }
         maven {
-            name = "sonatype-rc"
+            name = "sonatype-central-rc"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
                 username = sonatypeProperties().getProperty("sonatype.username") as String
@@ -195,6 +195,7 @@ jacocoTestReport {
                     'io/github/honhimw/ms/json/ParameterizedTypeImpl.class',
                     'io/github/honhimw/ms/http/URIBuilder.class',
                     'io/github/honhimw/ms/http/URIBuilder$TokenParser.class',
+                    'io/github/honhimw/ms/http/URIBuilder$ParserCursor.class',
                     'io/github/honhimw/ms/support/StringUtils.class',
                     'io/github/honhimw/ms/support/IOUtils.class',
             ])
@@ -204,17 +205,17 @@ jacocoTestReport {
 
 tasks.register('publish-snapshot') {
     version = version + '-SNAPSHOT'
-    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-snapshotsRepository')
+    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-snapshotsRepository')
 }
 tasks.register('publish-rc') {
     version = version + '-RC.' + 0
-    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-rcRepository')
+    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-central-rcRepository')
 }
 tasks.register('publish-release') {
-    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-releasesRepository')
+    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-releasesRepository')
 }
 tasks.register('publish-central') {
-    dependsOn tasks.getByPath(':publishGprPublicationToSonatype-centralRepository')
+    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-centralRepository')
 }
 
 Properties loadProfileProperties() {
