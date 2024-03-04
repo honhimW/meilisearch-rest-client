@@ -39,7 +39,7 @@ $ gradle clean build -x test
 
 ```groovy
 // Gradle
-implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.3'
+implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.4'
 ```
 
 ```xml
@@ -47,7 +47,7 @@ implementation 'io.github.honhimw:meilisearch-rest-client:1.6.0.3'
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.6.0.3</version>
+    <version>1.6.0.4</version>
 </dependency>
 ```
 
