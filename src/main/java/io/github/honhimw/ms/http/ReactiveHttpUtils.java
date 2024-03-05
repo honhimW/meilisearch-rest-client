@@ -342,35 +342,11 @@ public class ReactiveHttpUtils implements AutoCloseable {
      */
     public <T> T request(String method, String url, Consumer<Configurer> configurer,
                          Function<HttpResult, T> resultMapper) {
-        _assertState(StringUtils.isNotBlank(url), "URL should not be blank");
-        _assertState(Objects.nonNull(configurer), "String should not be null");
-        Configurer requestConfigurer = new Configurer(_defaultRequestConfig)
-            .method(method)
-            .charset(defaultCharset)
-            .url(url);
-        for (Consumer<Configurer> requestInterceptor : requestInterceptors) {
-            configurer = configurer.andThen(requestInterceptor);
-        }
-        configurer.accept(requestConfigurer);
-        HttpResult httpResult = request(requestConfigurer);
+        ReactiveHttpResult receiver = receiver(method, url, configurer);
+        Configurer _configurer = receiver.getConfigurer();
+        HttpResult httpResult = receiver.toHttpResult();
+        _configurer.resultHook.accept(httpResult);
         return resultMapper.apply(httpResult);
-    }
-
-    private HttpResult request(Configurer configurer) {
-        HttpResult httpResult = new HttpResult();
-        long start = System.currentTimeMillis();
-        Mono<byte[]> byteMono = _request(configurer).responseSingle((httpClientResponse, byteBufMono) -> {
-            httpResult.setHttpClientResponse(httpClientResponse);
-            httpResult.init();
-            return byteBufMono.asByteArray();
-        });
-        byte[] content = byteMono.block();
-        if (log.isDebugEnabled()) {
-            log.debug("response: cost=" + (System.currentTimeMillis() - start) + "ms, code="
-                + httpResult.getStatusCode() + ", length=" + httpResult.contentLength);
-        }
-        httpResult.setContent(content);
-        return httpResult;
     }
 
     /**
@@ -389,7 +365,9 @@ public class ReactiveHttpUtils implements AutoCloseable {
         }
         configurer.accept(requestConfigurer);
         ResponseReceiver<?> responseReceiver = _request(requestConfigurer);
-        return new ReactiveHttpResult(responseReceiver);
+        ReactiveHttpResult reactiveHttpResult = new ReactiveHttpResult(responseReceiver, requestConfigurer);
+        requestConfigurer.reactiveResultHook.accept(reactiveHttpResult);
+        return reactiveHttpResult;
     }
 
     private ResponseReceiver<?> _request(Configurer configurer) {
@@ -654,6 +632,10 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
         private RequestConfig config;
 
+        private Consumer<HttpResult> resultHook = httpResult -> {};
+
+        private Consumer<ReactiveHttpResult> reactiveResultHook = reactiveHttpResult -> {};
+
         public Configurer method(String method) {
             this.method = method;
             return this;
@@ -714,6 +696,36 @@ public class ReactiveHttpUtils implements AutoCloseable {
         public Configurer body(Consumer<Payload> configurer) {
             bodyConfigurer = configurer;
             return this;
+        }
+
+        public Configurer resultHook(Consumer<HttpResult> resultHook) {
+            this.resultHook = this.resultHook.andThen(resultHook);
+            return this;
+        }
+
+        public Configurer reactiveResultHook(Consumer<ReactiveHttpResult> resultHook) {
+            this.reactiveResultHook = this.reactiveResultHook.andThen(resultHook);
+            return this;
+        }
+
+        public String method() {
+            return this.method;
+        }
+
+        public Charset charset() {
+            return this.charset;
+        }
+
+        public String url() {
+            return this.url;
+        }
+
+        public List<Map.Entry<String, String>> params() {
+            return this.params;
+        }
+
+        public Map<String, List<String>> headers() {
+            return this.headers;
         }
 
         @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -1151,10 +1163,12 @@ public class ReactiveHttpUtils implements AutoCloseable {
     public static class ReactiveHttpResult {
 
         private final ResponseReceiver<?> responseReceiver;
+        @Getter
+        private final Configurer configurer;
 
-        private ReactiveHttpResult(ResponseReceiver<?> responseReceiver) {
+        private ReactiveHttpResult(ResponseReceiver<?> responseReceiver, Configurer configurer) {
             this.responseReceiver = responseReceiver;
-
+            this.configurer = configurer;
         }
 
         public Mono<HttpClientResponse> response() {
@@ -1178,6 +1192,26 @@ public class ReactiveHttpUtils implements AutoCloseable {
         public <V> Flux<V> responseConnection(
             BiFunction<? super HttpClientResponse, ? super Connection, ? extends Publisher<V>> receiver) {
             return responseReceiver.responseConnection(receiver);
+        }
+
+        /**
+         * Will blocking process a real http request with each-invoked.
+         */
+        public HttpResult toHttpResult() {
+            HttpResult httpResult = new HttpResult();
+            long start = System.currentTimeMillis();
+            Mono<byte[]> byteMono = responseReceiver.responseSingle((httpClientResponse, byteBufMono) -> {
+                httpResult.setHttpClientResponse(httpClientResponse);
+                httpResult.init();
+                return byteBufMono.asByteArray();
+            });
+            byte[] content = byteMono.block();
+            if (log.isDebugEnabled()) {
+                log.debug("response: cost=" + (System.currentTimeMillis() - start) + "ms, code="
+                    + httpResult.getStatusCode() + ", length=" + httpResult.contentLength);
+            }
+            httpResult.setContent(content);
+            return httpResult;
         }
 
     }

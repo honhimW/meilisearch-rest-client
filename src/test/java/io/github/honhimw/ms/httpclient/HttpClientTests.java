@@ -55,6 +55,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 /**
@@ -330,6 +332,39 @@ public class HttpClientTests {
 
         httpClient.close();
         disposableServer.disposeNow();
+    }
+
+    @Test
+    @SneakyThrows
+    void resultKeeper() {
+        ReactiveHttpUtils httpClient = ReactiveHttpUtils.getInstance();
+        AtomicInteger counter = new AtomicInteger(0);
+        DisposableServer disposableServer = createClient(httpServerRoutes -> httpServerRoutes.get("/api", (req, resp) -> {
+            System.out.println("accept count: " + counter.incrementAndGet());
+            String uri = req.uri();
+            URIBuilder.from(uri).getQueryParams().forEach(e -> resp.addHeader(e.getKey(), e.getValue()));
+            return resp.sendString(Mono.just(MESSAGE));
+        }));
+
+        String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(disposableServer.port()).setPath("/api").build().toString();
+        AtomicReference<ReactiveHttpUtils.HttpResult> blockingRef = new AtomicReference<>();
+        AtomicReference<ReactiveHttpUtils.ReactiveHttpResult> reactiveRef = new AtomicReference<>();
+        ReactiveHttpUtils.HttpResult httpResult = httpClient.get(uri, configurer -> configurer.resultHook(blockingRef::set).reactiveResultHook(reactiveRef::set));
+        assert httpResult.str().equals(MESSAGE);
+        ReactiveHttpUtils.HttpResult _httpResult = blockingRef.get();
+        for (int i = 0; i < 4; i++) {
+            assert MESSAGE.equals(_httpResult.str());
+        }
+        ReactiveHttpUtils.ReactiveHttpResult reactiveHttpResult = reactiveRef.get();
+        for (int i = 0; i < 4; i++) {
+            String block = reactiveHttpResult.responseSingle((httpClientResponse, byteBufMono) -> byteBufMono.asByteArray()).map(bytes -> new String(bytes, StandardCharsets.UTF_8)).block();
+            assert MESSAGE.equals(block);
+        }
+
+        assert counter.get() == 5;
+
+        httpClient.close();
+        disposableServer.dispose();
     }
 
     private static String jsonQuote(String json) {

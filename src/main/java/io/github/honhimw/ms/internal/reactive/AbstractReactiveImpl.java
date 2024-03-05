@@ -30,7 +30,7 @@ import java.util.function.Consumer;
  * @since 2024-01-03
  */
 
-public abstract class AbstractReactiveImpl {
+abstract class AbstractReactiveImpl {
 
     protected final ReactiveMSearchClientImpl _client;
 
@@ -99,7 +99,6 @@ public abstract class AbstractReactiveImpl {
             Consumer<ReactiveHttpUtils.Configurer> _apiKey_configurer = configurer1 -> configurer1
                 .header("Authorization", String.format("Bearer %s", _client.apiKey));
             configurer = _apiKey_configurer.andThen(configurer);
-
         }
         ReactiveHttpUtils.ReactiveHttpResult receiver = getHttpClient().receiver(method, fulfillUri(path), configurer);
         return extract(receiver, typeRef);

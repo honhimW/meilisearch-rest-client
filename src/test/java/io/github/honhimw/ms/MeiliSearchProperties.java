@@ -67,4 +67,8 @@ public class MeiliSearchProperties {
         return StringUtils.defaultIfBlank(getProperties().getProperty("server.api-key"), null);
     }
 
+    public static String getIndex() {
+        return StringUtils.defaultIfBlank(getProperties().getProperty("tests.index"), "movie_test");
+    }
+
 }

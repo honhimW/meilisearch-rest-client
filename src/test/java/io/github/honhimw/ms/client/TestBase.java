@@ -38,7 +38,7 @@ public class TestBase {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    protected static final String INDEX = "movie_test";
+    protected static String INDEX = "movie_test";
     protected static ReactiveMSearchClient reactiveClient;
     protected static MSearchClient blockingClient;
 
@@ -57,6 +57,7 @@ public class TestBase {
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
         );
+        INDEX = MeiliSearchProperties.getIndex();
         blockingClient = MSearchClient.create(builder -> builder
             .serverUrl(String.format("http://%s:%d", MeiliSearchProperties.getHost(), MeiliSearchProperties.getPort()))
             .apiKey(MeiliSearchProperties.getApiKey())
