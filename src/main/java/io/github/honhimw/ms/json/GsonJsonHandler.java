@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +88,25 @@ public class GsonJsonHandler implements JsonHandler {
                         return null;
                     }
                     return LocalDateTime.parse(in.nextString(), RFC_3339_FORMATTER);
+                }
+            })
+            .registerTypeAdapter(Instant.class, new TypeAdapter<Instant>() {
+                @Override
+                public void write(JsonWriter out, Instant value) throws IOException {
+                    if (value == null) {
+                        out.nullValue();
+                        return;
+                    }
+                    out.value(value.toString());
+                }
+
+                @Override
+                public Instant read(JsonReader in) throws IOException {
+                    if (in.peek() == JsonToken.NULL) {
+                        in.nextNull();
+                        return null;
+                    }
+                    return LocalDateTime.parse(in.nextString(), RFC_3339_FORMATTER).toInstant(ZoneOffset.UTC);
                 }
             })
             .setLongSerializationPolicy(LongSerializationPolicy.STRING)
