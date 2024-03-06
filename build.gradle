@@ -14,6 +14,7 @@ group = 'io.github.honhimw'
 version = '1.7.0.0' // API docs version plus '.x(-SNAPSHOT/RC.x)?'
 description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
+def rc = 1
 def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.3'
 def jacksonVersion = '2.16.1'
@@ -208,7 +209,7 @@ tasks.register('publish-snapshot') {
     dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-snapshotsRepository')
 }
 tasks.register('publish-rc') {
-    version = version + '-RC.' + 0
+    version = version + '-RC.' + rc
     dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-central-rcRepository')
 }
 tasks.register('publish-release') {

@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Singleton {@link TypeRef}, reducing compiled class files size, and memory usage during runtime.
+ * Singleton {@link TypeRef}, reducing size of compiled classes and runtime memory usage.
  *
  * @author hon_him
  * @since 2024-03-06
