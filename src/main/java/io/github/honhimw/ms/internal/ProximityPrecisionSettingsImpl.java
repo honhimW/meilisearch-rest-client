@@ -16,7 +16,6 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.api.ProximityPrecisionSettings;
 import io.github.honhimw.ms.api.reactive.ReactiveProximityPrecisionSettings;
-import io.github.honhimw.ms.model.ProximityPrecision;
 import io.github.honhimw.ms.model.ProximityPrecisionType;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.ReactorUtils;

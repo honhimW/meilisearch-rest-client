@@ -59,7 +59,6 @@ public interface Keys {
 
     /**
      * Create an API key with the provided description, permissions, and expiration date.
-     *
      */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
     Key create(CreateKeyRequest request);

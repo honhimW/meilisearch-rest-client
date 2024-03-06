@@ -144,6 +144,7 @@ public interface MSearchClient extends AutoCloseable {
 
     /**
      * Create a blocking-client.
+     *
      * @param config client configuration
      * @return blocking-client
      */
@@ -153,6 +154,7 @@ public interface MSearchClient extends AutoCloseable {
 
     /**
      * Create a blocking-client with default config.
+     *
      * @param configure client configure
      * @return blocking-client
      */

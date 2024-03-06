@@ -18,6 +18,7 @@ import io.github.honhimw.ms.json.EnumValue;
 
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#ranking-rules-array">Ranking rules array</a>
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -28,7 +29,7 @@ public enum RankingRule implements EnumValue<RankingRule> {
      */
     WORDS("words"),
     /**
-     * 	Sorts results by increasing number of typos
+     * Sorts results by increasing number of typos
      */
     TYPO("typo"),
     /**
@@ -44,7 +45,7 @@ public enum RankingRule implements EnumValue<RankingRule> {
      */
     SORT("sort"),
     /**
-     * 	Sorts results based on the similarity of the matched words with the query words
+     * Sorts results based on the similarity of the matched words with the query words
      */
     EXACTNESS("exactness"),
     ;

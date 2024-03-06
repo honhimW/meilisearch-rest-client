@@ -14,7 +14,10 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.model.FacetSearchRequest;
+import io.github.honhimw.ms.model.FacetSearchResponse;
+import io.github.honhimw.ms.model.SearchDetailsResponse;
+import io.github.honhimw.ms.model.SearchRequest;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.function.Consumer;

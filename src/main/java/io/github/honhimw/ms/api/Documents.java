@@ -57,8 +57,8 @@ public interface Documents {
     /**
      * Get documents by batch.
      *
-     * @param limit  default 20
-     * @param offset default 0
+     * @param limit   default 20
+     * @param offset  default 0
      * @param typeRef document type
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")

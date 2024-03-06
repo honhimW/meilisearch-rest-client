@@ -15,8 +15,8 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveLogs;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.LogStreamRequest;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 /**
@@ -32,19 +32,16 @@ class ReactiveLogsImpl extends AbstractReactiveImpl implements ReactiveLogs {
 
     @Override
     public Mono<Void> update(LogStreamRequest request) {
-        return post("/logs/stream", configurer -> json(configurer, request), new TypeRef<Void>() {
-        });
+        return post("/logs/stream", configurer -> json(configurer, request), TypeRefs.VoidRef.INSTANCE);
     }
 
     @Override
     public Mono<Void> stderr(LogStreamRequest request) {
-        return post("/logs/stderr", configurer -> json(configurer, request), new TypeRef<Void>() {
-        });
+        return post("/logs/stderr", configurer -> json(configurer, request), TypeRefs.VoidRef.INSTANCE);
     }
 
     @Override
     public Mono<Void> reset() {
-        return delete("/logs/stream", new TypeRef<Void>() {
-        });
+        return delete("/logs/stream", TypeRefs.VoidRef.INSTANCE);
     }
 }

@@ -15,8 +15,8 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveDistinctAttributeSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 /**
@@ -40,19 +40,16 @@ class ReactiveDistinctAttributeSettingsImpl extends AbstractReactiveImpl impleme
 
     @Override
     public Mono<String> get() {
-        return get(path, new TypeRef<String>() {
-        });
+        return get(path, TypeRefs.StringRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(String distinctAttribute) {
-        return put(path, configurer -> json(configurer, String.format("\"%s\"", distinctAttribute)), new TypeRef<TaskInfo>() {
-        });
+        return put(path, configurer -> json(configurer, String.format("\"%s\"", distinctAttribute)), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

@@ -68,7 +68,7 @@ public class SearchDetails implements Serializable {
         public static class Position implements Serializable {
             @Schema(description = "start position")
             private Integer start;
-            
+
             @Schema(description = "match length")
             private Integer length;
         }
@@ -93,7 +93,7 @@ public class SearchDetails implements Serializable {
     public static class RankingScoreDetails implements Serializable {
         @Schema(description = "TODO")
         private Words words;
-        
+
         @Schema(description = "TODO")
         private Typo typo;
 
@@ -113,13 +113,13 @@ public class SearchDetails implements Serializable {
         public static class Words implements Serializable {
             @Schema(description = "TODO")
             private Integer order;
-            
+
             @Schema(description = "TODO")
             private Integer matchingWords;
 
             @Schema(description = "TODO")
             private Integer maxMatchingWords;
-            
+
             @Schema(description = "TODO")
             private Double score;
         }

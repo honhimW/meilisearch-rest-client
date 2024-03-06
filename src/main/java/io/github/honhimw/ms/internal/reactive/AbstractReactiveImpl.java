@@ -108,9 +108,10 @@ abstract class AbstractReactiveImpl {
         return receiver.responseSingle((httpClientResponse, byteBufMono) -> {
                 HttpResponseStatus status = httpClientResponse.status();
                 int code = status.code();
+                Mono<String> stringMono = byteBufMono.asByteArray()
+                    .map(bytes -> new String(bytes, StandardCharsets.UTF_8));
                 if (code < 200 || 300 <= code) {
-                    return byteBufMono.asByteArray()
-                        .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+                    return stringMono
                         .switchIfEmpty(Mono.just(status.reasonPhrase()))
                         .handle((s, sink) -> {
                             HttpFailureException httpFailureException = new HttpFailureException(code, s);
@@ -119,8 +120,7 @@ abstract class AbstractReactiveImpl {
                             sink.error(httpFailureException);
                         });
                 } else {
-                    return byteBufMono.asByteArray()
-                        .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+                    return stringMono
                         .mapNotNull(s -> jsonHandler.fromJson(s, typeRef));
                 }
             })

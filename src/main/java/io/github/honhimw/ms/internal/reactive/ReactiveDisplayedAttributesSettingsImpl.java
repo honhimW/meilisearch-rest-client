@@ -15,8 +15,8 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveDisplayedAttributesSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -42,19 +42,16 @@ class ReactiveDisplayedAttributesSettingsImpl extends AbstractReactiveImpl imple
 
     @Override
     public Mono<List<String>> get() {
-        return get(path, new TypeRef<List<String>>() {
-        });
+        return get(path, TypeRefs.StringListRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(List<String> displayedAttributes) {
-        return put(path, configurer -> json(configurer, displayedAttributes), new TypeRef<TaskInfo>() {
-        });
+        return put(path, configurer -> json(configurer, displayedAttributes), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

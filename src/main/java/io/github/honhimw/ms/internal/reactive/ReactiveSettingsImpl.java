@@ -15,9 +15,9 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.*;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -39,8 +39,7 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
 
     @Override
     public Mono<Setting> get() {
-        return get(String.format("/indexes/%s/settings", indexUid), new TypeRef<Setting>() {
-        });
+        return get(String.format("/indexes/%s/settings", indexUid), TypeRefs.of(Setting.class));
     }
 
     @Override
@@ -48,14 +47,12 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
         if (Objects.isNull(setting)) {
             return reset();
         }
-        return patch(String.format("/indexes/%s/settings", indexUid), configurer -> json(configurer, jsonHandler.toJson(setting)), new TypeRef<TaskInfo>() {
-        });
+        return patch(String.format("/indexes/%s/settings", indexUid), configurer -> json(configurer, jsonHandler.toJson(setting)), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(String.format("/indexes/%s/settings", indexUid), new TypeRef<TaskInfo>() {
-        });
+        return delete(String.format("/indexes/%s/settings", indexUid), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override

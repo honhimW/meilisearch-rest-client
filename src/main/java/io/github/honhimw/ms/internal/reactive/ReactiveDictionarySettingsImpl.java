@@ -15,8 +15,8 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveDictionarySettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -42,20 +42,16 @@ class ReactiveDictionarySettingsImpl extends AbstractReactiveImpl implements Rea
 
     @Override
     public Mono<List<String>> get() {
-        return get(path, new TypeRef<List<String>>() {
-        });
+        return get(path, TypeRefs.StringListRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(List<String> dictionary) {
-        return put(path, configurer -> json(configurer, dictionary),
-            new TypeRef<TaskInfo>() {
-        });
+        return put(path, configurer -> json(configurer, dictionary), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

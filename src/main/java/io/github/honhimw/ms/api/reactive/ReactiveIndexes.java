@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -64,11 +63,6 @@ public interface ReactiveIndexes {
     @Operation(method = "GET", tags = "/indexes/{index_uid}")
     Mono<Index> get(String uid);
 
-    @Operation(method = "POST", tags = "/indexes")
-    default Mono<TaskInfo> create(String uid) {
-        return create(uid, null);
-    }
-
     /**
      * Create an index.
      *
@@ -78,6 +72,11 @@ public interface ReactiveIndexes {
      */
     @Operation(method = "POST", tags = "/indexes")
     Mono<TaskInfo> create(String uid, @Nullable String primaryKey);
+
+    @Operation(method = "POST", tags = "/indexes")
+    default Mono<TaskInfo> create(String uid) {
+        return create(uid, null);
+    }
 
     /**
      * Update an index. Specify a primaryKey if it doesn't already exists yet.

@@ -37,19 +37,19 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder(builderClassName = "Builder")
 public class CancelTasksRequest implements Serializable {
-    
+
     @Schema(description = "Cancel tasks based on uid. Separate multiple uids with a comma (,). Use uids=* for all uids")
     private List<String> uids;
-    
+
     @Schema(description = "Cancel tasks based on status. Separate multiple statuses with a comma (,). Use statuses=* for all statuses")
     private List<TaskStatus> statuses;
-    
+
     @Schema(description = "Cancel tasks based on type. Separate multiple types with a comma (,). Use types=* for all types")
     private List<TaskType> types;
-    
+
     @Schema(description = "Cancel tasks based on indexUid. Separate multiple uids with a comma (,). Use indexUids=* for all indexUids. Case-sensitive")
     private List<String> indexUids;
-    
+
     @Schema(description = "Cancel tasks before a specified enqueuedAt date. Use beforeEnqueuedAt=* to cancel all tasks")
     private LocalDateTime beforeEnqueuedAt;
 

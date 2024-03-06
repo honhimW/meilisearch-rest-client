@@ -33,8 +33,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MultiSearchRequest implements Serializable {
-    
+
     @Schema(description = "Contains the list of search queries to perform. The indexUid search parameter is required, all other parameters are optional")
     private List<SearchWithIndexRequest> queries;
-    
+
 }

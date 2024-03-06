@@ -22,7 +22,6 @@ import io.github.honhimw.ms.model.SearchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Consumer;
 

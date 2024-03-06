@@ -49,7 +49,7 @@ import java.util.Objects;
 public final class MSearchConfig {
 
     private final String serverUrl;
-    
+
     private final String apiKey;
 
     private final JsonHandler jsonHandler;

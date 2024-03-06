@@ -55,7 +55,7 @@ public class Embedder implements Serializable {
 
         @Schema(description = "It is mandatory to pass an OpenAI API key through the OPENAI_API_KEY environment variable or the apiKey field when using an OpenAI embedder. Generate an API key from your OpenAI account. Use tier 2 keys or above for optimal performance.")
         private String apiKey;
-        
+
         @Schema(description = "model", example = "text-embedding-ada-002")
         private String model;
 

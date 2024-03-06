@@ -30,11 +30,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder(builderClassName = "Builder")
 public class UpdateKeyRequest implements Serializable {
-    
+
     @Schema(description = "A human-readable name for the key")
     private String name;
 
     @Schema(description = "An optional description for the key")
     private String description;
-    
+
 }

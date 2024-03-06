@@ -31,6 +31,7 @@ package io.github.honhimw.ms.internal.reactive;
 import io.github.honhimw.ms.api.reactive.*;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.TypeRefs;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -54,15 +55,13 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
         return get("/indexes", configurer -> configurer
                 .param("offset", _offset)
                 .param("limit", _limit),
-            new TypeRef<Page<Index>>() {
-            });
+            TypeRefs.PageIndexRef.INSTANCE);
     }
 
     @Override
     public Mono<Index> get(String uid) {
         return get(String.format("/indexes/%s", uid), configurer -> {
-        }, new TypeRef<Index>() {
-        });
+        }, TypeRefs.of(Index.class));
     }
 
     @Override
@@ -75,8 +74,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
                     Optional.ofNullable(primaryKey)
                         .ifPresent(pk -> obj.put("primaryKey", pk));
                     raw.json(jsonHandler.toJson(obj));
-                })), new TypeRef<TaskInfo>() {
-        });
+                })), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
@@ -87,15 +85,13 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
                     Map<String, String> obj = new HashMap<>();
                     obj.put("primaryKey", primaryKey);
                     raw.json(jsonHandler.toJson(obj));
-                })), new TypeRef<TaskInfo>() {
-        });
+                })), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> delete(String uid) {
         return delete(String.format("/indexes/%s", uid), configurer -> {
-        }, new TypeRef<TaskInfo>() {
-        });
+        }, TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
@@ -112,8 +108,7 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
                     list.add(swap);
                 }
                 raw.json(jsonHandler.toJson(list));
-            })), new TypeRef<TaskInfo>() {
-        });
+            })), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
@@ -148,13 +143,11 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
 
     @Override
     public Mono<Stats> stats() {
-        return get("/stats", new TypeRef<Stats>() {
-        });
+        return get("/stats", TypeRefs.of(Stats.class));
     }
 
     @Override
     public Mono<IndexStats> stats(String uid) {
-        return get(String.format("/indexes/%s/stats", uid), new TypeRef<IndexStats>() {
-        });
+        return get(String.format("/indexes/%s/stats", uid), TypeRefs.of(IndexStats.class));
     }
 }

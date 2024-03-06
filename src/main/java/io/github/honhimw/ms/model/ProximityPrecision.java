@@ -29,6 +29,7 @@ import java.io.Serializable;
  *   "proximityPrecision": "byWord"
  * }
  * </pre>
+ *
  * @author hon_him
  * @since 2024-01-18 V1.6
  */

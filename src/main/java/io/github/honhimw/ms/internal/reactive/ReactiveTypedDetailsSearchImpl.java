@@ -18,6 +18,7 @@ import io.github.honhimw.ms.api.reactive.ReactiveTypedDetailsSearch;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
@@ -35,8 +36,6 @@ class ReactiveTypedDetailsSearchImpl<T> extends AbstractReactiveImpl implements 
 
     private final String indexUid;
     private final TypeRef<T> typeRef;
-    private static final TypeRef<SearchResponse<Map<String, Object>>> mapTypeRef = new TypeRef<SearchResponse<Map<String, Object>>>() {
-    };
 
     public ReactiveTypedDetailsSearchImpl(ReactiveIndexesImpl indexes, String indexUid, TypeRef<T> typeRef) {
         super(indexes._client);
@@ -48,20 +47,19 @@ class ReactiveTypedDetailsSearchImpl<T> extends AbstractReactiveImpl implements 
     public Mono<SearchDetailsResponse<T>> find(String q) {
         Map<String, String> obj = new HashMap<>();
         obj.put("q", q);
-        return post(String.format("/indexes/%s/search", indexUid), configurer -> json(configurer, jsonHandler.toJson(obj)), mapTypeRef)
+        return post(String.format("/indexes/%s/search", indexUid), configurer -> json(configurer, jsonHandler.toJson(obj)), TypeRefs.StringObjectMapSearchResponseRef.INSTANCE)
             .map(this::transform);
     }
 
     @Override
     public Mono<SearchDetailsResponse<T>> find(SearchRequest request) {
-        return post(String.format("/indexes/%s/search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), mapTypeRef)
+        return post(String.format("/indexes/%s/search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), TypeRefs.StringObjectMapSearchResponseRef.INSTANCE)
             .map(this::transform);
     }
 
     @Override
     public Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request) {
-        return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), new TypeRef<FacetSearchResponse>() {
-        });
+        return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), TypeRefs.of(FacetSearchResponse.class));
     }
 
     private SearchDetailsResponse<T> transform(SearchResponse<Map<String, Object>> searchResponse) {

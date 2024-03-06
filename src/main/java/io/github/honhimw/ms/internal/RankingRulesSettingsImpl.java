@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 class RankingRulesSettingsImpl implements RankingRulesSettings {
-    
+
     private final ReactiveRankingRulesSettings _reactive;
 
     RankingRulesSettingsImpl(ReactiveRankingRulesSettings reactive) {

@@ -16,8 +16,10 @@ package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.support.FilterBuilder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.function.Consumer;

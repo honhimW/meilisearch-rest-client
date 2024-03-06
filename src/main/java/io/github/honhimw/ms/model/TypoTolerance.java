@@ -36,7 +36,6 @@ import java.util.List;
  * }
  * </pre>
  *
- *
  * @author hon_him
  * @since 2024-01-03
  */
@@ -50,12 +49,12 @@ public class TypoTolerance implements Serializable {
 
     @Schema(description = "Whether typo tolerance is enabled or not", defaultValue = "true")
     private Boolean enabled;
-    
+
     private MinWordSizeForTypos minWordSizeForTypos;
-    
+
     @Schema(description = "An array of words for which the typo tolerance feature is disabled", defaultValue = "[]")
     private List<String> disableOnWords;
-    
+
     @Schema(description = "An array of attributes for which the typo tolerance feature is disabled", defaultValue = "[]")
     private List<String> disableOnAttributes;
 
@@ -77,14 +76,14 @@ public class TypoTolerance implements Serializable {
     @AllArgsConstructor
     @lombok.Builder(builderClassName = "Builder")
     public static class MinWordSizeForTypos implements Serializable {
-        
+
         @Schema(description = "The minimum word size for accepting 1 typo; must be between 0 and twoTypos", defaultValue = "5")
         private Integer oneTypo;
-        
+
         @Schema(description = "The minimum word size for accepting 2 typos; must be between oneTypo and 255", defaultValue = "9")
         private Integer twoTypos;
-        
+
     }
-    
+
 
 }

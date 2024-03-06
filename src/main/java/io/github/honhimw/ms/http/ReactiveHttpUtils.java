@@ -632,9 +632,11 @@ public class ReactiveHttpUtils implements AutoCloseable {
 
         private RequestConfig config;
 
-        private Consumer<HttpResult> resultHook = httpResult -> {};
+        private Consumer<HttpResult> resultHook = httpResult -> {
+        };
 
-        private Consumer<ReactiveHttpResult> reactiveResultHook = reactiveHttpResult -> {};
+        private Consumer<ReactiveHttpResult> reactiveResultHook = reactiveHttpResult -> {
+        };
 
         public Configurer method(String method) {
             this.method = method;

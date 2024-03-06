@@ -49,12 +49,12 @@ public interface SortableAttributesSettings {
      * Update an index's sortable attributes list.
      *
      * @param sortableAttributes An array of strings.
-     *                        Each string should be an attribute that exists in the selected index.
-     *                        If an attribute contains an object,
-     *                        you can use dot notation to set one or more of its keys as a value for this setting:
-     *                        "sortableAttributes": ["author.surname"].
-     *                        <h2 style="color:orange">WARNING</h2>
-     *                        <pre>If the field does not exist, no error will be thrown.</pre>
+     *                           Each string should be an attribute that exists in the selected index.
+     *                           If an attribute contains an object,
+     *                           you can use dot notation to set one or more of its keys as a value for this setting:
+     *                           "sortableAttributes": ["author.surname"].
+     *                           <h2 style="color:orange">WARNING</h2>
+     *                           <pre>If the field does not exist, no error will be thrown.</pre>
      * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/sortable-attributes")

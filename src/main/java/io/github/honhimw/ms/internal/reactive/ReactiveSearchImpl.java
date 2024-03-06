@@ -21,6 +21,7 @@ import io.github.honhimw.ms.model.FacetSearchRequest;
 import io.github.honhimw.ms.model.FacetSearchResponse;
 import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -48,8 +49,7 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
                     obj.put("q", q);
                     raw.json(jsonHandler.toJson(obj));
                 }))
-            , new TypeRef<SearchResponse<Map<String, Object>>>() {
-            });
+            , TypeRefs.StringObjectMapSearchResponseRef.INSTANCE);
     }
 
     @Override
@@ -68,8 +68,7 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
     public Mono<SearchResponse<Map<String, Object>>> find(SearchRequest request) {
         return post(String.format("/indexes/%s/search", indexUid), configurer -> configurer
                 .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
-            , new TypeRef<SearchResponse<Map<String, Object>>>() {
-            });
+            , TypeRefs.StringObjectMapSearchResponseRef.INSTANCE);
     }
 
     @Override
@@ -84,7 +83,6 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
     public Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request) {
         return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> configurer
                 .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
-            , new TypeRef<FacetSearchResponse>() {
-            });
+            , TypeRefs.of(FacetSearchResponse.class));
     }
 }

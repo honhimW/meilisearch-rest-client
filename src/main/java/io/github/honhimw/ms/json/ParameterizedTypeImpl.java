@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @see sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
  * @author hon_him
+ * @see sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
  * @since 2024-01-08
  */
 
@@ -36,7 +36,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
     private ParameterizedTypeImpl(Class<?> var1, Type[] var2, Type var3) {
         this.actualTypeArguments = var2;
         this.rawType = var1;
-        this.ownerType = (Type)(var3 != null ? var3 : var1.getDeclaringClass());
+        this.ownerType = (Type) (var3 != null ? var3 : var1.getDeclaringClass());
         this.validateConstructorArguments();
     }
 
@@ -45,7 +45,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
         if (var1.length != this.actualTypeArguments.length) {
             throw new MalformedParameterizedTypeException();
         } else {
-            for(int var2 = 0; var2 < this.actualTypeArguments.length; ++var2) {
+            for (int var2 = 0; var2 < this.actualTypeArguments.length; ++var2) {
             }
 
         }
@@ -56,7 +56,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
     }
 
     public Type[] getActualTypeArguments() {
-        return (Type[])this.actualTypeArguments.clone();
+        return (Type[]) this.actualTypeArguments.clone();
     }
 
     public Class<?> getRawType() {
@@ -69,7 +69,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
 
     public boolean equals(Object var1) {
         if (var1 instanceof ParameterizedType) {
-            ParameterizedType var2 = (ParameterizedType)var1;
+            ParameterizedType var2 = (ParameterizedType) var1;
             if (this == var2) {
                 return true;
             } else {
@@ -90,14 +90,14 @@ public class ParameterizedTypeImpl implements ParameterizedType {
         StringBuilder var1 = new StringBuilder();
         if (this.ownerType != null) {
             if (this.ownerType instanceof Class) {
-                var1.append(((Class)this.ownerType).getName());
+                var1.append(((Class) this.ownerType).getName());
             } else {
                 var1.append(this.ownerType.toString());
             }
 
             var1.append("$");
             if (this.ownerType instanceof ParameterizedTypeImpl) {
-                var1.append(this.rawType.getName().replace(((ParameterizedTypeImpl)this.ownerType).rawType.getName() + "$", ""));
+                var1.append(this.rawType.getName().replace(((ParameterizedTypeImpl) this.ownerType).rawType.getName() + "$", ""));
             } else {
                 var1.append(this.rawType.getSimpleName());
             }
@@ -111,7 +111,7 @@ public class ParameterizedTypeImpl implements ParameterizedType {
             Type[] var3 = this.actualTypeArguments;
             int var4 = var3.length;
 
-            for(int var5 = 0; var5 < var4; ++var5) {
+            for (int var5 = 0; var5 < var4; ++var5) {
                 Type var6 = var3[var5];
                 if (!var2) {
                     var1.append(", ");

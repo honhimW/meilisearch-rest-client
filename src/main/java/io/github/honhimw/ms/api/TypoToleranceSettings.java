@@ -64,8 +64,8 @@ public interface TypoToleranceSettings {
     /**
      * Reset an index's typo tolerance settings to their default value.
      *
-     * @see TypoTolerance#defaultObject()
      * @return reset task
+     * @see TypoTolerance#defaultObject()
      */
     @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/typo-tolerance")
     TaskInfo reset();

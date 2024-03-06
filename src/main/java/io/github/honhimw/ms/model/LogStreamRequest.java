@@ -33,10 +33,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogStreamRequest implements Serializable {
-    
+
     @Schema(description = "to select what logs you’re interested into. It takes the form of code_part=log_level.", example = "index_scheduler=info")
     private String target;
-    
+
     @Schema(description = "to select in what format of log you want")
     private Mode mode;
 
@@ -109,5 +109,5 @@ public class LogStreamRequest implements Serializable {
             return value;
         }
     }
-    
+
 }

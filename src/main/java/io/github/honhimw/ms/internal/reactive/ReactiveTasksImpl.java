@@ -15,11 +15,11 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveTasks;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.CancelTasksRequest;
 import io.github.honhimw.ms.model.GetTasksRequest;
 import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -40,8 +40,7 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
         return get("/tasks", configurer -> {
             Map<String, String> parameters = request.toParameters();
             configurer.params(parameters);
-        }, new TypeRef<Page<TaskInfo>>() {
-        });
+        }, TypeRefs.PageTaskInfoRef.INSTANCE);
     }
 
     @Override
@@ -49,14 +48,12 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
         return delete("/tasks", configurer -> {
             Map<String, String> parameters = request.toParameters();
             configurer.params(parameters);
-        }, new TypeRef<TaskInfo>() {
-        });
+        }, TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> get(Integer uid) {
-        return get(String.format("/tasks/%s", uid), new TypeRef<TaskInfo>() {
-        });
+        return get(String.format("/tasks/%s", uid), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
@@ -64,7 +61,6 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
         return post("/tasks/cancel", configurer -> {
             Map<String, String> parameters = request.toParameters();
             configurer.params(parameters);
-        }, new TypeRef<TaskInfo>() {
-        });
+        }, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

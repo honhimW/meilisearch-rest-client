@@ -15,9 +15,9 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveTypoToleranceSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.TypoTolerance;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 /**
@@ -41,19 +41,16 @@ class ReactiveTypoToleranceSettingsImpl extends AbstractReactiveImpl implements 
 
     @Override
     public Mono<TypoTolerance> get() {
-        return get(path, new TypeRef<TypoTolerance>() {
-        });
+        return get(path, TypeRefs.of(TypoTolerance.class));
     }
 
     @Override
     public Mono<TaskInfo> update(TypoTolerance typoTolerance) {
-        return patch(path, configurer -> json(configurer, typoTolerance), new TypeRef<TaskInfo>() {
-        });
+        return patch(path, configurer -> json(configurer, typoTolerance), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

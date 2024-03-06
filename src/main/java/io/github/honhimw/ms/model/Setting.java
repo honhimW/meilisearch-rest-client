@@ -83,22 +83,22 @@ public class Setting implements Serializable {
 
     @Schema(description = "Fields displayed in the returned documents", defaultValue = "[\"*\"]")
     private List<String> displayedAttributes;
-    
+
     @Schema(description = "Fields in which to search for matching query words sorted by order of importance", defaultValue = "[\"*\"]")
     private List<String> searchableAttributes;
-    
+
     @Schema(description = "Attributes to use as filters and facets", defaultValue = "[]")
     private List<String> filterableAttributes;
-    
+
     @Schema(description = "Attributes to use when sorting search results", defaultValue = "[]")
     private List<String> sortableAttributes;
-    
+
     @Schema(description = "List of ranking rules in order of importance", defaultValue = "[\"words\",\"typo\",\"proximity\",\"attribute\",\"sort\",\"exactness\"]")
     private List<RankingRule> rankingRules;
-    
+
     @Schema(description = "List of words ignored by Meilisearch when present in search queries", defaultValue = "[]")
     private List<String> stopWords;
-    
+
     @Schema(description = "List of characters not delimiting where one term begins and ends", defaultValue = "[]")
     private List<String> nonSeparatorTokens;
 
@@ -110,10 +110,10 @@ public class Setting implements Serializable {
 
     @Schema(description = "List of associated words treated similarly", defaultValue = "{}")
     private Map<String, List<String>> synonyms;
-    
+
     @Schema(description = "Search returns documents with distinct (different) values of the given field", defaultValue = "null")
     private String distinctAttribute;
-    
+
     @Schema(description = "Typo tolerance settings", defaultValue = "default object")
     private TypoTolerance typoTolerance;
 
@@ -122,10 +122,10 @@ public class Setting implements Serializable {
 
     @Schema(description = "Pagination settings", defaultValue = "default object")
     private Pagination pagination;
-    
+
     @Schema(description = "Precision level when calculating the proximity ranking rule", defaultValue = "byWord")
     private ProximityPrecisionType proximityPrecision;
-    
+
     @Schema(description = "To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.")
     private Map<String, ? extends Embedder> embedders;
 

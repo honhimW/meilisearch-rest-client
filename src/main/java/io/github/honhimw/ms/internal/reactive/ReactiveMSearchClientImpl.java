@@ -60,11 +60,11 @@ import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.api.reactive.*;
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.json.JsonHandler;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.Version;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -112,14 +112,12 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
 
     @Override
     public Mono<List<SearchResponse<Map<String, Object>>>> multiSearch(MultiSearchRequest request) {
-        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), new TypeRef<List<SearchResponse<Map<String, Object>>>>() {
-        });
+        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), TypeRefs.StringObjectMapSearchResponseListRef.INSTANCE);
     }
 
     @Override
     public Mono<Void> healthy() {
-        return getSimpleReactive().get("/health", new TypeRef<Map<String, String>>() {
-            }).handle((map, sink) -> {
+        return getSimpleReactive().get("/health", TypeRefs.StringStringMapRef.INSTANCE).handle((map, sink) -> {
                 if (!"available".equals(map.get("status"))) {
                     sink.error(new IllegalStateException("server status not ['available']"));
                 }
@@ -129,20 +127,17 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
 
     @Override
     public Mono<Version> version() {
-        return getSimpleReactive().get("/version", new TypeRef<Version>() {
-        });
+        return getSimpleReactive().get("/version", TypeRefs.of(Version.class));
     }
 
     @Override
     public Mono<TaskInfo> dumps() {
-        return getSimpleReactive().post("/dumps", new TypeRef<TaskInfo>() {
-        });
+        return getSimpleReactive().post("/dumps", TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> snapshots() {
-        return getSimpleReactive().post("/snapshots", new TypeRef<TaskInfo>() {
-        });
+        return getSimpleReactive().post("/snapshots", TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override

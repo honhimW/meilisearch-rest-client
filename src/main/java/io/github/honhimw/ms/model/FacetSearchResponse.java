@@ -36,26 +36,26 @@ public class FacetSearchResponse implements Serializable {
 
     @Schema(description = "Facet hits")
     private List<FacetHit> facetHits;
-    
+
     @Schema(description = "The original facetQuery")
     private String facetQuery;
-    
+
     @Schema(description = "Processing time of the query")
     private Long processingTimeMs;
-    
+
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
     @AllArgsConstructor
     public static class FacetHit implements Serializable {
-        
+
         @Schema(description = "Facet value matching the facetQuery")
         private String value;
-        
+
         @Schema(description = "Number of documents with a facet value matching value")
         private Integer count;
-        
+
     }
-    
-    
+
+
 }

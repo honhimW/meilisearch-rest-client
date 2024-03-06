@@ -16,7 +16,6 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.LogStreamRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
 

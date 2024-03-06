@@ -15,11 +15,11 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveKeys;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.CreateKeyRequest;
 import io.github.honhimw.ms.model.Key;
 import io.github.honhimw.ms.model.Page;
 import io.github.honhimw.ms.model.UpdateKeyRequest;
+import io.github.honhimw.ms.support.TypeRefs;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -46,31 +46,26 @@ class ReactiveKeysImpl extends AbstractReactiveImpl implements ReactiveKeys {
                     .param("offset", _offset)
                     .param("limit", _limit);
             }
-            , new TypeRef<Page<Key>>() {
-            });
+            , TypeRefs.PageKeyRef.INSTANCE);
     }
 
     @Override
     public Mono<Key> get(String keyOrUid) {
-        return get("/keys/" + keyOrUid, new TypeRef<Key>() {
-        });
+        return get("/keys/" + keyOrUid, TypeRefs.of(Key.class));
     }
 
     @Override
     public Mono<Key> create(CreateKeyRequest request) {
-        return post("/keys", configurer -> json(configurer, request), new TypeRef<Key>() {
-        });
+        return post("/keys", configurer -> json(configurer, request), TypeRefs.of(Key.class));
     }
 
     @Override
     public Mono<Key> update(String keyOrUid, UpdateKeyRequest request) {
-        return patch("/keys/" + keyOrUid, configurer -> json(configurer, request), new TypeRef<Key>() {
-        });
+        return patch("/keys/" + keyOrUid, configurer -> json(configurer, request), TypeRefs.of(Key.class));
     }
 
     @Override
     public Mono<Void> delete(String keyOrUid) {
-        return delete("/keys/" + keyOrUid, new TypeRef<Void>() {
-        });
+        return delete("/keys/" + keyOrUid, TypeRefs.VoidRef.INSTANCE);
     }
 }

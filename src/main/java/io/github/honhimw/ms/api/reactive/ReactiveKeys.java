@@ -59,7 +59,6 @@ public interface ReactiveKeys {
 
     /**
      * Create an API key with the provided description, permissions, and expiration date.
-     *
      */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
     Mono<Key> create(CreateKeyRequest request);

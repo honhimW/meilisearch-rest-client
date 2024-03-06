@@ -15,7 +15,6 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.Pagination;
-import io.github.honhimw.ms.model.ProximityPrecision;
 import io.github.honhimw.ms.model.ProximityPrecisionType;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;

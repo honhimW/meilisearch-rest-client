@@ -30,20 +30,20 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(builderClassName = "Builder")
 public class FacetSearchRequest extends FilterableAttributesRequest {
-    
+
     @Schema(description = "Query string")
     private String q;
-    
+
     @Schema(description = "Facet name to search values on", requiredMode = Schema.RequiredMode.REQUIRED)
     private String facetName;
-    
+
     @Schema(description = "Search query for a given facet value. If facetQuery isn't specified, Meilisearch performs a placeholder search which returns all facet values for the searched facet, limited to 100")
     private String facetQuery;
-    
+
     @Schema(description = "Strategy used to match query terms within documents")
     private String matchingStrategy;
-    
+
     @Schema(description = "Restrict search to the specified attributes")
     private List<String> attributesToSearchOn;
-    
+
 }

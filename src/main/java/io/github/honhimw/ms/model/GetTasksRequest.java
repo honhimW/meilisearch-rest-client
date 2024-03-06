@@ -37,43 +37,43 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder(builderClassName = "Builder")
 public class GetTasksRequest implements Serializable {
-    
+
     @Schema(description = "Number of tasks to return", defaultValue = "20")
     private Integer limit;
-    
+
     @Schema(description = "uid of the first task returned", defaultValue = "uid of the last created task")
     private String from;
-    
+
     @Schema(description = "Filter tasks by their uid. Separate multiple task uids with a comma (,)", defaultValue = "*")
     private List<String> uids;
-    
+
     @Schema(description = "Filter tasks by their status. Separate multiple task statuses with a comma (,)", defaultValue = "*")
     private List<TaskStatus> statuses;
-    
+
     @Schema(description = "Filter tasks by their type. Separate multiple task types with a comma (,)", defaultValue = "*")
     private List<TaskType> types;
-    
+
     @Schema(description = "Filter tasks by their indexUid. Separate multiple task indexUids with a comma (,). Case-sensitive", defaultValue = "*")
     private List<String> indexUids;
-    
+
     @Schema(description = "Filter tasks by their canceledBy field. Separate multiple task uids with a comma (,)")
     private List<String> canceledBy;
-    
+
     @Schema(description = "Filter tasks by their enqueuedAt field", defaultValue = "*")
     private LocalDateTime beforeEnqueuedAt;
-    
+
     @Schema(description = "Filter tasks by their startedAt field", defaultValue = "*")
     private LocalDateTime beforeStartedAt;
-    
+
     @Schema(description = "Filter tasks by their finishedAt field", defaultValue = "*")
     private LocalDateTime beforeFinishedAt;
-    
+
     @Schema(description = "Filter tasks by their enqueuedAt field", defaultValue = "*")
     private LocalDateTime afterEnqueuedAt;
-    
+
     @Schema(description = "Filter tasks by their startedAt field", defaultValue = "*")
     private LocalDateTime afterStartedAt;
-    
+
     @Schema(description = "Filter tasks by their finishedAt field", defaultValue = "*")
     private LocalDateTime afterFinishedAt;
 

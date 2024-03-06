@@ -34,14 +34,14 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VectorizedDocument implements Serializable {
-    
+
     @Schema(description = "document id")
     private String id;
 
     @Schema(description = "vectorized data")
     private Map<String, List<Number>> _vectors;
-    
+
     @Schema(description = "textual document")
     private String text;
-    
+
 }

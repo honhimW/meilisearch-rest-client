@@ -15,8 +15,8 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveSynonymsSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -43,19 +43,16 @@ class ReactiveSynonymsSettingsImpl extends AbstractReactiveImpl implements React
 
     @Override
     public Mono<Map<String, List<String>>> get() {
-        return get(path, new TypeRef<Map<String, List<String>>>() {
-        });
+        return get(path, TypeRefs.StringStringListMapRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(Map<String, List<String>> synonyms) {
-        return put(path, configurer -> json(configurer, synonyms), new TypeRef<TaskInfo>() {
-        });
+        return put(path, configurer -> json(configurer, synonyms), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

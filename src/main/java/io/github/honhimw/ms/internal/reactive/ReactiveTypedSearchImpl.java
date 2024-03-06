@@ -21,6 +21,7 @@ import io.github.honhimw.ms.model.FacetSearchRequest;
 import io.github.honhimw.ms.model.FacetSearchResponse;
 import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -59,7 +60,6 @@ class ReactiveTypedSearchImpl<T> extends AbstractReactiveImpl implements Reactiv
 
     @Override
     public Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request) {
-        return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), new TypeRef<FacetSearchResponse>() {
-        });
+        return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), TypeRefs.of(FacetSearchResponse.class));
     }
 }

@@ -61,8 +61,8 @@ public interface SearchableAttributesSettings {
      *                             "searchableAttributes": ["release_date.year"].
      *                             <h2 style="color:orange">WARNING</h2>
      *                             <pre>
-     *                             If the field does not exist, no error will be thrown.
-     *                             </pre>
+     *                                                         If the field does not exist, no error will be thrown.
+     *                                                         </pre>
      * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/searchable-attributes")

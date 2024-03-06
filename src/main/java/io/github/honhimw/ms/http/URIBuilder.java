@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 /**
  * copied from apache httpclient-core, exclude all dependencies except jdk
+ *
  * @author hon_him
  * @since 2023-07-24
  */
@@ -572,43 +573,49 @@ public final class URIBuilder {
         return buildString();
     }
 
-    private static final BitSet UNRESERVED   = new BitSet(256);
+    private static final BitSet UNRESERVED = new BitSet(256);
     /**
      * Punctuation characters: , ; : $ & + =
      * <p>
      * These are the additional characters allowed by userinfo.
      */
-    private static final BitSet PUNCT        = new BitSet(256);
-    /** Characters which are safe to use in userinfo,
-     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation */
-    private static final BitSet USERINFO     = new BitSet(256);
-    /** Characters which are safe to use in a path,
-     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation plus / @ */
-    private static final BitSet PATHSAFE     = new BitSet(256);
-    /** Characters which are safe to use in a query or a fragment,
-     * i.e. {@link #RESERVED} plus {@link #UNRESERVED} */
-    private static final BitSet URIC     = new BitSet(256);
+    private static final BitSet PUNCT = new BitSet(256);
+    /**
+     * Characters which are safe to use in userinfo,
+     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation
+     */
+    private static final BitSet USERINFO = new BitSet(256);
+    /**
+     * Characters which are safe to use in a path,
+     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation plus / @
+     */
+    private static final BitSet PATHSAFE = new BitSet(256);
+    /**
+     * Characters which are safe to use in a query or a fragment,
+     * i.e. {@link #RESERVED} plus {@link #UNRESERVED}
+     */
+    private static final BitSet URIC = new BitSet(256);
 
     /**
      * Reserved characters, i.e. {@code ;/?:@&=+$,[]}
      * <p>
-     *  This list is the same as the {@code reserved} list in
-     *  <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>
-     *  as augmented by
-     *  <a href="http://www.ietf.org/rfc/rfc2732.txt">RFC 2732</a>
+     * This list is the same as the {@code reserved} list in
+     * <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>
+     * as augmented by
+     * <a href="http://www.ietf.org/rfc/rfc2732.txt">RFC 2732</a>
      */
-    private static final BitSet RESERVED     = new BitSet(256);
+    private static final BitSet RESERVED = new BitSet(256);
 
 
     /**
      * Safe characters for x-www-form-urlencoded data, as per java.net.URLEncoder and browser behaviour,
      * i.e. alphanumeric plus {@code "-", "_", ".", "*"}
      */
-    private static final BitSet URLENCODER   = new BitSet(256);
+    private static final BitSet URLENCODER = new BitSet(256);
 
     private static final BitSet PATH_SPECIAL = new BitSet(256);
 
-    private static final BitSet PATH_SAFE     = new BitSet(256);
+    private static final BitSet PATH_SAFE = new BitSet(256);
 
     static {
         // unreserved chars

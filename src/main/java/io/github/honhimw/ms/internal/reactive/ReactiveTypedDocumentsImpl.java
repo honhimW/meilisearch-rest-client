@@ -20,6 +20,7 @@ import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.StringUtils;
+import io.github.honhimw.ms.support.TypeRefs;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -67,32 +68,27 @@ class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements Reac
 
     @Override
     public Mono<TaskInfo> save(String json) {
-        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> save(Collection<? extends T> collection) {
-        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(String json) {
-        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), new TypeRef<TaskInfo>() {
-        });
+        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(Collection<? extends T> collection) {
-        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
-        });
+        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> deleteAll() {
-        return delete(String.format("/indexes/%s/documents", indexUid), new TypeRef<TaskInfo>() {
-        });
+        return delete(String.format("/indexes/%s/documents", indexUid), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
@@ -103,14 +99,12 @@ class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements Reac
 
     @Override
     public Mono<TaskInfo> batchDelete(Collection<String> ids) {
-        return post(String.format("/indexes/%s/documents/delete-batch", indexUid), configurer -> json(configurer, ids), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents/delete-batch", indexUid), configurer -> json(configurer, ids), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> delete(FilterableAttributesRequest filter) {
-        return post(String.format("/indexes/%s/documents/delete", indexUid), configurer -> json(configurer, filter), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents/delete", indexUid), configurer -> json(configurer, filter), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
@@ -127,7 +121,6 @@ class ReactiveTypedDocumentsImpl<T> extends AbstractReactiveImpl implements Reac
 
     @Override
     public Mono<TaskInfo> delete(String id) {
-        return delete(String.format("/indexes/%s/documents/%s", indexUid, id), new TypeRef<TaskInfo>() {
-        });
+        return delete(String.format("/indexes/%s/documents/%s", indexUid, id), TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

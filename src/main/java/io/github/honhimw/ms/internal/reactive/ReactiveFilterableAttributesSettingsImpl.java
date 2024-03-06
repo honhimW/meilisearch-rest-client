@@ -15,8 +15,8 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveFilterableAttributesSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -42,19 +42,16 @@ class ReactiveFilterableAttributesSettingsImpl extends AbstractReactiveImpl impl
 
     @Override
     public Mono<List<String>> get() {
-        return get(path, new TypeRef<List<String>>() {
-        });
+        return get(path, TypeRefs.StringListRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(List<String> filterableAttributes) {
-        return put(path, configurer -> json(configurer, filterableAttributes), new TypeRef<TaskInfo>() {
-        });
+        return put(path, configurer -> json(configurer, filterableAttributes), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

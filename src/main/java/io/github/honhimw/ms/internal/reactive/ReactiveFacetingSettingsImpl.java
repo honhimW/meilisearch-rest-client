@@ -15,9 +15,9 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveFacetingSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.Faceting;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 /**
@@ -41,19 +41,16 @@ class ReactiveFacetingSettingsImpl extends AbstractReactiveImpl implements React
 
     @Override
     public Mono<Faceting> get() {
-        return get(path, new TypeRef<Faceting>() {
-        });
+        return get(path, TypeRefs.of(Faceting.class));
     }
 
     @Override
     public Mono<TaskInfo> update(Faceting faceting) {
-        return patch(path, configurer -> json(configurer, faceting), new TypeRef<TaskInfo>() {
-        });
+        return patch(path, configurer -> json(configurer, faceting), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

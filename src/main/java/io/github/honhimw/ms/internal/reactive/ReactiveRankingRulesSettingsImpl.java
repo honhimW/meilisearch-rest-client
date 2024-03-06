@@ -15,9 +15,9 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveRankingRulesSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.RankingRule;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -43,19 +43,16 @@ class ReactiveRankingRulesSettingsImpl extends AbstractReactiveImpl implements R
 
     @Override
     public Mono<List<RankingRule>> get() {
-        return get(path, new TypeRef<List<RankingRule>>() {
-        });
+        return get(path, TypeRefs.RankingRuleListRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(List<RankingRule> rankingRules) {
-        return put(path, configurer -> json(configurer, rankingRules), new TypeRef<TaskInfo>() {
-        });
+        return put(path, configurer -> json(configurer, rankingRules), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

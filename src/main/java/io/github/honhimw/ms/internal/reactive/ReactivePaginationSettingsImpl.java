@@ -15,9 +15,9 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactivePaginationSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 /**
@@ -41,19 +41,16 @@ class ReactivePaginationSettingsImpl extends AbstractReactiveImpl implements Rea
 
     @Override
     public Mono<Pagination> get() {
-        return get(path, new TypeRef<Pagination>() {
-        });
+        return get(path, TypeRefs.of(Pagination.class));
     }
 
     @Override
     public Mono<TaskInfo> update(Pagination pagination) {
-        return patch(path, configurer -> json(configurer, pagination), new TypeRef<TaskInfo>() {
-        });
+        return patch(path, configurer -> json(configurer, pagination), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

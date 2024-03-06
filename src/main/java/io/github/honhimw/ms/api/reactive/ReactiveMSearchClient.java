@@ -114,7 +114,6 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      * Triggers a dump creation task. Once the process is complete, a dump is created in the dump directory. If the dump directory does not exist yet, it will be created.
      * <p>
      * Dump tasks take priority over all other tasks in the queue. This means that a newly created dump task will be processed as soon as the current task is finished.
-     *
      */
     @Operation(method = "POST", tags = "/dumps")
     Mono<TaskInfo> dumps();
@@ -149,6 +148,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * Create a non-blocking-client.
+     *
      * @param config client configuration
      * @return non-blocking-client
      */
@@ -158,6 +158,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * Create a non-blocking-client with default config.
+     *
      * @param configure client configure
      * @return non-blocking-client
      */

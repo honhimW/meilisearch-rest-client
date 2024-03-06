@@ -51,5 +51,4 @@ public class Index implements Serializable {
     private LocalDateTime updatedAt;
 
 
-
 }

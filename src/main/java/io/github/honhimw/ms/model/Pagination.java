@@ -30,6 +30,7 @@ import java.io.Serializable;
  *     "maxTotalHits": 1000
  * }
  * </pre>
+ *
  * @author hon_him
  * @since 2024-01-03
  */
@@ -39,7 +40,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pagination implements Serializable {
-    
+
     @Schema(description = "The maximum number of search results Meilisearch can return", defaultValue = "1000")
     private Integer maxTotalHits;
 

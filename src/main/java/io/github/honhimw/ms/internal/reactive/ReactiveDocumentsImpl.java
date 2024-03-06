@@ -20,6 +20,7 @@ import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.StringUtils;
+import io.github.honhimw.ms.support.TypeRefs;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -32,8 +33,6 @@ import java.util.*;
 
 class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocuments {
 
-    private static final TypeRef<Map<String, Object>> MAP_TYPE_REF = new TypeRef<Map<String, Object>>() {
-    };
     private final ReactiveIndexesImpl indexes;
     private final String indexUid;
 
@@ -45,7 +44,7 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
 
     @Override
     public Mono<Page<Map<String, Object>>> list(GetDocumentRequest page) {
-        return list(page, MAP_TYPE_REF);
+        return list(page, TypeRefs.StringObjectMapRef.INSTANCE);
     }
 
     @Override
@@ -79,44 +78,37 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
 
     @Override
     public Mono<TaskInfo> save(String json) {
-        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> save(Collection<?> collection) {
-        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> saveVectorized(Collection<VectorizedDocument> collection) {
-        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(String json) {
-        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), new TypeRef<TaskInfo>() {
-        });
+        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, json), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> update(Collection<?> collection) {
-        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), new TypeRef<TaskInfo>() {
-        });
+        return put(String.format("/indexes/%s/documents", indexUid), configurer -> json(configurer, collection), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> deleteAll() {
-        return delete(String.format("/indexes/%s/documents", indexUid), new TypeRef<TaskInfo>() {
-        });
+        return delete(String.format("/indexes/%s/documents", indexUid), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<Page<Map<String, Object>>> batchGet(BatchGetDocumentsRequest fetch) {
-        return post(String.format("/indexes/%s/documents/fetch", indexUid), configurer -> json(configurer, fetch), new TypeRef<Page<Map<String, Object>>>() {
-        });
+        return post(String.format("/indexes/%s/documents/fetch", indexUid), configurer -> json(configurer, fetch), TypeRefs.PageStringObjectMapRef.INSTANCE);
     }
 
     @Override
@@ -128,19 +120,17 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
 
     @Override
     public Mono<TaskInfo> batchDelete(List<String> ids) {
-        return post(String.format("/indexes/%s/documents/delete-batch", indexUid), configurer -> json(configurer, ids), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents/delete-batch", indexUid), configurer -> json(configurer, ids), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> delete(FilterableAttributesRequest filter) {
-        return post(String.format("/indexes/%s/documents/delete", indexUid), configurer -> json(configurer, filter), new TypeRef<TaskInfo>() {
-        });
+        return post(String.format("/indexes/%s/documents/delete", indexUid), configurer -> json(configurer, filter), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<Map<String, Object>> get(String id, @Nullable String... fields) {
-        return get(id, MAP_TYPE_REF, fields);
+        return get(id, TypeRefs.StringObjectMapRef.INSTANCE, fields);
     }
 
     @Override
@@ -157,7 +147,6 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
 
     @Override
     public Mono<TaskInfo> delete(String id) {
-        return delete(String.format("/indexes/%s/documents/%s", indexUid, id), new TypeRef<TaskInfo>() {
-        });
+        return delete(String.format("/indexes/%s/documents/%s", indexUid, id), TypeRefs.TaskInfoRef.INSTANCE);
     }
 }

@@ -15,8 +15,8 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveExperimentalFeaturesSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.ExperimentalFeatures;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 /**
@@ -32,13 +32,11 @@ class ReactiveExperimentalFeaturesSettingsImpl extends AbstractReactiveImpl impl
 
     @Override
     public Mono<ExperimentalFeatures> get() {
-        return get("/experimental-features", new TypeRef<ExperimentalFeatures>() {
-        });
+        return get("/experimental-features", TypeRefs.of(ExperimentalFeatures.class));
     }
 
     @Override
     public Mono<ExperimentalFeatures> configure(ExperimentalFeatures configure) {
-        return patch("/experimental-features", configurer -> json(configurer, configure), new TypeRef<ExperimentalFeatures>() {
-        });
+        return patch("/experimental-features", configurer -> json(configurer, configure), TypeRefs.of(ExperimentalFeatures.class));
     }
 }

@@ -33,20 +33,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskInfo implements Serializable {
-    
+
     @Schema(description = "Unique sequential identifier")
     private Integer taskUid;
-    
+
     @Schema(description = "Unique index identifier (always null for global tasks)")
     private String indexUid;
-    
+
     @Schema(description = "Status of the task. Value is enqueued")
     private TaskStatus status;
-    
+
     @Schema(description = "Type of task")
     private TaskType type;
-    
+
     @Schema(description = "Represents the date and time in the RFC 3339 format when the task has been enqueued")
     private LocalDateTime enqueuedAt;
-    
+
 }

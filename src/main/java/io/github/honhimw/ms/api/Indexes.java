@@ -100,8 +100,8 @@ public interface Indexes {
     TaskInfo swap(List<Map.Entry<String, String>> uids);
 
     /**
-     * @see #swap(List)
      * @param consumer entryList configurer
+     * @see #swap(List)
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     TaskInfo swap(Consumer<EntryList> consumer);
@@ -136,6 +136,7 @@ public interface Indexes {
      *     <li>A POST multi-search route allowing to perform multiple search queries in a single HTTP request. Meilisearch exposes 1 route to perform facet searches:</li>
      *     <li>A POST facet-search route allowing to perform a facet search query on a facet in a single HTTP request.</li>
      * </ul>
+     *
      * @param uid uid of the requested index
      * @return {@link Search} operator
      */

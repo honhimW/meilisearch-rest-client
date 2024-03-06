@@ -15,10 +15,10 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveEmbeddersSettings;
-import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.Embedder;
 import io.github.honhimw.ms.model.EmbedderSource;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -45,8 +45,7 @@ class ReactiveEmbeddersSettingsImpl extends AbstractReactiveImpl implements Reac
 
     @Override
     public Mono<Map<String, ? extends Embedder>> get() {
-        return get(path, new TypeRef<Map<String, Map<String, Object>>>() {
-        }).map(stringMapMap -> {
+        return get(path, TypeRefs.StringStringObjectMapMapRef.INSTANCE).map(stringMapMap -> {
             Map<String, Embedder> map = new HashMap<>();
             stringMapMap.forEach((s, stringObjectMap) -> {
                 Object source = stringObjectMap.get("source");
@@ -75,13 +74,11 @@ class ReactiveEmbeddersSettingsImpl extends AbstractReactiveImpl implements Reac
 
     @Override
     public Mono<TaskInfo> update(Map<String, ? extends Embedder> embedders) {
-        return patch(path, configurer -> json(configurer, embedders), new TypeRef<TaskInfo>() {
-        });
+        return patch(path, configurer -> json(configurer, embedders), TypeRefs.TaskInfoRef.INSTANCE);
     }
 
     @Override
     public Mono<TaskInfo> reset() {
-        return delete(path, new TypeRef<TaskInfo>() {
-        });
+        return delete(path, TypeRefs.TaskInfoRef.INSTANCE);
     }
 }
