@@ -16,6 +16,10 @@ package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.json.EnumValue;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#ranking-rules-array">Ranking rules array</a>
  *
@@ -58,6 +62,10 @@ public enum RankingRule implements EnumValue<RankingRule> {
     @Override
     public String value() {
         return this.name;
+    }
+
+    public static List<RankingRule> defaultOrder() {
+        return Arrays.asList(WORDS, TYPO, PROXIMITY, ATTRIBUTE, SORT, EXACTNESS);
     }
 
 }

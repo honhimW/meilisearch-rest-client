@@ -91,6 +91,11 @@ class IndexesImpl implements Indexes {
     }
 
     @Override
+    public SingleIndex single(String uid) {
+        return new SingleIndexImpl(_indexes.single(uid));
+    }
+
+    @Override
     public Documents documents(String uid) {
         return new DocumentsImpl(_indexes.documents(uid));
     }

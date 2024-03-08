@@ -119,6 +119,13 @@ public interface ReactiveIndexes {
     }
 
     /**
+     * Get the operator for a single index.
+     * @param uid index uid
+     * @return {@link ReactiveSingleIndex} operator
+     */
+    ReactiveSingleIndex single(String uid);
+
+    /**
      * Documents are objects composed of fields that can store any type of data.
      * Each field contains an attribute and its associated value.
      * Documents are stored inside indexes.

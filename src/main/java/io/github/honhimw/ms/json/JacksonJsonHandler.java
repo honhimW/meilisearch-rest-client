@@ -53,14 +53,14 @@ import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339_FORMATTER;
 @Getter
 public class JacksonJsonHandler implements JsonHandler {
 
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
 
     public JacksonJsonHandler() {
         this(defaultBuilder().build());
     }
 
-    public JacksonJsonHandler(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public JacksonJsonHandler(JsonMapper jsonMapper) {
+        this.jsonMapper = jsonMapper;
     }
 
     @SuppressWarnings("rawtypes")
@@ -141,7 +141,7 @@ public class JacksonJsonHandler implements JsonHandler {
     @Override
     public String toJson(Object o) {
         try {
-            return objectMapper.writeValueAsString(o);
+            return jsonMapper.writeValueAsString(o);
         } catch (Exception e) {
             throw new IllegalArgumentException("json encode exception", e);
         }
@@ -150,7 +150,7 @@ public class JacksonJsonHandler implements JsonHandler {
     @Override
     public <T> T fromJson(String json, Class<T> tClass) {
         try {
-            return objectMapper.readValue(json, tClass);
+            return jsonMapper.readValue(json, tClass);
         } catch (Exception e) {
             throw new IllegalArgumentException("json decode exception", e);
         }
@@ -159,7 +159,7 @@ public class JacksonJsonHandler implements JsonHandler {
     @Override
     public <T> T fromJson(String json, TypeRef<T> typeRef) {
         try {
-            return objectMapper.readValue(json, new TypeReference<T>() {
+            return jsonMapper.readValue(json, new TypeReference<T>() {
                 @Override
                 public Type getType() {
                     return typeRef.getType();
@@ -173,7 +173,7 @@ public class JacksonJsonHandler implements JsonHandler {
     @Override
     public <T> T transform(Object o, TypeRef<T> typeRef) {
         try {
-            return objectMapper.convertValue(o, new TypeReference<T>() {
+            return jsonMapper.convertValue(o, new TypeReference<T>() {
                 @Override
                 public Type getType() {
                     return typeRef.getType();
@@ -183,4 +183,9 @@ public class JacksonJsonHandler implements JsonHandler {
             throw new IllegalArgumentException("json decode exception", e);
         }
     }
+
+    public JsonMapper getJsonMapper() {
+        return jsonMapper;
+    }
+
 }

@@ -107,6 +107,13 @@ public interface Indexes {
     TaskInfo swap(Consumer<EntryList> consumer);
 
     /**
+     * Get the operator for a single index.
+     * @param uid index uid
+     * @return {@link SingleIndex} operator
+     */
+    SingleIndex single(String uid);
+
+    /**
      * Documents are objects composed of fields that can store any type of data.
      * Each field contains an attribute and its associated value.
      * Documents are stored inside indexes.

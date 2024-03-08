@@ -112,6 +112,11 @@ class ReactiveIndexesImpl extends AbstractReactiveImpl implements ReactiveIndexe
     }
 
     @Override
+    public ReactiveSingleIndex single(String uid) {
+        return new ReactiveSingleIndexImpl(uid, this);
+    }
+
+    @Override
     public ReactiveDocuments documents(String uid) {
         return new ReactiveDocumentsImpl(this, uid);
     }

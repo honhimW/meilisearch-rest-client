@@ -22,6 +22,7 @@ import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.SearchResponse;
+import lombok.Cleanup;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -52,58 +53,54 @@ public class MainRunner {
 
     public static void reactive() {
         JsonHandler jsonHandler = new JacksonJsonHandler();
-        try (
-            ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
-                .enableSSL(false)                    // true: https, false: http
-                .host("{{meilisearch-server-host}}") // server host
-                .port(7700)                          // server port
-                .jsonHandler(jsonHandler)
-                .httpClient(ReactiveHttpUtils.getInstance(http -> http.readTimeout(Duration.ofMillis(100)))))
-        ) {
-            String indexUid = "movies";
-            Mono<SearchResponse<Movie>> searchResponse = client.indexes(indexes -> indexes
-                .search(indexUid, search -> search
-                    .find("hello world", Movie.class)));
-            List<Movie> hits = searchResponse.block().getHits();
-            // or
-            List<Movie> hits2 = client.indexes(indexes -> indexes
-                .search(indexUid, Movie.class, search -> search
-                    .find(q -> q
-                        .q("hello world")
-                        .limit(1)
-                    )
-                    .map(SearchResponse::getHits)
+        @Cleanup
+        ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
+            .enableSSL(false)                    // true: https, false: http
+            .host("{{meilisearch-server-host}}") // server host
+            .port(7700)                          // server port
+            .jsonHandler(jsonHandler)
+            .httpClient(ReactiveHttpUtils.getInstance(http -> http.readTimeout(Duration.ofMillis(100)))));
+        String indexUid = "movies";
+        Mono<SearchResponse<Movie>> searchResponse = client.indexes(indexes -> indexes
+            .search(indexUid, search -> search
+                .find("hello world", Movie.class)));
+        List<Movie> hits = searchResponse.block().getHits();
+        // or
+        List<Movie> hits2 = client.indexes(indexes -> indexes
+            .search(indexUid, Movie.class, search -> search
+                .find(q -> q
+                    .q("hello world")
+                    .limit(1)
                 )
-            ).block();
-        }
+                .map(SearchResponse::getHits)
+            )
+        ).block();
     }
 
     public static void blocking() {
         JsonHandler jsonHandler = new JacksonJsonHandler();
-        try (
-            MSearchClient client = MSearchClient.create(builder -> builder
-                .enableSSL(false)                    // true: https, false: http
-                .host("{{meilisearch-server-host}}") // server host
-                .port(7700)                          // server port
-                .jsonHandler(jsonHandler)
-                .httpClient(ReactiveHttpUtils.getInstance(http -> http.readTimeout(Duration.ofMillis(100)))))
-        ) {
-            String indexUid = "movies";
-            SearchResponse<Movie> searchResponse = client.indexes(indexes -> indexes
-                .search(indexUid, search -> search
-                    .find("hello world", Movie.class)));
-            List<Movie> hits = searchResponse.getHits();
-            // or
-            List<Movie> hits2 = client.indexes(indexes -> indexes
-                .search(indexUid, Movie.class, search -> search
-                    .find(q -> q
-                        .q("hello world")
-                        .limit(1)
-                    )
-                    .getHits()
+        @Cleanup
+        MSearchClient client = MSearchClient.create(builder -> builder
+            .enableSSL(false)                    // true: https, false: http
+            .host("{{meilisearch-server-host}}") // server host
+            .port(7700)                          // server port
+            .jsonHandler(jsonHandler)
+            .httpClient(ReactiveHttpUtils.getInstance(http -> http.readTimeout(Duration.ofMillis(100)))));
+        String indexUid = "movies";
+        SearchResponse<Movie> searchResponse = client.indexes(indexes -> indexes
+            .search(indexUid, search -> search
+                .find("hello world", Movie.class)));
+        List<Movie> hits = searchResponse.getHits();
+        // or
+        List<Movie> hits2 = client.indexes(indexes -> indexes
+            .search(indexUid, Movie.class, search -> search
+                .find(q -> q
+                    .q("hello world")
+                    .limit(1)
                 )
-            );
-        }
+                .getHits()
+            )
+        );
     }
 
 }

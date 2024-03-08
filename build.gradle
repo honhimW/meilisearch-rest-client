@@ -20,6 +20,7 @@ def reactorVersion = '2023.0.3'
 def jacksonVersion = '2.16.1'
 def gsonVersion = '2.10.1'
 def lombokVersion = '1.18.30'
+def slf4jVersion = '2.0.12'
 
 apply plugin: 'idea'
 apply plugin: 'java'
@@ -44,7 +45,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'org.slf4j:slf4j-api:2.0.12'
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
     compileOnly "com.google.code.gson:gson:${gsonVersion}"
 
@@ -54,7 +55,6 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
 }
 
 dependencies {
@@ -67,7 +67,7 @@ dependencies {
 
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.slf4j:slf4j-simple:2.0.12'
+    testImplementation "org.slf4j:slf4j-simple:${slf4jVersion}"
 }
 
 java {
@@ -168,7 +168,6 @@ jar {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = StandardCharsets.UTF_8.name()
     inputs.files(tasks.withType(ProcessResources))
-
 }
 
 test {
@@ -205,18 +204,18 @@ jacocoTestReport {
 }
 
 tasks.register('publish-snapshot') {
-    version = version + '-SNAPSHOT'
-    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-snapshotsRepository')
+    version = version + '-RC.' + rc + '-SNAPSHOT'
+    finalizedBy ':publishAllPublicationsToSonatype-snapshotsRepository'
 }
 tasks.register('publish-rc') {
     version = version + '-RC.' + rc
-    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-central-rcRepository')
+    finalizedBy ':publishAllPublicationsToSonatype-central-rcRepository'
 }
 tasks.register('publish-release') {
-    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-releasesRepository')
+    finalizedBy ':publishAllPublicationsToSonatype-releasesRepository'
 }
 tasks.register('publish-central') {
-    dependsOn tasks.getByPath(':publishAllPublicationsToSonatype-centralRepository')
+    finalizedBy ':publishAllPublicationsToSonatype-centralRepository'
 }
 
 Properties loadProfileProperties() {
