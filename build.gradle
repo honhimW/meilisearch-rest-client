@@ -11,10 +11,10 @@ plugins {
 }
 
 group = 'io.github.honhimw'
-version = '1.7.0.0' // API docs version plus '.x(-SNAPSHOT/RC.x)?'
+version = '1.7.0.1' // API docs version plus '.x(-SNAPSHOT/RC.x)?'
 description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
-def rc = 1
+def rc = 0
 def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.3'
 def jacksonVersion = '2.16.2'
