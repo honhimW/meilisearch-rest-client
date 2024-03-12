@@ -390,7 +390,6 @@ public class ReactiveHttpUtils implements AutoCloseable {
                 bodyModelConsumer.accept(payload);
                 return payload.getBody();
             }).orElse(null);
-        ;
         if (Objects.nonNull(body) && StringUtils.isNotBlank(body.contentType())) {
             client = client.headers(
                 entries -> entries.add(HttpHeaderNames.CONTENT_TYPE.toString(), body.contentType()));
@@ -433,6 +432,7 @@ public class ReactiveHttpUtils implements AutoCloseable {
         responseReceiver = responseReceiver.uri(uri);
 
         if (responseReceiver instanceof RequestSender && Objects.nonNull(body)) {
+            body.init();
             RequestSender requestSender = (RequestSender) responseReceiver;
             responseReceiver = body.sender(requestSender, configurer.charset);
         }

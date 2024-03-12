@@ -24,7 +24,6 @@ import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * @author hon_him
@@ -65,28 +64,8 @@ class SingleIndexImpl implements SingleIndex {
     }
 
     @Override
-    public <R> R documents(Function<Documents, R> operation) {
-        return operation.apply(documents());
-    }
-
-    @Override
     public <T> TypedDocuments<T> documents(TypeRef<T> typeRef) {
         return new TypedDocumentImpl<>(_index.documents(typeRef));
-    }
-
-    @Override
-    public <T> TypedDocuments<T> documents(Class<T> type) {
-        return documents(TypeRef.of(type));
-    }
-
-    @Override
-    public <T, R> R documents(TypeRef<T> typeRef, Function<TypedDocuments<T>, R> operation) {
-        return operation.apply(documents(typeRef));
-    }
-
-    @Override
-    public <T, R> R documents(Class<T> type, Function<TypedDocuments<T>, R> operation) {
-        return operation.apply(documents(type));
     }
 
     @Override
@@ -95,28 +74,8 @@ class SingleIndexImpl implements SingleIndex {
     }
 
     @Override
-    public <R> R search(Function<Search, R> operation) {
-        return operation.apply(search());
-    }
-
-    @Override
     public <T> TypedSearch<T> search(TypeRef<T> typeRef) {
         return new TypedSearchImpl<>(_index.search(typeRef));
-    }
-
-    @Override
-    public <T> TypedSearch<T> search(Class<T> type) {
-        return search(TypeRef.of(type));
-    }
-
-    @Override
-    public <T, R> R search(TypeRef<T> typeRef, Function<TypedSearch<T>, R> operation) {
-        return operation.apply(search(typeRef));
-    }
-
-    @Override
-    public <T, R> R search(Class<T> type, Function<TypedSearch<T>, R> operation) {
-        return operation.apply(search(type));
     }
 
     @Override
@@ -125,28 +84,8 @@ class SingleIndexImpl implements SingleIndex {
     }
 
     @Override
-    public <T> TypedDetailsSearch<T> searchWithDetails(Class<T> type) {
-        return searchWithDetails(TypeRef.of(type));
-    }
-
-    @Override
-    public <T, R> R searchWithDetails(TypeRef<T> typeRef, Function<TypedDetailsSearch<T>, R> operation) {
-        return operation.apply(searchWithDetails(typeRef));
-    }
-
-    @Override
-    public <T, R> R searchWithDetails(Class<T> type, Function<TypedDetailsSearch<T>, R> operation) {
-        return operation.apply(searchWithDetails(type));
-    }
-
-    @Override
     public Settings settings() {
         return new SettingsImpl(_index.settings());
-    }
-
-    @Override
-    public <R> R settings(Function<Settings, R> operation) {
-        return operation.apply(settings());
     }
 
     @Override

@@ -32,6 +32,7 @@ import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.http.URIBuilder;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
+import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.StringUtils;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpMethod;
@@ -363,6 +364,34 @@ public class HttpClientTests {
 
         assert counter.get() == 5;
 
+        httpClient.close();
+        disposableServer.dispose();
+    }
+
+    @Test
+    @SneakyThrows
+    void override() {
+        ReactiveHttpUtils httpClient = ReactiveHttpUtils.getInstance();
+        DisposableServer disposableServer = createClient(httpServerRoutes -> httpServerRoutes.get("/api", (req, resp) -> {
+            String uri = req.uri();
+            URIBuilder.from(uri).getQueryParams().forEach(e -> resp.addHeader(e.getKey(), e.getValue()));
+            return resp.sendString(Mono.just(MESSAGE));
+        }));
+
+        String uri = new URIBuilder().setScheme("http").setHost("localhost").setPort(disposableServer.port()).setPath("/api").build().toString();
+
+        ReactiveHttpUtils.ReactiveHttpResult reactiveHttpResult = httpClient.rGet(uri, configurer -> {
+            assert "GET".equals(configurer.method());
+            assert uri.equals(configurer.url());
+            assert CollectionUtils.isEmpty(configurer.params());
+            assert CollectionUtils.isEmpty(configurer.headers());
+            assert StandardCharsets.UTF_8.equals(configurer.charset());
+            configurer.method("POST").url(configurer.url() + "/1");
+        });
+        HttpClientResponse block = reactiveHttpResult.response().block();
+        assert Objects.nonNull(block);
+        assert HttpMethod.POST == block.method(): block.method();
+        assert "/api/1".equals(block.uri()) : block.uri();
         httpClient.close();
         disposableServer.dispose();
     }
