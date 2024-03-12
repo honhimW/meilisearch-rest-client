@@ -14,7 +14,6 @@ group = 'io.github.honhimw'
 version = '1.7.0.1' // API docs version plus '.x(-SNAPSHOT/RC.x)?'
 description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
-def rc = 0
 def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.3'
 def jacksonVersion = '2.16.2'
@@ -117,14 +116,6 @@ publishing {
             }
         }
         maven {
-            name = "sonatype-central-rc"
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = sonatypeProperties().getProperty("sonatype.username") as String
-                password = sonatypeProperties().getProperty("sonatype.password") as String
-            }
-        }
-        maven {
             name = "sonatype-central"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
@@ -204,12 +195,8 @@ jacocoTestReport {
 }
 
 tasks.register('publish-snapshot') {
-    version = version + '-RC.' + rc + '-SNAPSHOT'
+    version = version + '-SNAPSHOT'
     finalizedBy ':publishAllPublicationsToSonatype-snapshotsRepository'
-}
-tasks.register('publish-rc') {
-    version = version + '-RC.' + rc
-    finalizedBy ':publishAllPublicationsToSonatype-central-rcRepository'
 }
 tasks.register('publish-release') {
     finalizedBy ':publishAllPublicationsToSonatype-releasesRepository'
