@@ -30,7 +30,6 @@ package io.github.honhimw.ms;
 
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.http.ResponseFilter;
-import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.support.Asserts;
 import io.github.honhimw.ms.support.StringUtils;
@@ -66,7 +65,7 @@ public final class MSearchConfig {
 
     public static Builder withDefault() {
         return builder()
-            .jsonHandler(new JacksonJsonHandler())
+//            .jsonHandler(new JacksonJsonHandler()) // ClassNotFoundException when exclude com.fasterxml.jackson.*
             .httpClient(ReactiveHttpUtils.getInstance());
     }
 
