@@ -36,7 +36,6 @@ dependencies {
     implementation platform("com.fasterxml.jackson:jackson-bom:${jacksonVersion}")
     implementation platform("io.projectreactor:reactor-bom:${reactorVersion}")
 
-    implementation "io.projectreactor.netty:reactor-netty-core"
     implementation "io.projectreactor.netty:reactor-netty-http"
 
     implementation 'com.fasterxml.jackson.core:jackson-core'

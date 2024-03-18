@@ -40,6 +40,8 @@ The version number of this library is named by appending `.X` to the version num
 ```shell
 # build from sources
 $ ./gradlew clean build -x test
+# publish to maven local
+$ ./gradlew publishToMavenLocal
 ```
 
 ```groovy
