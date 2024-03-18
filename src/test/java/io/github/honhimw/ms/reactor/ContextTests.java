@@ -97,8 +97,7 @@ public class ContextTests extends TestBase {
 
         // put context in Reactor context
         searchResponseMono = searchResponseMono.contextWrite(context -> context.put(respCtx, _map));
-
-        System.out.println(searchResponseMono.block().toString());
+        System.out.println(searchResponseMono.block());
     }
 
 }
