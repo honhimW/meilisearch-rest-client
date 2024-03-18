@@ -21,7 +21,7 @@ import io.github.honhimw.ms.json.TypeRef;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -108,8 +108,10 @@ abstract class AbstractReactiveImpl {
         return receiver.responseSingle((httpClientResponse, byteBufMono) -> {
                 HttpResponseStatus status = httpClientResponse.status();
                 int code = status.code();
+                Charset charset = ReactiveHttpUtils.getCharset(httpClientResponse);
                 Mono<String> stringMono = byteBufMono.asByteArray()
-                    .map(bytes -> new String(bytes, StandardCharsets.UTF_8));
+                    .flatMap(bytes -> _client.responseFilter.accept(httpClientResponse, bytes))
+                    .map(bytes -> new String(bytes, charset));
                 if (code < 200 || 300 <= code) {
                     return stringMono
                         .switchIfEmpty(Mono.just(status.reasonPhrase()))

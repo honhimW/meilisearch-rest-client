@@ -29,6 +29,7 @@
 package io.github.honhimw.ms;
 
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
+import io.github.honhimw.ms.http.ResponseFilter;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.support.Asserts;
@@ -36,6 +37,7 @@ import io.github.honhimw.ms.support.StringUtils;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 
@@ -56,6 +58,8 @@ public final class MSearchConfig {
 
     private final ReactiveHttpUtils httpClient;
 
+    private final ResponseFilter responseFilter;
+
     public static Builder builder() {
         return new Builder();
     }
@@ -74,6 +78,7 @@ public final class MSearchConfig {
         private String apiKey;
         private JsonHandler jsonHandler;
         private ReactiveHttpUtils httpClient;
+        private ResponseFilter responseFilter = (response, bytes) -> Mono.just(bytes);
 
         public Builder() {
         }
@@ -113,6 +118,11 @@ public final class MSearchConfig {
             return this;
         }
 
+        public Builder responseFilter(ResponseFilter responseFilter) {
+            this.responseFilter = responseFilter;
+            return this;
+        }
+
         public MSearchConfig build() {
             if (StringUtils.isBlank(serverUrl)) {
                 serverUrl = String.format("%s://%s:%s", ssl ? "https" : "http", host, port);
@@ -120,7 +130,8 @@ public final class MSearchConfig {
             Asserts.status(Objects.nonNull(serverUrl), "serverUrl must not be null");
             Asserts.status(Objects.nonNull(jsonHandler), "jsonHandler must not be null");
             Asserts.status(Objects.nonNull(httpClient), "httpClient must not be null");
-            return new MSearchConfig(serverUrl, apiKey, jsonHandler, httpClient);
+            Asserts.status(Objects.nonNull(responseFilter), "responseConsumer must not be null");
+            return new MSearchConfig(serverUrl, apiKey, jsonHandler, httpClient, responseFilter);
         }
     }
 }

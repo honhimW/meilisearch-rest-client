@@ -1224,4 +1224,19 @@ public class ReactiveHttpUtils implements AutoCloseable {
         }
     }
 
+    public static Charset getCharset(HttpClientResponse httpClientResponse) {
+        HttpHeaders entries = httpClientResponse.responseHeaders();
+        return Optional.ofNullable(entries.get(HttpHeaderNames.CONTENT_TYPE.toString()))
+            .flatMap(contentType -> {
+                String[] split = contentType.split(";");
+                return Arrays.stream(split).map(String::trim)
+                    .filter(StringUtils::isNotBlank)
+                    .filter(s -> StringUtils.startsWithIgnoreCase(s, "charset"))
+                    .map(s -> StringUtils.removeStartIgnoreCase(s, "charset="))
+                    .findFirst()
+                    .map(Charset::forName);
+            })
+            .orElse(StandardCharsets.UTF_8);
+    }
+
 }

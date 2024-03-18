@@ -59,6 +59,7 @@ package io.github.honhimw.ms.internal.reactive;
 import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.api.reactive.*;
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
+import io.github.honhimw.ms.http.ResponseFilter;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.model.MultiSearchRequest;
 import io.github.honhimw.ms.model.SearchResponse;
@@ -86,6 +87,8 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
 
     protected final ReactiveHttpUtils httpClient;
 
+    protected final ResponseFilter responseFilter;
+
     private SimpleReactiveImpl simpleReactive;
 
     public ReactiveMSearchClientImpl(MSearchConfig config) {
@@ -93,6 +96,7 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
         this.apiKey = config.getApiKey();
         this.jsonHandler = config.getJsonHandler();
         this.httpClient = config.getHttpClient();
+        this.responseFilter = config.getResponseFilter();
     }
 
     @Override
