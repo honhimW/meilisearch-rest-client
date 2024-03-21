@@ -16,7 +16,10 @@ package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.support.DateTimeUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -35,7 +38,6 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class GetTasksRequest implements Serializable {
 
     @Schema(description = "Number of tasks to return", defaultValue = "20")
@@ -77,6 +79,26 @@ public class GetTasksRequest implements Serializable {
     @Schema(description = "Filter tasks by their finishedAt field", defaultValue = "*")
     private LocalDateTime afterFinishedAt;
 
+    private GetTasksRequest(Builder builder) {
+        setLimit(builder.limit);
+        setFrom(builder.from);
+        setUids(builder.uids);
+        setStatuses(builder.statuses);
+        setTypes(builder.types);
+        setIndexUids(builder.indexUids);
+        setCanceledBy(builder.canceledBy);
+        setBeforeEnqueuedAt(builder.beforeEnqueuedAt);
+        setBeforeStartedAt(builder.beforeStartedAt);
+        setBeforeFinishedAt(builder.beforeFinishedAt);
+        setAfterEnqueuedAt(builder.afterEnqueuedAt);
+        setAfterStartedAt(builder.afterStartedAt);
+        setAfterFinishedAt(builder.afterFinishedAt);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public Map<String, String> toParameters() {
         Map<String, String> parameters = new HashMap<>();
         Optional.ofNullable(limit).ifPresent(limit -> parameters.put("limit", String.valueOf(limit)));
@@ -95,4 +117,91 @@ public class GetTasksRequest implements Serializable {
         return parameters;
     }
 
+    public static final class Builder {
+        private Integer limit;
+        private String from;
+        private List<String> uids;
+        private List<TaskStatus> statuses;
+        private List<TaskType> types;
+        private List<String> indexUids;
+        private List<String> canceledBy;
+        private LocalDateTime beforeEnqueuedAt;
+        private LocalDateTime beforeStartedAt;
+        private LocalDateTime beforeFinishedAt;
+        private LocalDateTime afterEnqueuedAt;
+        private LocalDateTime afterStartedAt;
+        private LocalDateTime afterFinishedAt;
+
+        private Builder() {
+        }
+
+        public Builder limit(Integer val) {
+            limit = val;
+            return this;
+        }
+
+        public Builder from(String val) {
+            from = val;
+            return this;
+        }
+
+        public Builder uids(List<String> val) {
+            uids = val;
+            return this;
+        }
+
+        public Builder statuses(List<TaskStatus> val) {
+            statuses = val;
+            return this;
+        }
+
+        public Builder types(List<TaskType> val) {
+            types = val;
+            return this;
+        }
+
+        public Builder indexUids(List<String> val) {
+            indexUids = val;
+            return this;
+        }
+
+        public Builder canceledBy(List<String> val) {
+            canceledBy = val;
+            return this;
+        }
+
+        public Builder beforeEnqueuedAt(LocalDateTime val) {
+            beforeEnqueuedAt = val;
+            return this;
+        }
+
+        public Builder beforeStartedAt(LocalDateTime val) {
+            beforeStartedAt = val;
+            return this;
+        }
+
+        public Builder beforeFinishedAt(LocalDateTime val) {
+            beforeFinishedAt = val;
+            return this;
+        }
+
+        public Builder afterEnqueuedAt(LocalDateTime val) {
+            afterEnqueuedAt = val;
+            return this;
+        }
+
+        public Builder afterStartedAt(LocalDateTime val) {
+            afterStartedAt = val;
+            return this;
+        }
+
+        public Builder afterFinishedAt(LocalDateTime val) {
+            afterFinishedAt = val;
+            return this;
+        }
+
+        public GetTasksRequest build() {
+            return new GetTasksRequest(this);
+        }
+    }
 }

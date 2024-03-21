@@ -15,7 +15,10 @@
 package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -78,7 +81,6 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class Setting implements Serializable {
 
     @Schema(description = "Fields displayed in the returned documents", defaultValue = "[\"*\"]")
@@ -129,6 +131,25 @@ public class Setting implements Serializable {
     @Schema(description = "To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.")
     private Map<String, ? extends Embedder> embedders;
 
+    private Setting(Builder builder) {
+        setDisplayedAttributes(builder.displayedAttributes);
+        setSearchableAttributes(builder.searchableAttributes);
+        setFilterableAttributes(builder.filterableAttributes);
+        setSortableAttributes(builder.sortableAttributes);
+        setRankingRules(builder.rankingRules);
+        setStopWords(builder.stopWords);
+        setNonSeparatorTokens(builder.nonSeparatorTokens);
+        setSeparatorTokens(builder.separatorTokens);
+        setDictionary(builder.dictionary);
+        setSynonyms(builder.synonyms);
+        setDistinctAttribute(builder.distinctAttribute);
+        setTypoTolerance(builder.typoTolerance);
+        setFaceting(builder.faceting);
+        setPagination(builder.pagination);
+        setProximityPrecision(builder.proximityPrecision);
+        setEmbedders(builder.embedders);
+    }
+
     public static Setting defaultObject() {
         Setting setting = new Setting();
         setting.setDisplayedAttributes(Stream.of("*").collect(Collectors.toList()));
@@ -149,4 +170,113 @@ public class Setting implements Serializable {
         return setting;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private List<String> displayedAttributes;
+        private List<String> searchableAttributes;
+        private List<String> filterableAttributes;
+        private List<String> sortableAttributes;
+        private List<RankingRule> rankingRules;
+        private List<String> stopWords;
+        private List<String> nonSeparatorTokens;
+        private List<String> separatorTokens;
+        private List<String> dictionary;
+        private Map<String, List<String>> synonyms;
+        private String distinctAttribute;
+        private TypoTolerance typoTolerance;
+        private Faceting faceting;
+        private Pagination pagination;
+        private ProximityPrecisionType proximityPrecision;
+        private Map<String, ? extends Embedder> embedders;
+
+        private Builder() {
+        }
+
+        public Builder displayedAttributes(List<String> val) {
+            displayedAttributes = val;
+            return this;
+        }
+
+        public Builder searchableAttributes(List<String> val) {
+            searchableAttributes = val;
+            return this;
+        }
+
+        public Builder filterableAttributes(List<String> val) {
+            filterableAttributes = val;
+            return this;
+        }
+
+        public Builder sortableAttributes(List<String> val) {
+            sortableAttributes = val;
+            return this;
+        }
+
+        public Builder rankingRules(List<RankingRule> val) {
+            rankingRules = val;
+            return this;
+        }
+
+        public Builder stopWords(List<String> val) {
+            stopWords = val;
+            return this;
+        }
+
+        public Builder nonSeparatorTokens(List<String> val) {
+            nonSeparatorTokens = val;
+            return this;
+        }
+
+        public Builder separatorTokens(List<String> val) {
+            separatorTokens = val;
+            return this;
+        }
+
+        public Builder dictionary(List<String> val) {
+            dictionary = val;
+            return this;
+        }
+
+        public Builder synonyms(Map<String, List<String>> val) {
+            synonyms = val;
+            return this;
+        }
+
+        public Builder distinctAttribute(String val) {
+            distinctAttribute = val;
+            return this;
+        }
+
+        public Builder typoTolerance(TypoTolerance val) {
+            typoTolerance = val;
+            return this;
+        }
+
+        public Builder faceting(Faceting val) {
+            faceting = val;
+            return this;
+        }
+
+        public Builder pagination(Pagination val) {
+            pagination = val;
+            return this;
+        }
+
+        public Builder proximityPrecision(ProximityPrecisionType val) {
+            proximityPrecision = val;
+            return this;
+        }
+
+        public Builder embedders(Map<String, ? extends Embedder> val) {
+            embedders = val;
+            return this;
+        }
+
+        public Setting build() {
+            return new Setting(this);
+        }
+    }
 }

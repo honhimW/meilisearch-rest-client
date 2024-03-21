@@ -16,7 +16,10 @@ package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -31,7 +34,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class CreateKeyRequest implements Serializable {
 
     @Schema(description = "A list of API actions permitted for the key. [\"*\"] for all actions")
@@ -54,4 +56,62 @@ public class CreateKeyRequest implements Serializable {
     @Schema(description = "An optional description for the key")
     private String description;
 
+    private CreateKeyRequest(Builder builder) {
+        setActions(builder.actions);
+        setIndexes(builder.indexes);
+        setExpiresAt(builder.expiresAt);
+        setName(builder.name);
+        setUid(builder.uid);
+        setDescription(builder.description);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private List<KeyAction> actions;
+        private List<String> indexes;
+        private LocalDateTime expiresAt;
+        private String name;
+        private String uid;
+        private String description;
+
+        private Builder() {
+        }
+
+        public Builder actions(List<KeyAction> val) {
+            actions = val;
+            return this;
+        }
+
+        public Builder indexes(List<String> val) {
+            indexes = val;
+            return this;
+        }
+
+        public Builder expiresAt(LocalDateTime val) {
+            expiresAt = val;
+            return this;
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public Builder uid(String val) {
+            uid = val;
+            return this;
+        }
+
+        public Builder description(String val) {
+            description = val;
+            return this;
+        }
+
+        public CreateKeyRequest build() {
+            return new CreateKeyRequest(this);
+        }
+    }
 }

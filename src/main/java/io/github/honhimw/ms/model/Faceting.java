@@ -41,7 +41,6 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class Faceting implements Serializable {
 
     @Schema(description = "Maximum number of facet values returned for each facet. Values are sorted in ascending lexicographical order", defaultValue = "100")
@@ -49,6 +48,11 @@ public class Faceting implements Serializable {
 
     @Schema(description = "Customize facet order to sort by descending value count (count) or ascending alphanumeric order (alpha)", defaultValue = "{\"*\": \"alpha\"}")
     private Map<String, String> sortFacetValuesBy;
+
+    private Faceting(Builder builder) {
+        setMaxValuesPerFacet(builder.maxValuesPerFacet);
+        setSortFacetValuesBy(builder.sortFacetValuesBy);
+    }
 
     public static Faceting defaultObject() {
         Faceting faceting = new Faceting();
@@ -59,4 +63,30 @@ public class Faceting implements Serializable {
         return faceting;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+
+    public static final class Builder {
+        private Integer maxValuesPerFacet;
+        private Map<String, String> sortFacetValuesBy;
+
+        private Builder() {
+        }
+
+        public Builder maxValuesPerFacet(Integer val) {
+            maxValuesPerFacet = val;
+            return this;
+        }
+
+        public Builder sortFacetValuesBy(Map<String, String> val) {
+            sortFacetValuesBy = val;
+            return this;
+        }
+
+        public Faceting build() {
+            return new Faceting(this);
+        }
+    }
 }

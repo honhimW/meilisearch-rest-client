@@ -15,7 +15,10 @@
 package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +47,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class TypoTolerance implements Serializable {
 
     @Schema(description = "Whether typo tolerance is enabled or not", defaultValue = "true")
@@ -58,6 +60,13 @@ public class TypoTolerance implements Serializable {
     @Schema(description = "An array of attributes for which the typo tolerance feature is disabled", defaultValue = "[]")
     private List<String> disableOnAttributes;
 
+    private TypoTolerance(Builder builder) {
+        setEnabled(builder.enabled);
+        setMinWordSizeForTypos(builder.minWordSizeForTypos);
+        setDisableOnWords(builder.disableOnWords);
+        setDisableOnAttributes(builder.disableOnAttributes);
+    }
+
     public static TypoTolerance defaultObject() {
         TypoTolerance typoTolerance = new TypoTolerance();
         typoTolerance.setEnabled(true);
@@ -70,11 +79,14 @@ public class TypoTolerance implements Serializable {
         return typoTolerance;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
     @AllArgsConstructor
-    @lombok.Builder(builderClassName = "Builder")
     public static class MinWordSizeForTypos implements Serializable {
 
         @Schema(description = "The minimum word size for accepting 1 typo; must be between 0 and twoTypos", defaultValue = "5")
@@ -83,7 +95,71 @@ public class TypoTolerance implements Serializable {
         @Schema(description = "The minimum word size for accepting 2 typos; must be between oneTypo and 255", defaultValue = "9")
         private Integer twoTypos;
 
+        private MinWordSizeForTypos(Builder builder) {
+            setOneTypo(builder.oneTypo);
+            setTwoTypos(builder.twoTypos);
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+
+        public static final class Builder {
+            private Integer oneTypo;
+            private Integer twoTypos;
+
+            private Builder() {
+            }
+
+            public Builder oneTypo(Integer val) {
+                oneTypo = val;
+                return this;
+            }
+
+            public Builder twoTypos(Integer val) {
+                twoTypos = val;
+                return this;
+            }
+
+            public MinWordSizeForTypos build() {
+                return new MinWordSizeForTypos(this);
+            }
+        }
     }
 
 
+    public static final class Builder {
+        private Boolean enabled;
+        private MinWordSizeForTypos minWordSizeForTypos;
+        private List<String> disableOnWords;
+        private List<String> disableOnAttributes;
+
+        private Builder() {
+        }
+
+        public Builder enabled(Boolean val) {
+            enabled = val;
+            return this;
+        }
+
+        public Builder minWordSizeForTypos(MinWordSizeForTypos val) {
+            minWordSizeForTypos = val;
+            return this;
+        }
+
+        public Builder disableOnWords(List<String> val) {
+            disableOnWords = val;
+            return this;
+        }
+
+        public Builder disableOnAttributes(List<String> val) {
+            disableOnAttributes = val;
+            return this;
+        }
+
+        public TypoTolerance build() {
+            return new TypoTolerance(this);
+        }
+    }
 }

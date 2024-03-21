@@ -15,7 +15,10 @@
 package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -28,7 +31,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class UpdateKeyRequest implements Serializable {
 
     @Schema(description = "A human-readable name for the key")
@@ -37,4 +39,34 @@ public class UpdateKeyRequest implements Serializable {
     @Schema(description = "An optional description for the key")
     private String description;
 
+    private UpdateKeyRequest(Builder builder) {
+        setName(builder.name);
+        setDescription(builder.description);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private String name;
+        private String description;
+
+        private Builder() {
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public Builder description(String val) {
+            description = val;
+            return this;
+        }
+
+        public UpdateKeyRequest build() {
+            return new UpdateKeyRequest(this);
+        }
+    }
 }

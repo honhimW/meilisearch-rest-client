@@ -15,7 +15,10 @@
 package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -28,7 +31,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class ExperimentalFeatures implements Serializable {
 
     @Schema(description = "true if feature is active, false otherwise")
@@ -45,6 +47,51 @@ public class ExperimentalFeatures implements Serializable {
 
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean logsRoute;
+
+    private ExperimentalFeatures(Builder builder) {
+        setMetrics(builder.metrics);
+        setVectorStore(builder.vectorStore);
+        setExportPuffinReports(builder.exportPuffinReports);
+        setLogsRoute(builder.logsRoute);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private Boolean metrics;
+        private Boolean vectorStore;
+        private Boolean exportPuffinReports;
+        private Boolean logsRoute;
+
+        private Builder() {
+        }
+
+        public Builder metrics(Boolean val) {
+            metrics = val;
+            return this;
+        }
+
+        public Builder vectorStore(Boolean val) {
+            vectorStore = val;
+            return this;
+        }
+
+        public Builder exportPuffinReports(Boolean val) {
+            exportPuffinReports = val;
+            return this;
+        }
+
+        public Builder logsRoute(Boolean val) {
+            logsRoute = val;
+            return this;
+        }
+
+        public ExperimentalFeatures build() {
+            return new ExperimentalFeatures(this);
+        }
+    }
 
     /*
      * Stabilize since 1.7

@@ -16,7 +16,10 @@ package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.support.DateTimeUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -35,7 +38,6 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class CancelTasksRequest implements Serializable {
 
     @Schema(description = "Cancel tasks based on uid. Separate multiple uids with a comma (,). Use uids=* for all uids")
@@ -62,6 +64,21 @@ public class CancelTasksRequest implements Serializable {
     @Schema(description = "Cancel tasks after a specified startedAt date. Use afterStartedAt=* to cancel all tasks")
     private LocalDateTime afterStartedAt;
 
+    private CancelTasksRequest(Builder builder) {
+        setUids(builder.uids);
+        setStatuses(builder.statuses);
+        setTypes(builder.types);
+        setIndexUids(builder.indexUids);
+        setBeforeEnqueuedAt(builder.beforeEnqueuedAt);
+        setBeforeStartedAt(builder.beforeStartedAt);
+        setAfterEnqueuedAt(builder.afterEnqueuedAt);
+        setAfterStartedAt(builder.afterStartedAt);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public Map<String, String> toParameters() {
         Map<String, String> parameters = new HashMap<>();
         Optional.ofNullable(uids).filter(strings -> !strings.isEmpty()).map(strings -> String.join(",", strings)).ifPresent(uids -> parameters.put("uids", uids));
@@ -75,4 +92,61 @@ public class CancelTasksRequest implements Serializable {
         return parameters;
     }
 
+    public static final class Builder {
+        private List<String> uids;
+        private List<TaskStatus> statuses;
+        private List<TaskType> types;
+        private List<String> indexUids;
+        private LocalDateTime beforeEnqueuedAt;
+        private LocalDateTime beforeStartedAt;
+        private LocalDateTime afterEnqueuedAt;
+        private LocalDateTime afterStartedAt;
+
+        private Builder() {
+        }
+
+        public Builder uids(List<String> val) {
+            uids = val;
+            return this;
+        }
+
+        public Builder statuses(List<TaskStatus> val) {
+            statuses = val;
+            return this;
+        }
+
+        public Builder types(List<TaskType> val) {
+            types = val;
+            return this;
+        }
+
+        public Builder indexUids(List<String> val) {
+            indexUids = val;
+            return this;
+        }
+
+        public Builder beforeEnqueuedAt(LocalDateTime val) {
+            beforeEnqueuedAt = val;
+            return this;
+        }
+
+        public Builder beforeStartedAt(LocalDateTime val) {
+            beforeStartedAt = val;
+            return this;
+        }
+
+        public Builder afterEnqueuedAt(LocalDateTime val) {
+            afterEnqueuedAt = val;
+            return this;
+        }
+
+        public Builder afterStartedAt(LocalDateTime val) {
+            afterStartedAt = val;
+            return this;
+        }
+
+        public CancelTasksRequest build() {
+            return new CancelTasksRequest(this);
+        }
+    }
 }

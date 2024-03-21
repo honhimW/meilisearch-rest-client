@@ -30,7 +30,6 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class BatchGetDocumentsRequest extends FilterableAttributesRequest {
 
     @Schema(description = "Number of documents to skip", defaultValue = "0")
@@ -42,6 +41,17 @@ public class BatchGetDocumentsRequest extends FilterableAttributesRequest {
     @Schema(description = "Document attributes to show (case-sensitive, comma-separated)")
     private List<String> fields;
 
+    private BatchGetDocumentsRequest(Builder builder) {
+        setOffset(builder.offset);
+        setLimit(builder.limit);
+        setFields(builder.fields);
+        setFilter(builder.filter);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public BatchGetDocumentsRequest addField(String field) {
         if (Objects.isNull(getFields())) {
             setFields(new ArrayList<>());
@@ -50,4 +60,37 @@ public class BatchGetDocumentsRequest extends FilterableAttributesRequest {
         return this;
     }
 
+    public static final class Builder {
+        private Integer offset;
+        private Integer limit;
+        private List<String> fields;
+        private String filter;
+
+        private Builder() {
+        }
+
+        public Builder offset(Integer val) {
+            offset = val;
+            return this;
+        }
+
+        public Builder limit(Integer val) {
+            limit = val;
+            return this;
+        }
+
+        public Builder fields(List<String> val) {
+            fields = val;
+            return this;
+        }
+
+        public Builder filter(String val) {
+            filter = val;
+            return this;
+        }
+
+        public BatchGetDocumentsRequest build() {
+            return new BatchGetDocumentsRequest(this);
+        }
+    }
 }

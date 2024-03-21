@@ -28,7 +28,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderClassName = "Builder")
 public class FacetSearchRequest extends FilterableAttributesRequest {
 
     @Schema(description = "Query string")
@@ -46,4 +45,62 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
     @Schema(description = "Restrict search to the specified attributes")
     private List<String> attributesToSearchOn;
 
+    private FacetSearchRequest(Builder builder) {
+        setQ(builder.q);
+        setFacetName(builder.facetName);
+        setFacetQuery(builder.facetQuery);
+        setMatchingStrategy(builder.matchingStrategy);
+        setAttributesToSearchOn(builder.attributesToSearchOn);
+        setFilter(builder.filter);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private String q;
+        private String facetName;
+        private String facetQuery;
+        private String matchingStrategy;
+        private List<String> attributesToSearchOn;
+        private String filter;
+
+        private Builder() {
+        }
+
+        public Builder q(String val) {
+            q = val;
+            return this;
+        }
+
+        public Builder facetName(String val) {
+            facetName = val;
+            return this;
+        }
+
+        public Builder facetQuery(String val) {
+            facetQuery = val;
+            return this;
+        }
+
+        public Builder matchingStrategy(String val) {
+            matchingStrategy = val;
+            return this;
+        }
+
+        public Builder attributesToSearchOn(List<String> val) {
+            attributesToSearchOn = val;
+            return this;
+        }
+
+        public Builder filter(String val) {
+            filter = val;
+            return this;
+        }
+
+        public FacetSearchRequest build() {
+            return new FacetSearchRequest(this);
+        }
+    }
 }
