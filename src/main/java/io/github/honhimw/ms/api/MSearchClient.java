@@ -36,36 +36,54 @@ import java.util.function.Function;
 public interface MSearchClient extends AutoCloseable {
 
     /**
-     * @return Indexes operator
+     * Get the indexes instance, hold and share the client inside, will not cache the instance by default.
+     *
+     * @return {@link Indexes}
      */
     Indexes indexes();
 
     /**
-     * @return Indexes operator
+     * Function to apply on {@link Indexes}. Get the result fluently.
+     *
+     * @param operation fluent operation
+     * @param <R>       return type
+     * @return fluent operation return
      */
     default <R> R indexes(Function<Indexes, R> operation) {
         return operation.apply(indexes());
     }
 
     /**
-     * @return Tasks operator
+     * Get the tasks instance, hold and share the client inside, will not cache the instance by default.
+     *
+     * @return {@link Tasks}
      */
     Tasks tasks();
 
     /**
-     * @return Tasks operator
+     * Function to apply on {@link Tasks}. Get the result fluently.
+     *
+     * @param operation fluent operation
+     * @param <R>       return type
+     * @return fluent operation return
      */
     default <R> R tasks(Function<Tasks, R> operation) {
         return operation.apply(tasks());
     }
 
     /**
-     * @return Keys operator
+     * Get the keys instance, hold and share the client inside, will not cache the instance by default.
+     *
+     * @return {@link Keys}
      */
     Keys keys();
 
     /**
-     * @return Keys operator
+     * Function to apply on {@link Keys}. Get the result fluently.
+     *
+     * @param operation fluent operation
+     * @param <R>       return type
+     * @return fluent operation return
      */
     default <R> R keys(Function<Keys, R> operation) {
         return operation.apply(keys());
@@ -79,11 +97,12 @@ public interface MSearchClient extends AutoCloseable {
      * Perform a multi-search
      * <p>
      * Bundle multiple search queries in a single API request. Use this endpoint to search through multiple indexes at once.
-     * <h2 style="color:orange">WARNING</h2>
+     * <p style="color:orange;font-size:large">WARNING</p>
      * <pre>
      * If Meilisearch encounters an error when handling any of the queries in a multi-search request, it immediately stops processing the request and returns an error message. The returned message will only address the first error encountered.
      * </pre>
      *
+     * @param request multi-search request
      * @return multi-search result
      */
     @Operation(method = "POST", tags = "/multi-search")
@@ -106,37 +125,50 @@ public interface MSearchClient extends AutoCloseable {
     Version version();
 
     /**
-     * <a href="https://www.meilisearch.com/docs/reference/api/dump"><h1>Dumps</h1></a>
+     * <a style="font-size:large" href="https://www.meilisearch.com/docs/reference/api/dump">Dumps</a>
      * The /dumps route allows the creation of database dumps. Dumps are .dump files that can be used to restore Meilisearch data or migrate between different versions.
      * <p>
      * Triggers a dump creation task. Once the process is complete, a dump is created in the dump directory. If the dump directory does not exist yet, it will be created.
      * <p>
      * Dump tasks take priority over all other tasks in the queue. This means that a newly created dump task will be processed as soon as the current task is finished.
+     *
+     * @return TaskInfo dumps task info
      */
     TaskInfo dumps();
 
     /**
-     * <a href="https://www.meilisearch.com/docs/reference/api/snapshots"><h1>Snapshots</h1></a>
+     * <a style="font-size:large" href="https://www.meilisearch.com/docs/reference/api/snapshots">Snapshots</a>
+     * <p>
      * The /snapshot route allows you to create database snapshots. Snapshots are .snapshot files that can be used to make quick backups of Meilisearch data.
      * <p>
      * <a style="color:red" href="https://www.meilisearch.com/docs/learn/advanced/snapshots">Learn more about snapshots.</a>
      * <p>
      * Snapshot tasks take priority over other tasks in the queue.
+     *
+     * @return TaskInfo snapshot task info
      */
     TaskInfo snapshots();
 
     /**
-     * @return Logs operator
+     * Get the logs instance, hold and share the client inside, will not cache the instance by default.
+     *
+     * @return {@link Logs}
      */
     Logs logs();
 
     /**
-     * @return ExperimentalFeaturesSettings operator
+     * Get the experimentalFeatures instance, hold and share the client inside, will not cache the instance by default.
+     *
+     * @return {@link ExperimentalFeaturesSettings}
      */
     ExperimentalFeaturesSettings experimentalFeatures();
 
     /**
-     * @return ExperimentalFeaturesSettings operator
+     * Function to apply on {@link ExperimentalFeaturesSettings}. Get the result fluently.
+     *
+     * @param operation fluent operation
+     * @param <R>       return type
+     * @return fluent operation return
      */
     default <R> R experimentalFeatures(Function<ExperimentalFeaturesSettings, R> operation) {
         return operation.apply(experimentalFeatures());

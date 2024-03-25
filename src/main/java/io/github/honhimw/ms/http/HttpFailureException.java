@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Rest client http exception
  * @author hon_him
  * @since 2024-02-27
  */
@@ -32,25 +33,49 @@ public class HttpFailureException extends IllegalStateException {
 
     private String uri;
 
+    /**
+     * Constructor with status code
+     * @param statusCode http status code
+     */
     public HttpFailureException(int statusCode) {
         this.statusCode = statusCode;
     }
 
+    /**
+     * Constructor with status code and message
+     * @param statusCode http status code
+     * @param s message
+     */
     public HttpFailureException(int statusCode, String s) {
         super(s);
         this.statusCode = statusCode;
     }
 
+    /**
+     * Constructor with status code, message and cause
+     * @param statusCode http status code
+     * @param message message
+     * @param cause cause
+     */
     public HttpFailureException(int statusCode, String message, Throwable cause) {
         super(message, cause);
         this.statusCode = statusCode;
     }
 
+    /**
+     * Constructor with status code and cause
+     * @param statusCode http status code
+     * @param cause cause
+     */
     public HttpFailureException(int statusCode, Throwable cause) {
         super(cause);
         this.statusCode = statusCode;
     }
 
+    /**
+     * Formatted message
+     * @return formatted message
+     */
     public String formatted() {
         return String.format("failure with status code: [%d] [%s] %s, %s", statusCode, method, uri, getMessage());
     }

@@ -23,7 +23,13 @@ import io.github.honhimw.ms.json.EnumValue;
 
 public enum ProximityPrecisionType implements EnumValue<ProximityPrecisionType> {
 
+    /**
+     * by word
+     */
     BY_WORD("byWord"),
+    /**
+     * by attribute
+     */
     BY_ATTRIBUTE("byAttribute"),
     ;
 

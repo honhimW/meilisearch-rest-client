@@ -42,6 +42,11 @@ public interface ReactiveKeys {
     @Operation(method = "GET", tags = "/keys")
     Mono<Page<Key>> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    /**
+     * Get all Keys
+     * @param page page request builder
+     * @return Returns the most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
+     */
     @Operation(method = "GET", tags = "/keys")
     default Mono<Page<Key>> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
@@ -53,16 +58,24 @@ public interface ReactiveKeys {
      * Get information on the specified key. Attempting to use this endpoint with a non-existent or deleted key will result in an error.
      *
      * @param keyOrUid key value of the requested API key, uid of the requested API key
+     * @return Returns information on the specified key.
      */
     @Operation(method = "GET", tags = "/keys/{key_or_uid}")
     Mono<Key> get(String keyOrUid);
 
     /**
      * Create an API key with the provided description, permissions, and expiration date.
+     * @param request CreateKeyRequest
+     * @return Returns information on the created key.
      */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
     Mono<Key> create(CreateKeyRequest request);
 
+    /**
+     * Create an API key with the provided description, permissions, and expiration date.
+     * @param builder CreateKeyRequest.Builder
+     * @return Returns information on the created key.
+     */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
     default Mono<Key> create(Consumer<CreateKeyRequest.Builder> builder) {
         CreateKeyRequest.Builder _builder = CreateKeyRequest.builder();
@@ -74,10 +87,18 @@ public interface ReactiveKeys {
      * A valid API key or uid is required.
      *
      * @param keyOrUid key value of the requested API key, uid of the requested API key
+     * @param request UpdateKeyRequest request
+     * @return Returns information on the updated key.
      */
     @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
     Mono<Key> update(String keyOrUid, UpdateKeyRequest request);
 
+    /**
+     * A valid API key or uid is required.
+     * @param keyOrUid key value of the requested API key, uid of the requested API key
+     * @param builder UpdateKeyRequest.Builder
+     * @return Returns information on the updated key.
+     */
     @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
     default Mono<Key> update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder) {
         UpdateKeyRequest.Builder _builder = UpdateKeyRequest.builder();
@@ -85,6 +106,11 @@ public interface ReactiveKeys {
         return update(keyOrUid, _builder.build());
     }
 
+    /**
+     * Delete a key.
+     * @param keyOrUid key value of the requested API key, uid of the requested API key
+     * @return NoneReactiveLogs
+     */
     @Operation(method = "DELETE", tags = "/keys/{key_or_uid}")
     Mono<Void> delete(String keyOrUid);
 

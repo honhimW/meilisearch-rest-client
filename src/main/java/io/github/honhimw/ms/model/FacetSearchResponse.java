@@ -43,6 +43,9 @@ public class FacetSearchResponse implements Serializable {
     @Schema(description = "Processing time of the query")
     private Long processingTimeMs;
 
+    /**
+     * Facet hit
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor

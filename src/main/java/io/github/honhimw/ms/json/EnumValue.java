@@ -21,6 +21,10 @@ package io.github.honhimw.ms.json;
 
 public interface EnumValue<T extends Enum<T> & EnumValue<T>> {
 
+    /**
+     * Enum value
+     * @return the enum value
+     */
     String value();
 
 }

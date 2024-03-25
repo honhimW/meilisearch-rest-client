@@ -20,24 +20,42 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.function.Consumer;
 
 /**
+ * Configure the stream using the same parameters as regular logging: mode and target. The stream will continue to run indefinitely until you interrupt it.
+ *
  * @author hon_him
  * @since 2024-02-22
  */
 
 public interface Logs {
 
+    /**
+     * Focused debugging sessions
+     * @param request request
+     */
     @Operation(method = "POST", tags = "/logs/stream")
     void update(LogStreamRequest request);
 
+    /**
+     * Focused debugging sessions
+     * @param builder request builder
+     */
     default void update(Consumer<LogStreamRequest.Builder> builder) {
         LogStreamRequest.Builder _builder = LogStreamRequest.builder();
         builder.accept(_builder);
         update(_builder.build());
     }
 
+    /**
+     * Customize logging levels for the default logging system.
+     * @param request request
+     */
     @Operation(method = "POST", tags = "/logs/stderr")
     void stderr(LogStreamRequest request);
 
+    /**
+     * Customize logging levels for the default logging system.
+     * @param builder request builder
+     */
     default void stderr(Consumer<LogStreamRequest.Builder> builder) {
         LogStreamRequest.Builder _builder = LogStreamRequest.builder();
         builder.accept(_builder);
@@ -45,6 +63,9 @@ public interface Logs {
         stderr(_builder.build());
     }
 
+    /**
+     * Reset the stream
+     */
     @Operation(method = "DELETE", tags = "/logs/stream")
     void reset();
 

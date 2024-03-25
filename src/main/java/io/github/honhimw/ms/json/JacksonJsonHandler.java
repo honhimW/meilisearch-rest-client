@@ -55,14 +55,25 @@ public class JacksonJsonHandler implements JsonHandler {
 
     private final JsonMapper jsonMapper;
 
+    /**
+     * Creates a new instance of the JacksonJsonHandler.
+     */
     public JacksonJsonHandler() {
         this(defaultBuilder().build());
     }
 
+    /**
+     * Creates a new instance of the JacksonJsonHandler with the given {@link JsonMapper}.
+     * @param jsonMapper configured {@link JsonMapper}
+     */
     public JacksonJsonHandler(JsonMapper jsonMapper) {
         this.jsonMapper = jsonMapper;
     }
 
+    /**
+     * Returns a new {@link JsonMapper.Builder} with the default configuration.
+     * @return a new {@link JsonMapper.Builder}
+     */
     @SuppressWarnings("rawtypes")
     public static JsonMapper.Builder defaultBuilder() {
         JsonMapper.Builder builder = JsonMapper.builder();
@@ -184,6 +195,10 @@ public class JacksonJsonHandler implements JsonHandler {
         }
     }
 
+    /**
+     * Get current json mapper
+     * @return current json mapper
+     */
     public JsonMapper getJsonMapper() {
         return jsonMapper;
     }

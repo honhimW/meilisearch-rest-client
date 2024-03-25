@@ -43,6 +43,11 @@ public class ProximityPrecision implements Serializable {
     @Schema(description = "Precision level when calculating the proximity ranking rule", defaultValue = "byWord")
     private ProximityPrecisionType proximityPrecision;
 
+    /**
+     * A static method that creates and returns a default ProximityPrecision object.
+     *
+     * @return         	the default ProximityPrecision object
+     */
     public static ProximityPrecision defaultObject() {
         ProximityPrecision pagination = new ProximityPrecision();
         pagination.setProximityPrecision(ProximityPrecisionType.BY_WORD);

@@ -15,7 +15,10 @@
 package io.github.honhimw.ms.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -54,6 +57,10 @@ public class Faceting implements Serializable {
         setSortFacetValuesBy(builder.sortFacetValuesBy);
     }
 
+    /**
+     * Faceting setting default values object
+     * @return Faceting default object
+     */
     public static Faceting defaultObject() {
         Faceting faceting = new Faceting();
         faceting.setMaxValuesPerFacet(100);
@@ -63,11 +70,19 @@ public class Faceting implements Serializable {
         return faceting;
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
 
+    /**
+     * {@code Faceting} builder static inner class.
+     */
     public static final class Builder {
         private Integer maxValuesPerFacet;
         private Map<String, String> sortFacetValuesBy;
@@ -75,16 +90,33 @@ public class Faceting implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code maxValuesPerFacet} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code maxValuesPerFacet} to set
+         * @return a reference to this Builder
+         */
         public Builder maxValuesPerFacet(Integer val) {
             maxValuesPerFacet = val;
             return this;
         }
 
+        /**
+         * Sets the {@code sortFacetValuesBy} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code sortFacetValuesBy} to set
+         * @return a reference to this Builder
+         */
         public Builder sortFacetValuesBy(Map<String, String> val) {
             sortFacetValuesBy = val;
             return this;
         }
 
+        /**
+         * Returns a {@code Faceting} built from the parameters previously set.
+         *
+         * @return a {@code Faceting} built with parameters of this {@code Faceting.Builder}
+         */
         public Faceting build() {
             return new Faceting(this);
         }

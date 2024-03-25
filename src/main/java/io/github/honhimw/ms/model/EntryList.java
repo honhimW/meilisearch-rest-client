@@ -32,15 +32,31 @@ public class EntryList {
         this.list = new ArrayList<>();
     }
 
+    /**
+     * Creates a new EntryList instance.
+     *
+     * @return a new EntryList instance
+     */
     public static EntryList newInstance() {
         return new EntryList();
     }
 
+    /**
+     * Adds a key-value pair to the EntryList.
+     *
+     * @param key   the key to add
+     * @param value the value to add
+     * @return the modified EntryList
+     */
     public EntryList add(String key, String value) {
         list.add(new AbstractMap.SimpleEntry<>(key, value));
         return this;
     }
 
+    /**
+     * Returns the list of key-value pairs in the EntryList.
+     * @return the list of key-value pairs
+     */
     public List<Map.Entry<String, String>> getList() {
         return list;
     }

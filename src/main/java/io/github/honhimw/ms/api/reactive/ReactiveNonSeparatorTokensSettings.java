@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#non-separator-tokens"><h1>Non-separator tokens</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#non-separator-tokens">Non-separator tokens</a>
  * Remove tokens from Meilisearch's default list of word separators.
  *
  * @author hon_him

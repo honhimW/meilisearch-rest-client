@@ -30,15 +30,32 @@ public abstract class ComplexTypeRef<T> extends TypeRef<T> {
 
     private final List<TypeRef<?>> refs = new ArrayList<>();
 
+    /**
+     * Construct a new {@link ComplexTypeRef}.
+     *
+     * @param ref  first parameterized type reference
+     * @param refs more parameterized type references
+     */
     public ComplexTypeRef(TypeRef<?> ref, TypeRef<?>... refs) {
         this.refs.add(ref);
         this.refs.addAll(Arrays.asList(refs));
     }
 
+    /**
+     * Construct a new {@link ComplexTypeRef}.
+     *
+     * @param ref single parameterized type reference
+     */
     public ComplexTypeRef(TypeRef<?> ref) {
         this.refs.add(ref);
     }
 
+    /**
+     * Construct a new {@link ComplexTypeRef}.
+     *
+     * @param type  first parameterized type
+     * @param types more parameterized types
+     */
     public ComplexTypeRef(Class<?> type, Class<?>... types) {
         this.refs.add(TypeRef.of(type));
         for (Class<?> aClass : types) {
@@ -46,6 +63,11 @@ public abstract class ComplexTypeRef<T> extends TypeRef<T> {
         }
     }
 
+    /**
+     * Construct a new {@link ComplexTypeRef}.
+     *
+     * @param type single parameterized type
+     */
     public ComplexTypeRef(Class<?> type) {
         this.refs.add(TypeRef.of(type));
     }

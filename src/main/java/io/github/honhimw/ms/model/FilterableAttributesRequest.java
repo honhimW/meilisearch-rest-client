@@ -38,6 +38,12 @@ public class FilterableAttributesRequest implements Serializable {
     @Schema(description = "Refine results based on attributes in the filterableAttributes list")
     private String filter;
 
+    /**
+     * Sets the filter for the request using the provided consumer.
+     *
+     * @param  consumer  the consumer that builds the filter
+     * @return           the updated FilterableAttributesRequest object
+     */
     public FilterableAttributesRequest filter(Consumer<FilterBuilder> consumer) {
         FilterBuilder filterBuilder = FilterBuilder.builder();
         consumer.accept(filterBuilder);
@@ -45,6 +51,11 @@ public class FilterableAttributesRequest implements Serializable {
         return this;
     }
 
+    /**
+     * Sets the filter for the request using the provided consumer.
+     * @param consumer the consumer that builds the filter
+     * @return new FilterableAttributesRequest object
+     */
     public static FilterableAttributesRequest builder(Consumer<FilterBuilder> consumer) {
         FilterBuilder filterBuilder = FilterBuilder.builder();
         consumer.accept(filterBuilder);
@@ -54,6 +65,11 @@ public class FilterableAttributesRequest implements Serializable {
         return filterableAttributesRequest;
     }
 
+    /**
+     * Set filter and return self
+     * @param filter the filter string
+     * @return self
+     */
     public FilterableAttributesRequest filter(String filter) {
         this.filter = filter;
         return this;

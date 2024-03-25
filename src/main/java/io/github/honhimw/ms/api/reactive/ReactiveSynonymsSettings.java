@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#synonyms"><h1>Synonyms</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#synonyms">Synonyms</a>
  * The synonyms object contains words and their respective synonyms. A synonym in Meilisearch is considered equal to its associated word for the purposes of calculating search results.
  * <p>
  * <a style="color:red"
@@ -55,6 +55,11 @@ public interface ReactiveSynonymsSettings {
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
     Mono<TaskInfo> update(Map<String, List<String>> synonyms);
 
+    /**
+     * Update the list of synonyms of an index.
+     * @param synonyms map builder
+     * @return update task
+     */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
     default Mono<TaskInfo> update(Consumer<MapBuilder<String, List<String>>> synonyms) {
         MapBuilder<String, List<String>> builder = MapBuilder.builder();

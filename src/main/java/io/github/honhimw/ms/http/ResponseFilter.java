@@ -24,6 +24,12 @@ import reactor.netty.http.client.HttpClientResponse;
 
 public interface ResponseFilter {
 
+    /**
+     * Response refactor
+     * @param response HttpClientResponse
+     * @param bytes response content
+     * @return content publisher
+     */
     Mono<byte[]> accept(HttpClientResponse response, byte[] bytes);
 
 }

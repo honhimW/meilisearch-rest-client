@@ -65,6 +65,10 @@ public class MSearchClientImpl implements MSearchClient {
 
     private final ReactiveMSearchClient reactiveMSearchClient;
 
+    /**
+     * Create a MSearchClient with given config
+     * @param config client config
+     */
     public MSearchClientImpl(MSearchConfig config) {
         this.reactiveMSearchClient = ReactiveMSearchClient.create(config);
     }

@@ -12,6 +12,9 @@
  * limitations under the License.
  */
 
+/**
+ * Blocking Client APIs.
+ */
 @NonNullApi
 package io.github.honhimw.ms.api;
 

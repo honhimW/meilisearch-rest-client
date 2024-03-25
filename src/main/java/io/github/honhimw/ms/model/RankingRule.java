@@ -53,6 +53,9 @@ public enum RankingRule implements EnumValue<RankingRule> {
      */
     EXACTNESS("exactness"),
     ;
+    /**
+     * name
+     */
     public final String name;
 
     RankingRule(String name) {
@@ -64,6 +67,11 @@ public enum RankingRule implements EnumValue<RankingRule> {
         return this.name;
     }
 
+    /**
+     * Returns a list of default ranking rules in the order they are defined.
+     *
+     * @return a list of RankingRule objects representing the default order of ranking rules
+     */
     public static List<RankingRule> defaultOrder() {
         return Arrays.asList(WORDS, TYPO, PROXIMITY, ATTRIBUTE, SORT, EXACTNESS);
     }

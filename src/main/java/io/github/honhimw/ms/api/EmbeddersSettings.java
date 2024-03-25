@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * <a href="https://www.meilisearch.com/docs/learn/experimental/vector_search#deactivate-vector-search"><h1>Deactivate vector search</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/learn/experimental/vector_search#deactivate-vector-search">Deactivate vector search</a>
  *
  * @author hon_him
  * @see Pagination
@@ -38,6 +38,8 @@ public interface EmbeddersSettings {
 
     /**
      * Get current embedders configuration from your index:
+     *
+     * @return current embedders
      */
     @Nullable
     @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/embedders")
@@ -46,11 +48,17 @@ public interface EmbeddersSettings {
     /**
      * Update all embedder configuration from your index:
      *
+     * @param embedders new embedders
      * @return update task
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
     TaskInfo update(Map<String, ? extends Embedder> embedders);
 
+    /**
+     * Update all embedder configuration from your index:
+     * @param embedders new embedders builder
+     * @return update task
+     */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
     default TaskInfo update(Consumer<MapBuilder<String, ? extends Embedder>> embedders) {
         MapBuilder<String, ? extends Embedder> builder = MapBuilder.builder();
@@ -60,7 +68,7 @@ public interface EmbeddersSettings {
 
     /**
      * Manually remove all embedder configuration from your index:
-     * <h2 style="color:orange">WARNING</h2>
+     * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
      * <pre>
      * If you don't remove all embedders, Meilisearch will continue auto-generating embeddings for you documents. This will happen even if vectorStore has been set to false and may lead to unexpected expenses when using OpenAI's paid tiers.
      * </pre>

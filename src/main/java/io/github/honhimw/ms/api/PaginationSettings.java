@@ -19,7 +19,7 @@ import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#pagination"><h1>Pagination</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#pagination">Pagination</a>
  * To protect your database from malicious scraping, Meilisearch has a default limit of 1000 results per search. This setting allows you to configure the maximum number of results returned per search.
  * <p>
  * maxTotalHits takes priority over search parameters such as limit, offset, hitsPerPage, and page.
@@ -45,16 +45,22 @@ public interface PaginationSettings {
 
     /**
      * Partially update the pagination settings for an index.
-     * <h2 style="color:orange">WARNING</h2>
+     * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
      * <pre>
      * Setting maxTotalHits to a value higher than the default will negatively impact search performance. Setting maxTotalHits to values over 20000 may result in queries taking seconds to complete.
      * </pre>
      *
+     * @param pagination new pagination settings
      * @return update task
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
     TaskInfo update(Pagination pagination);
 
+    /**
+     * Partially update the pagination settings for an index.
+     * @param maxTotalHits new maxTotalHits in pagination
+     * @return update task
+     */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
     default TaskInfo update(int maxTotalHits) {
         Pagination pagination = new Pagination();

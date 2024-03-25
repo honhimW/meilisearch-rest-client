@@ -54,10 +54,18 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
         setFilter(builder.filter);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * {@code FacetSearchRequest} builder static inner class.
+     */
     public static final class Builder {
         private String q;
         private String facetName;
@@ -69,36 +77,77 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code q} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code q} to set
+         * @return a reference to this Builder
+         */
         public Builder q(String val) {
             q = val;
             return this;
         }
 
+        /**
+         * Sets the {@code facetName} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code facetName} to set
+         * @return a reference to this Builder
+         */
         public Builder facetName(String val) {
             facetName = val;
             return this;
         }
 
+        /**
+         * Sets the {@code facetQuery} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code facetQuery} to set
+         * @return a reference to this Builder
+         */
         public Builder facetQuery(String val) {
             facetQuery = val;
             return this;
         }
 
+        /**
+         * Sets the {@code matchingStrategy} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code matchingStrategy} to set
+         * @return a reference to this Builder
+         */
         public Builder matchingStrategy(String val) {
             matchingStrategy = val;
             return this;
         }
 
+        /**
+         * Sets the {@code attributesToSearchOn} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code attributesToSearchOn} to set
+         * @return a reference to this Builder
+         */
         public Builder attributesToSearchOn(List<String> val) {
             attributesToSearchOn = val;
             return this;
         }
 
+        /**
+         * Sets the {@code filter} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code filter} to set
+         * @return a reference to this Builder
+         */
         public Builder filter(String val) {
             filter = val;
             return this;
         }
 
+        /**
+         * Returns a {@code FacetSearchRequest} built from the parameters previously set.
+         *
+         * @return a {@code FacetSearchRequest} built with parameters of this {@code FacetSearchRequest.Builder}
+         */
         public FacetSearchRequest build() {
             return new FacetSearchRequest(this);
         }

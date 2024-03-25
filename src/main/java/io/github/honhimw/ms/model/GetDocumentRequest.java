@@ -51,11 +51,21 @@ public class GetDocumentRequest extends PageRequest {
         return this;
     }
 
+    /**
+     * set fields
+     * @param fields fields
+     * @return this
+     */
     public GetDocumentRequest fields(List<String> fields) {
         setFields(fields);
         return this;
     }
 
+    /**
+     * set filter
+     * @param filter filter
+     * @return this
+     */
     public GetDocumentRequest filter(String filter) {
         setFilter(filter);
         return this;

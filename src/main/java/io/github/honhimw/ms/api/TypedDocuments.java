@@ -53,11 +53,11 @@ public interface TypedDocuments<T> {
 
     /**
      * Add a list of documents or replace them if they already exist.
-     * <p/>
+     * <p>
      * If you send an already existing document (same id)
      * the whole existing document will be overwritten by the new document.
      * Fields previously in the document not present in the new document are removed.
-     * <p/>
+     * <p>
      * For a partial update of the document see Add or update documents route.
      * <ul>
      *     <li>info If the provided index does not exist, it will be created.</li>
@@ -78,11 +78,11 @@ public interface TypedDocuments<T> {
 
     /**
      * Add a list of documents or update them if they already exist.
-     * <p/>
+     * <p>
      * If you send an already existing document (same id)
      * the old document will be only partially updated according to the fields of the new document.
      * Thus, any fields not present in the new document are kept and remained unchanged.
-     * <p/>
+     * <p>
      * To completely overwrite a document, see Add or replace documents route.
      * <ul>
      *     <li>info If the provided index does not exist, it will be created.</li>

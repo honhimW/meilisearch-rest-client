@@ -49,27 +49,87 @@ public interface Search {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(String q);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param q       Query string
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(String q, TypeRef<T> typeRef);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param q    Query string
+     * @param type type
+     * @param <T>  document type
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(String q, Class<T> type);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param request search request
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(SearchRequest request);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param builder request builder
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(Consumer<SearchRequest.Builder> builder);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param request search request
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(SearchRequest request, TypeRef<T> typeRef);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param request search request
+     * @param type    type
+     * @param <T>     document type
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(SearchRequest request, Class<T> type);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param builder request builder
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, TypeRef<T> typeRef);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param builder request builder
+     * @param type    type
+     * @param <T>     document type
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, Class<T> type);
 
@@ -83,6 +143,12 @@ public interface Search {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(FacetSearchRequest request);
 
+    /**
+     * Search for facet values matching a specific query for a facet. When many values exist for a facet,
+     *
+     * @param builder facet-request builder
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder);
 

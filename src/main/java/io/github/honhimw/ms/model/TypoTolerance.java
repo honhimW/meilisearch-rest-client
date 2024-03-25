@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <a href="typoTolerance"/>Reference docs: Typo tolerance object</a>
- * <h2>Default object:</h2>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#typo-tolerance-object">Typo tolerance object</a>
+ * <p style="font-weight:bold;font-size:large">Default object:</p>
  * <pre>
  * {
  *     "enabled": true,
@@ -67,6 +67,11 @@ public class TypoTolerance implements Serializable {
         setDisableOnAttributes(builder.disableOnAttributes);
     }
 
+    /**
+     * Creates and returns a default TypoTolerance object with default values.
+     *
+     * @return  the default TypoTolerance object
+     */
     public static TypoTolerance defaultObject() {
         TypoTolerance typoTolerance = new TypoTolerance();
         typoTolerance.setEnabled(true);
@@ -79,6 +84,11 @@ public class TypoTolerance implements Serializable {
         return typoTolerance;
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -100,6 +110,11 @@ public class TypoTolerance implements Serializable {
             setTwoTypos(builder.twoTypos);
         }
 
+        /**
+         * Creates and returns a new instance of the Builder class.
+         *
+         * @return  a new instance of the Builder class
+         */
         public static Builder builder() {
             return new Builder();
         }

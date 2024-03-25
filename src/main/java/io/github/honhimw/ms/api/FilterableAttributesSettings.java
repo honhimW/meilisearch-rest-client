@@ -20,9 +20,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#filterable-attributes"><h1>Filterable attributes</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#filterable-attributes">Filterable attributes</a>
  * Attributes in the filterableAttributes list can be used as filters or facets.
- * <h2 style="color:orange">WARNING</h2>
+ * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>
  * Updating filterable attributes will re-index all documents in the index, which can take some time. We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
  * </pre>
@@ -51,7 +51,7 @@ public interface FilterableAttributesSettings {
      *                             If an attribute contains an object,
      *                             you can use dot notation to set one or more of its keys as a value for this setting:
      *                             "filterableAttributes": ["release_date.year"].
-     *                             <h3 style="color:orange">WARNING</h3>
+     *                             <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
      *                             <pre>If the field does not exist, no error will be thrown.</pre>
      * @return update task
      */

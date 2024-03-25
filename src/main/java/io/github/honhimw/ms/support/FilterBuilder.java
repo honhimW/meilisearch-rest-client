@@ -32,27 +32,56 @@ public class FilterBuilder {
         this.stringBuilder = stringBuilder;
     }
 
+    /**
+     * Get a new instance of {@link FilterBuilder}
+     *
+     * @return {@link FilterBuilder}
+     */
     public static FilterBuilder builder() {
         StringBuilder sb = new StringBuilder();
         return new FilterBuilder(sb);
     }
 
+    /**
+     * Creates a new instance of FilterBuilder and initializes it with the given initial expression.
+     *
+     * @param initial the initial expression to be set on the FilterBuilder
+     * @return the newly created FilterBuilder instance
+     */
     public static FilterBuilder builder(Consumer<Expression> initial) {
         FilterBuilder filterBuilder = new FilterBuilder(null);
         filterBuilder.base(initial);
         return filterBuilder;
     }
 
+    /**
+     * A function that takes a Consumer of Expression as a parameter, creates a new Expression object,
+     * accepts the Consumer, and returns the result of the valid method of the Expression object.
+     *
+     * @param expression a Consumer of Expression
+     * @return the result of the valid method of the Expression object
+     */
     public static String singleExpression(Consumer<Expression> expression) {
         Expression _expression = new Expression();
         expression.accept(_expression);
         return _expression.vaild();
     }
 
+    /**
+     * Builds the filter expression and returns it as a string.
+     *
+     * @return the filter expression
+     */
     public String build() {
         return stringBuilder.toString();
     }
 
+    /**
+     * Set the base expression.
+     *
+     * @param base the base expression
+     * @return this
+     */
     public FilterBuilder base(Consumer<Expression> base) {
         stringBuilder = new StringBuilder();
         Expression nextExpression = new Expression();
@@ -62,6 +91,12 @@ public class FilterBuilder {
         return this;
     }
 
+    /**
+     * Add next expression as an AND condition.
+     *
+     * @param next the next expression
+     * @return this
+     */
     public FilterBuilder and(Consumer<Expression> next) {
         if (stringBuilder.length() != 0) {
             stringBuilder.append(" ").append(Operator.AND.symbol()).append(" ");
@@ -73,6 +108,12 @@ public class FilterBuilder {
         return this;
     }
 
+    /**
+     * Add next expression as an OR condition.
+     *
+     * @param next the next expression
+     * @return this
+     */
     public FilterBuilder or(Consumer<Expression> next) {
         if (stringBuilder.length() != 0) {
             stringBuilder.append(" ").append(Operator.OR.symbol()).append(" ");
@@ -84,6 +125,12 @@ public class FilterBuilder {
         return this;
     }
 
+    /**
+     * Set the base group expression.
+     *
+     * @param sub group expression
+     * @return this
+     */
     public FilterBuilder baseGroup(Consumer<FilterBuilder> sub) {
         stringBuilder = new StringBuilder();
         FilterBuilder subFilter = FilterBuilder.builder();
@@ -97,6 +144,12 @@ public class FilterBuilder {
         return this;
     }
 
+    /**
+     * Add next group expression as an AND condition.
+     *
+     * @param sub group expression
+     * @return this
+     */
     public FilterBuilder andGroup(Consumer<FilterBuilder> sub) {
         if (stringBuilder.length() != 0) {
             stringBuilder.append(" ").append(Operator.AND.symbol()).append(" ");
@@ -112,6 +165,12 @@ public class FilterBuilder {
         return this;
     }
 
+    /**
+     * Add next group expression as an OR condition.
+     *
+     * @param sub group expression
+     * @return this
+     */
     public FilterBuilder orGroup(Consumer<FilterBuilder> sub) {
         if (stringBuilder.length() != 0) {
             stringBuilder.append(" ").append(Operator.OR.symbol()).append(" ");
@@ -127,6 +186,9 @@ public class FilterBuilder {
         return this;
     }
 
+    /**
+     * Filter expression.
+     */
     public static class Expression implements Serializable {
 
         private String expression;
@@ -142,66 +204,154 @@ public class FilterBuilder {
             return expression;
         }
 
+        /**
+         * Equal expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression equal(String attribute, String value) {
             this.expression = String.format("%s %s '%s'", attribute, Operator.EQUAL.symbol(), value);
             return this;
         }
 
+        /**
+         * Equal expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression equal(String attribute, Number value) {
             this.expression = String.format("%s %s %s", attribute, Operator.EQUAL.symbol(), value);
             return this;
         }
 
+        /**
+         * Unequal expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression unequal(String attribute, String value) {
             this.expression = String.format("%s %s '%s'", attribute, Operator.UNEQUAL.symbol(), value);
             return this;
         }
 
+        /**
+         * Unequal expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression unequal(String attribute, Number value) {
             this.expression = String.format("%s %s %s", attribute, Operator.UNEQUAL.symbol(), value);
             return this;
         }
 
+        /**
+         * Greater than expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression gt(String attribute, Number value) {
             this.expression = String.format("%s %s %s", attribute, Operator.GT.symbol(), value);
             return this;
         }
 
+        /**
+         * Greater than or equal expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression ge(String attribute, Number value) {
             this.expression = String.format("%s %s %s", attribute, Operator.GE.symbol(), value);
             return this;
         }
 
+        /**
+         * Less than expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression lt(String attribute, Number value) {
             this.expression = String.format("%s %s %s", attribute, Operator.LT.symbol(), value);
             return this;
         }
 
+        /**
+         * Less than or equal expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
         public Expression le(String attribute, Number value) {
             this.expression = String.format("%s %s %s", attribute, Operator.LE.symbol(), value);
             return this;
         }
 
+        /**
+         * Range expression.
+         *
+         * @param attribute attribute name
+         * @param min       min
+         * @param max       max
+         * @return this
+         */
         public Expression to(String attribute, Number min, Number max) {
             this.expression = String.format("%s %s %s %s", attribute, min, Operator.TO.symbol(), max);
             return this;
         }
 
+        /**
+         * Exists expression.
+         *
+         * @param attribute attribute name
+         * @return this
+         */
         public Expression exists(String attribute) {
             this.expression = String.format("%s %s", attribute, Operator.EXISTS.symbol());
             return this;
         }
 
+        /**
+         * Not exists expression.
+         *
+         * @param attribute attribute name
+         * @return this
+         */
         public Expression notExists(String attribute) {
             this.expression = String.format("%s %s", attribute, Operator.NOT_EXISTS.symbol());
             return this;
         }
 
+        /**
+         * Is empty expression.
+         *
+         * @param attribute attribute name
+         * @return this
+         */
         public Expression isEmpty(String attribute) {
             this.expression = String.format("%s %s", attribute, Operator.IS_EMPTY.symbol());
             return this;
         }
 
+        /**
+         * Not empty expression.
+         *
+         * @param attribute attribute name
+         * @return this
+         */
         public Expression notEmpty(String attribute) {
             this.expression = String.format("%s %s", attribute, Operator.NOT_EMPTY.symbol());
             return this;
@@ -209,6 +359,9 @@ public class FilterBuilder {
 
         /**
          * If you trying to determine whether a parameter has a value, you may mean to use {@link #isNullOrNotExists(String)}.
+         *
+         * @param attribute attribute name
+         * @return this
          */
         public Expression isNull(String attribute) {
             this.expression = String.format("%s %s", attribute, Operator.IS_NULL.symbol());
@@ -223,17 +376,33 @@ public class FilterBuilder {
          * <pre>
          * "(xxx NOT EXISTS OR xxx IS NULL)"
          * </pre>
+         *
+         * @param attribute attribute name
+         * @return this
          */
         public Expression isNullOrNotExists(String attribute) {
             this.expression = String.format("(%s %s %s %s %s)", attribute, Operator.NOT_EXISTS.symbol(), Operator.OR.symbol(), attribute, Operator.IS_NULL.symbol());
             return this;
         }
 
+        /**
+         * Not null expression.
+         *
+         * @param attribute attribute name
+         * @return this
+         */
         public Expression notNull(String attribute) {
             this.expression = String.format("%s %s", attribute, Operator.NOT_NULL.symbol());
             return this;
         }
 
+        /**
+         * In expression.
+         *
+         * @param attribute attribute name
+         * @param values    values
+         * @return this
+         */
         public Expression in(String attribute, String... values) {
             this.expression = Arrays.stream(values).collect(Collectors.joining(
                 "', '",
@@ -242,6 +411,13 @@ public class FilterBuilder {
             return this;
         }
 
+        /**
+         * In expression.
+         *
+         * @param attribute attribute name
+         * @param values    values
+         * @return this
+         */
         public Expression in(String attribute, Number... values) {
             this.expression = Arrays.stream(values).map(String::valueOf).collect(Collectors.joining(
                 ", ",
@@ -250,6 +426,13 @@ public class FilterBuilder {
             return this;
         }
 
+        /**
+         * Not in expression.
+         *
+         * @param attribute attribute name
+         * @param values    values
+         * @return this
+         */
         public Expression notIn(String attribute, String... values) {
             this.expression = Arrays.stream(values).collect(Collectors.joining(
                 "','",
@@ -258,6 +441,11 @@ public class FilterBuilder {
             return this;
         }
 
+        /**
+         * Not expression.
+         *
+         * @return this
+         */
         public Expression not() {
             if (StringUtils.isNotBlank(expression)) {
                 if (StringUtils.startsWith(expression, Operator.NOT.symbol())) {
@@ -271,24 +459,81 @@ public class FilterBuilder {
 
     }
 
+    /**
+     * Operator enum.
+     */
     public enum Operator implements Serializable {
+        /**
+         * =
+         */
         EQUAL("="),
+        /**
+         * !=
+         */
         UNEQUAL("!="),
+        /**
+         * >
+         */
         GT(">"),
+        /**
+         * >=
+         */
         GE(">="),
+        /**
+         * %3C
+         */
         LT("<"),
+        /**
+         * %3C=
+         */
         LE("<="),
+        /**
+         * TO
+         */
         TO("TO"),
+        /**
+         * EXISTS
+         */
         EXISTS("EXISTS"),
+        /**
+         * NOT EXISTS
+         */
         NOT_EXISTS("NOT EXISTS"),
+        /**
+         * IS EMPTY
+         */
         IS_EMPTY("IS EMPTY"),
+        /**
+         * IS NOT EMPTY
+         */
         NOT_EMPTY("IS NOT EMPTY"),
+        /**
+         * IS NULL
+         */
         IS_NULL("IS NULL"),
+        /**
+         * IS NOT NULL
+         */
         NOT_NULL("IS NOT NULL"),
+        /**
+         * IN
+         */
         IN("IN"),
+        /**
+         * NOT IN
+         */
         NOT_IN("NOT IN"),
+        /**
+         * NOT
+         */
         NOT("NOT"),
+        /**
+         * AND
+         */
         AND("AND"),
+        /**
+         * OR
+         */
         OR("OR"),
         ;
 
@@ -299,6 +544,10 @@ public class FilterBuilder {
             this.symbol = symbol;
         }
 
+        /**
+         * Operator symbol.
+         * @return symbol string
+         */
         public String symbol() {
             return this.symbol;
         }

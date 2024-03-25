@@ -55,10 +55,18 @@ public class ExperimentalFeatures implements Serializable {
         setLogsRoute(builder.logsRoute);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * {@code ExperimentalFeatures} builder static inner class.
+     */
     public static final class Builder {
         private Boolean metrics;
         private Boolean vectorStore;
@@ -68,26 +76,55 @@ public class ExperimentalFeatures implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code metrics} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code metrics} to set
+         * @return a reference to this Builder
+         */
         public Builder metrics(Boolean val) {
             metrics = val;
             return this;
         }
 
+        /**
+         * Sets the {@code vectorStore} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code vectorStore} to set
+         * @return a reference to this Builder
+         */
         public Builder vectorStore(Boolean val) {
             vectorStore = val;
             return this;
         }
 
+        /**
+         * Sets the {@code exportPuffinReports} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code exportPuffinReports} to set
+         * @return a reference to this Builder
+         */
         public Builder exportPuffinReports(Boolean val) {
             exportPuffinReports = val;
             return this;
         }
 
+        /**
+         * Sets the {@code logsRoute} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code logsRoute} to set
+         * @return a reference to this Builder
+         */
         public Builder logsRoute(Boolean val) {
             logsRoute = val;
             return this;
         }
 
+        /**
+         * Returns a {@code ExperimentalFeatures} built from the parameters previously set.
+         *
+         * @return a {@code ExperimentalFeatures} built with parameters of this {@code ExperimentalFeatures.Builder}
+         */
         public ExperimentalFeatures build() {
             return new ExperimentalFeatures(this);
         }

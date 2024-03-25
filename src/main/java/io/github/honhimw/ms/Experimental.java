@@ -28,9 +28,19 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface Experimental {
 
+    /**
+     * Experimental features
+     * @return Experimental features
+     */
     Features[] features() default {};
 
+    /**
+     * Experimental features
+     */
     enum Features {
+        /**
+         * Vector search
+         */
         VECTOR_SEARCH
     }
 

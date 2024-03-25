@@ -39,13 +39,26 @@ public interface Indexes {
      *
      * @param offset Number of indexes to skip
      * @param limit  Number of indexes to return
+     * @return paged indexes
      */
     @Operation(method = "GET", tags = "/indexes")
     Page<Index> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    /**
+     * List all indexes
+     *
+     * @param page page builder
+     * @return paged indexes
+     */
     @Operation(method = "GET", tags = "/indexes")
     Page<Index> list(Consumer<PageRequest> page);
 
+    /**
+     * List all indexes
+     *
+     * @param page page request
+     * @return paged indexes
+     */
     @Operation(method = "GET", tags = "/indexes")
     Page<Index> list(PageRequest page);
 
@@ -53,6 +66,7 @@ public interface Indexes {
      * Get information about an index.
      *
      * @param uid uid of the requested index
+     * @return index
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}")
     Optional<Index> get(String uid);
@@ -67,13 +81,20 @@ public interface Indexes {
     @Operation(method = "POST", tags = "/indexes")
     TaskInfo create(String uid, @Nullable String primaryKey);
 
+    /**
+     * Create an index without primary key.
+     *
+     * @param uid uid of the requested index
+     * @return create task
+     */
     @Operation(method = "POST", tags = "/indexes")
     TaskInfo create(String uid);
 
     /**
      * Update an index. Specify a primaryKey if it doesn't already exists yet.
      *
-     * @param uid uid of the requested index
+     * @param uid        uid of the requested index
+     * @param primaryKey Primary key of the requested index
      * @return update task
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}")
@@ -94,20 +115,25 @@ public interface Indexes {
      * Specifying several swap operations that will be processed in an atomic way is possible.
      *
      * @param uids Array of the two indexUids to be swapped
-     * @return indexSwap
+     * @return update task
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     TaskInfo swap(List<Map.Entry<String, String>> uids);
 
     /**
+     * Deploy a new version of an index without any downtime for clients by swapping documents,
+     * settings, and task history between two indexes.
+     * Specifying several swap operations that will be processed in an atomic way is possible.
+     *
      * @param consumer entryList configurer
-     * @see #swap(List)
+     * @return update task
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     TaskInfo swap(Consumer<EntryList> consumer);
 
     /**
      * Get the operator for a single index.
+     *
      * @param uid index uid
      * @return {@link SingleIndex} operator
      */
@@ -125,14 +151,58 @@ public interface Indexes {
     @Operation(tags = "/indexes/{index_uid}/documents")
     Documents documents(String uid);
 
+    /**
+     * Apply a function to the documents of an index.
+     *
+     * @param uid       the identifier for the document
+     * @param operation the function to apply to the documents
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <R> R documents(String uid, Function<Documents, R> operation);
 
+    /**
+     * Get the typed documents of an index.
+     *
+     * @param uid     uid of the requested index
+     * @param typeRef the type of the documents
+     * @param <T>     the type of the documents
+     * @return {@link TypedDocuments} operator
+     */
     <T> TypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
 
+    /**
+     * Get the typed documents of an index.
+     *
+     * @param uid  uid of the requested index
+     * @param type the type of the documents
+     * @param <T>  the type of the documents
+     * @return {@link TypedDocuments} operator
+     */
     <T> TypedDocuments<T> documents(String uid, Class<T> type);
 
+    /**
+     * Apply a function to the typed documents of an index.
+     *
+     * @param uid       uid of the requested index
+     * @param typeRef   the type of the documents
+     * @param operation the function to apply to the documents
+     * @param <T>       the type of the documents
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <T, R> R documents(String uid, TypeRef<T> typeRef, Function<TypedDocuments<T>, R> operation);
 
+    /**
+     * Apply a function to the typed documents of an index.
+     *
+     * @param uid       uid of the requested index
+     * @param type      the type of the documents
+     * @param operation the function to apply to the documents
+     * @param <T>       the type of the documents
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <T, R> R documents(String uid, Class<T> type, Function<TypedDocuments<T>, R> operation);
 
     /**
@@ -150,27 +220,121 @@ public interface Indexes {
     @Operation(tags = "/indexes/{index_uid}/search")
     Search search(String uid);
 
+    /**
+     * Apply a function to the search of an index.
+     *
+     * @param uid       uid of the requested index
+     * @param operation the function to apply to the search
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <R> R search(String uid, Function<Search, R> operation);
 
+    /**
+     * Get the typed search of an index.
+     *
+     * @param uid     uid of the requested index
+     * @param typeRef the type of the search
+     * @param <T>     the type of the search
+     * @return {@link TypedSearch} operator
+     */
     <T> TypedSearch<T> search(String uid, TypeRef<T> typeRef);
 
+    /**
+     * Get the typed search of an index.
+     *
+     * @param uid  uid of the requested index
+     * @param type the type of the search
+     * @param <T>  the type of the search
+     * @return {@link TypedSearch} operator
+     */
     <T> TypedSearch<T> search(String uid, Class<T> type);
 
+    /**
+     * Apply a function to the typed search of an index.
+     *
+     * @param uid       uid of the requested index
+     * @param typeRef   the type of the search
+     * @param operation the function to apply to the search
+     * @param <T>       the type of the search
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <T, R> R search(String uid, TypeRef<T> typeRef, Function<TypedSearch<T>, R> operation);
 
+    /**
+     * Apply a function to the typed search of an index.
+     *
+     * @param uid       uid of the requested index
+     * @param type      the type of the search
+     * @param operation the function to apply to the search
+     * @param <T>       the type of the search
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <T, R> R search(String uid, Class<T> type, Function<TypedSearch<T>, R> operation);
 
+    /**
+     * Get the typed search of an index with details.
+     *
+     * @param uid     uid of the requested index
+     * @param typeRef the type of the search
+     * @param <T>     the type of the search
+     * @return {@link TypedDetailsSearch} operator
+     */
     <T> TypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
 
+    /**
+     * Get the typed search of an index with details.
+     *
+     * @param uid  uid of the requested index
+     * @param type the type of the search
+     * @param <T>  the type of the search
+     * @return {@link TypedDetailsSearch} operator
+     */
     <T> TypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type);
 
+    /**
+     * Apply a function to the typed search of an index with details.
+     *
+     * @param uid       uid of the requested index
+     * @param typeRef   the type of the search
+     * @param operation the function to apply to the search
+     * @param <T>       the type of the search
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<TypedDetailsSearch<T>, R> operation);
 
+    /**
+     * Apply a function to the typed search of an index with details.
+     *
+     * @param uid       uid of the requested index
+     * @param type      the type of the search
+     * @param operation the function to apply to the search
+     * @param <T>       the type of the search
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <T, R> R searchWithDetails(String uid, Class<T> type, Function<TypedDetailsSearch<T>, R> operation);
 
+    /**
+     * Get settings of an index.
+     *
+     * @param uid uid of the requested index
+     * @return settings
+     */
     @Operation(tags = "/indexes/{indexUid}/settings")
     Settings settings(String uid);
 
+    /**
+     * Apply a function to the settings of an index.
+     *
+     * @param uid       uid of the requested index
+     * @param operation the function to apply to the settings
+     * @param <R>       the type of the result
+     * @return the result of the operation
+     */
     <R> R settings(String uid, Function<Settings, R> operation);
 
     /**
@@ -184,6 +348,7 @@ public interface Indexes {
     /**
      * Get stats of an index.
      *
+     * @param uid uid of the requested index
      * @return stats of an index.
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")

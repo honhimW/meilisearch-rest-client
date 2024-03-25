@@ -150,6 +150,11 @@ public class Setting implements Serializable {
         setEmbedders(builder.embedders);
     }
 
+    /**
+     * Returns a default Setting object with all attributes set to their default values.
+     *
+     * @return  a Setting object with default values for all attributes
+     */
     public static Setting defaultObject() {
         Setting setting = new Setting();
         setting.setDisplayedAttributes(Stream.of("*").collect(Collectors.toList()));
@@ -170,10 +175,18 @@ public class Setting implements Serializable {
         return setting;
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * {@code Setting} builder static inner class.
+     */
     public static final class Builder {
         private List<String> displayedAttributes;
         private List<String> searchableAttributes;
@@ -195,86 +208,187 @@ public class Setting implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code displayedAttributes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code displayedAttributes} to set
+         * @return a reference to this Builder
+         */
         public Builder displayedAttributes(List<String> val) {
             displayedAttributes = val;
             return this;
         }
 
+        /**
+         * Sets the {@code searchableAttributes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code searchableAttributes} to set
+         * @return a reference to this Builder
+         */
         public Builder searchableAttributes(List<String> val) {
             searchableAttributes = val;
             return this;
         }
 
+        /**
+         * Sets the {@code filterableAttributes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code filterableAttributes} to set
+         * @return a reference to this Builder
+         */
         public Builder filterableAttributes(List<String> val) {
             filterableAttributes = val;
             return this;
         }
 
+        /**
+         * Sets the {@code sortableAttributes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code sortableAttributes} to set
+         * @return a reference to this Builder
+         */
         public Builder sortableAttributes(List<String> val) {
             sortableAttributes = val;
             return this;
         }
 
+        /**
+         * Sets the {@code rankingRules} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code rankingRules} to set
+         * @return a reference to this Builder
+         */
         public Builder rankingRules(List<RankingRule> val) {
             rankingRules = val;
             return this;
         }
 
+        /**
+         * Sets the {@code stopWords} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code stopWords} to set
+         * @return a reference to this Builder
+         */
         public Builder stopWords(List<String> val) {
             stopWords = val;
             return this;
         }
 
+        /**
+         * Sets the {@code nonSeparatorTokens} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code nonSeparatorTokens} to set
+         * @return a reference to this Builder
+         */
         public Builder nonSeparatorTokens(List<String> val) {
             nonSeparatorTokens = val;
             return this;
         }
 
+        /**
+         * Sets the {@code separatorTokens} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code separatorTokens} to set
+         * @return a reference to this Builder
+         */
         public Builder separatorTokens(List<String> val) {
             separatorTokens = val;
             return this;
         }
 
+        /**
+         * Sets the {@code dictionary} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code dictionary} to set
+         * @return a reference to this Builder
+         */
         public Builder dictionary(List<String> val) {
             dictionary = val;
             return this;
         }
 
+        /**
+         * Sets the {@code synonyms} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code synonyms} to set
+         * @return a reference to this Builder
+         */
         public Builder synonyms(Map<String, List<String>> val) {
             synonyms = val;
             return this;
         }
 
+        /**
+         * Sets the {@code distinctAttribute} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code distinctAttribute} to set
+         * @return a reference to this Builder
+         */
         public Builder distinctAttribute(String val) {
             distinctAttribute = val;
             return this;
         }
 
+        /**
+         * Sets the {@code typoTolerance} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code typoTolerance} to set
+         * @return a reference to this Builder
+         */
         public Builder typoTolerance(TypoTolerance val) {
             typoTolerance = val;
             return this;
         }
 
+        /**
+         * Sets the {@code faceting} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code faceting} to set
+         * @return a reference to this Builder
+         */
         public Builder faceting(Faceting val) {
             faceting = val;
             return this;
         }
 
+        /**
+         * Sets the {@code pagination} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code pagination} to set
+         * @return a reference to this Builder
+         */
         public Builder pagination(Pagination val) {
             pagination = val;
             return this;
         }
 
+        /**
+         * Sets the {@code proximityPrecision} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code proximityPrecision} to set
+         * @return a reference to this Builder
+         */
         public Builder proximityPrecision(ProximityPrecisionType val) {
             proximityPrecision = val;
             return this;
         }
 
+        /**
+         * Sets the {@code embedders} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code embedders} to set
+         * @return a reference to this Builder
+         */
         public Builder embedders(Map<String, ? extends Embedder> val) {
             embedders = val;
             return this;
         }
 
+        /**
+         * Returns a {@code Setting} built from the parameters previously set.
+         *
+         * @return a {@code Setting} built with parameters of this {@code Setting.Builder}
+         */
         public Setting build() {
             return new Setting(this);
         }

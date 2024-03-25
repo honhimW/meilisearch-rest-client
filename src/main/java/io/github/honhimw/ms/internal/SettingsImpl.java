@@ -26,11 +26,11 @@ import jakarta.annotation.Nullable;
  * @since 2024-01-04
  */
 
-public class SettingsImpl implements Settings {
+class SettingsImpl implements Settings {
 
     private final ReactiveSettings _settings;
 
-    public SettingsImpl(ReactiveSettings settings) {
+    SettingsImpl(ReactiveSettings settings) {
         _settings = settings;
     }
 

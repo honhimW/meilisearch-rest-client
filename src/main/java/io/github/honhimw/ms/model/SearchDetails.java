@@ -53,6 +53,9 @@ public class SearchDetails implements Serializable {
     @Schema(description = "ranking score details")
     private RankingScoreDetails _rankingScoreDetails;
 
+    /**
+     * MatchesPosition
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -61,6 +64,9 @@ public class SearchDetails implements Serializable {
         @Schema(description = "TODO")
         private List<Position> overview;
 
+        /**
+         * Position
+         */
         @Data
         @EqualsAndHashCode(callSuper = false)
         @NoArgsConstructor
@@ -74,6 +80,9 @@ public class SearchDetails implements Serializable {
         }
     }
 
+    /**
+     * Geo
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -86,6 +95,9 @@ public class SearchDetails implements Serializable {
         private Double lng;
     }
 
+    /**
+     * RankingScoreDetails
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -106,6 +118,9 @@ public class SearchDetails implements Serializable {
         @Schema(description = "TODO")
         private Exactness exactness;
 
+        /**
+         * Words
+         */
         @Data
         @EqualsAndHashCode(callSuper = false)
         @NoArgsConstructor
@@ -124,6 +139,9 @@ public class SearchDetails implements Serializable {
             private Double score;
         }
 
+        /**
+         * Typo
+         */
         @Data
         @EqualsAndHashCode(callSuper = false)
         @NoArgsConstructor
@@ -142,6 +160,9 @@ public class SearchDetails implements Serializable {
             private Double score;
         }
 
+        /**
+         * Proximity
+         */
         @Data
         @EqualsAndHashCode(callSuper = false)
         @NoArgsConstructor
@@ -154,6 +175,9 @@ public class SearchDetails implements Serializable {
             private Double score;
         }
 
+        /**
+         * Attribute
+         */
         @Data
         @EqualsAndHashCode(callSuper = false)
         @NoArgsConstructor
@@ -172,6 +196,9 @@ public class SearchDetails implements Serializable {
             private Double score;
         }
 
+        /**
+         * Exactness
+         */
         @Data
         @EqualsAndHashCode(callSuper = false)
         @NoArgsConstructor

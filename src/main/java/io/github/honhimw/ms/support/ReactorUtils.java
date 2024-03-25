@@ -29,6 +29,12 @@ import java.util.Objects;
 
 public class ReactorUtils {
 
+    /**
+     * Block Mono and return non-null result.
+     * @param mono publisher
+     * @return blocking result
+     * @param <R> result type
+     */
     @Nonnull
     public static <R> R blockNonNull(@Nonnull Mono<R> mono) {
         R result = mono.block();
@@ -38,6 +44,12 @@ public class ReactorUtils {
         return result;
     }
 
+    /**
+     * Block Flux and return non-null result.
+     * @param flux publisher
+     * @return blocking result
+     * @param <R> result type
+     */
     @Nonnull
     public static <R> List<R> blockNonNull(@Nonnull Flux<R> flux) {
         List<R> result = flux.collectList().block();

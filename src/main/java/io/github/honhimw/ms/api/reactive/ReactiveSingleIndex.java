@@ -35,6 +35,8 @@ public interface ReactiveSingleIndex {
 
     /**
      * Get information about current index.
+     *
+     * @return current index
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}")
     Mono<Index> get();
@@ -51,6 +53,7 @@ public interface ReactiveSingleIndex {
     /**
      * Update current index. Specify a primaryKey if it doesn't already exists yet.
      *
+     * @param primaryKey update primary key of current index
      * @return update task
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}")
@@ -75,20 +78,59 @@ public interface ReactiveSingleIndex {
     @Operation(tags = "/indexes/{index_uid}/documents")
     ReactiveDocuments documents();
 
+    /**
+     * Applies the given operation to the documents of the index.
+     *
+     * @param operation operation
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <R> R documents(Function<ReactiveDocuments, R> operation) {
         return operation.apply(documents());
     }
 
+    /**
+     * Get the typed documents of current index.
+     *
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return {@link ReactiveTypedDocuments} operator
+     */
     <T> ReactiveTypedDocuments<T> documents(TypeRef<T> typeRef);
 
+    /**
+     * Get the typed documents of current index.
+     *
+     * @param type type
+     * @param <T>  document type
+     * @return {@link ReactiveTypedDocuments} operator
+     */
     default <T> ReactiveTypedDocuments<T> documents(Class<T> type) {
         return documents(TypeRef.of(type));
     }
 
+    /**
+     * Applies the given operation to the typed documents of the index.
+     *
+     * @param typeRef   type reference
+     * @param operation operation
+     * @param <T>       document type
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <T, R> R documents(TypeRef<T> typeRef, Function<ReactiveTypedDocuments<T>, R> operation) {
         return operation.apply(documents(typeRef));
     }
 
+    /**
+     * Applies the given operation to the typed documents of the index.
+     *
+     * @param type      type
+     * @param operation operation
+     * @param <T>       document type
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <T, R> R documents(Class<T> type, Function<ReactiveTypedDocuments<T>, R> operation) {
         return operation.apply(documents(type));
     }
@@ -107,41 +149,124 @@ public interface ReactiveSingleIndex {
     @Operation(tags = "/indexes/{index_uid}/search")
     ReactiveSearch search();
 
+    /**
+     * Applies the given operation to the search of the index.
+     *
+     * @param operation operation
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <R> R search(Function<ReactiveSearch, R> operation) {
         return operation.apply(search());
     }
 
+    /**
+     * Get the typed search of current index.
+     *
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return {@link ReactiveTypedSearch} operator
+     */
     <T> ReactiveTypedSearch<T> search(TypeRef<T> typeRef);
 
+    /**
+     * Get the typed search of current index.
+     *
+     * @param type type
+     * @param <T>  document type
+     * @return {@link ReactiveTypedSearch} operator
+     */
     default <T> ReactiveTypedSearch<T> search(Class<T> type) {
         return search(TypeRef.of(type));
     }
 
+    /**
+     * Applies the given operation to the typed search of the index.
+     *
+     * @param typeRef   type reference
+     * @param operation operation
+     * @param <T>       document type
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <T, R> R search(TypeRef<T> typeRef, Function<ReactiveTypedSearch<T>, R> operation) {
         return operation.apply(search(typeRef));
     }
 
+    /**
+     * Applies the given operation to the typed search of the index.
+     *
+     * @param type      type
+     * @param operation operation
+     * @param <T>       document type
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <T, R> R search(Class<T> type, Function<ReactiveTypedSearch<T>, R> operation) {
         return operation.apply(search(type));
     }
 
+    /**
+     * Get the typed search with details of current index.
+     *
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return {@link ReactiveTypedDetailsSearch} operator
+     */
     <T> ReactiveTypedDetailsSearch<T> searchWithDetails(TypeRef<T> typeRef);
 
+    /**
+     * Get the typed search with details of current index.
+     *
+     * @param type type
+     * @param <T>  document type
+     * @return {@link ReactiveTypedDetailsSearch} operator
+     */
     default <T> ReactiveTypedDetailsSearch<T> searchWithDetails(Class<T> type) {
         return searchWithDetails(TypeRef.of(type));
     }
 
+    /**
+     * Applies the given operation to the typed search with details of the index.
+     *
+     * @param typeRef   type reference
+     * @param operation operation
+     * @param <T>       document type
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <T, R> R searchWithDetails(TypeRef<T> typeRef, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
         return operation.apply(searchWithDetails(typeRef));
     }
 
+    /**
+     * Applies the given operation to the typed search with details of the index.
+     *
+     * @param type      type
+     * @param operation operation
+     * @param <T>       document type
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <T, R> R searchWithDetails(Class<T> type, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
         return operation.apply(searchWithDetails(type));
     }
 
+    /**
+     * Get the settings of current index.
+     *
+     * @return {@link ReactiveSettings} operator
+     */
     @Operation(tags = "/indexes/{indexUid}/settings")
     ReactiveSettings settings();
 
+    /**
+     * Applies the given operation to the settings of the index.
+     *
+     * @param operation operation
+     * @param <R>       return type
+     * @return the result of the operation
+     */
     default <R> R settings(Function<ReactiveSettings, R> operation) {
         return operation.apply(settings());
     }
@@ -153,6 +278,5 @@ public interface ReactiveSingleIndex {
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")
     Mono<IndexStats> stats();
-
 
 }

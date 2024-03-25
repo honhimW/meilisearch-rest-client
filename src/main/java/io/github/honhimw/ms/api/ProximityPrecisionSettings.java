@@ -20,7 +20,7 @@ import io.github.honhimw.ms.model.TaskInfo;
 import io.swagger.v3.oas.annotations.Operation;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#proximity-precision"><h1>Proximity precision</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#proximity-precision">Proximity precision</a>
  * Calculating the distance between words is a resource-intensive operation. Lowering the precision of this operation may significantly improve performance and will have little impact on result relevancy in most use-cases. Meilisearch uses word distance when ranking results according to proximity and when users perform phrase searches.
  * <p>
  * proximityPrecision accepts one of the following string values:
@@ -44,6 +44,11 @@ public interface ProximityPrecisionSettings {
     @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/proximity-precision")
     ProximityPrecisionType get();
 
+    /**
+     * Update the proximity precision settings of an index.
+     * @param type proximity precision
+     * @return update task
+     */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/proximity-precision")
     TaskInfo update(ProximityPrecisionType type);
 

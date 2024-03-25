@@ -59,16 +59,30 @@ public final class MSearchConfig {
 
     private final ResponseFilter responseFilter;
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     * With default HttpClient.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder withDefault() {
         return builder()
 //            .jsonHandler(new JacksonJsonHandler()) // ClassNotFoundException when exclude com.fasterxml.jackson.*
             .httpClient(ReactiveHttpUtils.getInstance());
     }
 
+    /**
+     * {@code MSearchConfig} builder static inner class.
+     */
     public static class Builder {
         private String serverUrl;
         private boolean ssl = false;
@@ -79,49 +93,102 @@ public final class MSearchConfig {
         private ReactiveHttpUtils httpClient;
         private ResponseFilter responseFilter = (response, bytes) -> Mono.just(bytes);
 
-        public Builder() {
+        private Builder() {
         }
 
+        /**
+         * Meilisearch server url. If is not empty, it will override {@code enabledSSL} {@code host} and {@code port}
+         *
+         * @param serverUrl the {@code serverUrl} to set
+         * @return a reference to this Builder
+         */
         public Builder serverUrl(String serverUrl) {
             this.serverUrl = serverUrl;
             return this;
         }
 
+        /**
+         * false: http, true: https
+         *
+         * @param enabled the {@code enabled} to set
+         * @return a reference to this Builder
+         */
         public Builder enableSSL(boolean enabled) {
             this.ssl = enabled;
             return this;
         }
 
+        /**
+         * Meilisearch server host
+         *
+         * @param host the {@code host} to set
+         * @return a reference to this Builder
+         */
         public Builder host(String host) {
             this.host = host;
             return this;
         }
 
+        /**
+         * Meilisearch server port
+         *
+         * @param port the {@code port} to set
+         * @return a reference to this Builder
+         */
         public Builder port(int port) {
             this.port = port;
             return this;
         }
 
+        /**
+         * Meilisearch server api key
+         *
+         * @param apiKey the {@code apiKey} to set
+         * @return a reference to this Builder
+         */
         public Builder apiKey(@Nullable String apiKey) {
             this.apiKey = apiKey;
             return this;
         }
 
+        /**
+         * json handler
+         *
+         * @param jsonHandler the {@code jsonHandler} to set
+         * @return a reference to this Builder
+         */
         public Builder jsonHandler(JsonHandler jsonHandler) {
             this.jsonHandler = jsonHandler;
             return this;
         }
 
+        /**
+         * Configured http client
+         *
+         * @param httpClient the {@code httpClient} to set
+         * @return a reference to this Builder
+         */
         public Builder httpClient(ReactiveHttpUtils httpClient) {
             this.httpClient = httpClient;
             return this;
         }
 
+        /**
+         * response custom filter
+         *
+         * @param responseFilter the {@code responseFilter} to set
+         * @return a reference to this Builder
+         */
         public Builder responseFilter(ResponseFilter responseFilter) {
             this.responseFilter = responseFilter;
             return this;
         }
 
+        /**
+         * Returns a {@code MSearchConfig} built from the parameters previously set.
+         *
+         * @return a {@code MSearchConfig} built with parameters of this {@code MSearchConfig.Builder}
+         */
         public MSearchConfig build() {
             if (StringUtils.isBlank(serverUrl)) {
                 serverUrl = String.format("%s://%s:%s", ssl ? "https" : "http", host, port);

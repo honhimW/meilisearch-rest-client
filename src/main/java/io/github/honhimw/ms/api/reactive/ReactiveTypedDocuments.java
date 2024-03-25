@@ -42,6 +42,7 @@ public interface ReactiveTypedDocuments<T> {
      *
      * @param offset default 0
      * @param limit  default 20
+     * @return paged documents
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit) {
@@ -51,9 +52,21 @@ public interface ReactiveTypedDocuments<T> {
         });
     }
 
+    /**
+     * Get documents by batch.
+     *
+     * @param page request
+     * @return paged documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Mono<Page<T>> list(GetDocumentRequest page);
 
+    /**
+     * Get documents by batch.
+     *
+     * @param page request builder
+     * @return paged documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default Mono<Page<T>> list(Consumer<GetDocumentRequest> page) {
         GetDocumentRequest pageRequest = new GetDocumentRequest();
@@ -63,11 +76,11 @@ public interface ReactiveTypedDocuments<T> {
 
     /**
      * Add a list of documents or replace them if they already exist.
-     * <p/>
+     * <p>
      * If you send an already existing document (same id)
      * the whole existing document will be overwritten by the new document.
      * Fields previously in the document not present in the new document are removed.
-     * <p/>
+     * <p>
      * For a partial update of the document see Add or update documents route.
      * <ul>
      *     <li>info If the provided index does not exist, it will be created.</li>
@@ -76,25 +89,38 @@ public interface ReactiveTypedDocuments<T> {
      * </ul>
      *
      * @param json json formatted array
+     * @return save task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(String json);
 
+    /**
+     * Save a document
+     *
+     * @param t document
+     * @return save task
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     default Mono<TaskInfo> save(T t) {
         return save(Collections.singleton(t));
     }
 
+    /**
+     * Save a collection of documents
+     *
+     * @param collection documents
+     * @return save task
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(Collection<? extends T> collection);
 
     /**
      * Add a list of documents or update them if they already exist.
-     * <p/>
+     * <p>
      * If you send an already existing document (same id)
      * the old document will be only partially updated according to the fields of the new document.
      * Thus, any fields not present in the new document are kept and remained unchanged.
-     * <p/>
+     * <p>
      * To completely overwrite a document, see Add or replace documents route.
      * <ul>
      *     <li>info If the provided index does not exist, it will be created.</li>
@@ -103,26 +129,44 @@ public interface ReactiveTypedDocuments<T> {
      * </ul>
      *
      * @param json json formatted array
+     * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(String json);
 
+    /**
+     * Update a document
+     *
+     * @param t document
+     * @return update task
+     */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     default Mono<TaskInfo> update(T t) {
         return update(Collections.singleton(t));
     }
 
+    /**
+     * Update a collection of documents
+     *
+     * @param collection documents
+     * @return update task
+     */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(Collection<? extends T> collection);
 
     /**
      * Delete all documents in the specified index.
+     *
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> deleteAll();
 
     /**
      * Get documents by batch.
+     *
+     * @param fetch request
+     * @return paged documents
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch);
@@ -131,6 +175,7 @@ public interface ReactiveTypedDocuments<T> {
      * Delete a set of documents based on an array of document ids.
      *
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
+     * @return delete task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
     Mono<TaskInfo> batchDelete(Collection<String> ids);
@@ -139,6 +184,7 @@ public interface ReactiveTypedDocuments<T> {
      * Delete a set of documents based on a filter.
      *
      * @param filter A filter expression written as a string or array of array of strings for the documents to be deleted.
+     * @return delete task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete")
     Mono<TaskInfo> delete(FilterableAttributesRequest filter);
@@ -150,6 +196,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param fields Comma-separated list of fields to display for an API resource.
      *               By default it contains all fields of an API resource.
      *               Default *.
+     * @return the requested document
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     Mono<T> get(String id, @Nullable String... fields);
@@ -158,6 +205,7 @@ public interface ReactiveTypedDocuments<T> {
      * Delete one document based on its unique id.
      *
      * @param id Document id of the requested document
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents/{documentId}")
     Mono<TaskInfo> delete(String id);

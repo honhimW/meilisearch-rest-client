@@ -19,9 +19,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#distinct-attribute"><h1>Distinct attribute</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#distinct-attribute">Distinct attribute</a>
  * The distinct attribute is a field whose value will always be unique in the returned documents.
- * <h2 style="color:orange">WARNING</h2>
+ * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>
  * Updating distinct attributes will re-index all documents in the index, which can take some time.
  * We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
@@ -46,6 +46,7 @@ public interface ReactiveDistinctAttributeSettings {
     /**
      * Update the displayed attributes of an index.
      *
+     * @param distinctAttribute distinct attribute
      * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/distinct-attribute")

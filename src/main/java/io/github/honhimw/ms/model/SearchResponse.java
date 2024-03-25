@@ -81,6 +81,9 @@ public class SearchResponse<T> implements Serializable {
     @Schema(description = "The numeric min and max values per facet")
     private Map<String, FacetStats> facetStats;
 
+    /**
+     * FacetStats
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor

@@ -58,6 +58,12 @@ public interface ReactiveTypedSearch<T> {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     Mono<SearchResponse<T>> find(SearchRequest request);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param builder request builder
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     default Mono<SearchResponse<T>> find(Consumer<SearchRequest.Builder> builder) {
         SearchRequest.Builder _builder = SearchRequest.builder();
@@ -75,6 +81,13 @@ public interface ReactiveTypedSearch<T> {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request);
 
+    /**
+     * Search for facet values matching a specific query for a facet. When many values exist for a facet,
+     * users need to be able to discover non-show values they can select in order to refine their faceted search.
+     *
+     * @param builder request builder
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     default Mono<FacetSearchResponse> facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
         FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();

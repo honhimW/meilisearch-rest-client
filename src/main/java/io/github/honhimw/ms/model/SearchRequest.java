@@ -101,10 +101,43 @@ public class SearchRequest extends FilterableAttributesRequest {
     @Schema(description = "must be an array of numbers indicating the search vector. You must generate these yourself when using vector search with user-provided embeddings.")
     private List<Number> vector;
 
+    private SearchRequest(Builder builder) {
+        setFilter(builder.filter);
+        setQ(builder.q);
+        setOffset(builder.offset);
+        setLimit(builder.limit);
+        setHitsPerPage(builder.hitsPerPage);
+        setPage(builder.page);
+        setFacets(builder.facets);
+        setAttributesToRetrieve(builder.attributesToRetrieve);
+        setAttributesToCrop(builder.attributesToCrop);
+        setCropLength(builder.cropLength);
+        setCropMarker(builder.cropMarker);
+        setAttributesToHighlight(builder.attributesToHighlight);
+        setHighlightPreTag(builder.highlightPreTag);
+        setHighlightPostTag(builder.highlightPostTag);
+        setShowMatchesPosition(builder.showMatchesPosition);
+        setSort(builder.sort);
+        setMatchingStrategy(builder.matchingStrategy);
+        setShowRankingScore(builder.showRankingScore);
+        setShowRankingScoreDetails(builder.showRankingScoreDetails);
+        setAttributesToSearchOn(builder.attributesToSearchOn);
+        setHybrid(builder.hybrid);
+        setVector(builder.vector);
+    }
+
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * {@code SearchRequest} builder static inner class.
+     */
     public static final class Builder {
         private String filter;
         private String q;
@@ -132,148 +165,255 @@ public class SearchRequest extends FilterableAttributesRequest {
         private Builder() {
         }
 
-        public Builder filter(String filter) {
-            this.filter = filter;
+        /**
+         * Sets the {@code filter} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code filter} to set
+         * @return a reference to this Builder
+         */
+        public Builder filter(String val) {
+            filter = val;
             return this;
         }
 
-        public Builder filter(Consumer<FilterBuilder> consumer) {
-            FilterBuilder filterBuilder = FilterBuilder.builder();
-            consumer.accept(filterBuilder);
-            this.filter = filterBuilder.build();
+        /**
+         * Sets the {@code q} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code q} to set
+         * @return a reference to this Builder
+         */
+        public Builder q(String val) {
+            q = val;
             return this;
         }
 
-        public Builder q(String q) {
-            this.q = q;
+        /**
+         * Sets the {@code offset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code offset} to set
+         * @return a reference to this Builder
+         */
+        public Builder offset(Integer val) {
+            offset = val;
             return this;
         }
 
-        public Builder offset(Integer offset) {
-            this.offset = offset;
+        /**
+         * Sets the {@code limit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limit} to set
+         * @return a reference to this Builder
+         */
+        public Builder limit(Integer val) {
+            limit = val;
             return this;
         }
 
-        public Builder limit(Integer limit) {
-            this.limit = limit;
+        /**
+         * Sets the {@code hitsPerPage} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code hitsPerPage} to set
+         * @return a reference to this Builder
+         */
+        public Builder hitsPerPage(Integer val) {
+            hitsPerPage = val;
             return this;
         }
 
-        public Builder hitsPerPage(Integer hitsPerPage) {
-            this.hitsPerPage = hitsPerPage;
+        /**
+         * Sets the {@code page} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code page} to set
+         * @return a reference to this Builder
+         */
+        public Builder page(Integer val) {
+            page = val;
             return this;
         }
 
-        public Builder page(Integer page) {
-            this.page = page;
+        /**
+         * Sets the {@code facets} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code facets} to set
+         * @return a reference to this Builder
+         */
+        public Builder facets(List<String> val) {
+            facets = val;
             return this;
         }
 
-        public Builder facets(List<String> facets) {
-            this.facets = facets;
+        /**
+         * Sets the {@code attributesToRetrieve} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code attributesToRetrieve} to set
+         * @return a reference to this Builder
+         */
+        public Builder attributesToRetrieve(List<String> val) {
+            attributesToRetrieve = val;
             return this;
         }
 
-        public Builder attributesToRetrieve(List<String> attributesToRetrieve) {
-            this.attributesToRetrieve = attributesToRetrieve;
+        /**
+         * Sets the {@code attributesToCrop} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code attributesToCrop} to set
+         * @return a reference to this Builder
+         */
+        public Builder attributesToCrop(List<String> val) {
+            attributesToCrop = val;
             return this;
         }
 
-        public Builder attributesToCrop(List<String> attributesToCrop) {
-            this.attributesToCrop = attributesToCrop;
+        /**
+         * Sets the {@code cropLength} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code cropLength} to set
+         * @return a reference to this Builder
+         */
+        public Builder cropLength(Integer val) {
+            cropLength = val;
             return this;
         }
 
-        public Builder cropLength(Integer cropLength) {
-            this.cropLength = cropLength;
+        /**
+         * Sets the {@code cropMarker} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code cropMarker} to set
+         * @return a reference to this Builder
+         */
+        public Builder cropMarker(String val) {
+            cropMarker = val;
             return this;
         }
 
-        public Builder cropMarker(String cropMarker) {
-            this.cropMarker = cropMarker;
+        /**
+         * Sets the {@code attributesToHighlight} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code attributesToHighlight} to set
+         * @return a reference to this Builder
+         */
+        public Builder attributesToHighlight(List<String> val) {
+            attributesToHighlight = val;
             return this;
         }
 
-        public Builder attributesToHighlight(List<String> attributesToHighlight) {
-            this.attributesToHighlight = attributesToHighlight;
+        /**
+         * Sets the {@code highlightPreTag} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code highlightPreTag} to set
+         * @return a reference to this Builder
+         */
+        public Builder highlightPreTag(String val) {
+            highlightPreTag = val;
             return this;
         }
 
-        public Builder highlightPreTag(String highlightPreTag) {
-            this.highlightPreTag = highlightPreTag;
+        /**
+         * Sets the {@code highlightPostTag} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code highlightPostTag} to set
+         * @return a reference to this Builder
+         */
+        public Builder highlightPostTag(String val) {
+            highlightPostTag = val;
             return this;
         }
 
-        public Builder highlightPostTag(String highlightPostTag) {
-            this.highlightPostTag = highlightPostTag;
+        /**
+         * Sets the {@code showMatchesPosition} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code showMatchesPosition} to set
+         * @return a reference to this Builder
+         */
+        public Builder showMatchesPosition(Boolean val) {
+            showMatchesPosition = val;
             return this;
         }
 
-        public Builder showMatchesPosition(Boolean showMatchesPosition) {
-            this.showMatchesPosition = showMatchesPosition;
+        /**
+         * Sets the {@code sort} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code sort} to set
+         * @return a reference to this Builder
+         */
+        public Builder sort(List<String> val) {
+            sort = val;
             return this;
         }
 
-        public Builder sort(List<String> sort) {
-            this.sort = sort;
+        /**
+         * Sets the {@code matchingStrategy} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code matchingStrategy} to set
+         * @return a reference to this Builder
+         */
+        public Builder matchingStrategy(String val) {
+            matchingStrategy = val;
             return this;
         }
 
-        public Builder matchingStrategy(String matchingStrategy) {
-            this.matchingStrategy = matchingStrategy;
+        /**
+         * Sets the {@code showRankingScore} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code showRankingScore} to set
+         * @return a reference to this Builder
+         */
+        public Builder showRankingScore(Boolean val) {
+            showRankingScore = val;
             return this;
         }
 
-        public Builder showRankingScore(Boolean showRankingScore) {
-            this.showRankingScore = showRankingScore;
+        /**
+         * Sets the {@code showRankingScoreDetails} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code showRankingScoreDetails} to set
+         * @return a reference to this Builder
+         */
+        public Builder showRankingScoreDetails(Boolean val) {
+            showRankingScoreDetails = val;
             return this;
         }
 
-        public Builder showRankingScoreDetails(Boolean showRankingScoreDetails) {
-            this.showRankingScoreDetails = showRankingScoreDetails;
+        /**
+         * Sets the {@code attributesToSearchOn} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code attributesToSearchOn} to set
+         * @return a reference to this Builder
+         */
+        public Builder attributesToSearchOn(List<String> val) {
+            attributesToSearchOn = val;
             return this;
         }
 
-        public Builder attributesToSearchOn(List<String> attributesToSearchOn) {
-            this.attributesToSearchOn = attributesToSearchOn;
+        /**
+         * Sets the {@code hybrid} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code hybrid} to set
+         * @return a reference to this Builder
+         */
+        public Builder hybrid(Hybrid val) {
+            hybrid = val;
             return this;
         }
 
-        public Builder hybrid(Hybrid hybrid) {
-            this.hybrid = hybrid;
+        /**
+         * Sets the {@code vector} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code vector} to set
+         * @return a reference to this Builder
+         */
+        public Builder vector(List<Number> val) {
+            vector = val;
             return this;
         }
 
-        public Builder vector(List<Number> vector) {
-            this.vector = vector;
-            return this;
-        }
-
+        /**
+         * Returns a {@code SearchRequest} built from the parameters previously set.
+         *
+         * @return a {@code SearchRequest} built with parameters of this {@code SearchRequest.Builder}
+         */
         public SearchRequest build() {
-            SearchRequest searchRequest = new SearchRequest();
-            searchRequest.setFilter(filter);
-            searchRequest.setQ(q);
-            searchRequest.setOffset(offset);
-            searchRequest.setLimit(limit);
-            searchRequest.setHitsPerPage(hitsPerPage);
-            searchRequest.setPage(page);
-            searchRequest.setFacets(facets);
-            searchRequest.setAttributesToRetrieve(attributesToRetrieve);
-            searchRequest.setAttributesToCrop(attributesToCrop);
-            searchRequest.setCropLength(cropLength);
-            searchRequest.setCropMarker(cropMarker);
-            searchRequest.setAttributesToHighlight(attributesToHighlight);
-            searchRequest.setHighlightPreTag(highlightPreTag);
-            searchRequest.setHighlightPostTag(highlightPostTag);
-            searchRequest.setShowMatchesPosition(showMatchesPosition);
-            searchRequest.setSort(sort);
-            searchRequest.setMatchingStrategy(matchingStrategy);
-            searchRequest.setShowRankingScore(showRankingScore);
-            searchRequest.setShowRankingScoreDetails(showRankingScoreDetails);
-            searchRequest.setAttributesToSearchOn(attributesToSearchOn);
-            searchRequest.setHybrid(hybrid);
-            searchRequest.setVector(vector);
-            return searchRequest;
+            return new SearchRequest(this);
         }
     }
 }

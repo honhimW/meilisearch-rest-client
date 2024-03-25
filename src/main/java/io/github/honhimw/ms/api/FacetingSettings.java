@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.function.Consumer;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#faceting"><h1>Faceting</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#faceting">Faceting</a>
  * With Meilisearch, you can create faceted search interfaces. This setting allows you to:
  * <ul>
  *     <li>Define the maximum number of values returned by the facets search parameter</li>
@@ -49,11 +49,19 @@ public interface FacetingSettings {
      * Partially update the faceting settings for an index.
      * Any parameters not provided in the body will be left unchanged.
      *
+     * @param faceting faceting settings
      * @return update task
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
     TaskInfo update(Faceting faceting);
 
+    /**
+     * Partially update the faceting settings for an index.
+     * Any parameters not provided in the body will be left unchanged.
+     *
+     * @param builder faceting settings builder
+     * @return update task
+     */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
     default TaskInfo update(Consumer<Faceting.Builder> builder) {
         Faceting.Builder _builder = Faceting.builder();

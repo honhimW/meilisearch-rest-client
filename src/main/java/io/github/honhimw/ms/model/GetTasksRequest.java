@@ -95,10 +95,19 @@ public class GetTasksRequest implements Serializable {
         setAfterFinishedAt(builder.afterFinishedAt);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Converts this {@code GetTasksRequest} to a map of query parameters.
+     * @return a map of query parameters
+     */
     public Map<String, String> toParameters() {
         Map<String, String> parameters = new HashMap<>();
         Optional.ofNullable(limit).ifPresent(limit -> parameters.put("limit", String.valueOf(limit)));
@@ -117,6 +126,9 @@ public class GetTasksRequest implements Serializable {
         return parameters;
     }
 
+    /**
+     * {@code GetTasksRequest} builder static inner class.
+     */
     public static final class Builder {
         private Integer limit;
         private String from;
@@ -135,71 +147,154 @@ public class GetTasksRequest implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code limit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code limit} to set
+         * @return a reference to this Builder
+         */
         public Builder limit(Integer val) {
             limit = val;
             return this;
         }
 
+        /**
+         * Sets the {@code from} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code from} to set
+         * @return a reference to this Builder
+         */
         public Builder from(String val) {
             from = val;
             return this;
         }
 
+        /**
+         * Sets the {@code uids} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code uids} to set
+         * @return a reference to this Builder
+         */
         public Builder uids(List<String> val) {
             uids = val;
             return this;
         }
 
+        /**
+         * Sets the {@code statuses} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code statuses} to set
+         * @return a reference to this Builder
+         */
         public Builder statuses(List<TaskStatus> val) {
             statuses = val;
             return this;
         }
 
+        /**
+         * Sets the {@code types} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code types} to set
+         * @return a reference to this Builder
+         */
         public Builder types(List<TaskType> val) {
             types = val;
             return this;
         }
 
+        /**
+         * Sets the {@code indexUids} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code indexUids} to set
+         * @return a reference to this Builder
+         */
         public Builder indexUids(List<String> val) {
             indexUids = val;
             return this;
         }
 
+        /**
+         * Sets the {@code canceledBy} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code canceledBy} to set
+         * @return a reference to this Builder
+         */
         public Builder canceledBy(List<String> val) {
             canceledBy = val;
             return this;
         }
 
+        /**
+         * Sets the {@code beforeEnqueuedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code beforeEnqueuedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder beforeEnqueuedAt(LocalDateTime val) {
             beforeEnqueuedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code beforeStartedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code beforeStartedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder beforeStartedAt(LocalDateTime val) {
             beforeStartedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code beforeFinishedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code beforeFinishedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder beforeFinishedAt(LocalDateTime val) {
             beforeFinishedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code afterEnqueuedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code afterEnqueuedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder afterEnqueuedAt(LocalDateTime val) {
             afterEnqueuedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code afterStartedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code afterStartedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder afterStartedAt(LocalDateTime val) {
             afterStartedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code afterFinishedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code afterFinishedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder afterFinishedAt(LocalDateTime val) {
             afterFinishedAt = val;
             return this;
         }
 
+        /**
+         * Returns a {@code GetTasksRequest} built from the parameters previously set.
+         *
+         * @return a {@code GetTasksRequest} built with parameters of this {@code GetTasksRequest.Builder}
+         */
         public GetTasksRequest build() {
             return new GetTasksRequest(this);
         }

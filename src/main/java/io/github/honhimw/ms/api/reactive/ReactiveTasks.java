@@ -34,11 +34,18 @@ public interface ReactiveTasks {
     /**
      * Get all tasks
      *
-     * @return paginated result
+     * @param request GetTasksRequest
+     * @return paged result
      */
     @Operation(method = "GET", tags = "/tasks")
     Mono<Page<TaskInfo>> list(GetTasksRequest request);
 
+    /**
+     * Get all tasks
+     *
+     * @param builder request builder
+     * @return paginated result
+     */
     @Operation(method = "GET", tags = "/tasks")
     default Mono<Page<TaskInfo>> list(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
@@ -49,11 +56,18 @@ public interface ReactiveTasks {
     /**
      * Delete finished tasks
      *
+     * @param request GetTasksRequest
      * @return delete task
      */
     @Operation(method = "DELETE", tags = "/tasks")
     Mono<TaskInfo> delete(GetTasksRequest request);
 
+    /**
+     * Delete finished tasks
+     *
+     * @param builder request builder
+     * @return delete task
+     */
     @Operation(method = "DELETE", tags = "/tasks")
     default Mono<TaskInfo> delete(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
@@ -65,6 +79,7 @@ public interface ReactiveTasks {
      * Get a single task.
      *
      * @param uid uid of the requested task
+     * @return the requested task
      */
     @Operation(method = "GET", tags = "/tasks/{taskUid}")
     Mono<TaskInfo> get(Integer uid);
@@ -75,10 +90,19 @@ public interface ReactiveTasks {
      * Task cancelation is an atomic transaction: either all tasks are successfully canceled or none are.
      *
      * @param request A valid uids, statuses, types, indexUids, or date(beforeXAt or afterXAt) parameter is required.
+     * @return cancel task
      */
     @Operation(method = "POST", tags = "/tasks/cancel")
     Mono<TaskInfo> cancel(CancelTasksRequest request);
 
+    /**
+     * Cancel any number of enqueued or processing tasks based on their uid, status, type, indexUid,
+     * or the date at which they were enqueued, processed, or completed.
+     * Task cancelation is an atomic transaction: either all tasks are successfully canceled or none are.
+     *
+     * @param builder request builder
+     * @return cancel task
+     */
     @Operation(method = "POST", tags = "/tasks/cancel")
     default Mono<TaskInfo> cancel(Consumer<CancelTasksRequest.Builder> builder) {
         CancelTasksRequest.Builder _builder = CancelTasksRequest.builder();
@@ -86,10 +110,24 @@ public interface ReactiveTasks {
         return cancel(_builder.build());
     }
 
+    /**
+     * Wait for task to complete
+     *
+     * @param uid task uid
+     * @return None
+     */
     default Mono<Void> waitForTask(int uid) {
         return waitForTask(uid, 100, Duration.ofMillis(50));
     }
 
+    /**
+     * Wait for task to complete
+     *
+     * @param uid         task uid
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @return None
+     */
     default Mono<Void> waitForTask(int uid, int maxAttempts, Duration fixedDelay) {
         return get(uid)
             .doOnNext(taskInfo -> {

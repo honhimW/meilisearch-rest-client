@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#displayed-attributes"><h1>Displayed attributes</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#displayed-attributes">Displayed attributes</a>
  * The attributes added to the displayedAttributes list appear in search results. displayedAttributes only affects the search endpoints.
  * It has no impact on the get documents with POST and get documents with GET endpoints.
  * <p>
@@ -45,6 +45,7 @@ public interface DisplayedAttributesSettings {
     /**
      * Update the displayed attributes of an index.
      *
+     * @param displayedAttributes new displayed attributes
      * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/displayed-attributes")

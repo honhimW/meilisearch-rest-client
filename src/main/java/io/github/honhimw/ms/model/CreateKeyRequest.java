@@ -65,10 +65,18 @@ public class CreateKeyRequest implements Serializable {
         setDescription(builder.description);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * {@code CreateKeyRequest} builder static inner class.
+     */
     public static final class Builder {
         private List<KeyAction> actions;
         private List<String> indexes;
@@ -80,36 +88,77 @@ public class CreateKeyRequest implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code actions} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code actions} to set
+         * @return a reference to this Builder
+         */
         public Builder actions(List<KeyAction> val) {
             actions = val;
             return this;
         }
 
+        /**
+         * Sets the {@code indexes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code indexes} to set
+         * @return a reference to this Builder
+         */
         public Builder indexes(List<String> val) {
             indexes = val;
             return this;
         }
 
+        /**
+         * Sets the {@code expiresAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code expiresAt} to set
+         * @return a reference to this Builder
+         */
         public Builder expiresAt(LocalDateTime val) {
             expiresAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code name} to set
+         * @return a reference to this Builder
+         */
         public Builder name(String val) {
             name = val;
             return this;
         }
 
+        /**
+         * Sets the {@code uid} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code uid} to set
+         * @return a reference to this Builder
+         */
         public Builder uid(String val) {
             uid = val;
             return this;
         }
 
+        /**
+         * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code description} to set
+         * @return a reference to this Builder
+         */
         public Builder description(String val) {
             description = val;
             return this;
         }
 
+        /**
+         * Returns a {@code CreateKeyRequest} built from the parameters previously set.
+         *
+         * @return a {@code CreateKeyRequest} built with parameters of this {@code CreateKeyRequest.Builder}
+         */
         public CreateKeyRequest build() {
             return new CreateKeyRequest(this);
         }

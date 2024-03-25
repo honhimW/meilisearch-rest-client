@@ -21,11 +21,11 @@ import reactor.core.publisher.Mono;
 import java.util.function.Consumer;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/experimental_features"><h1>Experimental features</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/experimental_features">Experimental features</a>
  * The /experimental-features route allows you to activate or deactivate some of Meilisearch's experimental features.
  * <p>
  * This route is synchronous. This means that no task object will be returned, and any activated or deactivated features will be made available or unavailable immediately.
- * <h1 style="color:red">DANGER</h1>
+ * <p style="color:red;font-weight:bold;font-size:large">DANGER</p>
  * <pre>
  * The experimental API route is not compatible with all experimental features. Consult the experimental feature overview for a compatibility list.
  * </pre>
@@ -57,6 +57,11 @@ public interface ReactiveExperimentalFeaturesSettings {
     @Operation(method = "PATCH", tags = "/experimental-features")
     Mono<ExperimentalFeatures> configure(ExperimentalFeatures configure);
 
+    /**
+     * Activate or deactivate experimental features.
+     * @param builder feature builder
+     * @return update task
+     */
     @Operation(method = "PATCH", tags = "/experimental-features")
     default Mono<ExperimentalFeatures> configure(Consumer<ExperimentalFeatures.Builder> builder) {
         ExperimentalFeatures.Builder _builder = ExperimentalFeatures.builder();

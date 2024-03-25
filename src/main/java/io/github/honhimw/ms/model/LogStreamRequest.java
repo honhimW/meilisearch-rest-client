@@ -40,61 +40,35 @@ public class LogStreamRequest implements Serializable {
     @Schema(description = "to select in what format of log you want")
     private Mode mode;
 
+    private LogStreamRequest(Builder builder) {
+        setTarget(builder.target);
+        setMode(builder.mode);
+    }
+
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
-    public static class Builder {
-        private String target;
-        private Mode mode;
-
-        public Builder target(String target) {
-            this.target = target;
-            return this;
-        }
-
-        public Builder mode(Mode mode) {
-            this.mode = mode;
-            return this;
-        }
-
-        public Builder error(String target) {
-            this.target = format(target, "error");
-            return this;
-        }
-
-        public Builder warn(String target) {
-            this.target = format(target, "warn");
-            return this;
-        }
-
-        public Builder info(String target) {
-            this.target = format(target, "info");
-            return this;
-        }
-
-        public Builder debug(String target) {
-            this.target = format(target, "debug");
-            return this;
-        }
-
-        public Builder trace(String target) {
-            this.target = format(target, "trace");
-            return this;
-        }
-
-        private String format(String name, String level) {
-            return String.format("%s=%s", name, level);
-        }
-
-        public LogStreamRequest build() {
-            return new LogStreamRequest(target, mode);
-        }
-    }
-
+    /**
+     * Logging Mode.
+     */
     public enum Mode implements EnumValue<Mode> {
+        /**
+         * human
+         */
         HUMAN("human"),
+        /**
+         * json
+         */
         JSON("json"),
+        /**
+         * profile
+         */
         PROFILE("profile"),
         ;
 
@@ -110,4 +84,45 @@ public class LogStreamRequest implements Serializable {
         }
     }
 
+    /**
+     * {@code LogStreamRequest} builder static inner class.
+     */
+    public static final class Builder {
+        private String target;
+        private Mode mode;
+
+        private Builder() {
+        }
+
+        /**
+         * Sets the {@code target} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code target} to set
+         * @return a reference to this Builder
+         */
+        public Builder target(String val) {
+            target = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code mode} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code mode} to set
+         * @return a reference to this Builder
+         */
+        public Builder mode(Mode val) {
+            mode = val;
+            return this;
+        }
+
+        /**
+         * Returns a {@code LogStreamRequest} built from the parameters previously set.
+         *
+         * @return a {@code LogStreamRequest} built with parameters of this {@code LogStreamRequest.Builder}
+         */
+        public LogStreamRequest build() {
+            return new LogStreamRequest(this);
+        }
+    }
 }

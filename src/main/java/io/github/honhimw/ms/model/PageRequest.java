@@ -32,7 +32,13 @@ import java.util.Objects;
 @AllArgsConstructor
 public class PageRequest implements Serializable {
 
+    /**
+     * Default offset
+     */
     public static final int DEFAULT_OFFSET = 0;
+    /**
+     * Default limit
+     */
     public static final int DEFAULT_LIMIT = 20;
 
     @Schema(description = "page no, >= 0")
@@ -47,11 +53,21 @@ public class PageRequest implements Serializable {
     @Schema(description = "page size, > 0")
     private Integer offset;
 
+    /**
+     * Constructs a new {@code PageRequest} with the default {@code no} and {@code size}.
+     */
     public PageRequest() {
         this.no = 0;
         this.size = 20;
     }
 
+    /**
+     * Constructs a new {@code PageRequest} with the given {@code no} and {@code size}.
+     *
+     * @param no   page no
+     * @param size page size
+     * @return a new {@code PageRequest}
+     */
     public static PageRequest of(int no, int size) {
         PageRequest pageRequest = new PageRequest();
         pageRequest.setNo(no);
@@ -59,26 +75,50 @@ public class PageRequest implements Serializable {
         return pageRequest;
     }
 
+    /**
+     * set no
+     * @param no page no
+     * @return this
+     */
     public PageRequest no(int no) {
         setNo(no);
         return this;
     }
 
+    /**
+     * set size
+     * @param size page size
+     * @return this
+     */
     public PageRequest size(int size) {
         setSize(size);
         return this;
     }
 
+    /**
+     * set offset
+     * @param offset offset
+     * @return this
+     */
     public PageRequest offset(int offset) {
         setOffset(offset);
         return this;
     }
 
+    /**
+     * set limit
+     * @param limit limit
+     * @return this
+     */
     public PageRequest limit(int limit) {
         setLimit(limit);
         return this;
     }
 
+    /**
+     * Get offset based on {@code no} and {@code size}
+     * @return offset
+     */
     public int toOffset() {
         if (Objects.nonNull(this.offset)) {
             return offset;
@@ -86,6 +126,10 @@ public class PageRequest implements Serializable {
         return no * size;
     }
 
+    /**
+     * Get limit based on {@code size}
+     * @return limit
+     */
     public int toLimit() {
         if (Objects.nonNull(this.limit)) {
             return limit;
@@ -93,6 +137,9 @@ public class PageRequest implements Serializable {
         return size;
     }
 
+    /**
+     * set default
+     */
     public void useDefault() {
         this.offset = DEFAULT_OFFSET;
         this.limit = DEFAULT_LIMIT;

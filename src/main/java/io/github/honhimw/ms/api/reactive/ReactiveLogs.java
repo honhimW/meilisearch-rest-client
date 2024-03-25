@@ -21,24 +21,46 @@ import reactor.core.publisher.Mono;
 import java.util.function.Consumer;
 
 /**
+ * Configure the stream using the same parameters as regular logging: mode and target. The stream will continue to run indefinitely until you interrupt it.
+ *
  * @author hon_him
  * @since 2024-02-22
  */
 
 public interface ReactiveLogs {
 
+    /**
+     * Focused debugging sessions
+     * @param request request
+     * @return None
+     */
     @Operation(method = "POST", tags = "/logs/stream")
     Mono<Void> update(LogStreamRequest request);
 
+    /**
+     * Focused debugging sessions
+     * @param builder request builder
+     * @return None
+     */
     default Mono<Void> update(Consumer<LogStreamRequest.Builder> builder) {
         LogStreamRequest.Builder _builder = LogStreamRequest.builder();
         builder.accept(_builder);
         return update(_builder.build());
     }
 
+    /**
+     * Customize logging levels for the default logging system.
+     * @param request request
+     * @return None
+     */
     @Operation(method = "POST", tags = "/logs/stderr")
     Mono<Void> stderr(LogStreamRequest request);
 
+    /**
+     * Customize logging levels for the default logging system.
+     * @param builder request builder
+     * @return None
+     */
     default Mono<Void> stderr(Consumer<LogStreamRequest.Builder> builder) {
         LogStreamRequest.Builder _builder = LogStreamRequest.builder();
         builder.accept(_builder);
@@ -46,6 +68,10 @@ public interface ReactiveLogs {
         return stderr(_builder.build());
     }
 
+    /**
+     * Reset the stream
+     * @return None
+     */
     @Operation(method = "DELETE", tags = "/logs/stream")
     Mono<Void> reset();
 

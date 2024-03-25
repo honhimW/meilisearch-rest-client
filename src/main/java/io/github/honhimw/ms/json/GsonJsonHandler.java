@@ -41,14 +41,26 @@ public class GsonJsonHandler implements JsonHandler {
 
     private final Gson gson;
 
+    /**
+     * Creates a new instance of the GsonJsonHandler.
+     */
     public GsonJsonHandler() {
         this(defaultBuilder().create());
     }
 
+    /**
+     * Creates a new instance of the GsonJsonHandler with the given gson.
+     * @param gson configured gson instance
+     */
     public GsonJsonHandler(Gson gson) {
         this.gson = gson;
     }
 
+    /**
+     * Returns a default GsonBuilder instance with custom type adapters and serialization policies.
+     *
+     * @return a GsonBuilder instance with default configurations
+     */
     public static GsonBuilder defaultBuilder() {
         return new GsonBuilder()
             .setDateFormat(RFC_3339)

@@ -20,13 +20,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#stop-words"><h1>Stop words</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#stop-words">Stop words</a>
  * Words added to the stopWords list are ignored in future search queries.
- * <h2 style="color:orange">WARNING</h2>
+ * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>
  * Updating stop words will re-index all documents in the index, which can take some time. We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
  * </pre>
- * <h2 style="color:blue">TIP</h2>
+ * <p style="color:blue;font-weight:bold;font-size:large">TIP</p>
  * <pre>
  * Stop words are strongly related to the language used in your dataset. For example, most datasets containing English documents will have countless occurrences of the and of. Italian datasets, instead, will benefit from ignoring words like a, la, or il.
  *

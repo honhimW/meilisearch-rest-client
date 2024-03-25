@@ -21,11 +21,11 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#separator-tokens"><h1>Separator tokens</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#separator-tokens">Separator tokens</a>
  * Configure strings as custom separator tokens indicating where a word ends and begins.
  * <p>
  * Tokens in the separatorTokens list are added on top of Meilisearch's default list of separators. To remove separators from the default list, use the nonSeparatorTokens setting.
- * <h2 style="color:orange">WARNING</h2>
+ * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>
  * Updating searchable attributes will re-index all documents in the index, which can take some time. We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
  * </pre>

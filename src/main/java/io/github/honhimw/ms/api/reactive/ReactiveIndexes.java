@@ -39,10 +39,16 @@ public interface ReactiveIndexes {
      *
      * @param offset Number of indexes to skip
      * @param limit  Number of indexes to return
+     * @return page of indexes
      */
     @Operation(method = "GET", tags = "/indexes")
     Mono<Page<Index>> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    /**
+     * List all indexes
+     * @param page page builder
+     * @return page of indexes
+     */
     @Operation(method = "GET", tags = "/indexes")
     default Mono<Page<Index>> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
@@ -50,6 +56,11 @@ public interface ReactiveIndexes {
         return list(pageRequest);
     }
 
+    /**
+     * List all indexes
+     * @param page page request
+     * @return page of indexes
+     */
     @Operation(method = "GET", tags = "/indexes")
     default Mono<Page<Index>> list(PageRequest page) {
         return list(page.toOffset(), page.toLimit());
@@ -59,6 +70,7 @@ public interface ReactiveIndexes {
      * Get information about an index.
      *
      * @param uid uid of the requested index
+     * @return {@link Index}
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}")
     Mono<Index> get(String uid);
@@ -73,6 +85,11 @@ public interface ReactiveIndexes {
     @Operation(method = "POST", tags = "/indexes")
     Mono<TaskInfo> create(String uid, @Nullable String primaryKey);
 
+    /**
+     * Create an index without primary key.
+     * @param uid uid of the requested index
+     * @return create task
+     */
     @Operation(method = "POST", tags = "/indexes")
     default Mono<TaskInfo> create(String uid) {
         return create(uid, null);
@@ -82,6 +99,7 @@ public interface ReactiveIndexes {
      * Update an index. Specify a primaryKey if it doesn't already exists yet.
      *
      * @param uid uid of the requested index
+     * @param primaryKey Primary key of the requested index
      * @return update task
      */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}")
@@ -108,8 +126,13 @@ public interface ReactiveIndexes {
     Mono<TaskInfo> swap(List<Map.Entry<String, String>> uids);
 
     /**
-     * @param consumer entryList configurer
+     * Deploy a new version of an index without any downtime for clients by swapping documents,
+     * settings, and task history between two indexes.
+     * Specifying several swap operations that will be processed in an atomic way is possible.
+     *
+     * @param consumer entryList configurer builder
      * @see #swap(List)
+     * @return swap task
      */
     @Operation(method = "POST", tags = "/swap-indexes")
     default Mono<TaskInfo> swap(Consumer<EntryList> consumer) {
@@ -137,20 +160,59 @@ public interface ReactiveIndexes {
     @Operation(tags = "/indexes/{index_uid}/documents")
     ReactiveDocuments documents(String uid);
 
+    /**
+     * Apply a function to the documents of an index.
+     * @param uid index uid
+     * @param operation operation
+     * @return operation result
+     * @param <R> return type
+     */
     default <R> R documents(String uid, Function<ReactiveDocuments, R> operation) {
         return operation.apply(documents(uid));
     }
 
+    /**
+     * Get the typed documents of an index.
+     * @param uid index uid
+     * @param typeRef type reference
+     * @return {@link ReactiveTypedDocuments} operator
+     * @param <T> documents type
+     */
     <T> ReactiveTypedDocuments<T> documents(String uid, TypeRef<T> typeRef);
 
+    /**
+     * Get the typed documents of an index.
+     * @param uid index uid
+     * @param type type
+     * @return typed documents
+     * @param <T> documents type
+     */
     default <T> ReactiveTypedDocuments<T> documents(String uid, Class<T> type) {
         return documents(uid, TypeRef.of(type));
     }
 
+    /**
+     * Apply a function to the typed documents of an index.
+     * @param uid index uid
+     * @param typeRef type reference
+     * @param operation operation
+     * @return operation result
+     * @param <T> documents type
+     * @param <R> return type
+     */
     default <T, R> R documents(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDocuments<T>, R> operation) {
         return operation.apply(documents(uid, typeRef));
     }
 
+    /**
+     * Apply a function to the typed documents of an index.
+     * @param uid index uid
+     * @param type type
+     * @param operation operation
+     * @return operation result
+     * @param <T> documents type
+     * @param <R> return type
+     */
     default <T, R> R documents(String uid, Class<T> type, Function<ReactiveTypedDocuments<T>, R> operation) {
         return operation.apply(documents(uid, type));
     }
@@ -170,41 +232,125 @@ public interface ReactiveIndexes {
     @Operation(tags = "/indexes/{index_uid}/search")
     ReactiveSearch search(String uid);
 
+    /**
+     * Apply a function to the search of an index.
+     * @param uid index uid
+     * @param operation operation
+     * @return operation result
+     * @param <R> return type
+     */
     default <R> R search(String uid, Function<ReactiveSearch, R> operation) {
         return operation.apply(search(uid));
     }
 
+    /**
+     * Get the typed search of an index.
+     * @param uid index uid
+     * @param typeRef type reference
+     * @return {@link ReactiveTypedSearch} operator
+     * @param <T> search type
+     */
     <T> ReactiveTypedSearch<T> search(String uid, TypeRef<T> typeRef);
 
+    /**
+     * Get the typed search of an index.
+     *
+     * @param uid index uid
+     * @param type type
+     * @return typed search
+     * @param <T> search type
+     */
     default <T> ReactiveTypedSearch<T> search(String uid, Class<T> type) {
         return search(uid, TypeRef.of(type));
     }
 
+    /**
+     * Apply a function to the typed search of an index.
+     * @param uid index uid
+     * @param typeRef type reference
+     * @param operation operation
+     * @return operation result
+     * @param <T> search type
+     * @param <R> return type
+     */
     default <T, R> R search(String uid, TypeRef<T> typeRef, Function<ReactiveTypedSearch<T>, R> operation) {
         return operation.apply(search(uid, typeRef));
     }
 
+    /**
+     * Apply a function to the typed search of an index.
+     * @param uid index uid
+     * @param type type
+     * @param operation operation
+     * @return operation result
+     * @param <T> search type
+     * @param <R> return type
+     */
     default <T, R> R search(String uid, Class<T> type, Function<ReactiveTypedSearch<T>, R> operation) {
         return operation.apply(search(uid, type));
     }
 
+    /**
+     * Get the typed search of an index with details.
+     * @param uid index uid
+     * @param typeRef type reference
+     * @return {@link ReactiveTypedDetailsSearch} operator
+     * @param <T> search type
+     */
     <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, TypeRef<T> typeRef);
 
+    /**
+     * Get the typed search of an index with details.
+     * @param uid index uid
+     * @param type type
+     * @return typed search
+     * @param <T> search type
+     */
     default <T> ReactiveTypedDetailsSearch<T> searchWithDetails(String uid, Class<T> type) {
         return searchWithDetails(uid, TypeRef.of(type));
     }
 
+    /**
+     * Apply a function to the typed search of an index with details.
+     * @param uid index uid
+     * @param typeRef type reference
+     * @param operation operation
+     * @return operation result
+     * @param <T> search type
+     * @param <R> return type
+     */
     default <T, R> R searchWithDetails(String uid, TypeRef<T> typeRef, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
         return operation.apply(searchWithDetails(uid, typeRef));
     }
 
+    /**
+     * Apply a function to the typed search of an index with details.
+     * @param uid index uid
+     * @param type type
+     * @param operation operation
+     * @return operation result
+     * @param <T> search type
+     * @param <R> return type
+     */
     default <T, R> R searchWithDetails(String uid, Class<T> type, Function<ReactiveTypedDetailsSearch<T>, R> operation) {
         return operation.apply(searchWithDetails(uid, type));
     }
 
+    /**
+     * Get the settings of an index.
+     * @param uid index uid
+     * @return {@link ReactiveSettings} operator
+     */
     @Operation(tags = "/indexes/{indexUid}/settings")
     ReactiveSettings settings(String uid);
 
+    /**
+     * Apply a function to the settings of an index.
+     * @param uid index uid
+     * @param operation operation
+     * @return operation result
+     * @param <R> return type
+     */
     default <R> R settings(String uid, Function<ReactiveSettings, R> operation) {
         return operation.apply(settings(uid));
     }
@@ -220,6 +366,7 @@ public interface ReactiveIndexes {
     /**
      * Get stats of an index.
      *
+     * @param uid index uidReactiveIndexes
      * @return stats of an index.
      */
     @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")

@@ -75,10 +75,20 @@ public class CancelTasksRequest implements Serializable {
         setAfterStartedAt(builder.afterStartedAt);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Converts the current parameter to HTTP query parameters.
+     *
+     * @return query parameters map
+     */
     public Map<String, String> toParameters() {
         Map<String, String> parameters = new HashMap<>();
         Optional.ofNullable(uids).filter(strings -> !strings.isEmpty()).map(strings -> String.join(",", strings)).ifPresent(uids -> parameters.put("uids", uids));
@@ -92,6 +102,9 @@ public class CancelTasksRequest implements Serializable {
         return parameters;
     }
 
+    /**
+     * {@code CancelTasksRequest} builder static inner class.
+     */
     public static final class Builder {
         private List<String> uids;
         private List<TaskStatus> statuses;
@@ -105,46 +118,99 @@ public class CancelTasksRequest implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code uids} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code uids} to set
+         * @return a reference to this Builder
+         */
         public Builder uids(List<String> val) {
             uids = val;
             return this;
         }
 
+        /**
+         * Sets the {@code statuses} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code statuses} to set
+         * @return a reference to this Builder
+         */
         public Builder statuses(List<TaskStatus> val) {
             statuses = val;
             return this;
         }
 
+        /**
+         * Sets the {@code types} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code types} to set
+         * @return a reference to this Builder
+         */
         public Builder types(List<TaskType> val) {
             types = val;
             return this;
         }
 
+        /**
+         * Sets the {@code indexUids} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code indexUids} to set
+         * @return a reference to this Builder
+         */
         public Builder indexUids(List<String> val) {
             indexUids = val;
             return this;
         }
 
+        /**
+         * Sets the {@code beforeEnqueuedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code beforeEnqueuedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder beforeEnqueuedAt(LocalDateTime val) {
             beforeEnqueuedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code beforeStartedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code beforeStartedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder beforeStartedAt(LocalDateTime val) {
             beforeStartedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code afterEnqueuedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code afterEnqueuedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder afterEnqueuedAt(LocalDateTime val) {
             afterEnqueuedAt = val;
             return this;
         }
 
+        /**
+         * Sets the {@code afterStartedAt} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code afterStartedAt} to set
+         * @return a reference to this Builder
+         */
         public Builder afterStartedAt(LocalDateTime val) {
             afterStartedAt = val;
             return this;
         }
 
+        /**
+         * Returns a {@code CancelTasksRequest} built from the parameters previously set.
+         *
+         * @return a {@code CancelTasksRequest} built with parameters of this {@code CancelTasksRequest.Builder}
+         */
         public CancelTasksRequest build() {
             return new CancelTasksRequest(this);
         }

@@ -21,6 +21,12 @@ package io.github.honhimw.ms.support;
 
 public class Asserts {
 
+    /**
+     * Assert that an expression is {@code true}.
+     *
+     * @param status  the expression to assert
+     * @param message the exception message to use if the assertion fails
+     */
     public static void status(boolean status, String message) {
         if (!status) {
             throw new IllegalStateException(message);

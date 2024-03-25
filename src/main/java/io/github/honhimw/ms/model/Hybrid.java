@@ -47,6 +47,10 @@ public class Hybrid implements Serializable {
     @Schema(description = "string, indicating one of the embedders configured for the queried index. Defaults to \"default\"", defaultValue = "default")
     private String embedder;
 
+    /**
+     * Hybrid default object
+     * @return Hybrid default
+     */
     public static Hybrid defaultObject() {
         Hybrid hybrid = new Hybrid();
         hybrid.setSemanticRatio(0.5);

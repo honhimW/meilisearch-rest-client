@@ -46,6 +46,7 @@ public interface ReactiveDocuments {
      *
      * @param offset default 0
      * @param limit  default 20
+     * @return a list of documents
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit) {
@@ -55,6 +56,12 @@ public interface ReactiveDocuments {
         });
     }
 
+    /**
+     * Get documents by batch.
+     *
+     * @param page page request builder
+     * @return a list of documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default Mono<Page<Map<String, Object>>> list(Consumer<GetDocumentRequest> page) {
         GetDocumentRequest pageRequest = new GetDocumentRequest();
@@ -62,20 +69,60 @@ public interface ReactiveDocuments {
         return list(pageRequest);
     }
 
+    /**
+     * Get documents by batch.
+     *
+     * @param page page request
+     * @return a list of documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Mono<Page<Map<String, Object>>> list(GetDocumentRequest page);
 
+    /**
+     * Get documents by batch with type.
+     *
+     * @param offset  default 0
+     * @param limit   default 20
+     * @param typeRef type
+     * @param <T>     document type
+     * @return a list of documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
 
+    /**
+     * Get documents by batch with type.
+     *
+     * @param offset default 0
+     * @param limit  default 20
+     * @param type   type
+     * @param <T>    document type
+     * @return a list of documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default <T> Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit, Class<T> type) {
         return list(offset, limit, TypeRef.of(type));
     }
 
+    /**
+     * Get documents by batch with type.
+     *
+     * @param page    page request
+     * @param typeRef type
+     * @param <T>     document type
+     * @return a list of documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Mono<Page<T>> list(GetDocumentRequest page, TypeRef<T> typeRef);
 
+    /**
+     * Get documents by batch with type.
+     *
+     * @param page    page request builder
+     * @param typeRef type
+     * @param <T>     document type
+     * @return a list of documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default <T> Mono<Page<T>> list(Consumer<GetDocumentRequest> page, TypeRef<T> typeRef) {
         GetDocumentRequest pageRequest = new GetDocumentRequest();
@@ -83,6 +130,14 @@ public interface ReactiveDocuments {
         return list(pageRequest, typeRef);
     }
 
+    /**
+     * Get documents by batch with type.
+     *
+     * @param page page request builder
+     * @param type type
+     * @param <T>  document type
+     * @return a list of documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default <T> Mono<Page<T>> list(Consumer<GetDocumentRequest> page, Class<T> type) {
         return list(page, TypeRef.of(type));
@@ -91,11 +146,11 @@ public interface ReactiveDocuments {
 
     /**
      * Add a list of documents or replace them if they already exist.
-     * <p/>
+     * <p>
      * If you send an already existing document (same id)
      * the whole existing document will be overwritten by the new document.
      * Fields previously in the document not present in the new document are removed.
-     * <p/>
+     * <p>
      * For a partial update of the document see Add or update documents route.
      * <ul>
      *     <li>info If the provided index does not exist, it will be created.</li>
@@ -104,35 +159,60 @@ public interface ReactiveDocuments {
      * </ul>
      *
      * @param json json formatted array
+     * @return save task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(String json);
 
+    /**
+     * Save one document
+     *
+     * @param one document
+     * @return save task
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     default Mono<TaskInfo> save(Object one) {
         return save(Collections.singleton(one));
     }
 
+    /**
+     * Save a list of documents
+     *
+     * @param collection documents
+     * @return save task
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> save(Collection<?> collection);
 
+    /**
+     * Save one vectorized document
+     *
+     * @param one vectorized document
+     * @return save task
+     */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     default Mono<TaskInfo> saveVectorized(VectorizedDocument one) {
         return save(Collections.singleton(one));
     }
 
+    /**
+     * Save a list of vectorized documents
+     *
+     * @param collection vectorized documents
+     * @return save task
+     */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> saveVectorized(Collection<VectorizedDocument> collection);
 
     /**
      * Add a list of documents or update them if they already exist.
-     * <p/>
+     * <p>
      * If you send an already existing document (same id)
      * the old document will be only partially updated according to the fields of the new document.
      * Thus, any fields not present in the new document are kept and remained unchanged.
-     * <p/>
+     * <p>
      * To completely overwrite a document, see Add or replace documents route.
      * <ul>
      *     <li>info If the provided index does not exist, it will be created.</li>
@@ -141,30 +221,54 @@ public interface ReactiveDocuments {
      * </ul>
      *
      * @param json json formatted array
+     * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(String json);
 
+    /**
+     * Add one document or update it if it already exists.
+     *
+     * @param one document
+     * @return update task
+     */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     default Mono<TaskInfo> update(Object one) {
         return update(Collections.singleton(one));
     }
 
+    /**
+     * Add a list of documents or update them if they already exist.
+     *
+     * @param collection documents
+     * @return update task
+     */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     Mono<TaskInfo> update(Collection<?> collection);
 
     /**
      * Delete all documents in the specified index.
+     *
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> deleteAll();
 
     /**
      * Get documents by batch.
+     *
+     * @param fetch fetch request
+     * @return a list of documents
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Mono<Page<Map<String, Object>>> batchGet(BatchGetDocumentsRequest fetch);
 
+    /**
+     * Get documents by batch.
+     *
+     * @param builder fetch request builder
+     * @return a list of documents
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     default Mono<Page<Map<String, Object>>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder) {
         BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
@@ -174,10 +278,23 @@ public interface ReactiveDocuments {
 
     /**
      * Get documents by batch.
+     *
+     * @param fetch   fetch request
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return a list of documents
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
 
+    /**
+     * Get documents by batch.
+     *
+     * @param builder fetch request builder
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return a list of documents
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     default <T> Mono<Page<T>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef) {
         BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
@@ -185,11 +302,27 @@ public interface ReactiveDocuments {
         return batchGet(_builder.build(), typeRef);
     }
 
+    /**
+     * Get documents by batch.
+     *
+     * @param fetch fetch request
+     * @param type  type
+     * @param <T>   document type
+     * @return a list of documents
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     default <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, Class<T> type) {
         return batchGet(fetch, TypeRef.of(type));
     }
 
+    /**
+     * Get documents by batch.
+     *
+     * @param builder fetch request builder
+     * @param type    type
+     * @param <T>     document type
+     * @return a list of documents
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     default <T> Mono<Page<T>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, Class<T> type) {
         BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
@@ -201,6 +334,7 @@ public interface ReactiveDocuments {
      * Delete a set of documents based on an array of document ids.
      *
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
+     * @return delete task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
     Mono<TaskInfo> batchDelete(List<String> ids);
@@ -209,6 +343,7 @@ public interface ReactiveDocuments {
      * Delete a set of documents based on a filter.
      *
      * @param filter A filter expression written as a string or array of array of strings for the documents to be deleted.
+     * @return delete task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete")
     Mono<TaskInfo> delete(FilterableAttributesRequest filter);
@@ -220,6 +355,7 @@ public interface ReactiveDocuments {
      * @param fields Comma-separated list of fields to display for an API resource.
      *               By default it contains all fields of an API resource.
      *               Default *.
+     * @return one document
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     Mono<Map<String, Object>> get(String id, @Nullable String... fields);
@@ -227,14 +363,27 @@ public interface ReactiveDocuments {
     /**
      * Get one document using its unique id.
      *
-     * @param id     Document id of the requested document
-     * @param fields Comma-separated list of fields to display for an API resource.
-     *               By default it contains all fields of an API resource.
-     *               Default *.
+     * @param id      Document id of the requested document
+     * @param typeRef type reference
+     * @param fields  Comma-separated list of fields to display for an API resource.
+     *                By default it contains all fields of an API resource.
+     *                Default *.
+     * @param <T>     document type
+     * @return one document
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     <T> Mono<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields);
 
+    /**
+     * Get one document using its unique id.
+     * @param id Document id of the requested document
+     * @param type type
+     * @param fields Comma-separated list of fields to display for an API resource.
+     *               By default it contains all fields of an API resource.
+     *               Default *.
+     * @return one document
+     * @param <T> document type
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     default <T> Mono<T> get(String id, Class<T> type, @Nullable String... fields) {
         return get(id, TypeRef.of(type), fields);
@@ -244,9 +393,9 @@ public interface ReactiveDocuments {
      * Delete one document based on its unique id.
      *
      * @param id Document id of the requested document
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents/{documentId}")
     Mono<TaskInfo> delete(String id);
-
 
 }

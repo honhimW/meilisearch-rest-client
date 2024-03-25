@@ -21,15 +21,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#ranking-rules"><h1>Ranking rules</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#ranking-rules">Ranking rules</a>
  * Ranking rules are built-in rules that rank search results according to certain criteria. They are applied in the same order in which they appear in the rankingRules array.
  * <p>
  * <a style="color:red"
  * href="https://www.meilisearch.com/docs/learn/core_concepts/relevancy">
  * To learn more about ranking rules, refer to our dedicated guide.
  * </a>
- * <h1 style="color:green">Ranking rules array</h1>
- * <h3>Default order</h3>
+ * <p style="color:green;font-weight:bold;font-size:large">Ranking rules array</p>
+ * <p style="color:orange;font-weight:bold;font-size:large">Default order</p>
  * <pre>
  * [
  *   "words",
@@ -65,13 +65,14 @@ public interface RankingRulesSettings {
      *     <li>To apply an ascending sort (results sorted by increasing value): attribute_name:asc</li>
      *     <li>To apply a descending sort (results sorted by decreasing value): attribute_name:desc</li>
      * </ul>
-     * <h2 style="color:orange">WARNING</h2>
+     * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
      * <pre>
      * If some documents do not contain the attribute defined in a custom ranking rule, the application of the ranking rule is undefined and the search results might not be sorted as you expected.
      *
      * Make sure that any attribute used in a custom ranking rule is present in all of your documents. For example, if you set the custom ranking rule desc(year), make sure that all your documents contain the attribute year.
      * </pre>
      *
+     * @param rankingRules ordered ranking rules
      * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/ranking-rules")
@@ -80,7 +81,7 @@ public interface RankingRulesSettings {
 
     /**
      * Reset the ranking rules of an index to their default value.
-     * <h2 style="color:blue">TIP</h2>
+     * <p style="color:blue;font-weight:bold;font-size:large">TIP</p>
      * <pre>
      * Resetting ranking rules is not the same as removing them. To remove a ranking rule, use the update ranking rules endpoint.
      * </pre>

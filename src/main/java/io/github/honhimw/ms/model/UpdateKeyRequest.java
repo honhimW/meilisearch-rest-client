@@ -44,10 +44,18 @@ public class UpdateKeyRequest implements Serializable {
         setDescription(builder.description);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return  a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * {@code UpdateKeyRequest} builder static inner class.
+     */
     public static final class Builder {
         private String name;
         private String description;
@@ -55,16 +63,33 @@ public class UpdateKeyRequest implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code name} to set
+         * @return a reference to this Builder
+         */
         public Builder name(String val) {
             name = val;
             return this;
         }
 
+        /**
+         * Sets the {@code description} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code description} to set
+         * @return a reference to this Builder
+         */
         public Builder description(String val) {
             description = val;
             return this;
         }
 
+        /**
+         * Returns a {@code UpdateKeyRequest} built from the parameters previously set.
+         *
+         * @return a {@code UpdateKeyRequest} built with parameters of this {@code UpdateKeyRequest.Builder}
+         */
         public UpdateKeyRequest build() {
             return new UpdateKeyRequest(this);
         }

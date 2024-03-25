@@ -50,8 +50,24 @@ public interface ReactiveSearch {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     Mono<SearchResponse<Map<String, Object>>> find(String q);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param q       Query string
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return typed search result
+     */
     <T> Mono<SearchResponse<T>> find(String q, TypeRef<T> typeRef);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param q    Query string
+     * @param type type
+     * @param <T>  document type
+     * @return typed search result
+     */
     default <T> Mono<SearchResponse<T>> find(String q, Class<T> type) {
         return find(q, TypeRef.of(type));
     }
@@ -61,11 +77,17 @@ public interface ReactiveSearch {
      * This is the preferred route to perform search when an API key is required, as it allows for preflight requests to be cached. Caching preflight requests improves considerably the speed of the search.
      *
      * @param request SearchRequest
-     * @return search result
+     * @return typed search result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     Mono<SearchResponse<Map<String, Object>>> find(SearchRequest request);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param builder request builder
+     * @return typed search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
     default Mono<SearchResponse<Map<String, Object>>> find(Consumer<SearchRequest.Builder> builder) {
         SearchRequest.Builder _builder = SearchRequest.builder();
@@ -73,12 +95,36 @@ public interface ReactiveSearch {
         return find(_builder.build());
     }
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param request SearchRequest
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return typed search result
+     */
     <T> Mono<SearchResponse<T>> find(SearchRequest request, TypeRef<T> typeRef);
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param request SearchRequest
+     * @param type    type
+     * @param <T>     document type
+     * @return typed search result
+     */
     default <T> Mono<SearchResponse<T>> find(SearchRequest request, Class<T> type) {
         return find(request, TypeRef.of(type));
     }
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param builder request builder
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return typed search result
+     */
     default <T> Mono<SearchResponse<T>> find(Consumer<SearchRequest.Builder> builder, TypeRef<T> typeRef) {
         SearchRequest.Builder _builder = SearchRequest.builder();
         builder.accept(_builder);
@@ -86,6 +132,14 @@ public interface ReactiveSearch {
         return find(request, typeRef);
     }
 
+    /**
+     * Search for documents matching a specific query in the given index.
+     *
+     * @param builder request builder
+     * @param type    type
+     * @param <T>     document type
+     * @return typed search result
+     */
     default <T> Mono<SearchResponse<T>> find(Consumer<SearchRequest.Builder> builder, Class<T> type) {
         return find(builder, TypeRef.of(type));
     }
@@ -100,6 +154,13 @@ public interface ReactiveSearch {
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request);
 
+    /**
+     * Search for facet values matching a specific query for a facet. When many values exist for a facet,
+     * users need to be able to discover non-show values they can select in order to refine their faceted search.
+     *
+     * @param builder facet-search request builder
+     * @return search result
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     default Mono<FacetSearchResponse> facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
         FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();

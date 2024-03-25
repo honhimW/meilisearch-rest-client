@@ -33,29 +33,59 @@ public class MapBuilder<K, V> {
         this._map = new HashMap<>();
     }
 
+    /**
+     * Create a new {@link MapBuilder}
+     * @return a new {@link MapBuilder}
+     * @param <K> Key type
+     * @param <V> Value type
+     */
     public static <K, V> MapBuilder<K, V> builder() {
         return new MapBuilder<>();
     }
 
+    /**
+     * Put a key-value pair
+     * @param k key
+     * @param v value
+     * @return this
+     */
     public MapBuilder<K, V> put(K k, V v) {
         _map.put(k, v);
         return this;
     }
 
+    /**
+     * Put all key-value pairs
+     * @param another another map
+     * @return this
+     */
     public MapBuilder<K, V> putAll(Map<K, V> another) {
         _map.putAll(another);
         return this;
     }
 
+    /**
+     * Clear the map
+     * @return this
+     */
     public MapBuilder<K, V> clear() {
         _map.clear();
         return this;
     }
 
+    /**
+     * Build the map
+     * @return the map
+     */
     public Map<K, V> build() {
         return build(true);
     }
 
+    /**
+     * Build the map with mutability. If false, the map will be immutable
+     * @param mut mutability
+     * @return the map
+     */
     public Map<K, V> build(boolean mut) {
         if (mut) {
             return _map;
@@ -64,8 +94,17 @@ public class MapBuilder<K, V> {
         }
     }
 
+    /**
+     * Immutable HashMap
+     * @param <K> Key type
+     * @param <V> Value type
+     */
     private static class ImmutableHashMap<K, V> extends HashMap<K, V> {
 
+        /**
+         * Create an immutable map
+         * @param m from
+         */
         public ImmutableHashMap(Map<? extends K, ? extends V> m) {
             super(m);
         }

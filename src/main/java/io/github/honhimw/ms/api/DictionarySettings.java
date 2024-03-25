@@ -20,14 +20,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#dictionary"><h1>Dictionary</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#dictionary">Dictionary</a>
  * <p>
  * Allows users to instruct Meilisearch to consider groups of strings as a single term by adding a supplementary dictionary of user-defined terms.
  * <p>
  * This is particularly useful when working with datasets containing many domain-specific words, and in languages where words are not separated by whitespace such as Japanese.
  * <p>
  * Custom dictionaries are also useful in a few use-cases for space-separated languages, such as datasets with names such as "J. R. R. Tolkien" and "W. E. B. Du Bois".
- * <h2>TIP:</h2>
+ * <p style="font-weight:bold;font-size:large">TIP:</p>
  * User-defined dictionaries can be used together with synonyms. It can be useful to configure Meilisearch so different spellings of an author's initials return the same results:
  * <pre>
  * {

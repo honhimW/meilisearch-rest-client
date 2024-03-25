@@ -38,14 +38,27 @@ public class Embedder implements Serializable {
     @Schema(description = "Embedders generate vector data from your documents.")
     private EmbedderSource source;
 
+    /**
+     * OpenAI embedder
+     */
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class OpenAI extends Embedder {
 
+        /**
+         * Create an OpenAI embedder with embedder source.
+         */
         public OpenAI() {
             super(EmbedderSource.OPEN_AI);
         }
 
+        /**
+         * Create an OpenAI embedder with embedder source. All arguments constructor.
+         *
+         * @param apiKey           api key
+         * @param model            model
+         * @param documentTemplate document template
+         */
         public OpenAI(String apiKey, String model, String documentTemplate) {
             this();
             this.apiKey = apiKey;
@@ -60,10 +73,9 @@ public class Embedder implements Serializable {
         private String model;
 
         /**
-         * <h2 style="color:green">`documentTemplate` usage</h2>
+         * <p style="color:green;font-weight:bold;font-size:large">`documentTemplate` usage</p>
          * <pre>
          * documentTemplate must be a Liquid template. Use {{ doc.attribute }} to access the attribute field value of your documents. Any field you refer to in this way must exist in all documents or an error will be raised at indexing time.
-         * <p>
          * For best results, use short strings indicating the type of document in that index, only include highly relevant document fields, and truncate long fields.
          * </pre>
          */
@@ -72,14 +84,26 @@ public class Embedder implements Serializable {
 
     }
 
+    /**
+     * Hugging Face embedder
+     */
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class HuggingFace extends Embedder {
 
+        /**
+         * Create an Hugging Face embedder with embedder source.
+         */
         public HuggingFace() {
             super(EmbedderSource.HUGGING_FACE);
         }
 
+        /**
+         * Create an Hugging Face embedder with embedder source. All arguments constructor.
+         *
+         * @param model            model
+         * @param documentTemplate document template
+         */
         public HuggingFace(String model, String documentTemplate) {
             this();
             this.model = model;
@@ -90,10 +114,9 @@ public class Embedder implements Serializable {
         private String model;
 
         /**
-         * <h2 style="color:green">`documentTemplate` usage</h2>
+         * <p style="color:green;font-weight:bold;font-size:large">`documentTemplate` usage</p>
          * <pre>
          * documentTemplate must be a Liquid template. Use {{ doc.attribute }} to access the attribute field value of your documents. Any field you refer to in this way must exist in all documents or an error will be raised at indexing time.
-         * <p>
          * For best results, use short strings indicating the type of document in that index, only include highly relevant document fields, and truncate long fields.
          * </pre>
          */
@@ -102,14 +125,25 @@ public class Embedder implements Serializable {
 
     }
 
+    /**
+     * User provided embedder
+     */
     @Data
     @EqualsAndHashCode(callSuper = true)
     public static class Custom extends Embedder {
 
+        /**
+         * Create an Custom embedder with embedder source.
+         */
         public Custom() {
             super(EmbedderSource.USER_PROVIDED);
         }
 
+        /**
+         * Create an Custom embedder with embedder source. All arguments constructor.
+         *
+         * @param dimensions dimensions
+         */
         public Custom(Integer dimensions) {
             this();
             this.dimensions = dimensions;

@@ -26,8 +26,17 @@ import io.github.honhimw.ms.support.StringUtils;
 @Experimental(features = Experimental.Features.VECTOR_SEARCH)
 public enum EmbedderSource implements EnumValue<EmbedderSource> {
 
+    /**
+     * Open AI
+     */
     OPEN_AI("openAi"),
+    /**
+     * Hugging Face
+     */
     HUGGING_FACE("huggingFace"),
+    /**
+     * User provided
+     */
     USER_PROVIDED("userProvided"),
     ;
 
@@ -42,6 +51,12 @@ public enum EmbedderSource implements EnumValue<EmbedderSource> {
         return this.source;
     }
 
+    /**
+     * Get enum value by name
+     *
+     * @param name name of enum
+     * @return enum
+     */
     public static EmbedderSource of(String name) {
         for (EmbedderSource value : values()) {
             if (StringUtils.equal(value.value(), name)) {

@@ -42,6 +42,12 @@ public interface Keys {
     @Operation(method = "GET", tags = "/keys")
     Page<Key> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    /**
+     * Get all Keys
+     *
+     * @param page page builder
+     * @return Returns the most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
+     */
     @Operation(method = "GET", tags = "/keys")
     default Page<Key> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
@@ -53,16 +59,26 @@ public interface Keys {
      * Get information on the specified key. Attempting to use this endpoint with a non-existent or deleted key will result in an error.
      *
      * @param keyOrUid key value of the requested API key, uid of the requested API key
+     * @return Returns information on the specified key.
      */
     @Operation(method = "GET", tags = "/keys/{key_or_uid}")
     Optional<Key> get(String keyOrUid);
 
     /**
      * Create an API key with the provided description, permissions, and expiration date.
+     *
+     * @param request CreateKeyRequest
+     * @return Returns information on the created key.
      */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
     Key create(CreateKeyRequest request);
 
+    /**
+     * Create an API key with the provided description, permissions, and expiration date.
+     *
+     * @param builder request builder
+     * @return Returns information on the created key.
+     */
     @Operation(method = "POST", tags = "/keys/{key_or_uid}")
     Key create(Consumer<CreateKeyRequest.Builder> builder);
 
@@ -70,14 +86,25 @@ public interface Keys {
      * A valid API key or uid is required.
      *
      * @param keyOrUid key value of the requested API key, uid of the requested API key
-     * @return
+     * @param request  UpdateKeyRequest request
+     * @return Returns information on the updated key.
      */
     @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
     Key update(String keyOrUid, UpdateKeyRequest request);
 
+    /**
+     * A valid API key or uid is required.
+     * @param keyOrUid key value of the requested API key, uid of the requested API key
+     * @param builder request builder
+     * @return Returns information on the updated key.
+     */
     @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
     Key update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder);
 
+    /**
+     * Delete the specified key. Attempting to use this endpoint with a non-existent or deleted key will result in an error.
+     * @param keyOrUid key value of the requested API key, uid of the requested API key
+     */
     @Operation(method = "DELETE", tags = "/keys/{key_or_uid}")
     void delete(String keyOrUid);
 

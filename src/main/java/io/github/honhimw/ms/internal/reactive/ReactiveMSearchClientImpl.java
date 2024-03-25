@@ -79,18 +79,37 @@ import java.util.Objects;
 
 public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
 
+    /**
+     * Server full URL.
+     */
     protected final String serverUrl;
 
+    /**
+     * Server API key.
+     */
     protected final String apiKey;
 
+    /**
+     * JSON handler.
+     */
     protected final JsonHandler jsonHandler;
 
+    /**
+     * HTTP client.
+     */
     protected final ReactiveHttpUtils httpClient;
 
+    /**
+     * HTTP response filter.
+     */
     protected final ResponseFilter responseFilter;
 
     private SimpleReactiveImpl simpleReactive;
 
+    /**
+     * Construct a new {@link ReactiveMSearchClientImpl} with the given {@link MSearchConfig}.
+     * @param config the {@link MSearchConfig}
+     */
     public ReactiveMSearchClientImpl(MSearchConfig config) {
         this.serverUrl = config.getServerUrl();
         this.apiKey = config.getApiKey();

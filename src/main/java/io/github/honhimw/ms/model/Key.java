@@ -46,11 +46,11 @@ public class Key implements Serializable {
 
     /**
      * This value is also used as the {key} path variable to update, delete, or get a specific key.
-     * <p/>
-     * <h2>NOTE:</h2>
+     * <p>
+     * <p style="font-weight:bold;font-size:large">NOTE:</p>
      * Since key is a hash of the uid and master key, key values are deterministic between instances sharing the same configuration.
      * This means if the master key changes, all key values are automatically changed.
-     * <p/>
+     * <p>
      * Since the key field depends on the master key, it is computed at runtime and therefore not propagated to dumps and snapshots.
      * As a result, even if a malicious user comes into possession of your dumps or snapshots, they will not have access to your instance's API keys.
      */
@@ -60,8 +60,8 @@ public class Key implements Serializable {
 
     /**
      * You can use * as a wildcard to access all endpoints for the documents, indexes, tasks, settings, stats and dumps actions. For example, documents.* gives access to all document actions.
-     * <p/>
-     * <h2 style="color:orange"/>WARNING:</h2>
+     * <p>
+     * <p style="color:orange;font-weight:bold;font-size:large">WARNING:</p>
      * For security reasons, we do not recommend creating keys that can perform all actions.
      */
     @Schema(description = "An array of API actions permitted for the key, represented as strings. API actions are only possible on authorized indexes. [\"*\"] for all actions.")

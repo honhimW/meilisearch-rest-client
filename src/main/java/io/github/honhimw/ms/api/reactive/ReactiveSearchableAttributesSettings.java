@@ -21,11 +21,11 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#searchable-attributes"><h1>Searchable attributes</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#searchable-attributes">Searchable attributes</a>
  * The values associated with attributes in the searchableAttributes list are searched for matching query words. The order of the list also determines the attribute ranking order.
  * <p>
  * By default, the searchableAttributes array is equal to all fields in your dataset. This behavior is represented by the value ["*"].
- * <h2 style="color:orange">WARNING</h2>
+ * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>
  * Updating searchable attributes will re-index all documents in the index, which can take some time. We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
  * </pre>
@@ -49,7 +49,7 @@ public interface ReactiveSearchableAttributesSettings {
 
     /**
      * Update the searchable attributes of an index.
-     * <h2 style="color:orange">WARNING</h2>
+     * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
      * <pre>
      * Due to an implementation bug, manually updating searchableAttributes will change the displayed order of document fields in the JSON response. This behavior is inconsistent and will be fixed in a future release.
      * </pre>
@@ -60,7 +60,7 @@ public interface ReactiveSearchableAttributesSettings {
      *                             If an attribute contains an object,
      *                             you can use dot notation to set one or more of its keys as a value for this setting:
      *                             "searchableAttributes": ["release_date.year"].
-     *                             <h2 style="color:orange">WARNING</h2>
+     *                             <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
      *                             <pre>
      *                                                         If the field does not exist, no error will be thrown.
      *                                                         </pre>

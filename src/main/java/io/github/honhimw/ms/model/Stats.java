@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/stats"><h1>Stats</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/stats">Stats</a>
  *
  * @author hon_him
  * @since 2024-01-03

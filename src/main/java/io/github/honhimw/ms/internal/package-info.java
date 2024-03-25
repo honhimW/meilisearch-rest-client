@@ -12,6 +12,9 @@
  * limitations under the License.
  */
 
+/**
+ * Internal package implementations for blocking API.
+ */
 @NonNullApi
 package io.github.honhimw.ms.internal;
 

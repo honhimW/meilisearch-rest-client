@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 import java.util.function.Consumer;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#typo-tolerance"><h1>Typo tolerance</h1></a>
+ * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#typo-tolerance">Typo tolerance</a>
  * Typo tolerance helps users find relevant results even when their search queries contain spelling mistakes or typos.
  * This setting allows you to configure the minimum word size for typos and disable typo tolerance for specific words or attributes.
  * <p>
@@ -55,6 +55,12 @@ public interface ReactiveTypoToleranceSettings {
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
     Mono<TaskInfo> update(TypoTolerance typoTolerance);
 
+    /**
+     * Partially update the typo tolerance settings for an index.
+     *
+     * @param builder TypoTolerance builder
+     * @return update task
+     */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
     default Mono<TaskInfo> update(Consumer<TypoTolerance.Builder> builder) {
         TypoTolerance.Builder _builder = TypoTolerance.builder();
