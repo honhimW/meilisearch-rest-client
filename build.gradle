@@ -8,6 +8,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'jacoco'
+    id 'signing'
 }
 
 group = 'io.github.honhimw'
@@ -26,6 +27,7 @@ apply plugin: 'java'
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
+apply plugin: 'signing'
 
 repositories {
     mavenLocal()
@@ -149,12 +151,23 @@ publishing {
                     connection.set('scm:git:git://github.com/honhimW/meilisearch-rest-client.git')
                     developerConnection.set('scm:git:ssh://github.com/honhimW/meilisearch-rest-client.git')
                     url.set('https://github.com/honhimW/meilisearch-rest-client')
-
                 }
             }
         }
     }
 
+}
+
+signing {
+    def props = sonatypeProperties()
+    def keyId = props.getProperty('signing.keyId')
+    def ringFile = props.getProperty('signing.secretKeyBase64')
+    def password = props.getProperty('signing.password')
+    println(keyId)
+    println(ringFile)
+    println(password)
+    useInMemoryPgpKeys(keyId, ringFile, password)
+    sign publishing.publications.gpr
 }
 
 jar {
