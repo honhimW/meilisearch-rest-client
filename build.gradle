@@ -145,6 +145,12 @@ publishing {
                         url.set('https://honhimW.github.io')
                     }
                 }
+                scm {
+                    connection.set('scm:git:git://github.com/honhimW/meilisearch-rest-client.git')
+                    developerConnection.set('scm:git:ssh://github.com/honhimW/meilisearch-rest-client.git')
+                    url.set('https://github.com/honhimW/meilisearch-rest-client')
+
+                }
             }
         }
     }
