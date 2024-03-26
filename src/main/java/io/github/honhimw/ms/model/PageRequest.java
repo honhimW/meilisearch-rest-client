@@ -42,25 +42,25 @@ public class PageRequest implements Serializable {
     public static final int DEFAULT_LIMIT = 20;
 
     /**
-     * page no, >= 0
+     * page no, grater than or equal to 0
      */
     @Schema(description = "page no, >= 0")
     private Integer no;
 
     /**
-     * page size, > 0
+     * page size, grater than 0
      */
     @Schema(description = "page size, > 0")
     private Integer size;
 
     /**
-     * page no, >= 0
+     * page no, grater than or equal to 0
      */
     @Schema(description = "page no, >= 0")
     private Integer limit;
 
     /**
-     * page size, > 0
+     * page size, grater than 0
      */
     @Schema(description = "page size, > 0")
     private Integer offset;
