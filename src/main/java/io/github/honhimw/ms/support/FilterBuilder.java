@@ -191,6 +191,9 @@ public class FilterBuilder {
      */
     public static class Expression implements Serializable {
 
+        /**
+         * plain expression
+         */
         private String expression;
 
         private Expression() {
@@ -464,75 +467,75 @@ public class FilterBuilder {
      */
     public enum Operator implements Serializable {
         /**
-         * =
+         * equal
          */
         EQUAL("="),
         /**
-         * !=
+         * unequal
          */
         UNEQUAL("!="),
         /**
-         * >
+         * greater than
          */
         GT(">"),
         /**
-         * >=
+         * greater than or equal
          */
         GE(">="),
         /**
-         * %3C
+         * less than
          */
         LT("<"),
         /**
-         * %3C=
+         * less than or equal
          */
         LE("<="),
         /**
-         * TO
+         * range XX TO XX
          */
         TO("TO"),
         /**
-         * EXISTS
+         * exists
          */
         EXISTS("EXISTS"),
         /**
-         * NOT EXISTS
+         * not exists
          */
         NOT_EXISTS("NOT EXISTS"),
         /**
-         * IS EMPTY
+         * is empty
          */
         IS_EMPTY("IS EMPTY"),
         /**
-         * IS NOT EMPTY
+         * is not empty
          */
         NOT_EMPTY("IS NOT EMPTY"),
         /**
-         * IS NULL
+         * is null
          */
         IS_NULL("IS NULL"),
         /**
-         * IS NOT NULL
+         * is not null
          */
         NOT_NULL("IS NOT NULL"),
         /**
-         * IN
+         * in
          */
         IN("IN"),
         /**
-         * NOT IN
+         * not in
          */
         NOT_IN("NOT IN"),
         /**
-         * NOT
+         * not
          */
         NOT("NOT"),
         /**
-         * AND
+         * and
          */
         AND("AND"),
         /**
-         * OR
+         * or
          */
         OR("OR"),
         ;

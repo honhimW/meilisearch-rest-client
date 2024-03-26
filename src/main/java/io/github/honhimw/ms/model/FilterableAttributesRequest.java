@@ -35,6 +35,9 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 public class FilterableAttributesRequest implements Serializable {
 
+    /**
+     * Refine results based on attributes in the filterableAttributes list
+     */
     @Schema(description = "Refine results based on attributes in the filterableAttributes list")
     private String filter;
 

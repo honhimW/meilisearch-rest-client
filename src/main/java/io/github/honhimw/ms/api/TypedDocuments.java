@@ -41,13 +41,26 @@ public interface TypedDocuments<T> {
      *
      * @param offset default 0
      * @param limit  default 20
+     * @return paginated documents
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<T> list(@Nullable Integer offset, @Nullable Integer limit);
 
+    /**
+     * Get documents by batch.
+     *
+     * @param page request builder
+     * @return paginated documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<T> list(Consumer<GetDocumentRequest> page);
 
+    /**
+     * Get documents by batch.
+     *
+     * @param page request
+     * @return paginated documents
+     */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<T> list(GetDocumentRequest page);
 
@@ -66,13 +79,28 @@ public interface TypedDocuments<T> {
      * </ul>
      *
      * @param json json formatted array
+     * @return save task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(String json);
 
+    /**
+     * Add one document or replace it if it already exists.
+     *
+     * @param t single document
+     * @return save task
+     * @see #save
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(T t);
 
+    /**
+     * Add a list of documents or replace them if they already exist.
+     *
+     * @param collection list of documents
+     * @return save task
+     * @see #save(String)
+     */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo save(Collection<? extends T> collection);
 
@@ -91,24 +119,44 @@ public interface TypedDocuments<T> {
      * </ul>
      *
      * @param json json formatted array
+     * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(String json);
 
+    /**
+     * Add one document or update it if it already exists.
+     *
+     * @param t single document
+     * @return update task
+     * @see #update(String)
+     */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(T t);
 
+    /**
+     * Add a list of documents or update them if they already exist.
+     *
+     * @param collection list of documents
+     * @return update task
+     * @see #update(String)
+     */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(Collection<? extends T> collection);
 
     /**
      * Delete all documents in the specified index.
+     *
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents")
     TaskInfo deleteAll();
 
     /**
      * Get documents by batch.
+     *
+     * @param fetch request
+     * @return paginated documents
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Page<T> batchGet(BatchGetDocumentsRequest fetch);
@@ -117,6 +165,7 @@ public interface TypedDocuments<T> {
      * Delete a set of documents based on an array of document ids.
      *
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
+     * @return delete task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
     TaskInfo batchDelete(Collection<String> ids);
@@ -125,6 +174,7 @@ public interface TypedDocuments<T> {
      * Delete a set of documents based on a filter.
      *
      * @param filter A filter expression written as a string or array of array of strings for the documents to be deleted.
+     * @return delete task
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete")
     TaskInfo delete(FilterableAttributesRequest filter);
@@ -136,6 +186,7 @@ public interface TypedDocuments<T> {
      * @param fields Comma-separated list of fields to display for an API resource.
      *               By default it contains all fields of an API resource.
      *               Default *.
+     * @return optional document
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
     Optional<T> get(String id, @Nullable String... fields);
@@ -144,6 +195,7 @@ public interface TypedDocuments<T> {
      * Delete one document based on its unique id.
      *
      * @param id Document id of the requested document
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents/{documentId}")
     TaskInfo delete(String id);

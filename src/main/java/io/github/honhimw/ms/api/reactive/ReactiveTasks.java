@@ -35,7 +35,7 @@ public interface ReactiveTasks {
      * Get all tasks
      *
      * @param request GetTasksRequest
-     * @return paged result
+     * @return paginated result
      */
     @Operation(method = "GET", tags = "/tasks")
     Mono<Page<TaskInfo>> list(GetTasksRequest request);

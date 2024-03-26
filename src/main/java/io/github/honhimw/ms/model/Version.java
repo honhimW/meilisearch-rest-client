@@ -33,12 +33,21 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Version implements Serializable {
 
+    /**
+     * Commit identifier that tagged the pkgVersion release
+     */
     @Schema(description = "Commit identifier that tagged the pkgVersion release")
     private String commitSha;
 
+    /**
+     * Date when the commitSha was created
+     */
     @Schema(description = "Date when the commitSha was created")
     private String commitDate;
 
+    /**
+     * Meilisearch version
+     */
     @Schema(description = "Meilisearch version")
     private String pkgVersion;
 

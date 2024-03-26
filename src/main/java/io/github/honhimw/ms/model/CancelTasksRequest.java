@@ -40,27 +40,51 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CancelTasksRequest implements Serializable {
 
+    /**
+     * Cancel tasks based on uid. Separate multiple uids with a comma (,). Use uids=* for all uids
+     */
     @Schema(description = "Cancel tasks based on uid. Separate multiple uids with a comma (,). Use uids=* for all uids")
     private List<String> uids;
 
+    /**
+     * Cancel tasks based on status. Separate multiple statuses with a comma (,). Use statuses=* for all statuses
+     */
     @Schema(description = "Cancel tasks based on status. Separate multiple statuses with a comma (,). Use statuses=* for all statuses")
     private List<TaskStatus> statuses;
 
+    /**
+     * Cancel tasks based on type. Separate multiple types with a comma (,). Use types=* for all types
+     */
     @Schema(description = "Cancel tasks based on type. Separate multiple types with a comma (,). Use types=* for all types")
     private List<TaskType> types;
 
+    /**
+     * Cancel tasks based on indexUid. Separate multiple uids with a comma (,). Use indexUids=* for all indexUids. Case-sensitive
+     */
     @Schema(description = "Cancel tasks based on indexUid. Separate multiple uids with a comma (,). Use indexUids=* for all indexUids. Case-sensitive")
     private List<String> indexUids;
 
+    /**
+     * Cancel tasks before a specified enqueuedAt date. Use beforeEnqueuedAt=* to cancel all tasks
+     */
     @Schema(description = "Cancel tasks before a specified enqueuedAt date. Use beforeEnqueuedAt=* to cancel all tasks")
     private LocalDateTime beforeEnqueuedAt;
 
+    /**
+     * Cancel tasks before a specified startedAt date. Use beforeStartedAt=* to cancel all tasks
+     */
     @Schema(description = "Cancel tasks before a specified startedAt date. Use beforeStartedAt=* to cancel all tasks")
     private LocalDateTime beforeStartedAt;
 
+    /**
+     * Cancel tasks after a specified enqueuedAt date. Use afterEnqueuedAt=* to cancel all tasks
+     */
     @Schema(description = "Cancel tasks after a specified enqueuedAt date. Use afterEnqueuedAt=* to cancel all tasks")
     private LocalDateTime afterEnqueuedAt;
 
+    /**
+     * Cancel tasks after a specified startedAt date. Use afterStartedAt=* to cancel all tasks
+     */
     @Schema(description = "Cancel tasks after a specified startedAt date. Use afterStartedAt=* to cancel all tasks")
     private LocalDateTime afterStartedAt;
 

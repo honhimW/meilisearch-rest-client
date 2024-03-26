@@ -23,7 +23,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -48,6 +47,7 @@ public class ContextTests extends TestBase {
         assert "foo".equals(next.block());
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     @SneakyThrows
     void httpContext() {

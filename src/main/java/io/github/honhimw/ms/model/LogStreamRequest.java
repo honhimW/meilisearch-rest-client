@@ -34,9 +34,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class LogStreamRequest implements Serializable {
 
+    /**
+     * to select what logs you’re interested into. It takes the form of code_part=log_level.", example = "index_scheduler=info
+     */
     @Schema(description = "to select what logs you’re interested into. It takes the form of code_part=log_level.", example = "index_scheduler=info")
     private String target;
 
+    /**
+     * to select in what format of log you want
+     */
     @Schema(description = "to select in what format of log you want")
     private Mode mode;
 

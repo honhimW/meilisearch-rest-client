@@ -35,11 +35,18 @@ public interface Tasks {
     /**
      * Get all tasks
      *
+     * @param request request
      * @return paginated result
      */
     @Operation(method = "GET", tags = "/tasks")
     Page<TaskInfo> list(GetTasksRequest request);
 
+    /**
+     * Get all tasks
+     *
+     * @param builder request builder
+     * @return paginated result
+     */
     @Operation(method = "GET", tags = "/tasks")
     default Page<TaskInfo> list(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
@@ -50,11 +57,18 @@ public interface Tasks {
     /**
      * Delete finished tasks
      *
-     * @return paginated result
+     * @param request request
+     * @return delete task
      */
     @Operation(method = "DELETE", tags = "/tasks")
     TaskInfo delete(GetTasksRequest request);
 
+    /**
+     * Delete finished tasks
+     *
+     * @param builder request builder
+     * @return delete task
+     */
     @Operation(method = "DELETE", tags = "/tasks")
     default TaskInfo delete(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
@@ -66,6 +80,7 @@ public interface Tasks {
      * Get a single task.
      *
      * @param uid uid of the requested task
+     * @return the requested task
      */
     @Operation(method = "GET", tags = "/tasks/{taskUid}")
     TaskInfo get(Integer uid);
@@ -76,10 +91,19 @@ public interface Tasks {
      * Task cancelation is an atomic transaction: either all tasks are successfully canceled or none are.
      *
      * @param request A valid uids, statuses, types, indexUids, or date(beforeXAt or afterXAt) parameter is required.
+     * @return cancel task
      */
     @Operation(method = "POST", tags = "/tasks/cancel")
     TaskInfo cancel(CancelTasksRequest request);
 
+    /**
+     * Cancel any number of enqueued or processing tasks based on their uid, status, type, indexUid,
+     * or the date at which they were enqueued, processed, or completed.
+     * Task cancelation is an atomic transaction: either all tasks are successfully canceled or none are.
+     *
+     * @param builder A valid uids, statuses, types, indexUids, or date(beforeXAt or afterXAt) parameter is required.
+     * @return cancel task
+     */
     @Operation(method = "POST", tags = "/tasks/cancel")
     default TaskInfo cancel(Consumer<CancelTasksRequest.Builder> builder) {
         CancelTasksRequest.Builder _builder = CancelTasksRequest.builder();
@@ -87,8 +111,20 @@ public interface Tasks {
         return cancel(_builder.build());
     }
 
+    /**
+     * Wait for task finish
+     *
+     * @param uid task uid
+     */
     void waitForTask(int uid);
 
+    /**
+     * Wait for task finish
+     *
+     * @param uid         task uid
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     */
     void waitForTask(int uid, int maxAttempts, Duration fixedDelay);
 
 }

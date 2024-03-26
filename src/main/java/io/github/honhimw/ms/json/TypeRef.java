@@ -24,8 +24,14 @@ import java.lang.reflect.Type;
 
 public abstract class TypeRef<T> {
 
+    /**
+     * The type of the reference.
+     */
     protected final Type _type;
 
+    /**
+     * No-arg constructor for TypeRef.
+     */
     protected TypeRef() {
         Type superClass = getClass().getGenericSuperclass();
         _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
@@ -43,9 +49,9 @@ public abstract class TypeRef<T> {
     /**
      * Creates a new TypeRef instance of type T with the specified type.
      *
-     * @param  type  the type of the TypeRef instance
-     * @param  <T>   the type of the TypeRef instance
-     * @return       the newly created TypeRef instance
+     * @param type the type of the TypeRef instance
+     * @param <T>  the type of the TypeRef instance
+     * @return the newly created TypeRef instance
      */
     public static <T> TypeRef<T> of(Type type) {
         return new TypeRef<T>() {
@@ -59,9 +65,9 @@ public abstract class TypeRef<T> {
     /**
      * Creates a new TypeRef instance for the given class type.
      *
-     * @param  type  the class type for the TypeRef
-     * @param  <T>   the type parameter for the TypeRef
-     * @return       a new TypeRef instance with the specified class type
+     * @param type the class type for the TypeRef
+     * @param <T>  the type parameter for the TypeRef
+     * @return a new TypeRef instance with the specified class type
      */
     public static <T> TypeRef<T> of(Class<T> type) {
         return new TypeRef<T>() {

@@ -54,6 +54,12 @@ public interface TypoToleranceSettings {
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
     TaskInfo update(TypoTolerance typoTolerance);
 
+    /**
+     * Partially update the typo tolerance settings for an index.
+     *
+     * @param builder TypoTolerance builder
+     * @return update task
+     */
     @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
     default TaskInfo update(Consumer<TypoTolerance.Builder> builder) {
         TypoTolerance.Builder _builder = TypoTolerance.builder();

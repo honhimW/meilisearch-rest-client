@@ -33,9 +33,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class UpdateKeyRequest implements Serializable {
 
+    /**
+     * A human-readable name for the key
+     */
     @Schema(description = "A human-readable name for the key")
     private String name;
 
+    /**
+     * An optional description for the key
+     */
     @Schema(description = "An optional description for the key")
     private String description;
 

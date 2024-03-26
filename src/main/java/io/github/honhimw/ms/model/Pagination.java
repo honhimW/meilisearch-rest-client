@@ -41,6 +41,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Pagination implements Serializable {
 
+    /**
+     * The maximum number of search results Meilisearch can return", defaultValue = "1000
+     */
     @Schema(description = "The maximum number of search results Meilisearch can return", defaultValue = "1000")
     private Integer maxTotalHits;
 

@@ -33,12 +33,21 @@ import java.util.Map;
 @AllArgsConstructor
 public class IndexStats implements Serializable {
 
+    /**
+     * Total number of documents in an index
+     */
     @Schema(description = "Total number of documents in an index")
     private Integer numberOfDocuments;
 
+    /**
+     * If true, the index is still processing documents and attempts to search will result in undefined behavior. If false, the index has finished processing and you can start searching
+     */
     @Schema(description = "If true, the index is still processing documents and attempts to search will result in undefined behavior. If false, the index has finished processing and you can start searching")
     private Boolean isIndexing;
 
+    /**
+     * Shows every field in the index along with the total number of documents containing that field in said index
+     */
     @Schema(description = "Shows every field in the index along with the total number of documents containing that field in said index")
     private Map<String, Integer> fieldDistribution;
 

@@ -45,39 +45,75 @@ import java.util.Map;
 @AllArgsConstructor
 public class SearchResponse<T> implements Serializable {
 
+    /**
+     * Results of the query
+     */
     @Schema(description = "Results of the query")
     private List<T> hits;
-
+    
+    /**
+     * Number of documents skipped
+     */
     @Schema(description = "Number of documents skipped")
     private Integer offset;
 
+    /**
+     * Number of documents to take
+     */
     @Schema(description = "Number of documents to take")
     private Integer limit;
 
+    /**
+     * Estimated total number of matches
+     */
     @Schema(description = "Estimated total number of matches")
     private Integer estimatedTotalHits;
 
+    /**
+     * Exhaustive total number of matches
+     */
     @Schema(description = "Exhaustive total number of matches")
     private Integer totalHits;
 
+    /**
+     * Exhaustive total number of search result pages
+     */
     @Schema(description = "Exhaustive total number of search result pages")
     private Integer totalPages;
 
+    /**
+     * Number of results on each page
+     */
     @Schema(description = "Number of results on each page")
     private Integer hitsPerPage;
 
+    /**
+     * Current search results page
+     */
     @Schema(description = "Current search results page")
     private Integer page;
 
+    /**
+     * Processing time of the query
+     */
     @Schema(description = "Processing time of the query")
     private Long processingTimeMs;
 
+    /**
+     * Query originating the response
+     */
     @Schema(description = "Query originating the response")
     private String query;
 
+    /**
+     * Distribution of the given facets
+     */
     @Schema(description = "Distribution of the given facets")
     private Map<String, Map<String, Integer>> facetDistribution;
 
+    /**
+     * The numeric min and max values per facet
+     */
     @Schema(description = "The numeric min and max values per facet")
     private Map<String, FacetStats> facetStats;
 
@@ -89,9 +125,16 @@ public class SearchResponse<T> implements Serializable {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class FacetStats implements Serializable {
+
+        /**
+         * lowest numerical value
+         */
         @Schema(description = "lowest numerical value")
         private Number min;
 
+        /**
+         * highest numerical value
+         */
         @Schema(description = "highest numerical value")
         private Number max;
     }

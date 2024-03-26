@@ -35,7 +35,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Embedder implements Serializable {
 
-    @Schema(description = "Embedders generate vector data from your documents.")
+    /**
+     * Embedders generate vector data from your documents.
+     */
+        /**
+     * Embedders generate vector data from your documents.
+     */
+    @Schema(description = "(.*?)")
     private EmbedderSource source;
 
     /**
@@ -66,9 +72,15 @@ public class Embedder implements Serializable {
             this.documentTemplate = documentTemplate;
         }
 
+        /**
+         * It is mandatory to pass an OpenAI API key through the OPENAI_API_KEY environment variable or the apiKey field when using an OpenAI embedder. Generate an API key from your OpenAI account. Use tier 2 keys or above for optimal performance.
+         */
         @Schema(description = "It is mandatory to pass an OpenAI API key through the OPENAI_API_KEY environment variable or the apiKey field when using an OpenAI embedder. Generate an API key from your OpenAI account. Use tier 2 keys or above for optimal performance.")
         private String apiKey;
 
+        /**
+         * model
+         */
         @Schema(description = "model", example = "text-embedding-ada-002")
         private String model;
 
@@ -110,6 +122,9 @@ public class Embedder implements Serializable {
             this.documentTemplate = documentTemplate;
         }
 
+        /**
+         * model
+         */
         @Schema(description = "model", example = "bge-base-en-v1.5")
         private String model;
 
@@ -149,6 +164,9 @@ public class Embedder implements Serializable {
             this.dimensions = dimensions;
         }
 
+        /**
+         * dimensions
+         */
         @Schema(description = "dimensions")
         private Integer dimensions;
 

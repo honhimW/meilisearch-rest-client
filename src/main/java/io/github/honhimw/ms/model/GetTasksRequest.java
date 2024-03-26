@@ -40,42 +40,81 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class GetTasksRequest implements Serializable {
 
+    /**
+     * Number of tasks to return", defaultValue = "20
+     */
     @Schema(description = "Number of tasks to return", defaultValue = "20")
     private Integer limit;
 
+    /**
+     * uid of the first task returned", defaultValue = "uid of the last created task
+     */
     @Schema(description = "uid of the first task returned", defaultValue = "uid of the last created task")
     private String from;
 
+    /**
+     * Filter tasks by their uid. Separate multiple task uids with a comma (,)", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their uid. Separate multiple task uids with a comma (,)", defaultValue = "*")
     private List<String> uids;
 
+    /**
+     * Filter tasks by their status. Separate multiple task statuses with a comma (,)", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their status. Separate multiple task statuses with a comma (,)", defaultValue = "*")
     private List<TaskStatus> statuses;
 
+    /**
+     * Filter tasks by their type. Separate multiple task types with a comma (,)", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their type. Separate multiple task types with a comma (,)", defaultValue = "*")
     private List<TaskType> types;
 
+    /**
+     * Filter tasks by their indexUid. Separate multiple task indexUids with a comma (,). Case-sensitive", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their indexUid. Separate multiple task indexUids with a comma (,). Case-sensitive", defaultValue = "*")
     private List<String> indexUids;
 
+    /**
+     * Filter tasks by their canceledBy field. Separate multiple task uids with a comma (,)
+     */
     @Schema(description = "Filter tasks by their canceledBy field. Separate multiple task uids with a comma (,)")
     private List<String> canceledBy;
 
+    /**
+     * Filter tasks by their enqueuedAt field", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their enqueuedAt field", defaultValue = "*")
     private LocalDateTime beforeEnqueuedAt;
 
+    /**
+     * Filter tasks by their startedAt field", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their startedAt field", defaultValue = "*")
     private LocalDateTime beforeStartedAt;
 
+    /**
+     * Filter tasks by their finishedAt field", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their finishedAt field", defaultValue = "*")
     private LocalDateTime beforeFinishedAt;
 
+    /**
+     * Filter tasks by their enqueuedAt field", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their enqueuedAt field", defaultValue = "*")
     private LocalDateTime afterEnqueuedAt;
 
+    /**
+     * Filter tasks by their startedAt field", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their startedAt field", defaultValue = "*")
     private LocalDateTime afterStartedAt;
 
+    /**
+     * Filter tasks by their finishedAt field", defaultValue = "*
+     */
     @Schema(description = "Filter tasks by their finishedAt field", defaultValue = "*")
     private LocalDateTime afterFinishedAt;
 

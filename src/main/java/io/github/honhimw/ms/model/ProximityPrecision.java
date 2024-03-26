@@ -40,6 +40,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ProximityPrecision implements Serializable {
 
+    /**
+     * Precision level when calculating the proximity ranking rule", defaultValue = "byWord
+     */
     @Schema(description = "Precision level when calculating the proximity ranking rule", defaultValue = "byWord")
     private ProximityPrecisionType proximityPrecision;
 

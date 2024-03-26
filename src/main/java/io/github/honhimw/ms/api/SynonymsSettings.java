@@ -54,6 +54,12 @@ public interface SynonymsSettings {
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
     TaskInfo update(Map<String, List<String>> synonyms);
 
+    /**
+     * Update the list of synonyms of an index. Synonyms are normalized.
+     *
+     * @param synonyms An object that contains all synonyms and their associated words. Add the associated words in an array to set a synonym for a word.
+     * @return update task
+     */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
     default TaskInfo update(Consumer<MapBuilder<String, List<String>>> synonyms) {
         MapBuilder<String, List<String>> builder = MapBuilder.builder();

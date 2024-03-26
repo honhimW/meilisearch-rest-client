@@ -44,7 +44,7 @@ public interface Documents {
      *
      * @param offset default 0
      * @param limit  default 20
-     * @return paged result
+     * @return paginated result
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit);
@@ -53,7 +53,7 @@ public interface Documents {
      * Get documents by batch.
      *
      * @param page parameter builder
-     * @return paged result
+     * @return paginated result
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(Consumer<GetDocumentRequest> page);
@@ -62,7 +62,7 @@ public interface Documents {
      * Get documents by batch.
      *
      * @param page parameter builder
-     * @return paged result
+     * @return paginated result
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(GetDocumentRequest page);
@@ -74,7 +74,7 @@ public interface Documents {
      * @param offset  default 0
      * @param typeRef document type
      * @param <T>     type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
@@ -86,7 +86,7 @@ public interface Documents {
      * @param limit  default 20
      * @param type   document type
      * @param <T>    type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, Class<T> type);
@@ -97,7 +97,7 @@ public interface Documents {
      * @param page    parameter builder
      * @param typeRef document type reference
      * @param <T>     type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Page<T> list(Consumer<GetDocumentRequest> page, TypeRef<T> typeRef);
@@ -108,7 +108,7 @@ public interface Documents {
      * @param page parameter builder
      * @param type document type
      * @param <T>  type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     <T> Page<T> list(Consumer<GetDocumentRequest> page, Class<T> type);
@@ -220,7 +220,7 @@ public interface Documents {
      * Get documents by batch.
      *
      * @param fetch request
-     * @return paged result
+     * @return paginated result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch);
@@ -229,7 +229,7 @@ public interface Documents {
      * Get documents by batch.
      *
      * @param builder parameter builder
-     * @return paged result
+     * @return paginated result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Page<Map<String, Object>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder);
@@ -240,7 +240,7 @@ public interface Documents {
      * @param fetch   request
      * @param typeRef document type reference
      * @param <T>     document type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
@@ -251,7 +251,7 @@ public interface Documents {
      * @param builder parameter builder
      * @param typeRef document type reference
      * @param <T>     document type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef);
@@ -262,7 +262,7 @@ public interface Documents {
      * @param fetch request
      * @param type  document type
      * @param <T>   document type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, Class<T> type);
@@ -273,7 +273,7 @@ public interface Documents {
      * @param builder parameter builder
      * @param type    document type
      * @param <T>     document type
-     * @return typed paged result
+     * @return typed paginated result
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, Class<T> type);

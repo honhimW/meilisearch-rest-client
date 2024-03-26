@@ -34,12 +34,21 @@ import java.util.List;
 @AllArgsConstructor
 public class FacetSearchResponse implements Serializable {
 
+    /**
+     * Facet hits
+     */
     @Schema(description = "Facet hits")
     private List<FacetHit> facetHits;
 
+    /**
+     * The original facetQuery
+     */
     @Schema(description = "The original facetQuery")
     private String facetQuery;
 
+    /**
+     * Processing time of the query
+     */
     @Schema(description = "Processing time of the query")
     private Long processingTimeMs;
 
@@ -52,9 +61,15 @@ public class FacetSearchResponse implements Serializable {
     @AllArgsConstructor
     public static class FacetHit implements Serializable {
 
+        /**
+         * Facet value matching the facetQuery
+         */
         @Schema(description = "Facet value matching the facetQuery")
         private String value;
 
+        /**
+         * Number of documents with a facet value matching value
+         */
         @Schema(description = "Number of documents with a facet value matching value")
         private Integer count;
 

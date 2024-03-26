@@ -33,9 +33,15 @@ import java.util.List;
 @AllArgsConstructor
 public class GetDocumentRequest extends PageRequest {
 
+    /**
+     * Document attributes to show (case-sensitive, comma-separated)", defaultValue = "*
+     */
     @Schema(description = "Document attributes to show (case-sensitive, comma-separated)", defaultValue = "*")
     private List<String> fields;
 
+    /**
+     * Refine results based on attributes in the filterableAttributes list", defaultValue = "null
+     */
     @Schema(description = "Refine results based on attributes in the filterableAttributes list", defaultValue = "null")
     private String filter;
 

@@ -41,9 +41,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Hybrid implements Serializable {
 
+    /**
+     * number between 0 and 1. 0 indicates full keyword search, 1 indicates full semantic search. Defaults to 0.5", defaultValue = "0.5
+     */
     @Schema(description = "number between 0 and 1. 0 indicates full keyword search, 1 indicates full semantic search. Defaults to 0.5", defaultValue = "0.5")
     private Double semanticRatio;
 
+    /**
+     * string, indicating one of the embedders configured for the queried index. Defaults to \"default\"", defaultValue = "default
+     */
     @Schema(description = "string, indicating one of the embedders configured for the queried index. Defaults to \"default\"", defaultValue = "default")
     private String embedder;
 

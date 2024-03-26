@@ -33,6 +33,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ExperimentalFeatures implements Serializable {
 
+    /**
+     * true if feature is active, false otherwise
+     */
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean metrics;
 
@@ -42,9 +45,15 @@ public class ExperimentalFeatures implements Serializable {
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean vectorStore;
 
+    /**
+     * true if feature is active, false otherwise
+     */
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean exportPuffinReports;
 
+    /**
+     * true if feature is active, false otherwise
+     */
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean logsRoute;
 

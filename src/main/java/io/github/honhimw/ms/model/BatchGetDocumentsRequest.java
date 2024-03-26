@@ -32,12 +32,23 @@ import java.util.Objects;
 @AllArgsConstructor
 public class BatchGetDocumentsRequest extends FilterableAttributesRequest {
 
+    /**
+     * Number of documents to skip.
+     * default 0
+     */
     @Schema(description = "Number of documents to skip", defaultValue = "0")
     private Integer offset;
 
+    /**
+     * Number of documents to return.
+     * default 20
+     */
     @Schema(description = "Number of documents to return", defaultValue = "20")
     private Integer limit;
 
+    /**
+     * Document attributes to show (case-sensitive, comma-separated).
+     */
     @Schema(description = "Document attributes to show (case-sensitive, comma-separated)")
     private List<String> fields;
 

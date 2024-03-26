@@ -35,17 +35,29 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Index implements Serializable {
 
+    /**
+     * Unique identifier for the index
+     */
     @Schema(description = "Unique identifier for the index", example = "movies")
     @Nonnull
     private String uid;
 
+    /**
+     * Custom primaryKey for documents
+     */
     @Schema(description = "Custom primaryKey for documents", example = "movie_id", nullable = true)
     private String primaryKey;
 
+    /**
+     * An RFC 3339 format for date/time/duration.
+     */
     @Schema(description = "An RFC 3339 format for date/time/duration.", example = "2019-11-20T09:40:33.711324Z")
     @Nonnull
     private LocalDateTime createdAt;
 
+    /**
+     * An RFC 3339 format for date/time/duration.
+     */
     @Schema(description = "An RFC 3339 format for date/time/duration.", example = "2019-11-20T09:40:33.711324Z")
     @Nonnull
     private LocalDateTime updatedAt;

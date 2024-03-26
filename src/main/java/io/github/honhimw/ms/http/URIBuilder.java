@@ -52,39 +52,88 @@ public final class URIBuilder {
     private String fragment;
     private String encodedFragment;
 
+    /**
+     * Constructs an empty instance.
+     *
+     * @return URIBuilder
+     */
     public static URIBuilder create() {
         return new URIBuilder();
     }
 
+    /**
+     * Constructs an empty instance from a string.
+     *
+     * @param uri string
+     * @return URIBuilder
+     */
     public static URIBuilder from(final String uri) {
         return new URIBuilder(uri);
     }
 
+    /**
+     * Construct an instance from the provided URI.
+     *
+     * @param uri URI
+     * @return URIBuilder
+     */
     public static URIBuilder from(final URI uri) {
         return new URIBuilder(uri);
     }
 
+    /**
+     * Constructs an empty instance.
+     */
     public URIBuilder() {
         this.port = -1;
     }
 
+    /**
+     * Construct an instance from the string which must be a valid URI.
+     *
+     * @param string a valid URI in string form
+     */
     public URIBuilder(final String string) {
         this(URI.create(string), null);
     }
 
+    /**
+     * Construct an instance from the provided URI.
+     *
+     * @param uri URI
+     */
     public URIBuilder(final URI uri) {
         this(uri, null);
     }
 
+    /**
+     * Construct an instance from the string which must be a valid URI.
+     *
+     * @param string  a valid URI in string form
+     * @param charset charset
+     * @throws URISyntaxException if the string is not a valid URI
+     */
     public URIBuilder(final String string, final Charset charset) throws URISyntaxException {
         this(new URI(string), charset);
     }
 
+    /**
+     * Construct an instance from the provided URI.
+     *
+     * @param uri URI
+     * @param charset charset
+     */
     public URIBuilder(final URI uri, final Charset charset) {
         setCharset(charset);
         digestURI(uri);
     }
 
+    /**
+     * Set the charset.
+     *
+     * @param charset charset
+     * @return this
+     */
     public URIBuilder setCharset(final Charset charset) {
         this.charset = charset;
         return this;
@@ -171,6 +220,8 @@ public final class URIBuilder {
 
     /**
      * Builds a {@link URI} instance.
+     * @return {@link URI}
+     * @throws URISyntaxException if the string is not a valid URI
      */
     public URI build() throws URISyntaxException {
         return new URI(buildString());
@@ -230,8 +281,8 @@ public final class URIBuilder {
     private static final Pattern IPV6_HEX_COMPRESSED_PATTERN =
         Pattern.compile(
             "^(([0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,5})?)" + // 0-6 hex fields
-                "::" +
-                "(([0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,5})?)$"); // 0-6 hex fields
+            "::" +
+            "(([0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,5})?)$"); // 0-6 hex fields
 
     private static final char COLON_CHAR = ':';
 
@@ -343,11 +394,21 @@ public final class URIBuilder {
         return urlEncode(content, charset, URIC, false);
     }
 
+    /**
+     * Set the scheme.
+     * @param scheme The scheme.
+     * @return this
+     */
     public URIBuilder setScheme(final String scheme) {
         this.scheme = scheme;
         return this;
     }
 
+    /**
+     * Set the user info.
+     * @param userInfo The user info.
+     * @return this
+     */
     public URIBuilder setUserInfo(final String userInfo) {
         this.userInfo = userInfo;
         this.encodedSchemeSpecificPart = null;
@@ -356,10 +417,21 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set the user info.
+     * @param username The username.
+     * @param password The password.
+     * @return this
+     */
     public URIBuilder setUserInfo(final String username, final String password) {
         return setUserInfo(username + ':' + password);
     }
 
+    /**
+     * Set the host.
+     * @param host The host.
+     * @return this
+     */
     public URIBuilder setHost(final String host) {
         this.host = host;
         this.encodedSchemeSpecificPart = null;
@@ -367,6 +439,11 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set the port.
+     * @param port The port.
+     * @return this
+     */
     public URIBuilder setPort(final int port) {
         this.port = port < 0 ? -1 : port;
         this.encodedSchemeSpecificPart = null;
@@ -374,6 +451,11 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set the path.
+     * @param path The path.
+     * @return this
+     */
     public URIBuilder setPath(final String path) {
         return setPathSegments(path != null ? splitSegments(path) : null);
     }
@@ -406,6 +488,11 @@ public final class URIBuilder {
         return list;
     }
 
+    /**
+     * Set the path segments.
+     * @param pathSegments The path segments.
+     * @return this
+     */
     public URIBuilder setPathSegments(final String... pathSegments) {
         this.pathSegments = pathSegments.length > 0 ? Arrays.asList(pathSegments) : null;
         this.encodedSchemeSpecificPart = null;
@@ -413,6 +500,11 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set the path segments.
+     * @param pathSegments The path segments.
+     * @return this
+     */
     public URIBuilder setPathSegments(final List<String> pathSegments) {
         this.pathSegments = pathSegments != null && !pathSegments.isEmpty() ? new ArrayList<>(pathSegments) : null;
         this.encodedSchemeSpecificPart = null;
@@ -420,6 +512,10 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Remove all query parameters.
+     * @return this
+     */
     public URIBuilder removeQuery() {
         this.queryParams = null;
         this.query = null;
@@ -428,6 +524,11 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set the query parameters.
+     * @param nvps The query parameters.
+     * @return this
+     */
     public URIBuilder setParameters(final List<Map.Entry<String, String>> nvps) {
         if (this.queryParams == null) {
             this.queryParams = new ArrayList<>();
@@ -441,6 +542,11 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Add query parameters.
+     * @param nvps The query parameters.
+     * @return this
+     */
     public URIBuilder addParameters(final List<Map.Entry<String, String>> nvps) {
         if (this.queryParams == null) {
             this.queryParams = new ArrayList<>();
@@ -452,6 +558,11 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set the query parameters.
+     * @param nvps The query parameters.
+     * @return this
+     */
     @SafeVarargs
     public final URIBuilder setParameters(final Map.Entry<String, String>... nvps) {
         if (this.queryParams == null) {
@@ -466,6 +577,12 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Add a query parameter.
+     * @param param parameter name
+     * @param value parameter value
+     * @return this
+     */
     public URIBuilder addParameter(final String param, final String value) {
         if (this.queryParams == null) {
             this.queryParams = new ArrayList<>();
@@ -477,6 +594,12 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Replace a query parameter.
+     * @param param parameter name
+     * @param value parameter value
+     * @return this
+     */
     public URIBuilder setParameter(final String param, final String value) {
         if (this.queryParams == null) {
             this.queryParams = new ArrayList<>();
@@ -491,6 +614,10 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Clear all query parameters.
+     * @return this
+     */
     public URIBuilder clearParameters() {
         this.queryParams = null;
         this.encodedQuery = null;
@@ -498,6 +625,11 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set custom query.
+     * @param query custom query
+     * @return this
+     */
     public URIBuilder setCustomQuery(final String query) {
         this.query = query;
         this.encodedQuery = null;
@@ -506,45 +638,86 @@ public final class URIBuilder {
         return this;
     }
 
+    /**
+     * Set fragment.
+     * @param fragment fragment
+     * @return this
+     */
     public URIBuilder setFragment(final String fragment) {
         this.fragment = fragment;
         this.encodedFragment = null;
         return this;
     }
 
+    /**
+     * Is absolute.
+     * @return is absolute
+     */
     public boolean isAbsolute() {
         return this.scheme != null;
     }
 
+    /**
+     * Is opaque.
+     * @return is opaque
+     */
     public boolean isOpaque() {
         return this.pathSegments == null && this.encodedPath == null;
     }
 
+    /**
+     * Get scheme.
+     * @return  scheme
+     */
     public String getScheme() {
         return this.scheme;
     }
 
+    /**
+     * Get user info.
+     * @return user info
+     */
     public String getUserInfo() {
         return this.userInfo;
     }
 
+    /**
+     * Get host.
+     * @return host
+     */
     public String getHost() {
         return this.host;
     }
 
+    /**
+     * Get port.
+     * @return port
+     */
     public int getPort() {
         return this.port;
     }
 
+    /**
+     * Is path empty.
+     * @return is path empty
+     */
     public boolean isPathEmpty() {
         return (this.pathSegments == null || this.pathSegments.isEmpty()) &&
-            (this.encodedPath == null || this.encodedPath.isEmpty());
+               (this.encodedPath == null || this.encodedPath.isEmpty());
     }
 
+    /**
+     * Get path segments.
+     * @return path segments
+     */
     public List<String> getPathSegments() {
         return this.pathSegments != null ? new ArrayList<String>(this.pathSegments) : new ArrayList<String>();
     }
 
+    /**
+     * Get path.
+     * @return path
+     */
     public String getPath() {
         if (this.pathSegments == null) {
             return null;
@@ -556,14 +729,26 @@ public final class URIBuilder {
         return result.toString();
     }
 
+    /**
+     * Is query empty.
+     * @return is query empty
+     */
     public boolean isQueryEmpty() {
         return (this.queryParams == null || this.queryParams.isEmpty()) && this.encodedQuery == null;
     }
 
+    /**
+     * Get query parameters.
+     * @return query parameters
+     */
     public List<Map.Entry<String, String>> getQueryParams() {
         return this.queryParams != null ? new ArrayList<>(this.queryParams) : new ArrayList<>();
     }
 
+    /**
+     * Get fragment.
+     * @return fragment
+     */
     public String getFragment() {
         return this.fragment;
     }

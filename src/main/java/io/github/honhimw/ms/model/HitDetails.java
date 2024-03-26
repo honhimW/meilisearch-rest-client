@@ -33,9 +33,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class HitDetails<T> implements Serializable {
 
+    /**
+     * hit document source
+     */
     @Schema(description = "hit document source")
     private T source;
 
+    /**
+     * Hit details
+     */
     @Schema(description = "hit details", nullable = true)
     private SearchDetails details;
 

@@ -35,12 +35,21 @@ import java.util.Map;
 @AllArgsConstructor
 public class VectorizedDocument implements Serializable {
 
+    /**
+     * document id
+     */
     @Schema(description = "document id")
     private String id;
 
+    /**
+     * vectorized data
+     */
     @Schema(description = "vectorized data")
     private Map<String, List<Number>> _vectors;
 
+    /**
+     * textual document
+     */
     @Schema(description = "textual document")
     private String text;
 

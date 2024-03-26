@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
+ * Copy from org.apache.commons:commons-lang3
+ *
  * @author hon_him
  * @since 2024-01-08
  */
@@ -29,7 +31,7 @@ public class CollectionUtils {
      * <p>
      * Null returns true.
      *
-     * @param coll  the collection to check, may be null
+     * @param coll the collection to check, may be null
      * @return true if empty or null
      */
     public static boolean isEmpty(Collection<?> coll) {
@@ -41,7 +43,7 @@ public class CollectionUtils {
      * <p>
      * Null returns false.
      *
-     * @param coll  the collection to check, may be null
+     * @param coll the collection to check, may be null
      * @return true if non-null and non-empty
      */
     public static boolean isNotEmpty(Collection<?> coll) {
@@ -53,7 +55,7 @@ public class CollectionUtils {
      * <p>
      * Null returns true.
      *
-     * @param map  the map to check, may be null
+     * @param map the map to check, may be null
      * @return true if empty or null
      */
     public static boolean isEmpty(Map<?, ?> map) {
@@ -65,7 +67,7 @@ public class CollectionUtils {
      * <p>
      * Null returns false.
      *
-     * @param map  the map to check, may be null
+     * @param map the map to check, may be null
      * @return true if non-null and non-empty
      */
     public static boolean isNotEmpty(Map<?, ?> map) {

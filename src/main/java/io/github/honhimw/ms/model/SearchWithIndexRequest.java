@@ -31,6 +31,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SearchWithIndexRequest extends SearchRequest {
 
+    /**
+     * uid of the requested index
+     */
     @Schema(description = "uid of the requested index")
     private String indexUid;
 

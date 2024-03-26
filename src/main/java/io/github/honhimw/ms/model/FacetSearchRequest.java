@@ -30,18 +30,33 @@ import java.util.List;
 @AllArgsConstructor
 public class FacetSearchRequest extends FilterableAttributesRequest {
 
+    /**
+     * Query string
+     */
     @Schema(description = "Query string")
     private String q;
 
+    /**
+     * Facet name to search values on
+     */
     @Schema(description = "Facet name to search values on", requiredMode = Schema.RequiredMode.REQUIRED)
     private String facetName;
 
+    /**
+     * Search query for a given facet value. If facetQuery isn't specified, Meilisearch performs a placeholder search which returns all facet values for the searched facet, limited to 100
+     */
     @Schema(description = "Search query for a given facet value. If facetQuery isn't specified, Meilisearch performs a placeholder search which returns all facet values for the searched facet, limited to 100")
     private String facetQuery;
 
+    /**
+     *
+     */
     @Schema(description = "Strategy used to match query terms within documents")
     private String matchingStrategy;
 
+    /**
+     * Restrict search to the specified attributes
+     */
     @Schema(description = "Restrict search to the specified attributes")
     private List<String> attributesToSearchOn;
 

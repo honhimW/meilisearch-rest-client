@@ -34,15 +34,27 @@ import java.util.List;
 @AllArgsConstructor
 public class Page<T> implements Serializable {
 
+    /**
+     * Limit given for the query. If limit is not provided as a query parameter, this parameter displays the default limit value.", example = "10
+     */
     @Schema(description = "Limit given for the query. If limit is not provided as a query parameter, this parameter displays the default limit value.", example = "10")
     private Integer limit;
 
+    /**
+     * Offset given for the query. If offset is not provided as a query parameter, this parameter displays the default offset value.", example = "0
+     */
     @Schema(description = "Offset given for the query. If offset is not provided as a query parameter, this parameter displays the default offset value.", example = "0")
     private Integer offset;
 
+    /**
+     * Total number of browsable results using offset/limit parameters for the given resource.", example = "50
+     */
     @Schema(description = "Total number of browsable results using offset/limit parameters for the given resource.", example = "50")
     private Integer total;
 
+    /**
+     * results
+     */
     @Schema(description = "results")
     private List<T> results;
 

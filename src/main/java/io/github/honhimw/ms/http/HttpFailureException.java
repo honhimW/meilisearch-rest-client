@@ -27,10 +27,19 @@ import lombok.Setter;
 @Getter
 public class HttpFailureException extends IllegalStateException {
 
+    /**
+     * Http status code
+     */
     private final int statusCode;
 
+    /**
+     * Http method
+     */
     private String method;
 
+    /**
+     * Http uri
+     */
     private String uri;
 
     /**

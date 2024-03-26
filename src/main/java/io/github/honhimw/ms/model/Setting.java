@@ -83,51 +83,99 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class Setting implements Serializable {
 
+    /**
+     * Fields displayed in the returned documents", defaultValue = "[\"*\"]
+     */
     @Schema(description = "Fields displayed in the returned documents", defaultValue = "[\"*\"]")
     private List<String> displayedAttributes;
 
+    /**
+     * Fields in which to search for matching query words sorted by order of importance", defaultValue = "[\"*\"]
+     */
     @Schema(description = "Fields in which to search for matching query words sorted by order of importance", defaultValue = "[\"*\"]")
     private List<String> searchableAttributes;
 
+    /**
+     * Attributes to use as filters and facets", defaultValue = "[]
+     */
     @Schema(description = "Attributes to use as filters and facets", defaultValue = "[]")
     private List<String> filterableAttributes;
 
+    /**
+     * Attributes to use when sorting search results", defaultValue = "[]
+     */
     @Schema(description = "Attributes to use when sorting search results", defaultValue = "[]")
     private List<String> sortableAttributes;
 
+    /**
+     * List of ranking rules in order of importance", defaultValue = "[\"words\",\"typo\",\"proximity\",\"attribute\",\"sort\",\"exactness\"]
+     */
     @Schema(description = "List of ranking rules in order of importance", defaultValue = "[\"words\",\"typo\",\"proximity\",\"attribute\",\"sort\",\"exactness\"]")
     private List<RankingRule> rankingRules;
 
+    /**
+     * List of words ignored by Meilisearch when present in search queries", defaultValue = "[]
+     */
     @Schema(description = "List of words ignored by Meilisearch when present in search queries", defaultValue = "[]")
     private List<String> stopWords;
 
+    /**
+     * List of characters not delimiting where one term begins and ends", defaultValue = "[]
+     */
     @Schema(description = "List of characters not delimiting where one term begins and ends", defaultValue = "[]")
     private List<String> nonSeparatorTokens;
 
+    /**
+     * List of characters delimiting where one term begins and ends", defaultValue = "[]
+     */
     @Schema(description = "List of characters delimiting where one term begins and ends", defaultValue = "[]")
     private List<String> separatorTokens;
 
+    /**
+     * List of strings Meilisearch should parse as a single term", defaultValue = "[]
+     */
     @Schema(description = "List of strings Meilisearch should parse as a single term", defaultValue = "[]")
     private List<String> dictionary;
 
+    /**
+     * List of associated words treated similarly", defaultValue = "{}
+     */
     @Schema(description = "List of associated words treated similarly", defaultValue = "{}")
     private Map<String, List<String>> synonyms;
 
+    /**
+     * Search returns documents with distinct (different) values of the given field", defaultValue = "null
+     */
     @Schema(description = "Search returns documents with distinct (different) values of the given field", defaultValue = "null")
     private String distinctAttribute;
 
+    /**
+     * Typo tolerance settings", defaultValue = "default object
+     */
     @Schema(description = "Typo tolerance settings", defaultValue = "default object")
     private TypoTolerance typoTolerance;
 
+    /**
+     * Faceting settings", defaultValue = "default object
+     */
     @Schema(description = "Faceting settings", defaultValue = "default object")
     private Faceting faceting;
 
+    /**
+     * Pagination settings", defaultValue = "default object
+     */
     @Schema(description = "Pagination settings", defaultValue = "default object")
     private Pagination pagination;
 
+    /**
+     * Precision level when calculating the proximity ranking rule", defaultValue = "byWord
+     */
     @Schema(description = "Precision level when calculating the proximity ranking rule", defaultValue = "byWord")
     private ProximityPrecisionType proximityPrecision;
 
+    /**
+     * To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.
+     */
     @Schema(description = "To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.")
     private Map<String, ? extends Embedder> embedders;
 

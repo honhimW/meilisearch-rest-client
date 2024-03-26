@@ -37,12 +37,21 @@ import java.util.Map;
 @AllArgsConstructor
 public class Stats implements Serializable {
 
+    /**
+     * Size of the database in bytes
+     */
     @Schema(description = "Size of the database in bytes")
     private Long databaseSize;
 
+    /**
+     * When the last update was made to the database in the RFC 3339 format
+     */
     @Schema(description = "When the last update was made to the database in the RFC 3339 format")
     private LocalDateTime lastUpdate;
 
+    /**
+     * Object containing the statistics for each index found in the database
+     */
     @Schema(description = "Object containing the statistics for each index found in the database")
     private Map<String, IndexStats> indexes;
 

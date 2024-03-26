@@ -42,7 +42,7 @@ public interface ReactiveTypedDocuments<T> {
      *
      * @param offset default 0
      * @param limit  default 20
-     * @return paged documents
+     * @return paginated documents
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit) {
@@ -56,7 +56,7 @@ public interface ReactiveTypedDocuments<T> {
      * Get documents by batch.
      *
      * @param page request
-     * @return paged documents
+     * @return paginated documents
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     Mono<Page<T>> list(GetDocumentRequest page);
@@ -65,7 +65,7 @@ public interface ReactiveTypedDocuments<T> {
      * Get documents by batch.
      *
      * @param page request builder
-     * @return paged documents
+     * @return paginated documents
      */
     @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
     default Mono<Page<T>> list(Consumer<GetDocumentRequest> page) {
@@ -166,7 +166,7 @@ public interface ReactiveTypedDocuments<T> {
      * Get documents by batch.
      *
      * @param fetch request
-     * @return paged documents
+     * @return paginated documents
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
     Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch);

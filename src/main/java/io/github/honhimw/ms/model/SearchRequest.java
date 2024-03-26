@@ -36,67 +36,130 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 public class SearchRequest extends FilterableAttributesRequest {
 
+    /**
+     * Query string
+     */
     @Schema(description = "Query string")
     private String q;
 
+    /**
+     * Number of documents to skip", defaultValue = "0
+     */
     @Schema(description = "Number of documents to skip", defaultValue = "0")
     private Integer offset;
 
+    /**
+     * Maximum number of documents returned", defaultValue = "20
+     */
     @Schema(description = "Maximum number of documents returned", defaultValue = "20")
     private Integer limit;
 
+    /**
+     * Maximum number of documents returned for a page", defaultValue = "1
+     */
     @Schema(description = "Maximum number of documents returned for a page", defaultValue = "1")
     private Integer hitsPerPage;
 
+    /**
+     * Request a specific page of results", defaultValue = "1
+     */
     @Schema(description = "Request a specific page of results", defaultValue = "1")
     private Integer page;
 
+    /**
+     * Display the count of matches per facet
+     */
     @Schema(description = "Display the count of matches per facet")
     private List<String> facets;
 
+    /**
+     * Attributes to display in the returned documents", defaultValue = "[\"*\"]
+     */
     @Schema(description = "Attributes to display in the returned documents", defaultValue = "[\"*\"]")
     private List<String> attributesToRetrieve;
 
+    /**
+     * Attributes whose values have to be cropped
+     */
     @Schema(description = "Attributes whose values have to be cropped")
     private List<String> attributesToCrop;
 
+    /**
+     * Maximum length of cropped value in words", defaultValue = "10
+     */
     @Schema(description = "Maximum length of cropped value in words", defaultValue = "10")
     private Integer cropLength;
 
+    /**
+     * String marking crop boundaries", defaultValue = "\"...\"
+     */
     @Schema(description = "String marking crop boundaries", defaultValue = "\"...\"")
     private String cropMarker;
 
+    /**
+     * Highlight matching terms contained in an attribute
+     */
     @Schema(description = "Highlight matching terms contained in an attribute")
     private List<String> attributesToHighlight;
 
+    /**
+     * String inserted at the start of a highlighted term"
+     */
     @Schema(description = "String inserted at the start of a highlighted term", defaultValue = "\"<em>\"")
     private String highlightPreTag;
 
+    /**
+     * String inserted at the end of a highlighted term"
+     */
     @Schema(description = "String inserted at the end of a highlighted term", defaultValue = "\"</em>\"")
     private String highlightPostTag;
 
+    /**
+     * Return matching terms location", defaultValue = "false
+     */
     @Schema(description = "Return matching terms location", defaultValue = "false")
     private Boolean showMatchesPosition;
 
+    /**
+     * Sort search results by an attribute's value
+     */
     @Schema(description = "Sort search results by an attribute's value")
     private List<String> sort;
 
+    /**
+     * Strategy used to match query terms within documents
+     */
     @Schema(description = "Strategy used to match query terms within documents")
     private String matchingStrategy;
 
+    /**
+     * Display the global ranking score of a document", defaultValue = "false
+     */
     @Schema(description = "Display the global ranking score of a document", defaultValue = "false")
     private Boolean showRankingScore;
 
+    /**
+     * Display the global ranking score of a document", defaultValue = "false
+     */
     @Schema(description = "Display the global ranking score of a document", defaultValue = "false")
     private Boolean showRankingScoreDetails;
 
+    /**
+     * Restrict search to the specified attributes", defaultValue = "[\"*\"]
+     */
     @Schema(description = "Restrict search to the specified attributes", defaultValue = "[\"*\"]")
     private List<String> attributesToSearchOn;
 
+    /**
+     * hybrid is an object and accepts two fields: semanticRatio and embedder
+     */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Schema(description = "hybrid is an object and accepts two fields: semanticRatio and embedder")
     private Hybrid hybrid;
 
+    /**
+     * must be an array of numbers indicating the search vector. You must generate these yourself when using vector search with user-provided embeddings.
+     */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Schema(description = "must be an array of numbers indicating the search vector. You must generate these yourself when using vector search with user-provided embeddings.")
     private List<Number> vector;

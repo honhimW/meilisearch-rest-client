@@ -46,9 +46,15 @@ import java.util.Map;
 @AllArgsConstructor
 public class Faceting implements Serializable {
 
+    /**
+     * Maximum number of facet values returned for each facet. Values are sorted in ascending lexicographical order
+     */
     @Schema(description = "Maximum number of facet values returned for each facet. Values are sorted in ascending lexicographical order", defaultValue = "100")
     private Integer maxValuesPerFacet;
 
+    /**
+     * Customize facet order to sort by descending value count (count) or ascending alphanumeric order (alpha)
+     */
     @Schema(description = "Customize facet order to sort by descending value count (count) or ascending alphanumeric order (alpha)", defaultValue = "{\"*\": \"alpha\"}")
     private Map<String, String> sortFacetValuesBy;
 

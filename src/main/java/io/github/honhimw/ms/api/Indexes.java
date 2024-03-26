@@ -39,7 +39,7 @@ public interface Indexes {
      *
      * @param offset Number of indexes to skip
      * @param limit  Number of indexes to return
-     * @return paged indexes
+     * @return paginated indexes
      */
     @Operation(method = "GET", tags = "/indexes")
     Page<Index> list(@Nullable Integer offset, @Nullable Integer limit);
@@ -48,7 +48,7 @@ public interface Indexes {
      * List all indexes
      *
      * @param page page builder
-     * @return paged indexes
+     * @return paginated indexes
      */
     @Operation(method = "GET", tags = "/indexes")
     Page<Index> list(Consumer<PageRequest> page);
@@ -57,7 +57,7 @@ public interface Indexes {
      * List all indexes
      *
      * @param page page request
-     * @return paged indexes
+     * @return paginated indexes
      */
     @Operation(method = "GET", tags = "/indexes")
     Page<Index> list(PageRequest page);

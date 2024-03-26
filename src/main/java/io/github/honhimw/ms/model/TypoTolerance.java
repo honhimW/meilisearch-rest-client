@@ -49,14 +49,26 @@ import java.util.List;
 @AllArgsConstructor
 public class TypoTolerance implements Serializable {
 
+    /**
+     * Whether typo tolerance is enabled or not", defaultValue = "true
+     */
     @Schema(description = "Whether typo tolerance is enabled or not", defaultValue = "true")
     private Boolean enabled;
 
+    /**
+     * MinWordSizeForTypos
+     */
     private MinWordSizeForTypos minWordSizeForTypos;
 
+    /**
+     * An array of words for which the typo tolerance feature is disabled", defaultValue = "[]
+     */
     @Schema(description = "An array of words for which the typo tolerance feature is disabled", defaultValue = "[]")
     private List<String> disableOnWords;
 
+    /**
+     * An array of attributes for which the typo tolerance feature is disabled", defaultValue = "[]
+     */
     @Schema(description = "An array of attributes for which the typo tolerance feature is disabled", defaultValue = "[]")
     private List<String> disableOnAttributes;
 
@@ -70,7 +82,7 @@ public class TypoTolerance implements Serializable {
     /**
      * Creates and returns a default TypoTolerance object with default values.
      *
-     * @return  the default TypoTolerance object
+     * @return the default TypoTolerance object
      */
     public static TypoTolerance defaultObject() {
         TypoTolerance typoTolerance = new TypoTolerance();
@@ -87,21 +99,30 @@ public class TypoTolerance implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * MinWordSizeForTypos
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MinWordSizeForTypos implements Serializable {
 
+        /**
+         * The minimum word size for accepting 1 typo; must be between 0 and twoTypos
+         */
         @Schema(description = "The minimum word size for accepting 1 typo; must be between 0 and twoTypos", defaultValue = "5")
         private Integer oneTypo;
 
+        /**
+         * The minimum word size for accepting 2 typos; must be between oneTypo and 255
+         */
         @Schema(description = "The minimum word size for accepting 2 typos; must be between oneTypo and 255", defaultValue = "9")
         private Integer twoTypos;
 
@@ -113,13 +134,15 @@ public class TypoTolerance implements Serializable {
         /**
          * Creates and returns a new instance of the Builder class.
          *
-         * @return  a new instance of the Builder class
+         * @return a new instance of the Builder class
          */
         public static Builder builder() {
             return new Builder();
         }
 
-
+        /**
+         * {@code MinWordSizeForTypos} builder static inner class.
+         */
         public static final class Builder {
             private Integer oneTypo;
             private Integer twoTypos;
@@ -127,16 +150,33 @@ public class TypoTolerance implements Serializable {
             private Builder() {
             }
 
+            /**
+             * Sets the {@code oneTypo} and returns a reference to this Builder enabling method chaining.
+             *
+             * @param val the {@code oneTypo} to set
+             * @return a reference to this Builder
+             */
             public Builder oneTypo(Integer val) {
                 oneTypo = val;
                 return this;
             }
 
+            /**
+             * Sets the {@code twoTypos} and returns a reference to this Builder enabling method chaining.
+             *
+             * @param val the {@code twoTypos} to set
+             * @return a reference to this Builder
+             */
             public Builder twoTypos(Integer val) {
                 twoTypos = val;
                 return this;
             }
 
+            /**
+             * Returns a {@code MinWordSizeForTypos} built from the parameters previously set.
+             *
+             * @return a {@code MinWordSizeForTypos} built with parameters of this {@code MinWordSizeForTypos.Builder}
+             */
             public MinWordSizeForTypos build() {
                 return new MinWordSizeForTypos(this);
             }
@@ -144,6 +184,9 @@ public class TypoTolerance implements Serializable {
     }
 
 
+    /**
+     * {@code TypoTolerance} builder static inner class.
+     */
     public static final class Builder {
         private Boolean enabled;
         private MinWordSizeForTypos minWordSizeForTypos;
@@ -153,26 +196,55 @@ public class TypoTolerance implements Serializable {
         private Builder() {
         }
 
+        /**
+         * Sets the {@code enabled} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code enabled} to set
+         * @return a reference to this Builder
+         */
         public Builder enabled(Boolean val) {
             enabled = val;
             return this;
         }
 
+        /**
+         * Sets the {@code minWordSizeForTypos} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code minWordSizeForTypos} to set
+         * @return a reference to this Builder
+         */
         public Builder minWordSizeForTypos(MinWordSizeForTypos val) {
             minWordSizeForTypos = val;
             return this;
         }
 
+        /**
+         * Sets the {@code disableOnWords} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code disableOnWords} to set
+         * @return a reference to this Builder
+         */
         public Builder disableOnWords(List<String> val) {
             disableOnWords = val;
             return this;
         }
 
+        /**
+         * Sets the {@code disableOnAttributes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code disableOnAttributes} to set
+         * @return a reference to this Builder
+         */
         public Builder disableOnAttributes(List<String> val) {
             disableOnAttributes = val;
             return this;
         }
 
+        /**
+         * Returns a {@code TypoTolerance} built from the parameters previously set.
+         *
+         * @return a {@code TypoTolerance} built with parameters of this {@code TypoTolerance.Builder}
+         */
         public TypoTolerance build() {
             return new TypoTolerance(this);
         }
