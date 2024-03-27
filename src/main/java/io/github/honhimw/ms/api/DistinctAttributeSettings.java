@@ -20,6 +20,7 @@ import jakarta.annotation.Nullable;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#distinct-attribute">Distinct attribute</a>
+ * <p>
  * The distinct attribute is a field whose value will always be unique in the returned documents.
  * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>

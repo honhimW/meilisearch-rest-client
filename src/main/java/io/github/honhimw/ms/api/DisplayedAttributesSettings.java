@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#displayed-attributes">Displayed attributes</a>
+ * <p>
  * The attributes added to the displayedAttributes list appear in search results. displayedAttributes only affects the search endpoints.
  * It has no impact on the get documents with POST and get documents with GET endpoints.
  * <p>

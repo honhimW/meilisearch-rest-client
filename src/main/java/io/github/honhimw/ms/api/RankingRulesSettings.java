@@ -22,12 +22,10 @@ import java.util.List;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#ranking-rules">Ranking rules</a>
+ * <p>
  * Ranking rules are built-in rules that rank search results according to certain criteria. They are applied in the same order in which they appear in the rankingRules array.
  * <p>
- * <a style="color:red"
- * href="https://www.meilisearch.com/docs/learn/core_concepts/relevancy">
- * To learn more about ranking rules, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/core_concepts/relevancy">To learn more about ranking rules, refer to our dedicated guide.</a>
  * <p style="color:green;font-weight:bold;font-size:large">Ranking rules array</p>
  * <p style="color:orange;font-weight:bold;font-size:large">Default order</p>
  * <pre>

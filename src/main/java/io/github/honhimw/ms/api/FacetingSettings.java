@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#faceting">Faceting</a>
+ * <p>
  * With Meilisearch, you can create faceted search interfaces. This setting allows you to:
  * <ul>
  *     <li>Define the maximum number of values returned by the facets search parameter</li>

@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#filterable-attributes">Filterable attributes</a>
+ * <p>
  * Attributes in the filterableAttributes list can be used as filters or facets.
  * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>

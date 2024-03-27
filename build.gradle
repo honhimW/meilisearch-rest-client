@@ -163,9 +163,6 @@ signing {
     def keyId = props.getProperty('signing.keyId')
     def ringFile = props.getProperty('signing.secretKeyBase64')
     def password = props.getProperty('signing.password')
-    println(keyId)
-    println(ringFile)
-    println(password)
     useInMemoryPgpKeys(keyId, ringFile, password)
     sign publishing.publications.gpr
 }

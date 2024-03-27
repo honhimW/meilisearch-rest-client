@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#stop-words">Stop words</a>
+ * <p>
  * Words added to the stopWords list are ignored in future search queries.
  * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>
@@ -32,10 +33,7 @@ import java.util.List;
  *
  * This website maintained by a French developer offers lists of possible stop words in different languages. Note that, depending on your dataset and use case, you will need to tweak these lists for optimal results.
  * </pre>
- * <a style="color:red"
- * href="https://www.meilisearch.com/docs/learn/fine_tuning_results/sorting">
- * To learn more about sortable attributes, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/fine_tuning_results/sorting">To learn more about sortable attributes, refer to our dedicated guide.</a>
  *
  * @author hon_him
  * @since 2024-01-03

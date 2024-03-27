@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#searchable-attributes">Searchable attributes</a>
+ * <p>
  * The values associated with attributes in the searchableAttributes list are searched for matching query words. The order of the list also determines the attribute ranking order.
  * <p>
  * By default, the searchableAttributes array is equal to all fields in your dataset. This behavior is represented by the value ["*"].
@@ -29,9 +30,7 @@ import java.util.List;
  * <pre>
  * Updating searchable attributes will re-index all documents in the index, which can take some time. We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
  * </pre>
- * <a style="color:red" href="https://www.meilisearch.com/docs/learn/configuration/displayed_searchable_attributes#searchable-fields">
- * To learn more about searchable attributes, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/configuration/displayed_searchable_attributes#searchable-fields">To learn more about searchable attributes, refer to our dedicated guide.</a>
  *
  * @author hon_him
  * @since 2024-01-03

@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/experimental_features">Experimental features</a>
+ * <p>
  * The /experimental-features route allows you to activate or deactivate some of Meilisearch's experimental features.
  * <p>
  * This route is synchronous. This means that no task object will be returned, and any activated or deactivated features will be made available or unavailable immediately.
@@ -29,10 +30,7 @@ import java.util.function.Consumer;
  * <pre>
  * The experimental API route is not compatible with all experimental features. Consult the experimental feature overview for a compatibility list.
  * </pre>
- * <a style="color:red"
- * href="https://www.meilisearch.com/docs/learn/fine_tuning_results/sorting">
- * To learn more about sortable attributes, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/fine_tuning_results/sorting">To learn more about sortable attributes, refer to our dedicated guide.</a>
  *
  * @author hon_him
  * @since 2024-01-03

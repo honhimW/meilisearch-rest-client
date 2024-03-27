@@ -22,15 +22,13 @@ import java.util.List;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#sortable-attributes">Sortable attributes</a>
+ * <p>
  * Attributes that can be used when sorting search results using the sort search parameter.
  * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
  * <pre>
  * Updating sortable attributes will re-index all documents in the index, which can take some time. We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
  * </pre>
- * <a style="color:red"
- * href="https://www.meilisearch.com/docs/learn/fine_tuning_results/sorting">
- * To learn more about sortable attributes, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/fine_tuning_results/sorting">To learn more about sortable attributes, refer to our dedicated guide.</a>
  *
  * @author hon_him
  * @since 2024-01-03

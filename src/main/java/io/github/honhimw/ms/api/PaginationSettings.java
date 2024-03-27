@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#pagination">Pagination</a>
+ * <p>
  * To protect your database from malicious scraping, Meilisearch has a default limit of 1000 results per search. This setting allows you to configure the maximum number of results returned per search.
  * <p>
  * maxTotalHits takes priority over search parameters such as limit, offset, hitsPerPage, and page.

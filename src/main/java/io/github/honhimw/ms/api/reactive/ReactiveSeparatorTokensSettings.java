@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#separator-tokens">Separator tokens</a>
+ * <p>
  * Configure strings as custom separator tokens indicating where a word ends and begins.
  * <p>
  * Tokens in the separatorTokens list are added on top of Meilisearch's default list of separators. To remove separators from the default list, use the nonSeparatorTokens setting.
@@ -29,9 +30,7 @@ import java.util.List;
  * <pre>
  * Updating searchable attributes will re-index all documents in the index, which can take some time. We recommend updating your index settings first and then adding documents as this reduces RAM consumption.
  * </pre>
- * <a style="color:red" href="https://www.meilisearch.com/docs/learn/configuration/displayed_searchable_attributes#searchable-fields">
- * To learn more about searchable attributes, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/configuration/displayed_searchable_attributes#searchable-fields">To learn more about searchable attributes, refer to our dedicated guide.</a>
  *
  * @author hon_him
  * @since 2024-01-03

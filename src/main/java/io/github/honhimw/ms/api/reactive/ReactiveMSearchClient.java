@@ -123,6 +123,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/dump">Dumps</a>
+     * <p>
      * The /dumps route allows the creation of database dumps. Dumps are .dump files that can be used to restore Meilisearch data or migrate between different versions.
      * <p>
      * Triggers a dump creation task. Once the process is complete, a dump is created in the dump directory. If the dump directory does not exist yet, it will be created.
@@ -136,6 +137,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/snapshots">Snapshots</a>
+     * <p>
      * The /snapshot route allows you to create database snapshots. Snapshots are .snapshot files that can be used to make quick backups of Meilisearch data.
      * <p>
      * <a style="color:red" href="https://www.meilisearch.com/docs/learn/advanced/snapshots">Learn more about snapshots.</a>

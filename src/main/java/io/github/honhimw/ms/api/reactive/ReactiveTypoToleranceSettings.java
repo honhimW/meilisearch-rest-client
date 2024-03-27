@@ -23,13 +23,11 @@ import java.util.function.Consumer;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#typo-tolerance">Typo tolerance</a>
+ * <p>
  * Typo tolerance helps users find relevant results even when their search queries contain spelling mistakes or typos.
  * This setting allows you to configure the minimum word size for typos and disable typo tolerance for specific words or attributes.
  * <p>
- * <a style="color:red"
- * href="https://www.meilisearch.com/docs/learn/configuration/typo_tolerance">
- * To learn more about typo tolerance, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/configuration/typo_tolerance">To learn more about typo tolerance, refer to our dedicated guide.</a>
  *
  * @author hon_him
  * @see TypoTolerance

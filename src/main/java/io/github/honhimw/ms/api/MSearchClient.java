@@ -126,6 +126,7 @@ public interface MSearchClient extends AutoCloseable {
 
     /**
      * <a style="font-size:large" href="https://www.meilisearch.com/docs/reference/api/dump">Dumps</a>
+     * <p>
      * The /dumps route allows the creation of database dumps. Dumps are .dump files that can be used to restore Meilisearch data or migrate between different versions.
      * <p>
      * Triggers a dump creation task. Once the process is complete, a dump is created in the dump directory. If the dump directory does not exist yet, it will be created.

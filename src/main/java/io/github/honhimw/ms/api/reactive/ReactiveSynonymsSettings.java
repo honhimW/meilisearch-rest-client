@@ -25,12 +25,10 @@ import java.util.function.Consumer;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#synonyms">Synonyms</a>
+ * <p>
  * The synonyms object contains words and their respective synonyms. A synonym in Meilisearch is considered equal to its associated word for the purposes of calculating search results.
  * <p>
- * <a style="color:red"
- * href="https://www.meilisearch.com/docs/learn/configuration/synonyms">
- * To learn more about synonyms, refer to our dedicated guide.
- * </a>
+ * <a style="color:red" href="https://www.meilisearch.com/docs/learn/configuration/synonyms">To learn more about synonyms, refer to our dedicated guide.</a>
  *
  * @author hon_him
  * @since 2024-01-03
