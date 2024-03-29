@@ -15,13 +15,13 @@
 package io.github.honhimw.ms.internal.reactive;
 
 import io.github.honhimw.ms.api.reactive.ReactiveTasks;
-import io.github.honhimw.ms.model.CancelTasksRequest;
-import io.github.honhimw.ms.model.GetTasksRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.model.exception.TaskStateException;
 import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.RetrySpec;
 
+import java.time.Duration;
 import java.util.Map;
 
 /**
@@ -62,5 +62,33 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
             Map<String, String> parameters = request.toParameters();
             configurer.params(parameters);
         }, TypeRefs.TaskInfoRef.INSTANCE);
+    }
+
+    @Override
+    public Mono<TaskInfo> await(int uid) {
+        return await(uid, _client.config.getAwaitAttempts(), _client.config.getAwaitFixedDelay());
+    }
+
+    @Override
+    public Mono<TaskInfo> await(int uid, int maxAttempts, Duration fixedDelay) {
+        boolean awaitExhaustedError = _client.config.isAwaitExhaustedError();
+        Mono<TaskInfo> mono = get(uid)
+            .doOnNext(taskInfo -> {
+                TaskStatus status = taskInfo.getStatus();
+                if (status == TaskStatus.ENQUEUED || status == TaskStatus.PROCESSING) {
+                    throw new TaskStateException(taskInfo, "task not completed.");
+                }
+            })
+            .retryWhen(RetrySpec.fixedDelay(maxAttempts, fixedDelay)
+                .modifyErrorFilter(throwablePredicate -> throwable -> throwable instanceof TaskStateException)
+                .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> {
+                    TaskStateException failure = (TaskStateException) retrySignal.failure();
+                    return new TaskStateException(failure.getTaskInfo(), String.format("task not completed after: %d attempts with fixed delay: %s", maxAttempts, fixedDelay));
+                })
+            );
+        if (!awaitExhaustedError) {
+            mono = mono.onErrorResume(TaskStateException.class::isInstance, throwable -> Mono.just(((TaskStateException) throwable).getTaskInfo()));
+        }
+        return mono;
     }
 }

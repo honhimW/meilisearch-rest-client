@@ -35,9 +35,10 @@ import io.github.honhimw.ms.support.Asserts;
 import io.github.honhimw.ms.support.StringUtils;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Objects;
 
 /**
@@ -45,7 +46,7 @@ import java.util.Objects;
  * @since 2023-07-24
  */
 
-@Data
+@Getter
 @AllArgsConstructor
 public final class MSearchConfig {
 
@@ -59,10 +60,16 @@ public final class MSearchConfig {
 
     private final ResponseFilter responseFilter;
 
+    private final int awaitAttempts;
+
+    private final Duration awaitFixedDelay;
+
+    private final boolean awaitExhaustedError;
+
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();
@@ -72,7 +79,7 @@ public final class MSearchConfig {
      * Creates and returns a new instance of the Builder class.
      * With default HttpClient.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder withDefault() {
         return builder()
@@ -92,6 +99,9 @@ public final class MSearchConfig {
         private JsonHandler jsonHandler;
         private ReactiveHttpUtils httpClient;
         private ResponseFilter responseFilter = (response, bytes) -> Mono.just(bytes);
+        private int awaitAttempts = 100;
+        private Duration awaitFixedDelay = Duration.ofMillis(50);
+        private boolean awaitExhaustedError = true;
 
         private Builder() {
         }
@@ -185,6 +195,41 @@ public final class MSearchConfig {
         }
 
         /**
+         * Default task await attempts
+         *
+         * @param awaitAttempts default task await attempts
+         * @return a reference to this Builder
+         */
+        public Builder awaitAttempts(int awaitAttempts) {
+            this.awaitAttempts = awaitAttempts;
+            return this;
+        }
+
+        /**
+         * Default task await fixed delay
+         *
+         * @param awaitFixedDelay default task await fixed delay
+         * @return a reference to this Builder
+         */
+        public Builder awaitFixedDelay(Duration awaitFixedDelay) {
+            this.awaitFixedDelay = awaitFixedDelay;
+            return this;
+        }
+
+        /**
+         * If true, throw an exception when the await attempts is exhausted.
+         * If false, will return the last attempt result of task info.
+         * Default value: true
+         *
+         * @param awaitExhaustedError default task await exhausted error
+         * @return a reference to this Builder
+         */
+        public Builder awaitExhaustedError(boolean awaitExhaustedError) {
+            this.awaitExhaustedError = awaitExhaustedError;
+            return this;
+        }
+
+        /**
          * Returns a {@code MSearchConfig} built from the parameters previously set.
          *
          * @return a {@code MSearchConfig} built with parameters of this {@code MSearchConfig.Builder}
@@ -197,7 +242,16 @@ public final class MSearchConfig {
             Asserts.status(Objects.nonNull(jsonHandler), "jsonHandler must not be null");
             Asserts.status(Objects.nonNull(httpClient), "httpClient must not be null");
             Asserts.status(Objects.nonNull(responseFilter), "responseConsumer must not be null");
-            return new MSearchConfig(serverUrl, apiKey, jsonHandler, httpClient, responseFilter);
+            return new MSearchConfig(
+                serverUrl,
+                apiKey,
+                jsonHandler,
+                httpClient,
+                responseFilter,
+                awaitAttempts,
+                awaitFixedDelay,
+                awaitExhaustedError
+            );
         }
     }
 }

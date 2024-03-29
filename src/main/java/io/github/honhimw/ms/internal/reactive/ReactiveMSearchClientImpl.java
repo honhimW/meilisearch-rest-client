@@ -80,6 +80,11 @@ import java.util.Objects;
 public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
 
     /**
+     * Client config.
+     */
+    protected final MSearchConfig config;
+
+    /**
      * Server full URL.
      */
     protected final String serverUrl;
@@ -111,6 +116,7 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
      * @param config the {@link MSearchConfig}
      */
     public ReactiveMSearchClientImpl(MSearchConfig config) {
+        this.config = config;
         this.serverUrl = config.getServerUrl();
         this.apiKey = config.getApiKey();
         this.jsonHandler = config.getJsonHandler();

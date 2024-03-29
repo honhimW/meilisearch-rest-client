@@ -69,7 +69,6 @@ public class ContextTests extends TestBase {
             .port(MeiliSearchProperties.getPort())
             .apiKey(MeiliSearchProperties.getApiKey())
             .jsonHandler(jsonHandler)
-            .httpClient(httpClient)
             .responseFilter((response, bytes) -> Mono.deferContextual(contextView -> {
                 // put http response in context and modify response content
                 Optional<Map> ctx = contextView.getOrEmpty(respCtx);
@@ -82,7 +81,8 @@ public class ContextTests extends TestBase {
                 // you may also return a Mono.error() to indicate that the result is not as expected
 //                return Mono.just("{}".getBytes(StandardCharsets.UTF_8));
                 return Mono.just(bytes);
-            })));
+            }))
+            .httpClient(httpClient));
         Mono<SearchResponse<Map<String, Object>>> searchResponseMono = reactiveClient.indexes().search("movies").find("2");
 
         Map<Object, Object> _map = new HashMap<>();

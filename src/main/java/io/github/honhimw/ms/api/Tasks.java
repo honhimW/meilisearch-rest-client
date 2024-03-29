@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.api;
 
+import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.model.CancelTasksRequest;
 import io.github.honhimw.ms.model.GetTasksRequest;
 import io.github.honhimw.ms.model.Page;
@@ -115,7 +116,45 @@ public interface Tasks {
      * Wait for task finish
      *
      * @param uid task uid
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
+    TaskInfo await(int uid);
+
+    /**
+     * Wait for task finish
+     *
+     * @param uid         task uid
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false
+     */
+    TaskInfo await(int uid, int maxAttempts, Duration fixedDelay);
+
+    /**
+     * Wait for task finish
+     *
+     * @param taskInfo task info
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false
+     */
+    TaskInfo await(TaskInfo taskInfo);
+
+    /**
+     * Wait for task finish
+     *
+     * @param taskInfo    task info
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false
+     */
+    TaskInfo await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay);
+
+    /**
+     * Wait for task finish
+     *
+     * @param uid task uid
+     * @deprecated use {@link #await(int)} instead
+     */
+    @Deprecated
     void waitForTask(int uid);
 
     /**
@@ -124,7 +163,9 @@ public interface Tasks {
      * @param uid         task uid
      * @param maxAttempts max attempts
      * @param fixedDelay  fixed delay
+     * @deprecated use {@link #await(int, int, Duration)} instead
      */
+    @Deprecated
     void waitForTask(int uid, int maxAttempts, Duration fixedDelay);
 
 }

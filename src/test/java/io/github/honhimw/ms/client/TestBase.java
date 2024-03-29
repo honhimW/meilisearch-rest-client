@@ -65,12 +65,12 @@ public class TestBase {
         );
     }
 
-    protected static Mono<Void> await(Mono<TaskInfo> taskInfo) {
-        return taskInfo.flatMap(taskInfo1 -> getReactiveTasks().waitForTask(taskInfo1.getTaskUid()));
+    protected static Mono<TaskInfo> await(Mono<TaskInfo> taskInfo) {
+        return taskInfo.flatMap(taskInfo1 -> getReactiveTasks().await(taskInfo1.getTaskUid()));
     }
 
-    protected static void await(TaskInfo taskInfo) {
-        getBlockingTasks().waitForTask(taskInfo.getTaskUid());
+    protected static TaskInfo await(TaskInfo taskInfo) {
+        return getBlockingTasks().await(taskInfo.getTaskUid());
     }
 
     @SafeVarargs

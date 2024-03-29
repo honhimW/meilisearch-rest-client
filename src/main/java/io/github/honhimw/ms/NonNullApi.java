@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  * @since 2024-01-02
  */
 
-@Target(ElementType.PACKAGE)
+@Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Nonnull

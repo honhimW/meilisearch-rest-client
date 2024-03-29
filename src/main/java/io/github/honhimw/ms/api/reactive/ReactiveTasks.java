@@ -14,7 +14,9 @@
 
 package io.github.honhimw.ms.api.reactive;
 
+import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.model.exception.TaskStateException;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.RetrySpec;
@@ -111,13 +113,55 @@ public interface ReactiveTasks {
     }
 
     /**
+     * Wait for task to complete, default 100 attempts with 50ms delay.
+     *
+     * @param uid task uid
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
+     */
+    Mono<TaskInfo> await(int uid);
+
+    /**
+     * Wait for task to complete
+     *
+     * @param uid         task uid
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
+     */
+    Mono<TaskInfo> await(int uid, int maxAttempts, Duration fixedDelay);
+
+    /**
+     * Wait for task to complete, default 100 attempts with 50ms delay.
+     *
+     * @param taskInfo task info
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
+     */
+    default Mono<TaskInfo> await(TaskInfo taskInfo) {
+        return await(taskInfo.getTaskUid());
+    }
+
+    /**
+     * Wait for task to complete
+     *
+     * @param taskInfo    task info
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
+     */
+    default Mono<TaskInfo> await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay) {
+        return await(taskInfo.getTaskUid(), maxAttempts, fixedDelay);
+    }
+
+    /**
      * Wait for task to complete
      *
      * @param uid task uid
      * @return None
+     * @deprecated use {@link #await(int)} instead, will be removed since 1.8.0.0
      */
+    @Deprecated
     default Mono<Void> waitForTask(int uid) {
-        return waitForTask(uid, 100, Duration.ofMillis(50));
+        return await(uid).then();
     }
 
     /**
@@ -127,16 +171,11 @@ public interface ReactiveTasks {
      * @param maxAttempts max attempts
      * @param fixedDelay  fixed delay
      * @return None
+     * @deprecated use {@link #await(int, int, Duration)} instead, will be removed since 1.8.0.0
      */
+    @Deprecated
     default Mono<Void> waitForTask(int uid, int maxAttempts, Duration fixedDelay) {
-        return get(uid)
-            .doOnNext(taskInfo -> {
-                if (taskInfo.getStatus() != TaskStatus.SUCCEEDED && taskInfo.getStatus() != TaskStatus.FAILED) {
-                    throw new IllegalStateException("task not completed");
-                }
-            })
-            .retryWhen(RetrySpec.fixedDelay(maxAttempts, fixedDelay))
-            .then();
+        return await(uid, maxAttempts, fixedDelay).then();
     }
 
 }

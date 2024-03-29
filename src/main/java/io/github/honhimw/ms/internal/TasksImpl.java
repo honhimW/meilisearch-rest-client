@@ -58,12 +58,34 @@ class TasksImpl implements Tasks {
     }
 
     @Override
-    public void waitForTask(int uid) {
-        _reactive.waitForTask(uid).block();
+    public TaskInfo await(int uid) {
+        return ReactorUtils.blockNonNull(_reactive.await(uid));
     }
 
     @Override
+    public TaskInfo await(int uid, int maxAttempts, Duration fixedDelay) {
+        return ReactorUtils.blockNonNull(_reactive.await(uid, maxAttempts, fixedDelay));
+    }
+
+    @Override
+    public TaskInfo await(TaskInfo taskInfo) {
+        return ReactorUtils.blockNonNull(_reactive.await(taskInfo));
+    }
+
+    @Override
+    public TaskInfo await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay) {
+        return ReactorUtils.blockNonNull(_reactive.await(taskInfo, maxAttempts, fixedDelay));
+    }
+
+    @Deprecated
+    @Override
+    public void waitForTask(int uid) {
+        _reactive.await(uid).block();
+    }
+
+    @Deprecated
+    @Override
     public void waitForTask(int uid, int maxAttempts, Duration fixedDelay) {
-        _reactive.waitForTask(uid, maxAttempts, fixedDelay).block();
+        _reactive.await(uid, maxAttempts, fixedDelay).block();
     }
 }

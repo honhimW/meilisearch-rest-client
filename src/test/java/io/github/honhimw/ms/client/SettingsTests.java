@@ -57,7 +57,7 @@ public class SettingsTests extends TestBase {
         TaskInfo block = settings.update(builder -> builder
                 .rankingRules(Stream.of(RankingRule.TYPO, RankingRule.WORDS).collect(Collectors.toList()))
                 .searchableAttributes(Stream.of("title", "overview").collect(Collectors.toList())));
-        reactiveClient.tasks().waitForTask(block.getTaskUid()).block();
+        reactiveClient.tasks().await(block.getTaskUid()).block();
         Setting current = settings.get();
         List<RankingRule> rankingRules = current.getRankingRules();
         assert rankingRules.size() == 2;
