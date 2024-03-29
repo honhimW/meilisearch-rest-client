@@ -23,15 +23,16 @@ your apps, websites, and workflow.
 
 The version number of this library is named by appending `.X` to the version number in the official documentation.
 
-| Doc's Version | Library Version   |
+| Doc's Version | Library's Version |
 |---------------|-------------------|
-| V1.7          | 1.7.0.0 +         |
-| V1.6          | 1.6.0.0 ~ 1.7.0.0 |
-| V1.5          | 1.5.0.0 ~ 1.6.0.0 |
+| V1.7(latest)  | 1.7.X.X           |
+| V1.6          | 1.6.X.X           |
+| V1.5          | 1.5.X.X           |
 
 ### Dependencies
 
 **By default**, this library depends on libraries as fallows:
+
 - reactor-netty-http(required)
 - jackson(replaceable by providing implementation of `io.github.honhimw.ms.JsonHandler`)
 
