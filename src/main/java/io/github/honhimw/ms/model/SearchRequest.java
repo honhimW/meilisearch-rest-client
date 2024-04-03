@@ -15,7 +15,6 @@
 package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.Experimental;
-import io.github.honhimw.ms.support.FilterBuilder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +22,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * @author hon_him

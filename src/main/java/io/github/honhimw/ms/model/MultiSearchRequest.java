@@ -21,7 +21,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author hon_him
@@ -40,4 +42,76 @@ public class MultiSearchRequest implements Serializable {
     @Schema(description = "Contains the list of search queries to perform. The indexUid search parameter is required, all other parameters are optional")
     private List<SearchWithIndexRequest> queries;
 
+    private MultiSearchRequest(Builder builder) {
+        setQueries(builder.queries);
+    }
+
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return a new instance of the Builder class
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+
+    /**
+     * {@code MultiSearchRequest} builder static inner class.
+     */
+    public static final class Builder {
+        private List<SearchWithIndexRequest> queries;
+
+        private Builder() {
+        }
+
+        /**
+         * Sets the {@code queries} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code queries} to set
+         * @return a reference to this Builder
+         */
+        public Builder queries(List<SearchWithIndexRequest> val) {
+            queries = val;
+            return this;
+        }
+
+        /**
+         * Add the {@code query} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param query the {@code queries} to added
+         * @return a reference to this Builder
+         */
+        public Builder addQuery(SearchWithIndexRequest query) {
+            if (Objects.isNull(queries)) {
+                queries = new ArrayList<>();
+            }
+            queries.add(query);
+            return this;
+        }
+
+        /**
+         * Add the {@code query} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param indexUid the index uid
+         * @param query the {@code queries} to added
+         * @return a reference to this Builder
+         */
+        public Builder addQuery(String indexUid, SearchRequest query) {
+            if (Objects.isNull(queries)) {
+                queries = new ArrayList<>();
+            }
+            queries.add(SearchWithIndexRequest.from(indexUid, query));
+            return this;
+        }
+
+        /**
+         * Returns a {@code MultiSearchRequest} built from the parameters previously set.
+         *
+         * @return a {@code MultiSearchRequest} built with parameters of this {@code MultiSearchRequest.Builder}
+         */
+        public MultiSearchRequest build() {
+            return new MultiSearchRequest(this);
+        }
+    }
 }

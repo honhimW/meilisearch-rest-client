@@ -162,12 +162,11 @@ public class SearchTests extends TestBase {
     @Order(6)
     @Test
     void multiSearch() {
-        MultiSearchRequest request = new MultiSearchRequest();
-        SearchWithIndexRequest searchWithIndexRequest = new SearchWithIndexRequest();
-        searchWithIndexRequest.setIndexUid(INDEX);
-        searchWithIndexRequest.setQ("2");
-        request.setQueries(toList(searchWithIndexRequest));
-        MultiSearchResponse multiSearchResponse = blockingClient.multiSearch(request);
+        MultiSearchResponse multiSearchResponse = blockingClient.multiSearch(MultiSearchRequest.builder()
+            .addQuery(INDEX, SearchRequest.builder()
+                .q("2")
+                .build())
+            .build());
         assert CollectionUtils.isNotEmpty(multiSearchResponse.getResults()) && multiSearchResponse.getResults().size() == 1;
         assert multiSearchResponse.getResults().get(0).getEstimatedTotalHits() > 0;
     }

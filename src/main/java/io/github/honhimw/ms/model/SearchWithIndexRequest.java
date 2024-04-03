@@ -37,4 +37,39 @@ public class SearchWithIndexRequest extends SearchRequest {
     @Schema(description = "uid of the requested index")
     private String indexUid;
 
+    /**
+     * Creates a new {@link SearchWithIndexRequest} instance from a {@link SearchRequest} with the given {@code indexUid}.
+     *
+     * @param indexUid      index uid
+     * @param searchRequest search request
+     * @return {@link SearchWithIndexRequest}
+     */
+    public static SearchWithIndexRequest from(String indexUid, SearchRequest searchRequest) {
+        SearchWithIndexRequest searchWithIndexRequest = new SearchWithIndexRequest();
+        searchWithIndexRequest.setIndexUid(indexUid);
+        searchWithIndexRequest.setFilter(searchRequest.getFilter());
+        searchWithIndexRequest.setQ(searchRequest.getQ());
+        searchWithIndexRequest.setOffset(searchRequest.getOffset());
+        searchWithIndexRequest.setLimit(searchRequest.getLimit());
+        searchWithIndexRequest.setHitsPerPage(searchRequest.getHitsPerPage());
+        searchWithIndexRequest.setPage(searchRequest.getPage());
+        searchWithIndexRequest.setFacets(searchRequest.getFacets());
+        searchWithIndexRequest.setAttributesToRetrieve(searchRequest.getAttributesToRetrieve());
+        searchWithIndexRequest.setAttributesToCrop(searchRequest.getAttributesToCrop());
+        searchWithIndexRequest.setCropLength(searchRequest.getCropLength());
+        searchWithIndexRequest.setCropMarker(searchRequest.getCropMarker());
+        searchWithIndexRequest.setAttributesToHighlight(searchRequest.getAttributesToHighlight());
+        searchWithIndexRequest.setHighlightPreTag(searchRequest.getHighlightPreTag());
+        searchWithIndexRequest.setHighlightPostTag(searchRequest.getHighlightPostTag());
+        searchWithIndexRequest.setShowMatchesPosition(searchRequest.getShowMatchesPosition());
+        searchWithIndexRequest.setSort(searchRequest.getSort());
+        searchWithIndexRequest.setMatchingStrategy(searchRequest.getMatchingStrategy());
+        searchWithIndexRequest.setShowRankingScore(searchRequest.getShowRankingScore());
+        searchWithIndexRequest.setShowRankingScoreDetails(searchRequest.getShowRankingScoreDetails());
+        searchWithIndexRequest.setAttributesToSearchOn(searchRequest.getAttributesToSearchOn());
+        searchWithIndexRequest.setHybrid(searchRequest.getHybrid());
+        searchWithIndexRequest.setVector(searchRequest.getVector());
+        return searchWithIndexRequest;
+    }
+
 }
