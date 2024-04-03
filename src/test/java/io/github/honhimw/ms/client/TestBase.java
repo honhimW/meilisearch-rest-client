@@ -55,12 +55,14 @@ public class TestBase {
             .host(MeiliSearchProperties.getHost())
             .port(MeiliSearchProperties.getPort())
             .apiKey(MeiliSearchProperties.getApiKey())
+            .awaitAttempts(200)
             .jsonHandler(jsonHandler)
         );
         INDEX = MeiliSearchProperties.getIndex();
         blockingClient = MSearchClient.create(builder -> builder
             .serverUrl(String.format("http://%s:%d", MeiliSearchProperties.getHost(), MeiliSearchProperties.getPort()))
             .apiKey(MeiliSearchProperties.getApiKey())
+            .awaitAttempts(200)
             .jsonHandler(jsonHandler)
         );
     }

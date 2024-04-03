@@ -181,11 +181,11 @@ public class TypeRefs {
      * String-Object Map SearchResponse List type reference.
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class StringObjectMapSearchResponseListRef extends TypeRef<List<SearchResponse<Map<String, Object>>>> {
+    public static class MultiSearchResponseRef extends TypeRef<MultiSearchResponse> {
         /**
          * Instance.
          */
-        public static final StringObjectMapSearchResponseListRef INSTANCE = new StringObjectMapSearchResponseListRef();
+        public static final MultiSearchResponseRef INSTANCE = new MultiSearchResponseRef();
     }
 
     /**

@@ -159,6 +159,19 @@ public class SearchTests extends TestBase {
         assert Objects.nonNull(hits.get(0).getDetails().get_formatted());
     }
 
+    @Order(6)
+    @Test
+    void multiSearch() {
+        MultiSearchRequest request = new MultiSearchRequest();
+        SearchWithIndexRequest searchWithIndexRequest = new SearchWithIndexRequest();
+        searchWithIndexRequest.setIndexUid(INDEX);
+        searchWithIndexRequest.setQ("2");
+        request.setQueries(toList(searchWithIndexRequest));
+        MultiSearchResponse multiSearchResponse = blockingClient.multiSearch(request);
+        assert CollectionUtils.isNotEmpty(multiSearchResponse.getResults()) && multiSearchResponse.getResults().size() == 1;
+        assert multiSearchResponse.getResults().get(0).getEstimatedTotalHits() > 0;
+    }
+
     @AfterEach
     void resetSetting() {
         TaskInfo reset = indexes.settings(INDEX).reset();

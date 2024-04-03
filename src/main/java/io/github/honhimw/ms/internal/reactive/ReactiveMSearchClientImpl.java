@@ -62,14 +62,12 @@ import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.http.ResponseFilter;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.model.MultiSearchRequest;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.MultiSearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.Version;
 import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -140,8 +138,8 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
     }
 
     @Override
-    public Mono<List<SearchResponse<Map<String, Object>>>> multiSearch(MultiSearchRequest request) {
-        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), TypeRefs.StringObjectMapSearchResponseListRef.INSTANCE);
+    public Mono<MultiSearchResponse> multiSearch(MultiSearchRequest request) {
+        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), TypeRefs.MultiSearchResponseRef.INSTANCE);
     }
 
     @Override

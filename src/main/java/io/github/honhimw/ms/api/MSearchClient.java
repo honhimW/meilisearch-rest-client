@@ -18,13 +18,11 @@ import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.internal.MSearchClientImpl;
 import io.github.honhimw.ms.model.MultiSearchRequest;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.MultiSearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.Version;
 import io.swagger.v3.oas.annotations.Operation;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -106,7 +104,7 @@ public interface MSearchClient extends AutoCloseable {
      * @return multi-search result
      */
     @Operation(method = "POST", tags = "/multi-search")
-    List<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchRequest request);
+    MultiSearchResponse multiSearch(MultiSearchRequest request);
 
     /**
      * The /health route allows you to verify the status and availability of a Meilisearch instance.
