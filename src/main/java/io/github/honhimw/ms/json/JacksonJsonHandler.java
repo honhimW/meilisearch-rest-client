@@ -28,7 +28,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.Getter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -50,7 +49,6 @@ import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339_FORMATTER;
  * @since 2023-12-29
  */
 
-@Getter
 public class JacksonJsonHandler implements JsonHandler {
 
     private final JsonMapper jsonMapper;

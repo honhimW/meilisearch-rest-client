@@ -21,41 +21,26 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
- * <a href="https://www.meilisearch.com/docs/reference/api/settings#pagination-object">Pagination object</a>
- * Default object
- * <pre>
- * {
- *     "maxTotalHits": 1000
- * }
- * </pre>
+ * <a style="font-size:large" href="https://www.meilisearch.com/docs/reference/api/multi_search#response">MultiSearch response</a>
  *
  * @author hon_him
- * @since 2024-01-03
+ * @since 2024-01-02
  */
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pagination implements Serializable {
+public class MultiSearchResponse implements Serializable {
 
     /**
-     * The maximum number of search results Meilisearch can return", defaultValue = "1000
+     * Results of the search queries in the same order they were requested in
      */
-    @Schema(description = "The maximum number of search results Meilisearch can return", defaultValue = "1000")
-    private Integer maxTotalHits;
-
-    /**
-     * Creates and returns a new instance of the Pagination class with default values.
-     *
-     * @return  a new instance of the Pagination class with default values
-     */
-    public static Pagination defaultObject() {
-        Pagination pagination = new Pagination();
-        pagination.setMaxTotalHits(1000);
-        return pagination;
-    }
+    @Schema(description = "Results of the search queries in the same order they were requested in")
+    private List<SearchResponse<Map<String, Object>>> results;
 
 }

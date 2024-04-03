@@ -26,7 +26,7 @@ import java.util.Map;
 
 /**
  * <a href="https://www.meilisearch.com/docs/reference/api/settings#faceting-object">Faceting object</a>
- * <h2>Default object</h2>
+ * Default object
  * <pre>
  * {
  *     "maxValuesPerFacet": 100,
@@ -65,6 +65,7 @@ public class Faceting implements Serializable {
 
     /**
      * Faceting setting default values object
+     *
      * @return Faceting default object
      */
     public static Faceting defaultObject() {
@@ -79,7 +80,7 @@ public class Faceting implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();

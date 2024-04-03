@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * <h2>Default object</h2>
+ * Default object
  * <pre>
  * {
  *   "proximityPrecision": "byWord"
@@ -49,7 +49,7 @@ public class ProximityPrecision implements Serializable {
     /**
      * A static method that creates and returns a default ProximityPrecision object.
      *
-     * @return         	the default ProximityPrecision object
+     * @return the default ProximityPrecision object
      */
     public static ProximityPrecision defaultObject() {
         ProximityPrecision pagination = new ProximityPrecision();

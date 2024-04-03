@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * <h2>Default object</h2>
+ * Default object
  * <pre>
  * {
  *     "semanticRatio": 0.5,

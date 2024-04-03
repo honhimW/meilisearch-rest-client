@@ -14,7 +14,6 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.model.CancelTasksRequest;
 import io.github.honhimw.ms.model.GetTasksRequest;
 import io.github.honhimw.ms.model.Page;

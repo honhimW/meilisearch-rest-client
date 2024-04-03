@@ -18,7 +18,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * <h2>Exhaustive and estimated total number of search results</h2>
+ * Exhaustive and estimated total number of search results
  * <p>
  * By default, Meilisearch only returns an estimate of the total number of search results in a query: estimatedTotalHits. This happens because Meilisearch prioritizes relevancy and performance over providing an exhaustive number of search results. When working with estimatedTotalHits, use offset and limit to navigate between search results.
  * <p>
