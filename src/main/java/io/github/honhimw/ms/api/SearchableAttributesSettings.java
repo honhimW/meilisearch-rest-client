@@ -59,9 +59,7 @@ public interface SearchableAttributesSettings {
      *                             you can use dot notation to set one or more of its keys as a value for this setting:
      *                             "searchableAttributes": ["release_date.year"].
      *                             <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
-     *                             <pre>
-     *                                                         If the field does not exist, no error will be thrown.
-     *                                                         </pre>
+     *                             <pre>If the field does not exist, no error will be thrown.</pre>
      * @return update task
      */
     @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/searchable-attributes")

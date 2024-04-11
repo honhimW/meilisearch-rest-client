@@ -121,13 +121,19 @@ public class SearchRequest extends FilterableAttributesRequest {
     /**
      * Sort search results by an attribute's value
      */
-    @Schema(description = "Sort search results by an attribute's value")
+    @Schema(description = "Sort search results by an attribute's value", defaultValue = "null")
     private List<String> sort;
 
     /**
-     * Strategy used to match query terms within documents
+     * Strategy used to match query terms within documents.
+     * <p>
+     * Expected value: <em style="color:green">last</em> or <em style="color:green">all</em>
+     * <p>
+     * <em style="color:green">last</em>: returns documents containing all the query terms first. If there are not enough results containing all query terms to meet the requested limit, Meilisearch will remove one query term at a time, starting from the end of the query.
+     * <p>
+     * <em style="color:green">all</em>:  only returns documents that contain all query terms. Meilisearch will not match any more documents even if there aren't enough to meet the requested limit.
      */
-    @Schema(description = "Strategy used to match query terms within documents")
+    @Schema(description = "Strategy used to match query terms within documents", defaultValue = "last")
     private String matchingStrategy;
 
     /**
@@ -190,7 +196,7 @@ public class SearchRequest extends FilterableAttributesRequest {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();
