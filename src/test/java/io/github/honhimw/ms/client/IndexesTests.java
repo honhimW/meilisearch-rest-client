@@ -86,6 +86,13 @@ public class IndexesTests extends TestBase {
         assert index.isPresent();
     }
 
+    @Order(2)
+    @Test
+    void getNotExists() {
+        Optional<Index> index = indexes.get("the-index-dose-not-exist");
+        assert !index.isPresent();
+    }
+
     @Order(3)
     @Test
     void update() {

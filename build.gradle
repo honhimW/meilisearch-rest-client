@@ -8,6 +8,8 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'jacoco'
+    id 'jvm-test-suite'
+    id 'jacoco-report-aggregation'
     id 'signing'
 }
 
@@ -58,9 +60,6 @@ dependencies {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.2')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-
     testImplementation "com.google.code.gson:gson:${gsonVersion}"
     testCompileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -79,7 +78,7 @@ java {
 
 processTestResources {
     def nm = new LinkedHashMap<String, String>()
-    project.properties.forEach {k, v ->
+    project.properties.forEach { k, v ->
         nm.put(k, v.toString())
     }
     nm.put('project.artifactId', project.name)
@@ -177,36 +176,23 @@ tasks.withType(JavaCompile).configureEach {
     inputs.files(tasks.withType(ProcessResources))
 }
 
-test {
-    useJUnitPlatform()
-
-    testLogging {
-        events 'passed', 'skipped', 'failed'
-    }
-
-    finalizedBy jacocoTestReport
-}
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.setRequired true
-        csv.setRequired false
-        html.setOutputLocation layout.buildDirectory.dir('jacocoHtml')
-    }
-
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                    'io/github/honhimw/ms/model/*',
-                    'io/github/honhimw/ms/json/ParameterizedTypeImpl.class',
-                    'io/github/honhimw/ms/http/URIBuilder.class',
-                    'io/github/honhimw/ms/http/URIBuilder$TokenParser.class',
-                    'io/github/honhimw/ms/http/URIBuilder$ParserCursor.class',
-                    'io/github/honhimw/ms/support/StringUtils.class',
-                    'io/github/honhimw/ms/support/IOUtils.class',
-            ])
-        }))
+testing {
+    suites {
+        test {
+            useJUnitJupiter()
+            dependencies {
+                implementation platform('org.junit:junit-bom:5.10.2')
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        testLogging {
+                            events 'passed', 'skipped', 'failed'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
