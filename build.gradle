@@ -22,7 +22,7 @@ def reactorVersion = '2023.0.4'
 def jacksonVersion = '2.17.0'
 def gsonVersion = '2.10.1'
 def lombokVersion = '1.18.32'
-def slf4jVersion = '2.0.12'
+def slf4jVersion = '2.0.13'
 
 apply plugin: 'idea'
 apply plugin: 'java'
