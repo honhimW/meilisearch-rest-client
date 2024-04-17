@@ -43,7 +43,7 @@ public class ClientTests extends TestBase {
     @Test
     void version() {
         Version version = blockingClient.version();
-        assert StringUtils.startsWith(version.getPkgVersion(), "1.7");
+        assert StringUtils.startsWith(version.getPkgVersion(), "1.8");
     }
 
     @Order(1)
