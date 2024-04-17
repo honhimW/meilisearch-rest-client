@@ -179,6 +179,13 @@ public class Setting implements Serializable {
     @Schema(description = "To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.")
     private Map<String, ? extends Embedder> embedders;
 
+    /**
+     * To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 150ms.
+     * The default value of the searchCutoffMs setting is null and corresponds to 150ms.
+     */
+    @Schema(description = "To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 150ms.", defaultValue = "null")
+    private Integer searchCutoffMs;
+
     private Setting(Builder builder) {
         setDisplayedAttributes(builder.displayedAttributes);
         setSearchableAttributes(builder.searchableAttributes);
@@ -196,12 +203,13 @@ public class Setting implements Serializable {
         setPagination(builder.pagination);
         setProximityPrecision(builder.proximityPrecision);
         setEmbedders(builder.embedders);
+        setSearchCutoffMs(builder.searchCutoffMs);
     }
 
     /**
      * Returns a default Setting object with all attributes set to their default values.
      *
-     * @return  a Setting object with default values for all attributes
+     * @return a Setting object with default values for all attributes
      */
     public static Setting defaultObject() {
         Setting setting = new Setting();
@@ -226,7 +234,7 @@ public class Setting implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();
@@ -252,6 +260,7 @@ public class Setting implements Serializable {
         private Pagination pagination;
         private ProximityPrecisionType proximityPrecision;
         private Map<String, ? extends Embedder> embedders;
+        private Integer searchCutoffMs;
 
         private Builder() {
         }
@@ -429,6 +438,11 @@ public class Setting implements Serializable {
          */
         public Builder embedders(Map<String, ? extends Embedder> val) {
             embedders = val;
+            return this;
+        }
+
+        public Builder searchCutoffMs(Integer val) {
+            searchCutoffMs = val;
             return this;
         }
 

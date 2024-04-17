@@ -196,7 +196,7 @@ public interface Settings {
      *
      * @return {@link ProximityPrecisionSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(tags = "/indexes/{index_uid}/settings/proximity-precision")
     ProximityPrecisionSettings proximityPrecision();
 
     /**
