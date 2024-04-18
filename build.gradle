@@ -215,7 +215,6 @@ Properties loadProfileProperties() {
     properties.put('meili-search.port', '7700')
     properties.put('meili-search.api-key', 'MASTER_KEY')
     properties.put('tests-index', 'movie_test')
-    properties.putAll(getProperties())
     def file = file("profile-${findProperty('profiles.active')}.properties")
     if (file.exists()) {
         file.withInputStream { properties.load(it) }
@@ -224,8 +223,12 @@ Properties loadProfileProperties() {
 }
 
 Properties githubProperties() {
-    def properties = new Properties()
-    properties.putAll(getProperties())
+    def properties = new Properties() {
+        @Override
+        String getProperty(String propertyName) {
+            return super.getProperty(propertyName)?: findProperty(propertyName)
+        }
+    }
 
     def file = file("github.properties")
     if (file.exists()) {
@@ -235,8 +238,12 @@ Properties githubProperties() {
 }
 
 Properties sonatypeProperties() {
-    def properties = new Properties()
-    properties.putAll(getProperties())
+    def properties = new Properties() {
+        @Override
+        String getProperty(String propertyName) {
+            return super.getProperty(propertyName)?: findProperty(propertyName)
+        }
+    }
 
     def file = file("sonatype.properties")
     if (file.exists()) {
