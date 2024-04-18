@@ -34,15 +34,12 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build -x test
 
-    - name: Echo
-      run: echo ${{ github.actor }}
+    - name: Write environment variables to file
+      run: |
+        echo "gpr.user=${{ github.actor }}" >> github.properties
+        echo "gpr.key=${{ secrets.GITHUB_TOKEN }}" >> github.properties
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
     - name: Publish to GitHub Packages
       run: ./gradlew publishGprPublicationToGitHubPackagesRepository
-      env:
-        gpr.user: ${{ github.actor }}
-        gpr.key: ${{ secrets.GITHUB_TOKEN }}
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}

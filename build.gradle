@@ -223,14 +223,7 @@ Properties loadProfileProperties() {
 }
 
 Properties githubProperties() {
-    def properties = new Properties() {
-        @Override
-        String getProperty(String propertyName) {
-            def val = super.getProperty(propertyName)?: findProperty(propertyName)
-            println val
-            return super.getProperty(propertyName)?: findProperty(propertyName)
-        }
-    }
+    def properties = new Properties()
 
     def file = file("github.properties")
     if (file.exists()) {
@@ -240,12 +233,7 @@ Properties githubProperties() {
 }
 
 Properties sonatypeProperties() {
-    def properties = new Properties() {
-        @Override
-        String getProperty(String propertyName) {
-            return super.getProperty(propertyName)?: findProperty(propertyName)
-        }
-    }
+    def properties = new Properties()
 
     def file = file("sonatype.properties")
     if (file.exists()) {
