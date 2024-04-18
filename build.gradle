@@ -162,8 +162,10 @@ signing {
     def keyId = props.getProperty('signing.keyId')
     def ringFile = props.getProperty('signing.secretKeyBase64')
     def password = props.getProperty('signing.password')
-    useInMemoryPgpKeys(keyId, ringFile, password)
-    sign publishing.publications.gpr
+    if (!(keyId == null || ringFile == null || password == null)) {
+        useInMemoryPgpKeys(keyId, ringFile, password)
+        sign publishing.publications.gpr
+    }
 }
 
 jar {

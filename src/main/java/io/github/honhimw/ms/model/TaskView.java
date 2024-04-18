@@ -107,6 +107,9 @@ public class TaskView implements Serializable {
     @Schema(description = "The date and time when the task finished processing, whether failed, succeeded, or canceled, in RFC 3339 format")
     private LocalDateTime finishedAt;
 
+    /**
+     * If the task has the failed status, then this object contains the error definition. Otherwise, set to null
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -139,6 +142,9 @@ public class TaskView implements Serializable {
 
     }
 
+    /**
+     * The detailed information on the task payload. This object's contents depend on the task's type
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -279,6 +285,9 @@ public class TaskView implements Serializable {
 
     }
 
+    /**
+     * Object containing the payload for the indexSwap task
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor

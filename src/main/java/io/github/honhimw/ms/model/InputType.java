@@ -21,8 +21,19 @@ import io.github.honhimw.ms.json.EnumValue;
  * @since 2024-04-18
  */
 public enum InputType implements EnumValue<InputType> {
-    TEXT("text"), TEXT_ARRAY("textArray");
+    /**
+     * text
+     */
+    TEXT("text"),
+    /**
+     * text array
+     */
+    TEXT_ARRAY("textArray")
+    ;
 
+    /**
+     * Input type
+     */
     private final String value;
 
     InputType(String value) {

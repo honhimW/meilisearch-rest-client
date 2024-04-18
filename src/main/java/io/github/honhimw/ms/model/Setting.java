@@ -441,6 +441,12 @@ public class Setting implements Serializable {
             return this;
         }
 
+        /**
+         * Sets the {@code searchCutoffMs} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code searchCutoffMs} to set
+         * @return a reference to this Builder
+         */
         public Builder searchCutoffMs(Integer val) {
             searchCutoffMs = val;
             return this;

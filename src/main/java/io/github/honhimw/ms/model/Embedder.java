@@ -37,6 +37,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class Embedder implements Serializable {
 
+    /**
+     * Create an embedder with embedder source.
+     * @param source embedder source
+     */
     public Embedder(EmbedderSource source) {
         this.source = source;
     }
@@ -55,12 +59,22 @@ public class Embedder implements Serializable {
     @Schema(description = "describes the natural distribution of results")
     private Distribution distribution;
 
+    /**
+     * Describes the natural distribution of results
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     public static final class Distribution implements Serializable {
+
+        /**
+         * mean value
+         */
         @Schema(description = "mean value")
         private Double mean;
 
+        /**
+         * variance
+         */
         @Schema(description = "variance")
         private Double sigma;
     }
@@ -202,7 +216,10 @@ public class Embedder implements Serializable {
     @EqualsAndHashCode(callSuper = true)
     public static class Rest extends Embedder {
 
-        public Rest(EmbedderSource source) {
+        /**
+         * Create an Rest embedder with embedder source.
+         */
+        public Rest() {
             super(EmbedderSource.REST);
         }
 
@@ -281,7 +298,10 @@ public class Embedder implements Serializable {
     @EqualsAndHashCode(callSuper = true)
     public static class Ollama extends Embedder {
 
-        public Ollama(EmbedderSource source) {
+        /**
+         * Create an Ollama embedder with embedder source.
+         */
+        public Ollama() {
             super(EmbedderSource.OLLAMA);
         }
 
