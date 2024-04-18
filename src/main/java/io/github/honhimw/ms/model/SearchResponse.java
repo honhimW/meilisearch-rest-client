@@ -106,6 +106,13 @@ public class SearchResponse<T> implements Serializable {
     private String query;
 
     /**
+     * It is present whenever a semantic search took place, either in hybrid or in full semantic search.
+     * It lists the number of hits from the hits array that come from the semantic search.
+     */
+    @Schema(description = "the number of hits from the hits array that come from the semantic search")
+    private Integer semanticHitCount;
+
+    /**
      * Distribution of the given facets
      */
     @Schema(description = "Distribution of the given facets")

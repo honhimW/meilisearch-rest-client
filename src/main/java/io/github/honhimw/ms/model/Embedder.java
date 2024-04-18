@@ -22,6 +22,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hon_him
@@ -35,14 +37,33 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Embedder implements Serializable {
 
+    public Embedder(EmbedderSource source) {
+        this.source = source;
+    }
+
     /**
-     * Embedders generate vector data from your documents.
-     */
-        /**
      * Embedders generate vector data from your documents.
      */
     @Schema(description = "(.*?)")
     private EmbedderSource source;
+
+    /**
+     * Describes the natural distribution of results
+     *
+     * @since v1.8
+     */
+    @Schema(description = "describes the natural distribution of results")
+    private Distribution distribution;
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static final class Distribution implements Serializable {
+        @Schema(description = "mean value")
+        private Double mean;
+
+        @Schema(description = "variance")
+        private Double sigma;
+    }
 
     /**
      * OpenAI embedder
@@ -169,6 +190,133 @@ public class Embedder implements Serializable {
          */
         @Schema(description = "dimensions")
         private Integer dimensions;
+
+    }
+
+    /**
+     * Rest embedder
+     *
+     * @since v1.8
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    public static class Rest extends Embedder {
+
+        public Rest(EmbedderSource source) {
+            super(EmbedderSource.REST);
+        }
+
+        /**
+         * Mandatory, full URL to the embedding endpoint. Must be parseable as an URL
+         */
+        @Schema(description = "Mandatory, full URL to the embedding endpoint. Must be parseable as an URL")
+        private String url;
+
+        /**
+         * Optional, will be passed as Bearer in the Authorization header
+         */
+        @Schema(description = "Optional, will be passed as Bearer in the Authorization header")
+        private String apiKey;
+
+        /**
+         * Optional, inferred with a dummy request if missing
+         */
+        @Schema(description = "Optional, inferred with a dummy request if missing")
+        private Integer dimensions;
+
+        /**
+         * <p style="color:green;font-weight:bold;font-size:large">`documentTemplate` usage</p>
+         * <pre>
+         * documentTemplate must be a Liquid template. Use {{ doc.attribute }} to access the attribute field value of your documents. Any field you refer to in this way must exist in all documents or an error will be raised at indexing time.
+         * For best results, use short strings indicating the type of document in that index, only include highly relevant document fields, and truncate long fields.
+         * </pre>
+         */
+        @Schema(description = "an optional field you can use to customize the data you send to the embedder. It is highly recommended you configure a custom template for your documents.")
+        private String documentTemplate;
+
+        /**
+         * Optional, defaults to []. Inject texts in data. Text in the query
+         */
+        @Schema(description = "Inject texts in data. Text in the query", defaultValue = "[]")
+        private List<String> inputField;
+
+        /**
+         * Optional, defaults to text. Inject a single text
+         */
+        @Schema(description = "text or textArray", defaultValue = "text")
+        private InputType inputType;
+
+        /**
+         * Optional, defaults to `{}`, A JSON object describing other fields to send in a query
+         * <pre>
+         * {
+         *   "model": "name-of-your-model",
+         *   "dimensions": 512
+         * }
+         * </pre>
+         */
+        @Schema(description = "A JSON object describing other fields to send in a query")
+        private Map<String, Object> query;
+
+        /**
+         * Optional, defaults to []. Look at embeddings in "data" in the response
+         */
+        @Schema(description = "Look at embeddings in 'data' in the response")
+        private List<String> pathToEmbeddings;
+
+        /**
+         * Optional, defaults to []. Look at the embedding inside of "embedding"
+         */
+        @Schema(description = "Look at the embedding inside of 'embedding'")
+        private List<String> embeddingObject;
+
+    }
+
+    /**
+     * Ollama embedder
+     *
+     * @since v1.8
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    public static class Ollama extends Embedder {
+
+        public Ollama(EmbedderSource source) {
+            super(EmbedderSource.OLLAMA);
+        }
+
+        /**
+         * Optional, fetched from environment if missing.
+         * If url is not passed, the server URL is fetched from the `MEILI_OLLAMA_URL`  environment variable
+         * and defaults to http://localhost:11434/api/embeddings (the default for an ollama server)
+         */
+        @Schema(description = "Optional, fetched from environment if missing")
+        private String url;
+
+        /**
+         * Optional.
+         * If apiKey is passed, then an Authorization: Bearer header will be added to the requests to the ollama server.
+         * While this is not used by the ollama server directly,
+         * it is a common practice to have publicly accessible ollama servers behind a reverse proxy that can provide this kind of authentication.
+         */
+        @Schema(description = "Optional")
+        private String apiKey;
+
+        /**
+         * model
+         */
+        @Schema(description = "model", example = "nomic-embed-text")
+        private String model;
+
+        /**
+         * <p style="color:green;font-weight:bold;font-size:large">`documentTemplate` usage</p>
+         * <pre>
+         * documentTemplate must be a Liquid template. Use {{ doc.attribute }} to access the attribute field value of your documents. Any field you refer to in this way must exist in all documents or an error will be raised at indexing time.
+         * For best results, use short strings indicating the type of document in that index, only include highly relevant document fields, and truncate long fields.
+         * </pre>
+         */
+        @Schema(description = "an optional field you can use to customize the data you send to the embedder. It is highly recommended you configure a custom template for your documents.")
+        private String documentTemplate;
 
     }
 

@@ -54,6 +54,14 @@ public class Hybrid implements Serializable {
     private String embedder;
 
     /**
+     * If 'true', fails when the autoembedding fails. Defaults to 'false'", defaultValue = "false
+     *
+     * @since v1.8
+     */
+    @Schema(description = "if 'true', fails when the autoembedding fails. Defaults to 'false'", defaultValue = "false")
+    private Boolean strict;
+
+    /**
      * Hybrid default object
      * @return Hybrid default
      */

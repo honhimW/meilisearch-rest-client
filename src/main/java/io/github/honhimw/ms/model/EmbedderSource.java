@@ -38,6 +38,18 @@ public enum EmbedderSource implements EnumValue<EmbedderSource> {
      * User provided
      */
     USER_PROVIDED("userProvided"),
+    /**
+     * Rest
+     *
+     * @since v1.8
+     */
+    REST("rest"),
+    /**
+     * Ollama
+     *
+     * @since v1.8
+     */
+    OLLAMA("ollama"),
     ;
 
     private final String source;
