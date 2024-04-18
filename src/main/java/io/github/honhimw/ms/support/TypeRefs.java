@@ -90,6 +90,17 @@ public class TypeRefs {
     }
 
     /**
+     * TaskView type reference.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class TaskViewRef extends TypeRef<TaskView> {
+        /**
+         * Instance.
+         */
+        public static final TaskViewRef INSTANCE = new TaskViewRef();
+    }
+
+    /**
      * String-String Map type reference.
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -131,6 +142,17 @@ public class TypeRefs {
          * Instance.
          */
         public static final PageTaskInfoRef INSTANCE = new PageTaskInfoRef();
+    }
+
+    /**
+     * Paginated TaskView type reference.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class PageTaskViewRef extends TypeRef<Page<TaskView>> {
+        /**
+         * Instance.
+         */
+        public static final PageTaskViewRef INSTANCE = new PageTaskViewRef();
     }
 
     /**

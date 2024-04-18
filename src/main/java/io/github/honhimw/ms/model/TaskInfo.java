@@ -24,6 +24,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * <a href="https://www.meilisearch.com/docs/reference/api/tasks#summarized-task-object">Summarized task object</a>
+ * <p>
+ * When an API request triggers an asynchronous process, Meilisearch returns a summarized task object.
+ *
  * @author hon_him
  * @since 2024-01-02
  */

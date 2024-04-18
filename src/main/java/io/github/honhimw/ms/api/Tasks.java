@@ -14,10 +14,7 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.CancelTasksRequest;
-import io.github.honhimw.ms.model.GetTasksRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.time.Duration;
@@ -39,7 +36,7 @@ public interface Tasks {
      * @return paginated result
      */
     @Operation(method = "GET", tags = "/tasks")
-    Page<TaskInfo> list(GetTasksRequest request);
+    Page<TaskView> list(GetTasksRequest request);
 
     /**
      * Get all tasks
@@ -48,7 +45,7 @@ public interface Tasks {
      * @return paginated result
      */
     @Operation(method = "GET", tags = "/tasks")
-    default Page<TaskInfo> list(Consumer<GetTasksRequest.Builder> builder) {
+    default Page<TaskView> list(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
         builder.accept(_builder);
         return list(_builder.build());
@@ -83,7 +80,7 @@ public interface Tasks {
      * @return the requested task
      */
     @Operation(method = "GET", tags = "/tasks/{taskUid}")
-    TaskInfo get(Integer uid);
+    TaskView get(Integer uid);
 
     /**
      * Cancel any number of enqueued or processing tasks based on their uid, status, type, indexUid,
@@ -117,7 +114,7 @@ public interface Tasks {
      * @param uid task uid
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
-    TaskInfo await(int uid);
+    TaskView await(int uid);
 
     /**
      * Wait for task finish
@@ -127,7 +124,7 @@ public interface Tasks {
      * @param fixedDelay  fixed delay
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
-    TaskInfo await(int uid, int maxAttempts, Duration fixedDelay);
+    TaskView await(int uid, int maxAttempts, Duration fixedDelay);
 
     /**
      * Wait for task finish
@@ -135,7 +132,7 @@ public interface Tasks {
      * @param taskInfo task info
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
-    TaskInfo await(TaskInfo taskInfo);
+    TaskView await(TaskInfo taskInfo);
 
     /**
      * Wait for task finish
@@ -145,26 +142,6 @@ public interface Tasks {
      * @param fixedDelay  fixed delay
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
-    TaskInfo await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay);
-
-    /**
-     * Wait for task finish
-     *
-     * @param uid task uid
-     * @deprecated use {@link #await(int)} instead
-     */
-    @Deprecated
-    void waitForTask(int uid);
-
-    /**
-     * Wait for task finish
-     *
-     * @param uid         task uid
-     * @param maxAttempts max attempts
-     * @param fixedDelay  fixed delay
-     * @deprecated use {@link #await(int, int, Duration)} instead
-     */
-    @Deprecated
-    void waitForTask(int uid, int maxAttempts, Duration fixedDelay);
+    TaskView await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay);
 
 }

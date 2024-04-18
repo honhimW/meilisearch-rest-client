@@ -54,7 +54,7 @@ public class DocumentsTests extends TestBase {
     void save() {
         TaskInfo save = documents.save(movies);
         await(save);
-        TaskInfo taskInfo = getBlockingTasks().get(save.getTaskUid());
+        TaskView taskInfo = getBlockingTasks().get(save.getTaskUid());
         assert taskInfo.getStatus() == TaskStatus.SUCCEEDED;
     }
 

@@ -36,11 +36,11 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
     }
 
     @Override
-    public Mono<Page<TaskInfo>> list(GetTasksRequest request) {
+    public Mono<Page<TaskView>> list(GetTasksRequest request) {
         return get("/tasks", configurer -> {
             Map<String, String> parameters = request.toParameters();
             configurer.params(parameters);
-        }, TypeRefs.PageTaskInfoRef.INSTANCE);
+        }, TypeRefs.PageTaskViewRef.INSTANCE);
     }
 
     @Override
@@ -52,8 +52,8 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
     }
 
     @Override
-    public Mono<TaskInfo> get(Integer uid) {
-        return get(String.format("/tasks/%s", uid), TypeRefs.TaskInfoRef.INSTANCE);
+    public Mono<TaskView> get(Integer uid) {
+        return get(String.format("/tasks/%s", uid), TypeRefs.TaskViewRef.INSTANCE);
     }
 
     @Override
@@ -65,29 +65,29 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
     }
 
     @Override
-    public Mono<TaskInfo> await(int uid) {
+    public Mono<TaskView> await(int uid) {
         return await(uid, _client.config.getAwaitAttempts(), _client.config.getAwaitFixedDelay());
     }
 
     @Override
-    public Mono<TaskInfo> await(int uid, int maxAttempts, Duration fixedDelay) {
+    public Mono<TaskView> await(int uid, int maxAttempts, Duration fixedDelay) {
         boolean awaitExhaustedError = _client.config.isAwaitExhaustedError();
-        Mono<TaskInfo> mono = get(uid)
-            .doOnNext(taskInfo -> {
-                TaskStatus status = taskInfo.getStatus();
+        Mono<TaskView> mono = get(uid)
+            .doOnNext(taskView -> {
+                TaskStatus status = taskView.getStatus();
                 if (status == TaskStatus.ENQUEUED || status == TaskStatus.PROCESSING) {
-                    throw new TaskStateException(taskInfo, "task not completed.");
+                    throw new TaskStateException(taskView, "task not completed.");
                 }
             })
             .retryWhen(RetrySpec.fixedDelay(maxAttempts, fixedDelay)
                 .modifyErrorFilter(throwablePredicate -> throwable -> throwable instanceof TaskStateException)
                 .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> {
                     TaskStateException failure = (TaskStateException) retrySignal.failure();
-                    return new TaskStateException(failure.getTaskInfo(), String.format("task not completed after: %d attempts with fixed delay: %s", maxAttempts, fixedDelay));
+                    return new TaskStateException(failure.getTaskView(), String.format("task not completed after: %d attempts with fixed delay: %s", maxAttempts, fixedDelay));
                 })
             );
         if (!awaitExhaustedError) {
-            mono = mono.onErrorResume(TaskStateException.class::isInstance, throwable -> Mono.just(((TaskStateException) throwable).getTaskInfo()));
+            mono = mono.onErrorResume(TaskStateException.class::isInstance, throwable -> Mono.just(((TaskStateException) throwable).getTaskView()));
         }
         return mono;
     }

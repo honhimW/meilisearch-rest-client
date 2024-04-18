@@ -14,7 +14,7 @@
 
 package io.github.honhimw.ms.model.exception;
 
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.TaskView;
 import lombok.Getter;
 
 /**
@@ -30,16 +30,16 @@ public class TaskStateException extends IllegalStateException {
     /**
      * Current task info
      */
-    private final TaskInfo taskInfo;
+    private final TaskView taskView;
 
     /**
      * Constructs an TaskStateException with no detail message.
      * A detail message is a String that describes this particular exception.
      *
-     * @param taskInfo the task info
+     * @param taskView the task info
      */
-    public TaskStateException(TaskInfo taskInfo) {
-        this.taskInfo = taskInfo;
+    public TaskStateException(TaskView taskView) {
+        this.taskView = taskView;
     }
 
     /**
@@ -47,17 +47,17 @@ public class TaskStateException extends IllegalStateException {
      * message.  A detail message is a String that describes this particular
      * exception.
      *
-     * @param taskInfo the task info
+     * @param taskView the task info
      * @param message  the String that contains a detailed message
      */
-    public TaskStateException(TaskInfo taskInfo, String message) {
+    public TaskStateException(TaskView taskView, String message) {
         super(message);
-        this.taskInfo = taskInfo;
+        this.taskView = taskView;
     }
 
     @Override
     public String getLocalizedMessage() {
-        return String.format("task[%d] in state: %s. message: %s", taskInfo.getTaskUid(), taskInfo.getStatus(), getMessage());
+        return String.format("task[%d] in state: %s. message: %s", taskView.getUid(), taskView.getStatus(), getMessage());
     }
 
 }

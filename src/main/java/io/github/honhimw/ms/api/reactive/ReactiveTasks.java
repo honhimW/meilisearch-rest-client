@@ -14,10 +14,7 @@
 
 package io.github.honhimw.ms.api.reactive;
 
-import io.github.honhimw.ms.model.CancelTasksRequest;
-import io.github.honhimw.ms.model.GetTasksRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
@@ -40,7 +37,7 @@ public interface ReactiveTasks {
      * @return paginated result
      */
     @Operation(method = "GET", tags = "/tasks")
-    Mono<Page<TaskInfo>> list(GetTasksRequest request);
+    Mono<Page<TaskView>> list(GetTasksRequest request);
 
     /**
      * Get all tasks
@@ -49,7 +46,7 @@ public interface ReactiveTasks {
      * @return paginated result
      */
     @Operation(method = "GET", tags = "/tasks")
-    default Mono<Page<TaskInfo>> list(Consumer<GetTasksRequest.Builder> builder) {
+    default Mono<Page<TaskView>> list(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
         builder.accept(_builder);
         return list(_builder.build());
@@ -84,7 +81,7 @@ public interface ReactiveTasks {
      * @return the requested task
      */
     @Operation(method = "GET", tags = "/tasks/{taskUid}")
-    Mono<TaskInfo> get(Integer uid);
+    Mono<TaskView> get(Integer uid);
 
     /**
      * Cancel any number of enqueued or processing tasks based on their uid, status, type, indexUid,
@@ -118,7 +115,7 @@ public interface ReactiveTasks {
      * @param uid task uid
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
      */
-    Mono<TaskInfo> await(int uid);
+    Mono<TaskView> await(int uid);
 
     /**
      * Wait for task to complete
@@ -128,7 +125,7 @@ public interface ReactiveTasks {
      * @param fixedDelay  fixed delay
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
      */
-    Mono<TaskInfo> await(int uid, int maxAttempts, Duration fixedDelay);
+    Mono<TaskView> await(int uid, int maxAttempts, Duration fixedDelay);
 
     /**
      * Wait for task to complete, default 100 attempts with 50ms delay.
@@ -136,7 +133,7 @@ public interface ReactiveTasks {
      * @param taskInfo task info
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
      */
-    default Mono<TaskInfo> await(TaskInfo taskInfo) {
+    default Mono<TaskView> await(TaskInfo taskInfo) {
         return await(taskInfo.getTaskUid());
     }
 
@@ -148,34 +145,8 @@ public interface ReactiveTasks {
      * @param fixedDelay  fixed delay
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
      */
-    default Mono<TaskInfo> await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay) {
+    default Mono<TaskView> await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay) {
         return await(taskInfo.getTaskUid(), maxAttempts, fixedDelay);
-    }
-
-    /**
-     * Wait for task to complete
-     *
-     * @param uid task uid
-     * @return None
-     * @deprecated use {@link #await(int)} instead, will be removed since 1.8.0.0
-     */
-    @Deprecated
-    default Mono<Void> waitForTask(int uid) {
-        return await(uid).then();
-    }
-
-    /**
-     * Wait for task to complete
-     *
-     * @param uid         task uid
-     * @param maxAttempts max attempts
-     * @param fixedDelay  fixed delay
-     * @return None
-     * @deprecated use {@link #await(int, int, Duration)} instead, will be removed since 1.8.0.0
-     */
-    @Deprecated
-    default Mono<Void> waitForTask(int uid, int maxAttempts, Duration fixedDelay) {
-        return await(uid, maxAttempts, fixedDelay).then();
     }
 
 }

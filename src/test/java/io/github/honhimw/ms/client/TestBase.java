@@ -22,6 +22,7 @@ import io.github.honhimw.ms.api.reactive.ReactiveTasks;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.TaskView;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,11 +68,11 @@ public class TestBase {
         );
     }
 
-    protected static Mono<TaskInfo> await(Mono<TaskInfo> taskInfo) {
+    protected static Mono<TaskView> await(Mono<TaskInfo> taskInfo) {
         return taskInfo.flatMap(taskInfo1 -> getReactiveTasks().await(taskInfo1.getTaskUid()));
     }
 
-    protected static TaskInfo await(TaskInfo taskInfo) {
+    protected static TaskView await(TaskInfo taskInfo) {
         return getBlockingTasks().await(taskInfo.getTaskUid());
     }
 

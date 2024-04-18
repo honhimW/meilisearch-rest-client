@@ -85,7 +85,7 @@ public class ClientTests extends TestBase {
     void tasks() {
         TaskInfo deleteSucceededTasks = blockingClient.tasks(tasks -> tasks.delete(builder -> builder.statuses(toList(TaskStatus.SUCCEEDED))));
         await(deleteSucceededTasks);
-        Page<TaskInfo> getSucceededTasks = blockingClient.tasks(tasks -> tasks.list(builder -> builder.statuses(toList(TaskStatus.SUCCEEDED))));
+        Page<TaskView> getSucceededTasks = blockingClient.tasks(tasks -> tasks.list(builder -> builder.statuses(toList(TaskStatus.SUCCEEDED))));
         assert getSucceededTasks.getLimit() == 20;
     }
 

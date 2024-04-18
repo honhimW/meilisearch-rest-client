@@ -28,11 +28,11 @@
 
 package io.github.honhimw.ms.internal.reactive;
 
-import io.github.honhimw.ms.NonNullApi;
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
 import io.github.honhimw.ms.api.reactive.ReactiveTasks;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
-import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.model.TaskStatus;
+import io.github.honhimw.ms.model.TaskView;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
@@ -63,19 +63,19 @@ public class RetryTests {
 
         AtomicInteger count = new AtomicInteger(0);
 
-        TaskInfo unfinished = new TaskInfo();
-        unfinished.setTaskUid(1);
+        TaskView unfinished = new TaskView();
+        unfinished.setUid(1);
         unfinished.setStatus(TaskStatus.ENQUEUED);
 
-        TaskInfo finished = new TaskInfo();
-        finished.setTaskUid(1);
+        TaskView finished = new TaskView();
+        finished.setUid(1);
         finished.setStatus(TaskStatus.CANCELED);
 
         ReactiveTasks tasks;
         tasks = new DelegateReactiveTasks((ReactiveMSearchClientImpl) reactiveClient) {
             @NonNull
             @Override
-            public Mono<TaskInfo> get(@NonNull Integer uid) {
+            public Mono<TaskView> get(@NonNull Integer uid) {
                 int i = count.getAndIncrement();
                 if (i < 8) {
                     return Mono.just(unfinished);
@@ -86,15 +86,15 @@ public class RetryTests {
         };
 
         Throwable t = null;
-        TaskInfo taskInfo = null;
+        TaskView taskView = null;
         try {
-            taskInfo = tasks.await(1).block();
+            taskView = tasks.await(1).block();
         } catch (Exception e) {
             t = e;
         }
         assert Objects.isNull(t) : t.toString();
-        assert Objects.nonNull(taskInfo);
-        assert taskInfo.getStatus() == TaskStatus.ENQUEUED;
+        assert Objects.nonNull(taskView);
+        assert taskView.getStatus() == TaskStatus.ENQUEUED;
     }
 
     @Test
@@ -108,15 +108,15 @@ public class RetryTests {
             .jsonHandler(new JacksonJsonHandler())
         );
 
-        TaskInfo unfinished = new TaskInfo();
-        unfinished.setTaskUid(1);
+        TaskView unfinished = new TaskView();
+        unfinished.setUid(1);
         unfinished.setStatus(TaskStatus.ENQUEUED);
 
         ReactiveTasks tasks;
         tasks = new DelegateReactiveTasks((ReactiveMSearchClientImpl) reactiveClient) {
             @NonNull
             @Override
-            public Mono<TaskInfo> get(@NonNull Integer uid) {
+            public Mono<TaskView> get(@NonNull Integer uid) {
                 return Mono.just(unfinished);
             }
         };

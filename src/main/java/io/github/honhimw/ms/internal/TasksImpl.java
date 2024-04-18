@@ -16,10 +16,7 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.api.Tasks;
 import io.github.honhimw.ms.api.reactive.ReactiveTasks;
-import io.github.honhimw.ms.model.CancelTasksRequest;
-import io.github.honhimw.ms.model.GetTasksRequest;
-import io.github.honhimw.ms.model.Page;
-import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.time.Duration;
@@ -38,7 +35,7 @@ class TasksImpl implements Tasks {
     }
 
     @Override
-    public Page<TaskInfo> list(GetTasksRequest request) {
+    public Page<TaskView> list(GetTasksRequest request) {
         return ReactorUtils.blockNonNull(_reactive.list(request));
     }
 
@@ -48,7 +45,7 @@ class TasksImpl implements Tasks {
     }
 
     @Override
-    public TaskInfo get(Integer uid) {
+    public TaskView get(Integer uid) {
         return ReactorUtils.blockNonNull(_reactive.get(uid));
     }
 
@@ -58,34 +55,23 @@ class TasksImpl implements Tasks {
     }
 
     @Override
-    public TaskInfo await(int uid) {
+    public TaskView await(int uid) {
         return ReactorUtils.blockNonNull(_reactive.await(uid));
     }
 
     @Override
-    public TaskInfo await(int uid, int maxAttempts, Duration fixedDelay) {
+    public TaskView await(int uid, int maxAttempts, Duration fixedDelay) {
         return ReactorUtils.blockNonNull(_reactive.await(uid, maxAttempts, fixedDelay));
     }
 
     @Override
-    public TaskInfo await(TaskInfo taskInfo) {
+    public TaskView await(TaskInfo taskInfo) {
         return ReactorUtils.blockNonNull(_reactive.await(taskInfo));
     }
 
     @Override
-    public TaskInfo await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay) {
+    public TaskView await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay) {
         return ReactorUtils.blockNonNull(_reactive.await(taskInfo, maxAttempts, fixedDelay));
     }
 
-    @Deprecated
-    @Override
-    public void waitForTask(int uid) {
-        _reactive.await(uid).block();
-    }
-
-    @Deprecated
-    @Override
-    public void waitForTask(int uid, int maxAttempts, Duration fixedDelay) {
-        _reactive.await(uid, maxAttempts, fixedDelay).block();
-    }
 }

@@ -20,6 +20,7 @@ import io.github.honhimw.ms.client.TestBase;
 import io.github.honhimw.ms.model.SearchResponse;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.TaskStatus;
+import io.github.honhimw.ms.model.TaskView;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ public class Issues4525Tests extends TestBase {
         await(createIndex);
         TypedDocuments<Person> documents = single.documents(Person.class);
         TaskInfo save = documents.save(people);
-        TaskInfo await = await(save);
+        TaskView await = await(save);
         assert await.getStatus().equals(TaskStatus.SUCCEEDED);
         {
             SearchResponse<Person> personSearchResponse = single.search(Person.class).find("");
