@@ -180,10 +180,10 @@ public class Setting implements Serializable {
     private Map<String, ? extends Embedder> embedders;
 
     /**
-     * To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 150ms.
-     * The default value of the searchCutoffMs setting is null and corresponds to 150ms.
+     * To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 1500ms.
+     * The default value of the searchCutoffMs setting is null and corresponds to 1500ms.
      */
-    @Schema(description = "To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 150ms.", defaultValue = "null")
+    @Schema(description = "To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 1500ms.", defaultValue = "null")
     private Integer searchCutoffMs;
 
     private Setting(Builder builder) {
