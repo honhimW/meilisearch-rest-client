@@ -25,22 +25,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <a style="font-size:large" href="https://www.meilisearch.com/docs/reference/api/multi_search#response">MultiSearch response</a>
+ * MultiSearch response with indexUid.
  *
  * @author hon_him
- * @since 2024-01-02
+ * @since 2024-04-26
  */
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class MultiSearchResponse implements Serializable {
+public class SearchWithIndexResponse<T> extends SearchResponse<T> {
 
     /**
-     * Results of the search queries in the same order they were requested in
+     * uid of the requested index
      */
-    @Schema(description = "Results of the search queries in the same order they were requested in")
-    private List<SearchWithIndexResponse<Map<String, Object>>> results;
+    @Schema(description = "uid of the requested index")
+    private String indexUid;
 
 }
