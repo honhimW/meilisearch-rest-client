@@ -21,6 +21,7 @@ import io.github.honhimw.ms.api.TypedDetailsSearch;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -169,6 +170,7 @@ public class SearchTests extends TestBase {
             .build());
         assert CollectionUtils.isNotEmpty(multiSearchResponse.getResults()) && multiSearchResponse.getResults().size() == 1;
         assert multiSearchResponse.getResults().get(0).getEstimatedTotalHits() > 0;
+        assert StringUtils.equal(INDEX, multiSearchResponse.getResults().get(0).getIndexUid());
     }
 
     @AfterEach
