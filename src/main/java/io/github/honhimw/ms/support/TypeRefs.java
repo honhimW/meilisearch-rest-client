@@ -68,6 +68,17 @@ public class TypeRefs {
     }
 
     /**
+     * String type reference.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class LongRef extends TypeRef<Long> {
+        /**
+         * Instance.
+         */
+        public static final LongRef INSTANCE = new LongRef();
+    }
+
+    /**
      * String List type reference.
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

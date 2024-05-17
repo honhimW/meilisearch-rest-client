@@ -95,6 +95,11 @@ class SettingsImpl implements Settings {
     }
 
     @Override
+    public CutoffSettings cutoff() {
+        return new CutoffSettingsImpl(_settings.cutoff());
+    }
+
+    @Override
     public SeparatorTokensSettings separatorTokens() {
         return new SeparatorTokensSettingsImpl(_settings.separatorTokens());
     }
