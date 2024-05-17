@@ -249,6 +249,25 @@ public interface Settings {
     }
 
     /**
+     * Get the cutoff settings of an index.
+     *
+     * @return {@link CutoffSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/search-cutoff-ms")
+    CutoffSettings cutoff();
+
+    /**
+     * Applies the given operation to the cutoff settings.
+     *
+     * @param operation operation
+     * @param <R>       return type
+     * @return the operation result
+     */
+    default <R> R cutoff(Function<CutoffSettings, R> operation) {
+        return operation.apply(cutoff());
+    }
+
+    /**
      * Get the separator tokens settings of an index.
      *
      * @return {@link SeparatorTokensSettings} operator

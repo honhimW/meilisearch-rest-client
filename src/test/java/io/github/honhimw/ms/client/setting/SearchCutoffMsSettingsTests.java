@@ -42,14 +42,12 @@
 
 package io.github.honhimw.ms.client.setting;
 
-import io.github.honhimw.ms.model.Setting;
+import io.github.honhimw.ms.api.CutoffSettings;
 import io.github.honhimw.ms.model.TaskInfo;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
-import java.util.Objects;
+import java.time.Duration;
+import java.util.Optional;
 
 /**
  * @author hon_him
@@ -59,32 +57,37 @@ import java.util.Objects;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SearchCutoffMsSettingsTests extends SettingTestBase {
 
+    private CutoffSettings _blokcing;
+
+    @BeforeEach
+    protected void initIndexes() {
+        _blokcing = blockingSettings.cutoff();
+    }
+
     @Order(0)
     @Test
     void get() {
-        Setting setting = blockingSettings.get();
-        Integer searchCutoffMs = setting.getSearchCutoffMs();
-        assert Objects.isNull(searchCutoffMs) : searchCutoffMs;
+        Optional<Duration> duration = _blokcing.get();
+        assert !duration.isPresent() : duration.get();
     }
 
     @Order(1)
     @Test
     void update() {
         int ms = 30;
-        TaskInfo update = blockingSettings.update(Setting.builder().searchCutoffMs(ms).build());
+        TaskInfo update = _blokcing.update(Duration.ofMillis(ms));
         await(update);
-        Integer searchCutoffMs = blockingSettings.get().getSearchCutoffMs();
-        assert Objects.nonNull(searchCutoffMs) && searchCutoffMs == ms;
+        Optional<Duration> duration = _blokcing.get();
+        assert duration.isPresent() && duration.get().toMillis() == 30;
     }
 
     @Order(2)
     @Test
     void reset() {
-        TaskInfo reset = blockingSettings.reset();
+        TaskInfo reset = _blokcing.reset();
         await(reset);
-        Setting setting = blockingSettings.get();
-        Integer ms = setting.getSearchCutoffMs();
-        assert Objects.isNull(ms);
+        Optional<Duration> duration = _blokcing.get();
+        assert !duration.isPresent();
     }
 
 }

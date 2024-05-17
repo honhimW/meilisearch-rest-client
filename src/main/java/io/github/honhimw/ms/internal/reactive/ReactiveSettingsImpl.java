@@ -116,6 +116,11 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
     }
 
     @Override
+    public ReactiveCutoffSettings cutoff() {
+        return new ReactiveCutoffSettingsImpl(this);
+    }
+
+    @Override
     public ReactiveStopWordsSettings stopWords() {
         return new ReactiveStopWordsSettingsImpl(this);
     }

@@ -307,6 +307,25 @@ public interface ReactiveSettings {
     }
 
     /**
+     * Get the cutoff settings of current index.
+     *
+     * @return {@link ReactiveCutoffSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/search-cutoff-ms")
+    ReactiveCutoffSettings cutoff();
+
+    /**
+     * Applies the given operation to the cutoff settings of the index.
+     *
+     * @param operation operation
+     * @param <R>       return type
+     * @return the result of the operation
+     */
+    default <R> R cutoff(Function<ReactiveCutoffSettings, R> operation) {
+        return operation.apply(cutoff());
+    }
+
+    /**
      * Get the stop words settings of current index.
      *
      * @return {@link ReactiveStopWordsSettings} operator
