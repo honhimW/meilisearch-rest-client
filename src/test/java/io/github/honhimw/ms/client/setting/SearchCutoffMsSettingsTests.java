@@ -57,17 +57,17 @@ import java.util.Optional;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SearchCutoffMsSettingsTests extends SettingTestBase {
 
-    private CutoffSettings _blokcing;
+    private CutoffSettings _blocking;
 
     @BeforeEach
     protected void initIndexes() {
-        _blokcing = blockingSettings.cutoff();
+        _blocking = blockingSettings.cutoff();
     }
 
     @Order(0)
     @Test
     void get() {
-        Optional<Duration> duration = _blokcing.get();
+        Optional<Duration> duration = _blocking.get();
         assert !duration.isPresent() : duration.get();
     }
 
@@ -75,18 +75,18 @@ public class SearchCutoffMsSettingsTests extends SettingTestBase {
     @Test
     void update() {
         int ms = 30;
-        TaskInfo update = _blokcing.update(Duration.ofMillis(ms));
+        TaskInfo update = _blocking.update(Duration.ofMillis(ms));
         await(update);
-        Optional<Duration> duration = _blokcing.get();
+        Optional<Duration> duration = _blocking.get();
         assert duration.isPresent() && duration.get().toMillis() == 30;
     }
 
     @Order(2)
     @Test
     void reset() {
-        TaskInfo reset = _blokcing.reset();
+        TaskInfo reset = _blocking.reset();
         await(reset);
-        Optional<Duration> duration = _blokcing.get();
+        Optional<Duration> duration = _blocking.get();
         assert !duration.isPresent();
     }
 
