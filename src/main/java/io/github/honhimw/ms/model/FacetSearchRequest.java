@@ -52,7 +52,7 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
      *
      */
     @Schema(description = "Strategy used to match query terms within documents")
-    private String matchingStrategy;
+    private MatchingStrategy matchingStrategy;
 
     /**
      * Restrict search to the specified attributes
@@ -85,7 +85,7 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
         private String q;
         private String facetName;
         private String facetQuery;
-        private String matchingStrategy;
+        private MatchingStrategy matchingStrategy;
         private List<String> attributesToSearchOn;
         private String filter;
 
@@ -131,7 +131,7 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
          * @param val the {@code matchingStrategy} to set
          * @return a reference to this Builder
          */
-        public Builder matchingStrategy(String val) {
+        public Builder matchingStrategy(MatchingStrategy val) {
             matchingStrategy = val;
             return this;
         }
