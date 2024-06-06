@@ -30,10 +30,7 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.api.TypedSearch;
 import io.github.honhimw.ms.api.reactive.ReactiveTypedSearch;
-import io.github.honhimw.ms.model.FacetSearchRequest;
-import io.github.honhimw.ms.model.FacetSearchResponse;
-import io.github.honhimw.ms.model.SearchRequest;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
 
 import java.util.function.Consumer;
@@ -74,5 +71,15 @@ class TypedSearchImpl<T> implements TypedSearch<T> {
     @Override
     public FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
         return ReactorUtils.blockNonNull(_search.facetSearch(builder));
+    }
+
+    @Override
+    public SearchResponse<T> similar(SimilarSearchRequest request) {
+        return ReactorUtils.blockNonNull(_search.similar(request));
+    }
+
+    @Override
+    public SearchResponse<T> similar(Consumer<SimilarSearchRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_search.similar(builder));
     }
 }

@@ -21,8 +21,11 @@ import io.github.honhimw.ms.api.TypedDetailsSearch;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.EnabledOnVersion;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledIf;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import java.util.List;
 import java.util.Map;
@@ -171,6 +174,14 @@ public class SearchTests extends TestBase {
         assert CollectionUtils.isNotEmpty(multiSearchResponse.getResults()) && multiSearchResponse.getResults().size() == 1;
         assert multiSearchResponse.getResults().get(0).getEstimatedTotalHits() > 0;
         assert StringUtils.equal(INDEX, multiSearchResponse.getResults().get(0).getIndexUid());
+    }
+
+    @Order(7)
+    @Test
+    @EnabledOnVersion(value = {"1.9"})
+    void similar() {
+        SearchResponse<Movie> similar = search.similar(builder -> builder.id("2"), TypeRef.of(Movie.class));
+        System.out.println(similar.getTotalHits());
     }
 
     @AfterEach
