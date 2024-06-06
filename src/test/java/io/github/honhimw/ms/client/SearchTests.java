@@ -180,8 +180,12 @@ public class SearchTests extends TestBase {
     @Test
     @EnabledOnVersion(value = {"1.9"})
     void similar() {
-        SearchResponse<Movie> similar = search.similar(builder -> builder.id("2"), TypeRef.of(Movie.class));
-        System.out.println(similar.getTotalHits());
+        SimilarSearchRequest request = new SimilarSearchRequest();
+        request.setId("2");
+        search.similar(request, TypeRef.of(Movie.class));
+        search.similar(request);
+        search.similar(builder -> builder.id("2"), TypeRef.of(Movie.class));
+        search.similar(builder -> builder.id("2"));
     }
 
     @AfterEach
