@@ -17,10 +17,7 @@ package io.github.honhimw.ms.internal.reactive;
 import io.github.honhimw.ms.api.reactive.ReactiveSearch;
 import io.github.honhimw.ms.json.ComplexTypeRef;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.FacetSearchRequest;
-import io.github.honhimw.ms.model.FacetSearchResponse;
-import io.github.honhimw.ms.model.SearchRequest;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.TypeRefs;
 import reactor.core.publisher.Mono;
 
@@ -84,5 +81,13 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
         return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> configurer
                 .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
             , TypeRefs.of(FacetSearchResponse.class));
+    }
+
+    @Override
+    public <T> Mono<SearchResponse<T>> similar(SimilarSearchRequest request, TypeRef<T> typeRef) {
+        return post(String.format("/indexes/%s/similar", indexUid), configurer -> configurer
+                .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))
+            , new ComplexTypeRef<SearchResponse<T>>(typeRef) {
+            });
     }
 }

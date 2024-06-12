@@ -134,7 +134,7 @@ public class SearchRequest extends FilterableAttributesRequest {
      * <em style="color:green">all</em>:  only returns documents that contain all query terms. Meilisearch will not match any more documents even if there aren't enough to meet the requested limit.
      */
     @Schema(description = "Strategy used to match query terms within documents", defaultValue = "last")
-    private String matchingStrategy;
+    private MatchingStrategy matchingStrategy;
 
     /**
      * Display the global ranking score of a document", defaultValue = "false
@@ -222,7 +222,7 @@ public class SearchRequest extends FilterableAttributesRequest {
         private String highlightPostTag;
         private Boolean showMatchesPosition;
         private List<String> sort;
-        private String matchingStrategy;
+        private MatchingStrategy matchingStrategy;
         private Boolean showRankingScore;
         private Boolean showRankingScoreDetails;
         private List<String> attributesToSearchOn;
@@ -414,7 +414,7 @@ public class SearchRequest extends FilterableAttributesRequest {
          * @param val the {@code matchingStrategy} to set
          * @return a reference to this Builder
          */
-        public Builder matchingStrategy(String val) {
+        public Builder matchingStrategy(MatchingStrategy val) {
             matchingStrategy = val;
             return this;
         }

@@ -21,8 +21,12 @@ import io.github.honhimw.ms.api.TypedDetailsSearch;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.EnabledOnVersion;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledIf;
+import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Map;
@@ -177,6 +181,35 @@ public class SearchTests extends TestBase {
     void resetSetting() {
         TaskInfo reset = indexes.settings(INDEX).reset();
         await(reset);
+    }
+
+    @Disabled("I don't have any AI-stuff, so I just disable it. ┌( ´_ゝ` )┐")
+    @EnabledOnVersion("1.8")
+    @Nested
+    class VectorSearch {
+
+        @BeforeEach
+        void initFeatures() {
+            ExperimentalFeatures configure = blockingClient.experimentalFeatures().configure(builder -> builder.vectorStore(true));
+            assert configure.getVectorStore();
+        }
+
+        @Test
+        @EnabledOnVersion("1.9")
+        void similar() {
+            SimilarSearchRequest request = new SimilarSearchRequest();
+            request.setId("2");
+            search.similar(request, TypeRef.of(Movie.class));
+            search.similar(request);
+            search.similar(builder -> builder.id("2"), TypeRef.of(Movie.class));
+            search.similar(builder -> builder.id("2"));
+        }
+
+        @AfterEach
+        void resetFeatures() {
+            ExperimentalFeatures configure = blockingClient.experimentalFeatures().configure(builder -> builder.vectorStore(false));
+            assert configure.getVectorStore();
+        }
     }
 
 }

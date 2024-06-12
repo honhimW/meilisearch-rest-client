@@ -19,6 +19,8 @@ import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.json.TypeRef;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.Charset;
@@ -31,6 +33,8 @@ import java.util.function.Consumer;
  */
 
 abstract class AbstractReactiveImpl {
+
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected final ReactiveMSearchClientImpl _client;
 
@@ -127,6 +131,9 @@ abstract class AbstractReactiveImpl {
                 }
             })
             .onErrorResume(throwable -> {
+                if (log.isDebugEnabled()) {
+                    log.debug("Process failed", throwable);
+                }
                 if (throwable instanceof HttpFailureException) {
                     HttpFailureException httpFailureException = (HttpFailureException) throwable;
                     return httpFailureException.getStatusCode() == 404;

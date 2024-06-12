@@ -190,7 +190,11 @@ testing {
                 all {
                     testTask.configure {
                         testLogging {
-                            events 'passed', 'skipped', 'failed'
+                            events(
+//                                    'passed',
+                                    'skipped',
+                                    'failed'
+                            )
                         }
                         finalizedBy jacocoTestReport
                     }

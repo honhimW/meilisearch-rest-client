@@ -14,10 +14,7 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.FacetSearchRequest;
-import io.github.honhimw.ms.model.FacetSearchResponse;
-import io.github.honhimw.ms.model.SearchRequest;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.function.Consumer;
@@ -86,5 +83,25 @@ public interface TypedSearch<T> {
      */
     @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder);
+
+    /**
+     * To retrieve similar documents in your datasets, two new routes have been introduced
+     *
+     * @param request similar request
+     * @return search result
+     */
+    SearchResponse<T> similar(SimilarSearchRequest request);
+
+    /**
+     * To retrieve similar documents in your datasets, two new routes have been introduced
+     *
+     * @param builder similar request builder
+     * @return search result
+     */
+    default SearchResponse<T> similar(Consumer<SimilarSearchRequest.Builder> builder) {
+        SimilarSearchRequest.Builder _builder = SimilarSearchRequest.builder();
+        builder.accept(_builder);
+        return similar(_builder.build());
+    }
 
 }

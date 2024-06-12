@@ -37,6 +37,8 @@ import java.util.*;
 
 public class TestBase {
 
+    public static final String VERSION_KEY = "meilisearch.version";
+
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected static String INDEX = "movie_test";
@@ -66,6 +68,7 @@ public class TestBase {
             .awaitAttempts(200)
             .jsonHandler(jsonHandler)
         );
+        System.setProperty(VERSION_KEY, blockingClient.version().getPkgVersion());
     }
 
     protected static Mono<TaskView> await(Mono<TaskInfo> taskInfo) {
@@ -74,6 +77,10 @@ public class TestBase {
 
     protected static TaskView await(TaskInfo taskInfo) {
         return getBlockingTasks().await(taskInfo.getTaskUid());
+    }
+
+    protected static String pkgVersion() {
+        return System.getProperty(VERSION_KEY);
     }
 
     @SafeVarargs

@@ -14,11 +14,10 @@
 
 package io.github.honhimw.ms.api.reactive;
 
+import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
-import io.github.honhimw.ms.model.FacetSearchRequest;
-import io.github.honhimw.ms.model.FacetSearchResponse;
-import io.github.honhimw.ms.model.SearchRequest;
-import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.model.*;
+import io.github.honhimw.ms.support.TypeRefs;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
@@ -166,6 +165,58 @@ public interface ReactiveSearch {
         FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();
         builder.accept(_builder);
         return facetSearch(_builder.build());
+    }
+
+    /**
+     * To retrieve similar documents in your datasets, two new routes have been introduced
+     *
+     * @param request similar request
+     * @return search result
+     */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/similar")
+    default Mono<SearchResponse<Map<String, Object>>> similar(SimilarSearchRequest request) {
+        return similar(request, TypeRefs.StringObjectMapRef.INSTANCE);
+    }
+
+    /**
+     * To retrieve similar documents in your datasets, two new routes have been introduced
+     *
+     * @param builder request builder
+     * @return search result
+     */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
+    default Mono<SearchResponse<Map<String, Object>>> similar(Consumer<SimilarSearchRequest.Builder> builder) {
+        SimilarSearchRequest.Builder _builder = SimilarSearchRequest.builder();
+        builder.accept(_builder);
+        return similar(builder);
+    }
+
+    /**
+     * To retrieve similar documents in your datasets, two new routes have been introduced
+     *
+     * @param request similar request
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return search result
+     */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
+    <T> Mono<SearchResponse<T>> similar(SimilarSearchRequest request, TypeRef<T> typeRef);
+
+    /**
+     * To retrieve similar documents in your datasets, two new routes have been introduced
+     *
+     * @param builder request builder
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return search result
+     */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
+    default <T> Mono<SearchResponse<T>> similar(Consumer<SimilarSearchRequest.Builder> builder, TypeRef<T> typeRef) {
+        SimilarSearchRequest.Builder _builder = SimilarSearchRequest.builder();
+        builder.accept(_builder);
+        SimilarSearchRequest request = _builder.build();
+        return similar(request, typeRef);
     }
 
 }
