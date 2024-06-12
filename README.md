@@ -48,7 +48,7 @@ $ ./gradlew publishToMavenLocal
 
 ```groovy
 // Gradle
-implementation 'io.github.honhimw:meilisearch-rest-client:1.8.0.1'
+implementation 'io.github.honhimw:meilisearch-rest-client:1.9.0.0'
 ```
 
 ```xml
@@ -56,7 +56,7 @@ implementation 'io.github.honhimw:meilisearch-rest-client:1.8.0.1'
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.8.0.1</version>
+    <version>1.9.0.0</version>
 </dependency>
 ```
 
