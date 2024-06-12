@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.api;
 
+import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.TypeRefs;
@@ -156,6 +157,7 @@ public interface Search {
      * @param request similar request
      * @return search result
      */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     @Operation(method = "POST", tags = "/indexes/{indexUid}/similar")
     default SearchResponse<Map<String, Object>> similar(SimilarSearchRequest request) {
         return similar(request, TypeRefs.StringObjectMapRef.INSTANCE);
@@ -167,6 +169,7 @@ public interface Search {
      * @param builder request builder
      * @return search result
      */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     default SearchResponse<Map<String, Object>> similar(Consumer<SimilarSearchRequest.Builder> builder) {
         SimilarSearchRequest.Builder _builder = SimilarSearchRequest.builder();
         builder.accept(_builder);
@@ -181,6 +184,7 @@ public interface Search {
      * @param <T>     document type
      * @return search result
      */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     <T> SearchResponse<T> similar(SimilarSearchRequest request, TypeRef<T> typeRef);
 
     /**
@@ -191,6 +195,7 @@ public interface Search {
      * @param <T>     document type
      * @return search result
      */
+    @Experimental(features = Experimental.Features.VECTOR_SEARCH)
     default <T> SearchResponse<T> similar(Consumer<SimilarSearchRequest.Builder> builder, TypeRef<T> typeRef) {
         SimilarSearchRequest.Builder _builder = SimilarSearchRequest.builder();
         builder.accept(_builder);
