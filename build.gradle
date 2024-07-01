@@ -18,10 +18,10 @@ version = '1.9.0.0' // API docs version plus '.x(-SNAPSHOT/RC.x)?'
 description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
 def title = 'Meilisearch rest client for java'
-def reactorVersion = '2023.0.6'
+def reactorVersion = '2023.0.7'
 def jacksonVersion = '2.17.1'
 def gsonVersion = '2.11.0'
-def lombokVersion = '1.18.32'
+def lombokVersion = '1.18.34'
 def slf4jVersion = '2.0.13'
 
 apply plugin: 'idea'
@@ -184,7 +184,7 @@ testing {
         test {
             useJUnitJupiter()
             dependencies {
-                implementation platform('org.junit:junit-bom:5.10.2')
+                implementation platform('org.junit:junit-bom:5.10.3')
             }
             targets {
                 all {
