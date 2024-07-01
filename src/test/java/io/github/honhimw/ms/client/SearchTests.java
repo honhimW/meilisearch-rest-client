@@ -28,9 +28,7 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author hon_him
@@ -175,6 +173,37 @@ public class SearchTests extends TestBase {
         assert CollectionUtils.isNotEmpty(multiSearchResponse.getResults()) && multiSearchResponse.getResults().size() == 1;
         assert multiSearchResponse.getResults().get(0).getEstimatedTotalHits() > 0;
         assert StringUtils.equal(INDEX, multiSearchResponse.getResults().get(0).getIndexUid());
+    }
+
+    @Order(7)
+    @Test
+    void distinctOnSearchTime() {
+        TaskInfo update = indexes.settings(INDEX).filterableAttributes().update(toList("director.gender"));
+        await(update);
+        SearchResponse<Movie> response = search.find(builder -> builder.q("male").distinct("director.gender"), Movie.class);
+        List<Movie> hits = response.getHits();
+        Set<String> set = new HashSet<>();
+        for (Movie hit : hits) {
+            String s = Optional.ofNullable(hit.getGenres()).flatMap(strings -> strings.stream().findFirst()).orElse(null);
+            assert !set.contains(s): "repeated: " + s;
+            set.add(s);
+        }
+    }
+
+    @Order(8)
+    @Test
+    void rankingScoreThreshold() {
+        TypedDetailsSearch<Movie> movieTypedDetailsSearch = indexes.searchWithDetails(INDEX, Movie.class);
+
+        SearchDetailsResponse<Movie> searchDetailsResponse = movieTypedDetailsSearch.find(builder -> builder
+            .q("2")
+            .showRankingScore(true)
+            .rankingScoreThreshold(0.5));
+        List<HitDetails<Movie>> hits = searchDetailsResponse.getHits();
+        for (HitDetails<Movie> hit : hits) {
+            Double rankingScore = hit.getDetails().get_rankingScore();
+            assert rankingScore >= 0.5;
+        }
     }
 
     @AfterEach

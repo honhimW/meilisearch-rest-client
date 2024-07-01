@@ -168,6 +168,21 @@ public class SearchRequest extends FilterableAttributesRequest {
     @Schema(description = "must be an array of numbers indicating the search vector. You must generate these yourself when using vector search with user-provided embeddings.")
     private List<Number> vector;
 
+    /**
+     * @since v1.9.0
+     */
+    @Schema(description = "If a distinct attribute is already defined in the settings it'll be ignored in favor of the one defined at search time.")
+    private String distinct;
+
+    /**
+     * Meilisearch does not return any documents below the configured threshold. Excluded results do not count towards estimatedTotalHits, totalHits, and facet distribution.
+     * <p>
+     * For performance reasons, if the number of documents above rankingScoreThreshold is higher than limit, Meilisearch does not evaluate the ranking score of the remaining documents. Results ranking below the threshold are not immediately removed from the set of candidates. In this case, Meilisearch may overestimate the count of estimatedTotalHits, totalHits and facet distribution.
+     * @since v1.9.0
+     */
+    @Schema(description = "Exclude search results with low ranking scores")
+    private Number rankingScoreThreshold;
+
     private SearchRequest(Builder builder) {
         setFilter(builder.filter);
         setQ(builder.q);
@@ -191,16 +206,14 @@ public class SearchRequest extends FilterableAttributesRequest {
         setAttributesToSearchOn(builder.attributesToSearchOn);
         setHybrid(builder.hybrid);
         setVector(builder.vector);
+        setDistinct(builder.distinct);
+        setRankingScoreThreshold(builder.rankingScoreThreshold);
     }
 
-    /**
-     * Creates and returns a new instance of the Builder class.
-     *
-     * @return a new instance of the Builder class
-     */
     public static Builder builder() {
         return new Builder();
     }
+
 
     /**
      * {@code SearchRequest} builder static inner class.
@@ -228,6 +241,8 @@ public class SearchRequest extends FilterableAttributesRequest {
         private List<String> attributesToSearchOn;
         private Hybrid hybrid;
         private List<Number> vector;
+        private String distinct;
+        private Number rankingScoreThreshold;
 
         private Builder() {
         }
@@ -471,6 +486,28 @@ public class SearchRequest extends FilterableAttributesRequest {
          */
         public Builder vector(List<Number> val) {
             vector = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code distinct} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code distinct} to set
+         * @return a reference to this Builder
+         */
+        public Builder distinct(String val) {
+            distinct = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code rankingScoreThreshold} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code rankingScoreThreshold} to set
+         * @return a reference to this Builder
+         */
+        public Builder rankingScoreThreshold(Number val) {
+            rankingScoreThreshold = val;
             return this;
         }
 

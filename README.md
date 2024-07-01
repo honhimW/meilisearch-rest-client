@@ -25,7 +25,8 @@ The version number of this library is named by appending `.X` to the version num
 
 | Doc's Version | Library's Version |
 |---------------|-------------------|
-| V1.8(latest)  | 1.8.X.X           |
+| V1.9(latest)  | 1.9.X.X           |
+| V1.8          | 1.8.X.X           |
 | V1.7          | 1.7.X.X           |
 | V1.6          | 1.6.X.X           |
 | V1.5          | 1.5.X.X           |
@@ -48,7 +49,7 @@ $ ./gradlew publishToMavenLocal
 
 ```groovy
 // Gradle
-implementation 'io.github.honhimw:meilisearch-rest-client:1.8.0.1'
+implementation 'io.github.honhimw:meilisearch-rest-client:1.9.0.0'
 ```
 
 ```xml
@@ -56,7 +57,7 @@ implementation 'io.github.honhimw:meilisearch-rest-client:1.8.0.1'
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.8.0.1</version>
+    <version>1.9.0.0</version>
 </dependency>
 ```
 
