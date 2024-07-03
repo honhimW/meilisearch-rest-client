@@ -86,6 +86,11 @@ public class SimilarSearchRequest extends FilterableAttributesRequest {
         setShowRankingScoreDetails(builder.showRankingScoreDetails);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }

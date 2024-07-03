@@ -210,6 +210,11 @@ public class SearchRequest extends FilterableAttributesRequest {
         setRankingScoreThreshold(builder.rankingScoreThreshold);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }
