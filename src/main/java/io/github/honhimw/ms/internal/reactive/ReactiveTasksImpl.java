@@ -23,6 +23,7 @@ import reactor.util.retry.RetrySpec;
 
 import java.time.Duration;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author hon_him
@@ -70,7 +71,7 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
     }
 
     @Override
-    public Mono<TaskView> await(int uid, int maxAttempts, Duration fixedDelay) {
+    public Mono<TaskView> await(int uid, int maxAttempts, Duration fixedDelay, Duration maxDuration) {
         boolean awaitExhaustedError = _client.config.isAwaitExhaustedError();
         Mono<TaskView> mono = get(uid)
             .doOnNext(taskView -> {
@@ -87,7 +88,11 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
                 })
             );
         if (!awaitExhaustedError) {
-            mono = mono.onErrorResume(TaskStateException.class::isInstance, throwable -> Mono.just(((TaskStateException) throwable).getTaskView()));
+            mono = mono
+                .take(maxDuration)
+                .onErrorResume(TaskStateException.class::isInstance, throwable -> Mono.just(((TaskStateException) throwable).getTaskView()));
+        } else {
+            mono = mono.timeout(maxDuration);
         }
         return mono;
     }

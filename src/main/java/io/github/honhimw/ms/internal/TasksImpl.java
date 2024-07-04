@@ -65,6 +65,11 @@ class TasksImpl implements Tasks {
     }
 
     @Override
+    public TaskView await(int uid, int maxAttempts, Duration fixedDelay, Duration maxDuration) {
+        return ReactorUtils.blockNonNull(_reactive.await(uid, maxAttempts, fixedDelay, maxDuration));
+    }
+
+    @Override
     public TaskView await(TaskInfo taskInfo) {
         return ReactorUtils.blockNonNull(_reactive.await(taskInfo));
     }
@@ -74,4 +79,8 @@ class TasksImpl implements Tasks {
         return ReactorUtils.blockNonNull(_reactive.await(taskInfo, maxAttempts, fixedDelay));
     }
 
+    @Override
+    public TaskView await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay, Duration maxDuration) {
+        return ReactorUtils.blockNonNull(_reactive.await(taskInfo, maxAttempts, fixedDelay, maxDuration));
+    }
 }

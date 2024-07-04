@@ -129,6 +129,17 @@ public interface Tasks {
     /**
      * Wait for task finish
      *
+     * @param uid         task uid
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @param maxDuration max duration
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false
+     */
+    TaskView await(int uid, int maxAttempts, Duration fixedDelay, Duration maxDuration);
+
+    /**
+     * Wait for task finish
+     *
      * @param taskInfo task info
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
@@ -143,5 +154,16 @@ public interface Tasks {
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
     TaskView await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay);
+
+    /**
+     * Wait for task finish
+     *
+     * @param taskInfo    task info
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @param maxDuration max duration
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false
+     */
+    TaskView await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay, Duration maxDuration);
 
 }

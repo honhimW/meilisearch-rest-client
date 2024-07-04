@@ -119,13 +119,25 @@ public interface ReactiveTasks {
 
     /**
      * Wait for task to complete
+     * @param uid         task uid
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @param maxDuration max duration
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
+     */
+    Mono<TaskView> await(int uid, int maxAttempts, Duration fixedDelay, Duration maxDuration);
+
+    /**
+     * Wait for task to complete
      *
      * @param uid         task uid
      * @param maxAttempts max attempts
      * @param fixedDelay  fixed delay
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
      */
-    Mono<TaskView> await(int uid, int maxAttempts, Duration fixedDelay);
+    default Mono<TaskView> await(int uid, int maxAttempts, Duration fixedDelay) {
+        return await(uid, maxAttempts, fixedDelay, Duration.ofSeconds(10));
+    }
 
     /**
      * Wait for task to complete, default 100 attempts with 50ms delay.
@@ -147,6 +159,19 @@ public interface ReactiveTasks {
      */
     default Mono<TaskView> await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay) {
         return await(taskInfo.getTaskUid(), maxAttempts, fixedDelay);
+    }
+
+    /**
+     * Wait for task to complete
+     *
+     * @param taskInfo    task info
+     * @param maxAttempts max attempts
+     * @param fixedDelay  fixed delay
+     * @param maxDuration max duration
+     * @return task info if MSearchConfig#isAwaitExhaustedError() is false, Mono.error() if true.
+     */
+    default Mono<TaskView> await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay, Duration maxDuration) {
+        return await(taskInfo.getTaskUid(), maxAttempts, fixedDelay, maxDuration);
     }
 
 }
