@@ -183,6 +183,13 @@ public class SearchRequest extends FilterableAttributesRequest {
     @Schema(description = "Exclude search results with low ranking scores")
     private Number rankingScoreThreshold;
 
+    /**
+     * When the experimental vectorStore feature is enabled, Meilisearch no longer includes _vectors in returned search results by default. This will considerably improve performance.
+     * @since v1.9.0
+     */
+    @Schema(description = "Use the new retrieveVectors search parameter to display the _vectors field")
+    private Boolean retrieveVectors;
+
     private SearchRequest(Builder builder) {
         setFilter(builder.filter);
         setQ(builder.q);
@@ -210,6 +217,11 @@ public class SearchRequest extends FilterableAttributesRequest {
         setRankingScoreThreshold(builder.rankingScoreThreshold);
     }
 
+    /**
+     * Creates and returns a new instance of the Builder class.
+     *
+     * @return a new instance of the Builder class
+     */
     public static Builder builder() {
         return new Builder();
     }

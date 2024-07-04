@@ -25,4 +25,18 @@ public class TestSupport {
         return json.replaceAll("'", "\"");
     }
 
+    public static void assertError(IRunnable runnable) {
+        Exception _e = null;
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            _e = e;
+        }
+        assert _e != null: "without error";
+    }
+
+    public interface IRunnable {
+        void run() throws Exception;
+    }
+
 }
