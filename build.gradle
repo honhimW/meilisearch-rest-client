@@ -19,7 +19,7 @@ description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
 def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.7'
-def jacksonVersion = '2.17.1'
+def jacksonVersion = '2.17.2'
 def gsonVersion = '2.11.0'
 def lombokVersion = '1.18.34'
 def slf4jVersion = '2.0.13'
