@@ -220,6 +220,7 @@ public class SearchTests extends TestBase {
 
     @Order(9)
     @Test
+    @EnabledOnVersion("1.10")
     void filterWithContains() {
         TaskInfo update = indexes.settings(INDEX).filterableAttributes().update(toList("title", "genres", "director"));
         await(update);
