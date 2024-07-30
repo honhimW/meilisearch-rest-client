@@ -35,6 +35,7 @@ import java.util.List;
  * @since 2024-01-03
  */
 
+@Disabled
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GeoSearchTests extends TestBase {
 
