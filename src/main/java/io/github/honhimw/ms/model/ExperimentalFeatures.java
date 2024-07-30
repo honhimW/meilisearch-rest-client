@@ -57,11 +57,19 @@ public class ExperimentalFeatures implements Serializable {
     @Schema(description = "true if feature is active, false otherwise")
     private Boolean logsRoute;
 
+    /**
+     * Enabling the experimental feature will make a new CONTAINS operator available while filtering on strings.
+     * This is similar to the SQL LIKE operator used with %.
+     */
+    @Schema(description = "Enabling the experimental feature will make a new CONTAINS operator available while filtering on strings.")
+    private Boolean containsFilter;
+
     private ExperimentalFeatures(Builder builder) {
         setMetrics(builder.metrics);
         setVectorStore(builder.vectorStore);
         setExportPuffinReports(builder.exportPuffinReports);
         setLogsRoute(builder.logsRoute);
+        setContainsFilter(builder.containsFilter);
     }
 
     /**
@@ -81,6 +89,7 @@ public class ExperimentalFeatures implements Serializable {
         private Boolean vectorStore;
         private Boolean exportPuffinReports;
         private Boolean logsRoute;
+        private Boolean containsFilter;
 
         private Builder() {
         }
@@ -126,6 +135,17 @@ public class ExperimentalFeatures implements Serializable {
          */
         public Builder logsRoute(Boolean val) {
             logsRoute = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code containsFilter} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code containsFilter} to set
+         * @return a reference to this Builder
+         */
+        public Builder containsFilter(Boolean val) {
+            containsFilter = val;
             return this;
         }
 

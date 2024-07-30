@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.json;
 
+import io.github.honhimw.ms.model.MultiSearchWithFederationRequest;
 import lombok.*;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +37,13 @@ public class JacksonTests {
 
     private static final LocalDateTime localDateTime = LocalDateTime.of(2024, 2, 29, 9, 0, 0, 1_000_001);
     private static final Instant instant = Timestamp.valueOf(localDateTime).toInstant();
+
+    @Test
+    @SneakyThrows
+    void emptyFederation() {
+        MultiSearchWithFederationRequest.Federation federation = new MultiSearchWithFederationRequest.Federation();
+        assert "{}".equals(jsonHandler.toJson(federation));
+    }
 
     @Test
     @SneakyThrows

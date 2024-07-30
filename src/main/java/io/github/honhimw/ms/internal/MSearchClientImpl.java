@@ -46,12 +46,11 @@ import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.api.*;
 import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
-import io.github.honhimw.ms.model.MultiSearchRequest;
-import io.github.honhimw.ms.model.MultiSearchResponse;
-import io.github.honhimw.ms.model.TaskInfo;
-import io.github.honhimw.ms.model.Version;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
 import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.Map;
 
 /**
  * @author hon_him
@@ -87,6 +86,11 @@ public class MSearchClientImpl implements MSearchClient {
 
     @Override
     public MultiSearchResponse multiSearch(MultiSearchRequest request) {
+        return ReactorUtils.blockNonNull(reactiveMSearchClient.multiSearch(request));
+    }
+
+    @Override
+    public SearchResponse<Map<String, Object>> multiSearch(MultiSearchWithFederationRequest request) {
         return ReactorUtils.blockNonNull(reactiveMSearchClient.multiSearch(request));
     }
 

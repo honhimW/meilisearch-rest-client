@@ -25,7 +25,8 @@ The version number of this library is named by appending `.X` to the version num
 
 | Doc's Version | Library's Version |
 |---------------|-------------------|
-| V1.9(latest)  | 1.9.X.X           |
+| V1.10(latest) | 1.10.X.X          |
+| V1.9          | 1.9.X.X           |
 | V1.8          | 1.8.X.X           |
 | V1.7          | 1.7.X.X           |
 | V1.6          | 1.6.X.X           |
@@ -49,7 +50,7 @@ $ ./gradlew publishToMavenLocal
 
 ```groovy
 // Gradle
-implementation 'io.github.honhimw:meilisearch-rest-client:1.9.0.1'
+implementation 'io.github.honhimw:meilisearch-rest-client:1.10.0.0'
 ```
 
 ```xml
@@ -57,13 +58,14 @@ implementation 'io.github.honhimw:meilisearch-rest-client:1.9.0.1'
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.9.0.1</version>
+    <version>1.10.0.0</version>
 </dependency>
 ```
 
 **[Copy Snippets here.](https://central.sonatype.com/artifact/io.github.honhimw/meilisearch-rest-client)**
 
 ---
+
 ## Run Tests
 
 ```shell
@@ -118,29 +120,47 @@ public static void main(String[] args) {
 ```
 
 ##### Search With Details API
+
 ```java
 ReactiveTypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
-searcher.find(builder -> builder
-    .q("hello world")
-    .filter("id < 10")
-    .showRankingScore(true)
+searcher.
+
+find(builder ->builder
+    .
+
+q("hello world")
+    .
+
+filter("id < 10")
+    .
+
+showRankingScore(true)
 )
-    .map(response -> {
-        Integer estimatedTotalHits = response.getEstimatedTotalHits();
-        Long processingTimeMs = response.getProcessingTimeMs();
-        return response.getHits();
+    .
+
+map(response ->{
+Integer estimatedTotalHits = response.getEstimatedTotalHits();
+Long processingTimeMs = response.getProcessingTimeMs();
+        return response.
+
+getHits();
     })
-        .doOnNext(hitDetails -> {
-            for (HitDetails<Movie> hitDetail : hitDetails) {
-                SearchDetails details = hitDetail.getDetails(); // Search Details
-                Movie source = hitDetail.getSource();           // Source Document
-                
-                Map<String, Object> formatted = details.get_formatted();
-                SearchDetails.Geo geo = details.get_geo();
-                Double rankingScore = details.get_rankingScore();
+        .
+
+doOnNext(hitDetails ->{
+    for(
+HitDetails<Movie> hitDetail :hitDetails){
+SearchDetails details = hitDetail.getDetails(); // Search Details
+Movie source = hitDetail.getSource();           // Source Document
+
+Map<String, Object> formatted = details.get_formatted();
+SearchDetails.Geo geo = details.get_geo();
+Double rankingScore = details.get_rankingScore();
             }
-        })
-        .subscribe()
+                })
+                .
+
+subscribe()
 ```
 
 #### Blocking
@@ -172,7 +192,9 @@ public static void main(String[] args) {
     );
 }
 ```
+
 ##### Search With Details API
+
 ```java
 TypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
 SearchDetailsResponse<Movie> response = searcher.find(builder -> builder
@@ -183,12 +205,13 @@ SearchDetailsResponse<Movie> response = searcher.find(builder -> builder
 Integer estimatedTotalHits = response.getEstimatedTotalHits();
 Long processingTimeMs = response.getProcessingTimeMs();
 List<HitDetails<Movie>> hitDetails = response.getHits();
-for (HitDetails<Movie> hitDetail : hitDetails) {
-    SearchDetails details = hitDetail.getDetails(); // Search Details
-    Movie source = hitDetail.getSource();           // Source Document
-    
-    Map<String, Object> formatted = details.get_formatted();
-    SearchDetails.Geo geo = details.get_geo();
-    Double rankingScore = details.get_rankingScore();
+for(
+HitDetails<Movie> hitDetail :hitDetails){
+SearchDetails details = hitDetail.getDetails(); // Search Details
+Movie source = hitDetail.getSource();           // Source Document
+
+Map<String, Object> formatted = details.get_formatted();
+SearchDetails.Geo geo = details.get_geo();
+Double rankingScore = details.get_rankingScore();
 }
 ```
