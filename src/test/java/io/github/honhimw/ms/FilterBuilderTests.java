@@ -61,6 +61,13 @@ public class FilterBuilderTests {
     }
 
     @Test
+    void stringContains() {
+        String filter = FilterBuilder.builder(expression -> expression.contains("genres", "action")).build();
+        log.info(filter);
+        assert filter.equals("genres CONTAINS 'action'");
+    }
+
+    @Test
     void gt() {
         String filter = FilterBuilder.builder(expression -> expression.gt("rating.users", 85)).build();
         log.info(filter);

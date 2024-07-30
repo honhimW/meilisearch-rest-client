@@ -256,6 +256,18 @@ public class FilterBuilder {
         }
 
         /**
+         * Contains expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
+        public Expression contains(String attribute, String value) {
+            this.expression = String.format("%s %s '%s'", attribute, Operator.CONTAINS.symbol(), value);
+            return this;
+        }
+
+        /**
          * Greater than expression.
          *
          * @param attribute attribute name
@@ -474,6 +486,10 @@ public class FilterBuilder {
          * unequal
          */
         UNEQUAL("!="),
+        /**
+         * contains
+         */
+        CONTAINS("CONTAINS"),
         /**
          * greater than
          */

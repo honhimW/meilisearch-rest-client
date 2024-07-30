@@ -16,13 +16,11 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.internal.reactive.ReactiveMSearchClientImpl;
-import io.github.honhimw.ms.model.MultiSearchRequest;
-import io.github.honhimw.ms.model.MultiSearchResponse;
-import io.github.honhimw.ms.model.TaskInfo;
-import io.github.honhimw.ms.model.Version;
+import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -99,6 +97,9 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      */
     @Operation(method = "POST", tags = "/multi-search")
     Mono<MultiSearchResponse> multiSearch(MultiSearchRequest request);
+
+    @Operation(method = "POST", tags = "/multi-search")
+    Mono<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request);
 
     /**
      * The /health route allows you to verify the status and availability of a Meilisearch instance.

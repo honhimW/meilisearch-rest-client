@@ -22,6 +22,7 @@ import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.EnabledOnVersion;
+import io.github.honhimw.ms.support.FilterBuilder;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 
@@ -172,6 +173,20 @@ public class SearchTests extends TestBase {
         assert StringUtils.equal(INDEX, multiSearchResponse.getResults().get(0).getIndexUid());
     }
 
+    @Order(6)
+    @Test
+    void multiSearchWithFederation() {
+        SearchResponse<Map<String, Object>> searchWithFederationResponse = blockingClient.multiSearch(MultiSearchWithFederationRequest.builder()
+            .addQuery(INDEX, 0.999, SearchRequest.builder()
+                .q("2")
+                .build())
+            .build());
+
+        assert CollectionUtils.isNotEmpty(searchWithFederationResponse.getHits());
+        assert searchWithFederationResponse.getEstimatedTotalHits() > 0;
+        assert searchWithFederationResponse.getHits().stream().allMatch(map -> map.containsKey("_federation"));
+    }
+
     @Order(7)
     @Test
     void distinctOnSearchTime() {
@@ -201,6 +216,29 @@ public class SearchTests extends TestBase {
             Double rankingScore = hit.getDetails().get_rankingScore();
             assert rankingScore >= 0.5;
         }
+    }
+
+    @Order(9)
+    @Test
+    void filterWithContains() {
+        TaskInfo update = indexes.settings(INDEX).filterableAttributes().update(toList("title", "genres", "director"));
+        await(update);
+
+        ExperimentalFeatures experimentalFeatures = blockingClient.experimentalFeatures(experimentalFeaturesSettings -> experimentalFeaturesSettings.configure(builder -> builder.containsFilter(true)));
+
+        assert experimentalFeatures.getContainsFilter();
+
+        TypedDetailsSearch<Movie> movieTypedDetailsSearch = indexes.searchWithDetails(INDEX, Movie.class);
+        SearchDetailsResponse<Movie> response = movieTypedDetailsSearch.find(builder -> builder
+            .q("2")
+            .filter(FilterBuilder.singleExpression(expression -> expression.contains("title", "Fifth")))
+        );
+        List<HitDetails<Movie>> hits = response.getHits();
+        assert CollectionUtils.isNotEmpty(hits);
+
+        HitDetails<Movie> movieHitDetails = hits.get(0);
+
+        assert movieHitDetails.getSource().getId() == 18;
     }
 
     @AfterEach
