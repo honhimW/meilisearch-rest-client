@@ -49,7 +49,7 @@ $ ./gradlew publishToMavenLocal
 
 ```groovy
 // Gradle
-implementation 'io.github.honhimw:meilisearch-rest-client:1.9.0.0'
+implementation 'io.github.honhimw:meilisearch-rest-client:1.9.0.1'
 ```
 
 ```xml
@@ -57,11 +57,33 @@ implementation 'io.github.honhimw:meilisearch-rest-client:1.9.0.0'
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.9.0.0</version>
+    <version>1.9.0.1</version>
 </dependency>
 ```
 
 **[Copy Snippets here.](https://central.sonatype.com/artifact/io.github.honhimw/meilisearch-rest-client)**
+
+---
+## Run Tests
+
+```shell
+$ ./gradlew test
+```
+
+Create file named `profile-test.properties` under project root directory.
+
+```properties
+./meilisearch-rest-client
+└── profile-test.properties
+meili-search.host=127.0.0.1
+meili-search.port=7700
+meili-search.api-key=MASTER_KEY
+```
+
+**Note**: You may also set `profiles.active` in gradle.properties for loading different properties file such as:
+> profile-alpha.properties: by setting profiles.active=alpha  
+> profile-beta.properties: by setting profiles.active=beta
+---
 
 ## Usage
 
@@ -95,6 +117,32 @@ public static void main(String[] args) {
 }
 ```
 
+##### Search With Details API
+```java
+ReactiveTypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
+searcher.find(builder -> builder
+    .q("hello world")
+    .filter("id < 10")
+    .showRankingScore(true)
+)
+    .map(response -> {
+        Integer estimatedTotalHits = response.getEstimatedTotalHits();
+        Long processingTimeMs = response.getProcessingTimeMs();
+        return response.getHits();
+    })
+        .doOnNext(hitDetails -> {
+            for (HitDetails<Movie> hitDetail : hitDetails) {
+                SearchDetails details = hitDetail.getDetails(); // Search Details
+                Movie source = hitDetail.getSource();           // Source Document
+                
+                Map<String, Object> formatted = details.get_formatted();
+                SearchDetails.Geo geo = details.get_geo();
+                Double rankingScore = details.get_rankingScore();
+            }
+        })
+        .subscribe()
+```
+
 #### Blocking
 
 ```java
@@ -124,23 +172,23 @@ public static void main(String[] args) {
     );
 }
 ```
-
-## Run Tests
-
-```shell
-$ ./gradlew test
+##### Search With Details API
+```java
+TypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
+SearchDetailsResponse<Movie> response = searcher.find(builder -> builder
+    .q("hello world")
+    .filter("id < 10")
+    .showRankingScore(true)
+);
+Integer estimatedTotalHits = response.getEstimatedTotalHits();
+Long processingTimeMs = response.getProcessingTimeMs();
+List<HitDetails<Movie>> hitDetails = response.getHits();
+for (HitDetails<Movie> hitDetail : hitDetails) {
+    SearchDetails details = hitDetail.getDetails(); // Search Details
+    Movie source = hitDetail.getSource();           // Source Document
+    
+    Map<String, Object> formatted = details.get_formatted();
+    SearchDetails.Geo geo = details.get_geo();
+    Double rankingScore = details.get_rankingScore();
+}
 ```
-
-Create file named `profile-test.properties` under project root directory.
-
-```properties
-./meilisearch-rest-client
-└── profile-test.properties
-meili-search.host=127.0.0.1
-meili-search.port=7700
-meili-search.api-key=MASTER_KEY
-```
-
-**Note**: You may also set `profiles.active` in gradle.properties for loading different properties file such as:
-> profile-alpha.properties: by setting profiles.active=alpha  
-> profile-beta.properties: by setting profiles.active=beta
