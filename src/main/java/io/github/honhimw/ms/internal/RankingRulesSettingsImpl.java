@@ -31,7 +31,7 @@ class RankingRulesSettingsImpl implements RankingRulesSettings {
 
     private final ReactiveRankingRulesSettings _reactive;
 
-    RankingRulesSettingsImpl(ReactiveRankingRulesSettings reactive) {
+    protected RankingRulesSettingsImpl(ReactiveRankingRulesSettings reactive) {
         _reactive = reactive;
     }
 

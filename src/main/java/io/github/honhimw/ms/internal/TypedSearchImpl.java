@@ -44,7 +44,7 @@ class TypedSearchImpl<T> implements TypedSearch<T> {
 
     private final ReactiveTypedSearch<T> _search;
 
-    public TypedSearchImpl(ReactiveTypedSearch<T> search) {
+    protected TypedSearchImpl(ReactiveTypedSearch<T> search) {
         _search = search;
     }
 

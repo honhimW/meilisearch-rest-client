@@ -30,7 +30,7 @@ class DictionarySettingsImpl implements DictionarySettings {
 
     private final ReactiveDictionarySettings _reactive;
 
-    DictionarySettingsImpl(ReactiveDictionarySettings reactive) {
+    protected DictionarySettingsImpl(ReactiveDictionarySettings reactive) {
         _reactive = reactive;
     }
 

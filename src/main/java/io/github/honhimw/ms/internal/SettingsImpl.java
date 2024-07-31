@@ -30,7 +30,7 @@ class SettingsImpl implements Settings {
 
     private final ReactiveSettings _settings;
 
-    SettingsImpl(ReactiveSettings settings) {
+    protected SettingsImpl(ReactiveSettings settings) {
         _settings = settings;
     }
 

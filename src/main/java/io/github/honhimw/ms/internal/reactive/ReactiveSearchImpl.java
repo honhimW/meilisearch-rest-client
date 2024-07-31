@@ -33,7 +33,7 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
 
     private final String indexUid;
 
-    public ReactiveSearchImpl(ReactiveIndexesImpl indexes, String indexUid) {
+    protected ReactiveSearchImpl(ReactiveIndexesImpl indexes, String indexUid) {
         super(indexes._client);
         this.indexUid = indexUid;
     }

@@ -29,7 +29,7 @@ class DistinctAttributeSettingsImpl implements DistinctAttributeSettings {
 
     private final ReactiveDistinctAttributeSettings _reactive;
 
-    DistinctAttributeSettingsImpl(ReactiveDistinctAttributeSettings reactive) {
+    protected DistinctAttributeSettingsImpl(ReactiveDistinctAttributeSettings reactive) {
         _reactive = reactive;
     }
 

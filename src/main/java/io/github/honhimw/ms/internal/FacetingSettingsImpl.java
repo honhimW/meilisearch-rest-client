@@ -29,7 +29,7 @@ class FacetingSettingsImpl implements FacetingSettings {
 
     private final ReactiveFacetingSettings _reactive;
 
-    FacetingSettingsImpl(ReactiveFacetingSettings reactive) {
+    protected FacetingSettingsImpl(ReactiveFacetingSettings reactive) {
         _reactive = reactive;
     }
 

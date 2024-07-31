@@ -30,7 +30,7 @@ class TasksImpl implements Tasks {
 
     private final ReactiveTasks _reactive;
 
-    TasksImpl(ReactiveTasks reactive) {
+    protected TasksImpl(ReactiveTasks reactive) {
         _reactive = reactive;
     }
 

@@ -37,7 +37,7 @@ class ReactiveTypedDetailsSearchImpl<T> extends AbstractReactiveImpl implements 
     private final String indexUid;
     private final TypeRef<T> typeRef;
 
-    public ReactiveTypedDetailsSearchImpl(ReactiveIndexesImpl indexes, String indexUid, TypeRef<T> typeRef) {
+    protected ReactiveTypedDetailsSearchImpl(ReactiveIndexesImpl indexes, String indexUid, TypeRef<T> typeRef) {
         super(indexes._client);
         this.indexUid = indexUid;
         this.typeRef = typeRef;

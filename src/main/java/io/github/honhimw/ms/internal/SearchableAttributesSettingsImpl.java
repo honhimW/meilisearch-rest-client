@@ -30,7 +30,7 @@ class SearchableAttributesSettingsImpl implements SearchableAttributesSettings {
 
     private final ReactiveSearchableAttributesSettings _reactive;
 
-    SearchableAttributesSettingsImpl(ReactiveSearchableAttributesSettings reactive) {
+    protected SearchableAttributesSettingsImpl(ReactiveSearchableAttributesSettings reactive) {
         _reactive = reactive;
     }
 

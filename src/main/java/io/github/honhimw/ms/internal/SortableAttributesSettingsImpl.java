@@ -30,7 +30,7 @@ class SortableAttributesSettingsImpl implements SortableAttributesSettings {
 
     private final ReactiveSortableAttributesSettings _reactive;
 
-    SortableAttributesSettingsImpl(ReactiveSortableAttributesSettings reactive) {
+    protected SortableAttributesSettingsImpl(ReactiveSortableAttributesSettings reactive) {
         _reactive = reactive;
     }
 

@@ -28,7 +28,7 @@ class ExperimentalFeaturesSettingsImpl implements ExperimentalFeaturesSettings {
 
     private final ReactiveExperimentalFeaturesSettings _reactive;
 
-    ExperimentalFeaturesSettingsImpl(ReactiveExperimentalFeaturesSettings reactive) {
+    protected ExperimentalFeaturesSettingsImpl(ReactiveExperimentalFeaturesSettings reactive) {
         _reactive = reactive;
     }
 

@@ -45,7 +45,7 @@ class TypedDetailsSearchImpl<T> implements TypedDetailsSearch<T> {
 
     private final ReactiveTypedDetailsSearch<T> _search;
 
-    public TypedDetailsSearchImpl(ReactiveTypedDetailsSearch<T> search) {
+    protected TypedDetailsSearchImpl(ReactiveTypedDetailsSearch<T> search) {
         _search = search;
     }
 

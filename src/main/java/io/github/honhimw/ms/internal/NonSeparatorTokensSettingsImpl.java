@@ -30,7 +30,7 @@ class NonSeparatorTokensSettingsImpl implements NonSeparatorTokensSettings {
 
     private final ReactiveNonSeparatorTokensSettings _reactive;
 
-    NonSeparatorTokensSettingsImpl(ReactiveNonSeparatorTokensSettings reactive) {
+    protected NonSeparatorTokensSettingsImpl(ReactiveNonSeparatorTokensSettings reactive) {
         _reactive = reactive;
     }
 

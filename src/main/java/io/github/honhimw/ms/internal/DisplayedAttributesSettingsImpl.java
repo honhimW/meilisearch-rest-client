@@ -30,7 +30,7 @@ class DisplayedAttributesSettingsImpl implements DisplayedAttributesSettings {
 
     private final ReactiveDisplayedAttributesSettings _reactive;
 
-    DisplayedAttributesSettingsImpl(ReactiveDisplayedAttributesSettings reactive) {
+    protected DisplayedAttributesSettingsImpl(ReactiveDisplayedAttributesSettings reactive) {
         _reactive = reactive;
     }
 

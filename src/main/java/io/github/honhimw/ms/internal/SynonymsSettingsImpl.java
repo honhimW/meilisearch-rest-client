@@ -31,7 +31,7 @@ class SynonymsSettingsImpl implements SynonymsSettings {
 
     private final ReactiveSynonymsSettings _reactive;
 
-    SynonymsSettingsImpl(ReactiveSynonymsSettings reactive) {
+    protected SynonymsSettingsImpl(ReactiveSynonymsSettings reactive) {
         _reactive = reactive;
     }
 

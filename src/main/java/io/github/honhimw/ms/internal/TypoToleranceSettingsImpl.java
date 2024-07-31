@@ -29,7 +29,7 @@ class TypoToleranceSettingsImpl implements TypoToleranceSettings {
 
     private final ReactiveTypoToleranceSettings _reactive;
 
-    TypoToleranceSettingsImpl(ReactiveTypoToleranceSettings reactive) {
+    protected TypoToleranceSettingsImpl(ReactiveTypoToleranceSettings reactive) {
         _reactive = reactive;
     }
 

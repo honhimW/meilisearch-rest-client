@@ -35,7 +35,7 @@ class ReactiveTypedSearchImpl<T> extends AbstractReactiveImpl implements Reactiv
     private final TypeRef<T> typeRef;
     private final ComplexTypeRef<SearchResponse<T>> complexTypeRef;
 
-    public ReactiveTypedSearchImpl(ReactiveIndexesImpl indexes, String indexUid, TypeRef<T> typeRef) {
+    protected ReactiveTypedSearchImpl(ReactiveIndexesImpl indexes, String indexUid, TypeRef<T> typeRef) {
         super(indexes._client);
         this.indexUid = indexUid;
         this.typeRef = typeRef;

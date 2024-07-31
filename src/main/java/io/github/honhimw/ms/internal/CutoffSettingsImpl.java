@@ -31,7 +31,7 @@ class CutoffSettingsImpl implements CutoffSettings {
 
     private final ReactiveCutoffSettings _reactive;
 
-    CutoffSettingsImpl(ReactiveCutoffSettings _reactive) {
+    protected CutoffSettingsImpl(ReactiveCutoffSettings _reactive) {
         this._reactive = _reactive;
     }
 
