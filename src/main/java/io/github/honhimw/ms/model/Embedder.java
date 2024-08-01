@@ -252,40 +252,27 @@ public class Embedder implements Serializable {
         private String documentTemplate;
 
         /**
-         * Optional, defaults to []. Inject texts in data. Text in the query
+         * Optional, defaults to `{}`, A JSON object describing other fields to send in a query
+         * <pre>
+         * {
+         *   "model": "name-of-your-model",
+         *   "prompt": "{{text}}"
+         * }
+         * </pre>
          */
-        @Schema(description = "Inject texts in data. Text in the query", defaultValue = "[]")
-        private List<String> inputField;
-
-        /**
-         * Optional, defaults to text. Inject a single text
-         */
-        @Schema(description = "text or textArray", defaultValue = "text")
-        private InputType inputType;
+        @Schema(description = "A JSON object describing other fields to send in a query")
+        private Map<String, Object> request;
 
         /**
          * Optional, defaults to `{}`, A JSON object describing other fields to send in a query
          * <pre>
          * {
-         *   "model": "name-of-your-model",
-         *   "dimensions": 512
+         *   "embedding": "{{embedding}}"
          * }
          * </pre>
          */
         @Schema(description = "A JSON object describing other fields to send in a query")
-        private Map<String, Object> query;
-
-        /**
-         * Optional, defaults to []. Look at embeddings in "data" in the response
-         */
-        @Schema(description = "Look at embeddings in 'data' in the response")
-        private List<String> pathToEmbeddings;
-
-        /**
-         * Optional, defaults to []. Look at the embedding inside of "embedding"
-         */
-        @Schema(description = "Look at the embedding inside of 'embedding'")
-        private List<String> embeddingObject;
+        private Map<String, Object> response;
 
     }
 

@@ -139,4 +139,9 @@ class ReactiveSettingsImpl extends AbstractReactiveImpl implements ReactiveSetti
     public ReactiveEmbeddersSettings embedders() {
         return new ReactiveEmbeddersSettingsImpl(this);
     }
+
+    @Override
+    public ReactiveLocalizedAttributesSettings localizedAttributes() {
+        return new ReactiveLocalizedAttributesSettingsImpl(this);
+    }
 }

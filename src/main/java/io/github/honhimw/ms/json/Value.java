@@ -16,9 +16,15 @@ package io.github.honhimw.ms.json;
 
 /**
  * @author hon_him
- * @since 2024-01-19
+ * @since 2024-08-01
  */
 
-public interface EnumValue<T extends Enum<T> & EnumValue<T>> extends Value {
+public interface Value {
+
+    /**
+     * Enum value
+     * @return the enum value
+     */
+    String value();
 
 }

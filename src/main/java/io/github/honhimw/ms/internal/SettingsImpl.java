@@ -133,4 +133,9 @@ class SettingsImpl implements Settings {
     public EmbeddersSettings embedders() {
         return new EmbeddersSettingsImpl(_settings.embedders());
     }
+
+    @Override
+    public LocalizedAttributesSettings localizedAttributes() {
+        return new LocalizedAttributesSettingsImpl(_settings.localizedAttributes());
+    }
 }

@@ -400,4 +400,23 @@ public interface Settings {
         return operation.apply(embedders());
     }
 
+    /**
+     * Get the localizedAttributes settings of an index.
+     *
+     * @return {@link LocalizedAttributesSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/localized-attributes")
+    LocalizedAttributesSettings localizedAttributes();
+
+    /**
+     * Applies the given operation to the localizedAttributes settings.
+     *
+     * @param operation operation
+     * @param <R>       return type
+     * @return the operation result
+     */
+    default <R> R localizedAttributes(Function<LocalizedAttributesSettings, R> operation) {
+        return operation.apply(localizedAttributes());
+    }
+
 }
