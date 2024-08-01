@@ -20,6 +20,7 @@ import io.github.honhimw.ms.api.Indexes;
 import io.github.honhimw.ms.api.Settings;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.CollectionUtils;
+import io.github.honhimw.ms.support.EnabledOnVersion;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 
@@ -292,7 +293,9 @@ public class DocumentsTests extends TestBase {
 
     @Order(10)
     @Test
+    @EnabledOnVersion("1.10")
     void edit() {
+        blockingClient.experimentalFeatures().configure(builder -> builder.editDocumentsByFunction(true));
         TaskInfo save = documents.save(movies);
         await(save);
         EditRequest editRequest = new EditRequest();
