@@ -35,7 +35,7 @@ class KeysImpl implements Keys {
 
     private final ReactiveKeys _reactive;
 
-    KeysImpl(ReactiveKeys reactive) {
+    protected KeysImpl(ReactiveKeys reactive) {
         _reactive = reactive;
     }
 

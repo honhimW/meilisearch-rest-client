@@ -17,6 +17,8 @@ package io.github.honhimw.ms.model;
 import io.github.honhimw.ms.json.EnumValue;
 
 /**
+ * Input type enum
+ *
  * @author hon_him
  * @since 2024-04-18
  */
@@ -28,8 +30,7 @@ public enum InputType implements EnumValue<InputType> {
     /**
      * text array
      */
-    TEXT_ARRAY("textArray")
-    ;
+    TEXT_ARRAY("textArray");
 
     /**
      * Input type

@@ -20,6 +20,10 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
+ * Map builder
+ *
+ * @param <K> Key type
+ * @param <V> Value type
  * @author hon_him
  * @since 2024-01-23
  */
@@ -35,9 +39,10 @@ public class MapBuilder<K, V> {
 
     /**
      * Create a new {@link MapBuilder}
-     * @return a new {@link MapBuilder}
+     *
      * @param <K> Key type
      * @param <V> Value type
+     * @return a new {@link MapBuilder}
      */
     public static <K, V> MapBuilder<K, V> builder() {
         return new MapBuilder<>();
@@ -45,6 +50,7 @@ public class MapBuilder<K, V> {
 
     /**
      * Put a key-value pair
+     *
      * @param k key
      * @param v value
      * @return this
@@ -56,6 +62,7 @@ public class MapBuilder<K, V> {
 
     /**
      * Put all key-value pairs
+     *
      * @param another another map
      * @return this
      */
@@ -66,6 +73,7 @@ public class MapBuilder<K, V> {
 
     /**
      * Clear the map
+     *
      * @return this
      */
     public MapBuilder<K, V> clear() {
@@ -75,6 +83,7 @@ public class MapBuilder<K, V> {
 
     /**
      * Build the map
+     *
      * @return the map
      */
     public Map<K, V> build() {
@@ -83,6 +92,7 @@ public class MapBuilder<K, V> {
 
     /**
      * Build the map with mutability. If false, the map will be immutable
+     *
      * @param mut mutability
      * @return the map
      */
@@ -96,6 +106,7 @@ public class MapBuilder<K, V> {
 
     /**
      * Immutable HashMap
+     *
      * @param <K> Key type
      * @param <V> Value type
      */
@@ -103,6 +114,7 @@ public class MapBuilder<K, V> {
 
         /**
          * Create an immutable map
+         *
          * @param m from
          */
         public ImmutableHashMap(Map<? extends K, ? extends V> m) {

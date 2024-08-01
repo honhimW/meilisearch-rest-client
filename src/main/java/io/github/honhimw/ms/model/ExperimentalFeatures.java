@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * Experimental features
+ *
  * @author hon_him
  * @since 2024-01-03
  */
@@ -46,10 +48,12 @@ public class ExperimentalFeatures implements Serializable {
     private Boolean vectorStore;
 
     /**
-     * true if feature is active, false otherwise
+     * edit documents by executing a Rhai function on all the documents of your database or a subset of them that you can select by a Meilisearch filter.
+     *
+     * @since v1.10
      */
-    @Schema(description = "true if feature is active, false otherwise")
-    private Boolean exportPuffinReports;
+    @Schema(description = "edit documents by executing a Rhai function on all the documents of your database or a subset of them that you can select by a Meilisearch filter.")
+    private Boolean editDocumentsByFunction;
 
     /**
      * true if feature is active, false otherwise
@@ -60,6 +64,8 @@ public class ExperimentalFeatures implements Serializable {
     /**
      * Enabling the experimental feature will make a new CONTAINS operator available while filtering on strings.
      * This is similar to the SQL LIKE operator used with %.
+     *
+     * @since v1.10
      */
     @Schema(description = "Enabling the experimental feature will make a new CONTAINS operator available while filtering on strings.")
     private Boolean containsFilter;
@@ -67,7 +73,7 @@ public class ExperimentalFeatures implements Serializable {
     private ExperimentalFeatures(Builder builder) {
         setMetrics(builder.metrics);
         setVectorStore(builder.vectorStore);
-        setExportPuffinReports(builder.exportPuffinReports);
+        setEditDocumentsByFunction(builder.editDocumentsByFunction);
         setLogsRoute(builder.logsRoute);
         setContainsFilter(builder.containsFilter);
     }
@@ -75,7 +81,7 @@ public class ExperimentalFeatures implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();
@@ -87,7 +93,7 @@ public class ExperimentalFeatures implements Serializable {
     public static final class Builder {
         private Boolean metrics;
         private Boolean vectorStore;
-        private Boolean exportPuffinReports;
+        private Boolean editDocumentsByFunction;
         private Boolean logsRoute;
         private Boolean containsFilter;
 
@@ -117,13 +123,13 @@ public class ExperimentalFeatures implements Serializable {
         }
 
         /**
-         * Sets the {@code exportPuffinReports} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code editDocumentsByFunction} and returns a reference to this Builder enabling method chaining.
          *
-         * @param val the {@code exportPuffinReports} to set
+         * @param val the {@code editDocumentsByFunction} to set
          * @return a reference to this Builder
          */
-        public Builder exportPuffinReports(Boolean val) {
-            exportPuffinReports = val;
+        public Builder editDocumentsByFunction(Boolean val) {
+            editDocumentsByFunction = val;
             return this;
         }
 

@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
+ * Page request
+ *
  * @author hon_him
  * @since 2024-01-05
  */
@@ -89,6 +91,7 @@ public class PageRequest implements Serializable {
 
     /**
      * set no
+     *
      * @param no page no
      * @return this
      */
@@ -99,6 +102,7 @@ public class PageRequest implements Serializable {
 
     /**
      * set size
+     *
      * @param size page size
      * @return this
      */
@@ -109,6 +113,7 @@ public class PageRequest implements Serializable {
 
     /**
      * set offset
+     *
      * @param offset offset
      * @return this
      */
@@ -119,6 +124,7 @@ public class PageRequest implements Serializable {
 
     /**
      * set limit
+     *
      * @param limit limit
      * @return this
      */
@@ -129,6 +135,7 @@ public class PageRequest implements Serializable {
 
     /**
      * Get offset based on {@code no} and {@code size}
+     *
      * @return offset
      */
     public int toOffset() {
@@ -140,6 +147,7 @@ public class PageRequest implements Serializable {
 
     /**
      * Get limit based on {@code size}
+     *
      * @return limit
      */
     public int toLimit() {

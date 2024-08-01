@@ -22,6 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Complex type reference
+ *
+ * @param <T> type in generic type
  * @author hon_him
  * @since 2024-01-08
  */

@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Search with indexUid parameter request
  * @author hon_him
  * @since 2024-01-02
  */

@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * Meilisearch version information
+ *
  * @author hon_him
  * @since 2024-01-03
  */

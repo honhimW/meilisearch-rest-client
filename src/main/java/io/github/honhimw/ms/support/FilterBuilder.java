@@ -20,6 +20,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
+ * Filter builder
+ *
  * @author hon_him
  * @since 2024-01-05
  */
@@ -565,6 +567,7 @@ public class FilterBuilder {
 
         /**
          * Operator symbol.
+         *
          * @return symbol string
          */
         public String symbol() {

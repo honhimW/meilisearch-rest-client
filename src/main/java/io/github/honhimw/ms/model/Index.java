@@ -25,6 +25,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * Index information
+ *
  * @author hon_him
  * @since 2023-12-29
  */

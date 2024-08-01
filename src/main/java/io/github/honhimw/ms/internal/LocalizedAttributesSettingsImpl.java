@@ -14,34 +14,37 @@
 
 package io.github.honhimw.ms.internal;
 
-import io.github.honhimw.ms.api.DistinctAttributeSettings;
-import io.github.honhimw.ms.api.reactive.ReactiveDistinctAttributeSettings;
+import io.github.honhimw.ms.api.LocalizedAttributesSettings;
+import io.github.honhimw.ms.api.reactive.ReactiveLocalizedAttributesSettings;
+import io.github.honhimw.ms.model.LocalizedAttribute;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.ReactorUtils;
 import jakarta.annotation.Nullable;
 
+import java.util.List;
+
 /**
  * @author hon_him
- * @since 2024-01-04
+ * @since 2024-08-01
  */
 
-class DistinctAttributeSettingsImpl implements DistinctAttributeSettings {
+class LocalizedAttributesSettingsImpl implements LocalizedAttributesSettings {
 
-    private final ReactiveDistinctAttributeSettings _reactive;
+    private final ReactiveLocalizedAttributesSettings _reactive;
 
-    protected DistinctAttributeSettingsImpl(ReactiveDistinctAttributeSettings reactive) {
-        _reactive = reactive;
+    protected LocalizedAttributesSettingsImpl(ReactiveLocalizedAttributesSettings reactive) {
+        this._reactive = reactive;
     }
 
     @Nullable
     @Override
-    public String get() {
+    public List<LocalizedAttribute> get() {
         return _reactive.get().block();
     }
 
     @Override
-    public TaskInfo update(String distinctAttribute) {
-        return ReactorUtils.blockNonNull(_reactive.update(distinctAttribute));
+    public TaskInfo update(List<LocalizedAttribute> localizedAttributes) {
+        return ReactorUtils.blockNonNull(_reactive.update(localizedAttributes));
     }
 
     @Override

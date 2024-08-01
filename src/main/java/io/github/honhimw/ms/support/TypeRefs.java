@@ -243,4 +243,15 @@ public class TypeRefs {
         public static final StringStringListMapRef INSTANCE = new StringStringListMapRef();
     }
 
+    /**
+     * LocalizedAttribute List type reference.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class LocalizedAttributeListRef extends TypeRef<List<LocalizedAttribute>> {
+        /**
+         * Instance.
+         */
+        public static final LocalizedAttributeListRef INSTANCE = new LocalizedAttributeListRef();
+    }
+
 }

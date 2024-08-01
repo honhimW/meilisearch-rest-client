@@ -32,7 +32,7 @@ class EmbeddersSettingsImpl implements EmbeddersSettings {
 
     private final ReactiveEmbeddersSettings _reactive;
 
-    EmbeddersSettingsImpl(ReactiveEmbeddersSettings reactive) {
+    protected EmbeddersSettingsImpl(ReactiveEmbeddersSettings reactive) {
         _reactive = reactive;
     }
 

@@ -30,7 +30,7 @@ class FilterableAttributesSettingsImpl implements FilterableAttributesSettings {
 
     private final ReactiveFilterableAttributesSettings _reactive;
 
-    FilterableAttributesSettingsImpl(ReactiveFilterableAttributesSettings reactive) {
+    protected FilterableAttributesSettingsImpl(ReactiveFilterableAttributesSettings reactive) {
         _reactive = reactive;
     }
 

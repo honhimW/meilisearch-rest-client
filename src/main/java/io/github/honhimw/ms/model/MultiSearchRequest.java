@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * MultiSearch request
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -94,7 +96,7 @@ public class MultiSearchRequest implements Serializable {
          * Add the {@code query} and returns a reference to this Builder enabling method chaining.
          *
          * @param indexUid the index uid
-         * @param query the {@code queries} to added
+         * @param query    the {@code queries} to added
          * @return a reference to this Builder
          */
         public Builder addQuery(String indexUid, SearchRequest query) {

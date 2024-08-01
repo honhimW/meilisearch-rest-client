@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
+ * Create key request
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -88,7 +90,7 @@ public class CreateKeyRequest implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();

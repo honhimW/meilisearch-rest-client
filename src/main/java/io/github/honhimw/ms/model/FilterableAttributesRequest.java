@@ -25,6 +25,8 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 
 /**
+ * Request with filter parameters
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -44,8 +46,8 @@ public class FilterableAttributesRequest implements Serializable {
     /**
      * Sets the filter for the request using the provided consumer.
      *
-     * @param  consumer  the consumer that builds the filter
-     * @return           the updated FilterableAttributesRequest object
+     * @param consumer the consumer that builds the filter
+     * @return the updated FilterableAttributesRequest object
      */
     public FilterableAttributesRequest filter(Consumer<FilterBuilder> consumer) {
         FilterBuilder filterBuilder = FilterBuilder.builder();
@@ -56,6 +58,7 @@ public class FilterableAttributesRequest implements Serializable {
 
     /**
      * Sets the filter for the request using the provided consumer.
+     *
      * @param consumer the consumer that builds the filter
      * @return new FilterableAttributesRequest object
      */
@@ -70,6 +73,7 @@ public class FilterableAttributesRequest implements Serializable {
 
     /**
      * Set filter and return self
+     *
      * @param filter the filter string
      * @return self
      */

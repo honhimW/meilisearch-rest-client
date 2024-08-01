@@ -30,7 +30,7 @@ class SettingsImpl implements Settings {
 
     private final ReactiveSettings _settings;
 
-    SettingsImpl(ReactiveSettings settings) {
+    protected SettingsImpl(ReactiveSettings settings) {
         _settings = settings;
     }
 
@@ -132,5 +132,10 @@ class SettingsImpl implements Settings {
     @Override
     public EmbeddersSettings embedders() {
         return new EmbeddersSettingsImpl(_settings.embedders());
+    }
+
+    @Override
+    public LocalizedAttributesSettings localizedAttributes() {
+        return new LocalizedAttributesSettingsImpl(_settings.localizedAttributes());
     }
 }

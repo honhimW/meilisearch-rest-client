@@ -30,7 +30,7 @@ class StopWordsSettingsImpl implements StopWordsSettings {
 
     private final ReactiveStopWordsSettings _reactive;
 
-    StopWordsSettingsImpl(ReactiveStopWordsSettings reactive) {
+    protected StopWordsSettingsImpl(ReactiveStopWordsSettings reactive) {
         _reactive = reactive;
     }
 

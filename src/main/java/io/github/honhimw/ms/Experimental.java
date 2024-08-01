@@ -20,6 +20,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Marked experimental features
+ *
  * @author hon_him
  * @since 2024-01-17
  */
@@ -30,6 +32,7 @@ public @interface Experimental {
 
     /**
      * Experimental features
+     *
      * @return Experimental features
      */
     Features[] features() default {};
@@ -41,7 +44,12 @@ public @interface Experimental {
         /**
          * Vector search
          */
-        VECTOR_SEARCH
+        VECTOR_SEARCH,
+
+        /**
+         * edit_documents_by_function
+         */
+        EDIT_DOCUMENTS_BY_FUNCTION
     }
 
 }

@@ -53,6 +53,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.util.Map;
 
 /**
+ * Blocking M-Search client implementation.
+ *
  * @author hon_him
  * @since 2023-07-24
  */
@@ -63,6 +65,7 @@ public class MSearchClientImpl implements MSearchClient {
 
     /**
      * Create a MSearchClient with given config
+     *
      * @param config client config
      */
     public MSearchClientImpl(MSearchConfig config) {

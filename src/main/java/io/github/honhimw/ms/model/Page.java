@@ -24,6 +24,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Result page
+ *
+ * @param <T> document type
  * @author hon_him
  * @since 2023-12-29
  */

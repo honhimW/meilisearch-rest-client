@@ -19,6 +19,8 @@ import java.nio.file.Files;
 import java.util.Objects;
 
 /**
+ * Copy from apache commons-io
+ *
  * @author hon_him
  * @since 2024-01-08
  */
@@ -141,13 +143,13 @@ public class IOUtils {
      * {@link BufferedInputStream}.
      * </p>
      *
-     * @param inputStream the {@link InputStream} to read.
+     * @param inputStream  the {@link InputStream} to read.
      * @param outputStream the {@link OutputStream} to write.
-     * @param buffer the buffer to use for the copy
+     * @param buffer       the buffer to use for the copy
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException          if an I/O error occurs.
      */
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream, final byte[] buffer)
         throws IOException {

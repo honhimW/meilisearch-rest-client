@@ -24,6 +24,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * Search request
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -178,6 +180,7 @@ public class SearchRequest extends FilterableAttributesRequest {
      * Meilisearch does not return any documents below the configured threshold. Excluded results do not count towards estimatedTotalHits, totalHits, and facet distribution.
      * <p>
      * For performance reasons, if the number of documents above rankingScoreThreshold is higher than limit, Meilisearch does not evaluate the ranking score of the remaining documents. Results ranking below the threshold are not immediately removed from the set of candidates. In this case, Meilisearch may overestimate the count of estimatedTotalHits, totalHits and facet distribution.
+     *
      * @since v1.9.0
      */
     @Schema(description = "Exclude search results with low ranking scores")
@@ -185,10 +188,21 @@ public class SearchRequest extends FilterableAttributesRequest {
 
     /**
      * When the experimental vectorStore feature is enabled, Meilisearch no longer includes _vectors in returned search results by default. This will considerably improve performance.
+     *
      * @since v1.9.0
      */
     @Schema(description = "Use the new retrieveVectors search parameter to display the _vectors field")
     private Boolean retrieveVectors;
+
+    /**
+     * allowing the end-user to define the language used in the current query.
+     * <p>
+     * The locales parameter overrides eventual locales in the index settings.
+     *
+     * @since v1.10
+     */
+    @Schema(description = "allowing the end-user to define the language used in the current query")
+    private List<String> locales;
 
     private SearchRequest(Builder builder) {
         setFilter(builder.filter);

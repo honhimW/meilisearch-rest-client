@@ -29,7 +29,7 @@ class ProximityPrecisionSettingsImpl implements ProximityPrecisionSettings {
 
     private final ReactiveProximityPrecisionSettings _reactive;
 
-    ProximityPrecisionSettingsImpl(ReactiveProximityPrecisionSettings reactive) {
+    protected ProximityPrecisionSettingsImpl(ReactiveProximityPrecisionSettings reactive) {
         _reactive = reactive;
     }
 

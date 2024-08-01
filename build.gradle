@@ -2,6 +2,8 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 import java.nio.charset.StandardCharsets
 
+import static java.nio.charset.StandardCharsets.UTF_8
+
 plugins {
     id 'idea'
     id 'java'
@@ -174,9 +176,10 @@ jar {
 }
 
 tasks.withType(JavaCompile).configureEach {
-
-    options.encoding = StandardCharsets.UTF_8.name()
+    options.encoding = UTF_8.name()
+    options.forkOptions.jvmArgs += ['-Duser.language=en', '-Duser.country=NO']
     inputs.files(tasks.withType(ProcessResources))
+//    options.compilerArgs << "-Werror" << "-Xlint:deprecation" << "-Xlint:unchecked"
 }
 
 testing {

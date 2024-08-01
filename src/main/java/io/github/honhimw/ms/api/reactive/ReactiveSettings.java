@@ -401,5 +401,23 @@ public interface ReactiveSettings {
         return operation.apply(embedders());
     }
 
+    /**
+     * Get the localizedAttributes settings of an index.
+     *
+     * @return {@link ReactiveLocalizedAttributesSettings} operator
+     */
+    @Operation(tags = "/indexes/{index_uid}/settings/localized-attributes")
+    ReactiveLocalizedAttributesSettings localizedAttributes();
+
+    /**
+     * Applies the given operation to the localizedAttributes settings.
+     *
+     * @param operation operation
+     * @param <R>       return type
+     * @return the operation result
+     */
+    default <R> R localizedAttributes(Function<ReactiveLocalizedAttributesSettings, R> operation) {
+        return operation.apply(localizedAttributes());
+    }
 
 }

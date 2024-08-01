@@ -12,25 +12,22 @@
  * limitations under the License.
  */
 
-package io.github.honhimw.ms.support;
+package io.github.honhimw.ms.json;
 
 /**
+ * Value
+ *
  * @author hon_him
- * @since 2024-01-05
+ * @since 2024-08-01
  */
 
-public class Asserts {
+public interface Value {
 
     /**
-     * Assert that an expression is {@code true}.
+     * Enum value
      *
-     * @param status  the expression to assert
-     * @param message the exception message to use if the assertion fails
+     * @return the enum value
      */
-    public static void status(boolean status, String message) {
-        if (!status) {
-            throw new IllegalStateException(message);
-        }
-    }
+    String value();
 
 }

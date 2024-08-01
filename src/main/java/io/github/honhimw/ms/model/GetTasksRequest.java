@@ -30,6 +30,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * Get tasks request
+ *
  * @author hon_him
  * @since 2024-01-04
  */
@@ -137,7 +139,7 @@ public class GetTasksRequest implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();
@@ -145,6 +147,7 @@ public class GetTasksRequest implements Serializable {
 
     /**
      * Converts this {@code GetTasksRequest} to a map of query parameters.
+     *
      * @return a map of query parameters
      */
     public Map<String, String> toParameters() {

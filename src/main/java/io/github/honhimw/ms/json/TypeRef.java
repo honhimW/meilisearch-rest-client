@@ -18,6 +18,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
+ * TypeRef
+ *
+ * @param <T> type
  * @author hon_him
  * @since 2024-01-03
  */

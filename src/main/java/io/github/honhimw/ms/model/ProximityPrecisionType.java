@@ -17,6 +17,7 @@ package io.github.honhimw.ms.model;
 import io.github.honhimw.ms.json.EnumValue;
 
 /**
+ * Proximity precision type
  * @author hon_him
  * @since 2024-01-18
  */

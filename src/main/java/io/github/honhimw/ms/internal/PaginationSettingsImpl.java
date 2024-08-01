@@ -29,7 +29,7 @@ class PaginationSettingsImpl implements PaginationSettings {
 
     private final ReactivePaginationSettings _reactive;
 
-    PaginationSettingsImpl(ReactivePaginationSettings reactive) {
+    protected PaginationSettingsImpl(ReactivePaginationSettings reactive) {
         _reactive = reactive;
     }
 

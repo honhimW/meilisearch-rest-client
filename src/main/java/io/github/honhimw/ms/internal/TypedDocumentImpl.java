@@ -47,7 +47,7 @@ class TypedDocumentImpl<T> implements TypedDocuments<T> {
 
     private final ReactiveTypedDocuments<T> _document;
 
-    public TypedDocumentImpl(ReactiveTypedDocuments<T> search) {
+    protected TypedDocumentImpl(ReactiveTypedDocuments<T> search) {
         _document = search;
     }
 

@@ -30,6 +30,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * Cancel tasks request
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -102,7 +104,7 @@ public class CancelTasksRequest implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();

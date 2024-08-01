@@ -180,6 +180,12 @@ public class Setting implements Serializable {
     private Map<String, ? extends Embedder> embedders;
 
     /**
+     * Set up the language of your index in your settings and during the search. This will prevent users from using alternative Meilisearch images we were separately created until now.
+     */
+    @Schema(description = "To use vector search, first configure the embedders index setting. You may configure multiple embedders for an index.")
+    private List<LocalizedAttribute> localizedAttributes;
+
+    /**
      * To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 1500ms.
      * The default value of the searchCutoffMs setting is null and corresponds to 1500ms.
      */
@@ -203,6 +209,7 @@ public class Setting implements Serializable {
         setPagination(builder.pagination);
         setProximityPrecision(builder.proximityPrecision);
         setEmbedders(builder.embedders);
+        setLocalizedAttributes(builder.localizedAttributes);
         setSearchCutoffMs(builder.searchCutoffMs);
     }
 
@@ -228,6 +235,8 @@ public class Setting implements Serializable {
         setting.setFaceting(Faceting.defaultObject());
         setting.setPagination(Pagination.defaultObject());
         setting.setProximityPrecision(ProximityPrecisionType.BY_WORD);
+        setting.setLocalizedAttributes(null);
+        setting.setSearchCutoffMs(null);
         return setting;
     }
 
@@ -260,6 +269,7 @@ public class Setting implements Serializable {
         private Pagination pagination;
         private ProximityPrecisionType proximityPrecision;
         private Map<String, ? extends Embedder> embedders;
+        private List<LocalizedAttribute> localizedAttributes;
         private Integer searchCutoffMs;
 
         private Builder() {
@@ -438,6 +448,17 @@ public class Setting implements Serializable {
          */
         public Builder embedders(Map<String, ? extends Embedder> val) {
             embedders = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code localizedAttributes} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code localizedAttributes} to set
+         * @return a reference to this Builder
+         */
+        public Builder localizedAttributes(List<LocalizedAttribute> val) {
+            localizedAttributes = val;
             return this;
         }
 

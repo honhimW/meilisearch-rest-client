@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Vectorized document
+ *
  * @author hon_him
  * @since 2024-01-18 V1.6
  */

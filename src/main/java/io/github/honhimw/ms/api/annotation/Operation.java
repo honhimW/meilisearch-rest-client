@@ -17,6 +17,8 @@ package io.github.honhimw.ms.api.annotation;
 import java.lang.annotation.*;
 
 /**
+ * Rest api operation description
+ *
  * @author hon_him
  * @since 2024-06-04
  */
@@ -25,7 +27,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.SOURCE)
 @Inherited
 public @interface Operation {
-
 
 
 }

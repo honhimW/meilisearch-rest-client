@@ -31,6 +31,7 @@ import java.util.function.Consumer;
  * Documents are stored inside indexes.
  * Learn more about documents.
  *
+ * @param <T> document type
  * @author hon_him
  * @since 2023-12-31
  */

@@ -20,6 +20,8 @@ import javax.annotation.meta.TypeQualifierDefault;
 import java.lang.annotation.*;
 
 /**
+ * Default non null api in package.
+ *
  * @author hon_him
  * @since 2024-01-02
  */

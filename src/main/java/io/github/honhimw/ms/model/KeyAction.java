@@ -17,6 +17,8 @@ package io.github.honhimw.ms.model;
 import io.github.honhimw.ms.json.EnumValue;
 
 /**
+ * Key action enum
+ *
  * @author hon_him
  * @since 2024-01-02
  */

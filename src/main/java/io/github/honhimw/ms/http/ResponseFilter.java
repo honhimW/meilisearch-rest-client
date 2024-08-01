@@ -18,6 +18,8 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClientResponse;
 
 /**
+ * Response filter
+ *
  * @author hon_him
  * @since 2024-03-15
  */
@@ -26,8 +28,9 @@ public interface ResponseFilter {
 
     /**
      * Response refactor
+     *
      * @param response HttpClientResponse
-     * @param bytes response content
+     * @param bytes    response content
      * @return content publisher
      */
     Mono<byte[]> accept(HttpClientResponse response, byte[] bytes);

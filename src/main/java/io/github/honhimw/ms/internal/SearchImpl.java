@@ -46,7 +46,7 @@ class SearchImpl implements Search {
 
     private final ReactiveSearch _search;
 
-    public SearchImpl(ReactiveSearch search) {
+    protected SearchImpl(ReactiveSearch search) {
         _search = search;
     }
 

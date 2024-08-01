@@ -30,7 +30,7 @@ class SeparatorTokensSettingsImpl implements SeparatorTokensSettings {
 
     private final ReactiveSeparatorTokensSettings _reactive;
 
-    SeparatorTokensSettingsImpl(ReactiveSeparatorTokensSettings reactive) {
+    protected SeparatorTokensSettingsImpl(ReactiveSeparatorTokensSettings reactive) {
         _reactive = reactive;
     }
 
