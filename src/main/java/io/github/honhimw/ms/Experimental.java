@@ -41,7 +41,12 @@ public @interface Experimental {
         /**
          * Vector search
          */
-        VECTOR_SEARCH
+        VECTOR_SEARCH,
+
+        /**
+         * edit_documents_by_function
+         */
+        EDIT_DOCUMENTS_BY_FUNCTION
     }
 
 }

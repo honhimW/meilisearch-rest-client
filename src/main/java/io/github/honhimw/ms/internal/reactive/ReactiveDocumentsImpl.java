@@ -104,6 +104,11 @@ class ReactiveDocumentsImpl extends AbstractReactiveImpl implements ReactiveDocu
     }
 
     @Override
+    public Mono<TaskInfo> edit(EditRequest edit) {
+        return post(String.format("%s/edit", _path), configurer -> json(configurer, edit), TypeRefs.TaskInfoRef.INSTANCE);
+    }
+
+    @Override
     public Mono<TaskInfo> deleteAll() {
         return delete(_path, TypeRefs.TaskInfoRef.INSTANCE);
     }

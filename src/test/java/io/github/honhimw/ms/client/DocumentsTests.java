@@ -23,6 +23,7 @@ import io.github.honhimw.ms.support.CollectionUtils;
 import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -288,6 +289,43 @@ public class DocumentsTests extends TestBase {
         await(deleteByFilter);
         assert documents.batchGet(batchGetDocumentsRequest).getTotal() == 0;
     }
+
+    @Order(10)
+    @Test
+    void edit() {
+        TaskInfo save = documents.save(movies);
+        await(save);
+        EditRequest editRequest = new EditRequest();
+        editRequest.setContext(toMap(toList("divisor"), toList(2)));
+        editRequest.setFunction(
+                         "if doc.id % context.divisor == 0 {\n" +
+                         "  doc.title2 = `✨ ${doc.title.to_upper()} ✨`\n" +
+                         "} else {\n" +
+                         "  doc.title2 = `✨ ${doc.title} ✨`\n" +
+                         "}");
+        editRequest.filter(filterBuilder -> filterBuilder.base(expression -> expression.le("id", 10)));
+        TaskInfo edit = documents.edit(editRequest);
+        await(edit);
+
+        Page<Map<String, Object>> mapPage = documents.batchGet(builder -> builder.limit(20));
+        List<Map<String, Object>> results = mapPage.getResults();
+        for (Map<String, Object> result : results) {
+            Integer id = (Integer) result.get("id");
+            if (id <= 10) {
+                assert result.containsKey("title2");
+                String title2 = (String) result.get("title2");
+                if (id % 2 == 0) {
+                    assert title2.equals("✨ " + result.get("title").toString().toUpperCase() + " ✨");
+                } else {
+                    assert title2.equals("✨ " + result.get("title") + " ✨");
+                }
+            } else {
+                assert !result.containsKey("title2");
+            }
+        }
+        System.out.println();
+    }
+
 
     @Order(100)
     @Test

@@ -247,6 +247,16 @@ public interface ReactiveDocuments {
     Mono<TaskInfo> update(Collection<?> collection);
 
     /**
+     * You can edit documents by executing a Rhai function on all the documents of your database or a subset of them that you can select by a Meilisearch filter.
+     *
+     * @param edit edit request
+     * @return edit task
+     */
+    @Experimental(features = Experimental.Features.EDIT_DOCUMENTS_BY_FUNCTION)
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/edit")
+    Mono<TaskInfo> edit(EditRequest edit);
+
+    /**
      * Delete all documents in the specified index.
      *
      * @return delete task

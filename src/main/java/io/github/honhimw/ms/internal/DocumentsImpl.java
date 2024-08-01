@@ -116,6 +116,11 @@ class DocumentsImpl implements Documents {
     }
 
     @Override
+    public TaskInfo edit(EditRequest edit) {
+        return ReactorUtils.blockNonNull(_documents.edit(edit));
+    }
+
+    @Override
     public TaskInfo deleteAll() {
         return ReactorUtils.blockNonNull(_documents.deleteAll());
     }

@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.api;
 
+import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -207,6 +208,16 @@ public interface Documents {
      */
     @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
     TaskInfo update(Collection<?> collection);
+
+    /**
+     * You can edit documents by executing a Rhai function on all the documents of your database or a subset of them that you can select by a Meilisearch filter.
+     *
+     * @param edit edit request
+     * @return edit task
+     */
+    @Experimental(features = Experimental.Features.EDIT_DOCUMENTS_BY_FUNCTION)
+    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/edit")
+    TaskInfo edit(EditRequest edit);
 
     /**
      * Delete all documents in the specified index.
