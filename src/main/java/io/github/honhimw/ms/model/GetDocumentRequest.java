@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * Get documents request
+ *
  * @author hon_him
  * @since 2024-01-22
  */
@@ -59,6 +61,7 @@ public class GetDocumentRequest extends PageRequest {
 
     /**
      * set fields
+     *
      * @param fields fields
      * @return this
      */
@@ -69,6 +72,7 @@ public class GetDocumentRequest extends PageRequest {
 
     /**
      * set filter
+     *
      * @param filter filter
      * @return this
      */

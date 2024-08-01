@@ -35,6 +35,7 @@ import java.util.Map;
  * <p>
  * You can <a href="https://www.meilisearch.com/docs/learn/front_end/pagination">read more about pagination in our dedicated guide.</a>
  *
+ * @param <T> document type
  * @author hon_him
  * @since 2024-01-02
  */

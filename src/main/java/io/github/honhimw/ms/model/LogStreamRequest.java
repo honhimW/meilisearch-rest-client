@@ -24,6 +24,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * LogStream request
+ *
  * @author hon_him
  * @since 2024-02-22
  */
@@ -54,7 +56,7 @@ public class LogStreamRequest implements Serializable {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();

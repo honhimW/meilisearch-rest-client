@@ -24,6 +24,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * Index stats
+ *
  * @author hon_him
  * @since 2024-01-03
  */

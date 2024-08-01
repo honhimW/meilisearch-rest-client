@@ -19,6 +19,8 @@ import io.github.honhimw.ms.json.EnumValue;
 import io.github.honhimw.ms.support.StringUtils;
 
 /**
+ * Embedder source
+ *
  * @author hon_him
  * @since 2024-01-18 V1.6
  */

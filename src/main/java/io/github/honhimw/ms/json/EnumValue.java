@@ -15,6 +15,9 @@
 package io.github.honhimw.ms.json;
 
 /**
+ * Enum value
+ *
+ * @param <T> enum type
  * @author hon_him
  * @since 2024-01-19
  */

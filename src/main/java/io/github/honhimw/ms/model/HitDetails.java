@@ -23,6 +23,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * Hit holder with details and source
+ *
+ * @param <T> document type
  * @author hon_him
  * @since 2024-02-22
  */

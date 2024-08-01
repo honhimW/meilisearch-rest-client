@@ -23,6 +23,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
+ * Reactor utils.
+ *
  * @author hon_him
  * @since 2024-01-12
  */
@@ -31,9 +33,10 @@ public class ReactorUtils {
 
     /**
      * Block Mono and return non-null result.
+     *
      * @param mono publisher
+     * @param <R>  result type
      * @return blocking result
-     * @param <R> result type
      */
     @Nonnull
     public static <R> R blockNonNull(@Nonnull Mono<R> mono) {
@@ -46,14 +49,15 @@ public class ReactorUtils {
 
     /**
      * Block Flux and return non-null result.
+     *
      * @param flux publisher
+     * @param <R>  result type
      * @return blocking result
-     * @param <R> result type
      */
     @Nonnull
     public static <R> List<R> blockNonNull(@Nonnull Flux<R> flux) {
         List<R> result = flux.collectList().block();
-        Asserts.status(Objects.nonNull(result), "Flux#collectList will never be null.");
+        Objects.requireNonNull(result, "Flux#collectList will never be null.");
         return result;
     }
 

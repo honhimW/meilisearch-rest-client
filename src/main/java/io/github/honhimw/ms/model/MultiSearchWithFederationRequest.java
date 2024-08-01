@@ -27,6 +27,8 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
+ * MultiSearch with federation request
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -65,6 +67,9 @@ public class MultiSearchWithFederationRequest implements Serializable {
     }
 
 
+    /**
+     * Federation
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -152,11 +157,23 @@ public class MultiSearchWithFederationRequest implements Serializable {
             return this;
         }
 
+        /**
+         * Sets the {@code federation} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param federation the {@code federation} to set
+         * @return a reference to this Builder
+         */
         public Builder federation(Federation federation) {
             this.federation = federation;
             return this;
         }
 
+        /**
+         * Sets the {@code federation} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param consumer the {@code federation} configuration
+         * @return a reference to this Builder
+         */
         public Builder federation(Consumer<Federation> consumer) {
             if (Objects.isNull(this.federation)) {
                 this.federation = new Federation();

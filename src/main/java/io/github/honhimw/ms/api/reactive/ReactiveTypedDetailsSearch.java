@@ -32,6 +32,7 @@ import java.util.function.Consumer;
  *     <li>A POST facet-search route allowing to perform a facet search query on a facet in a single HTTP request.</li>
  * </ul>
  *
+ * @param <T> document type
  * @author hon_him
  * @since 2024-02-22 v1.7.0.0
  */

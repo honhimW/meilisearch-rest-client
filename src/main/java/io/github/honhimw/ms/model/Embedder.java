@@ -22,10 +22,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**
+ * Embedder
+ *
  * @author hon_him
  * @since 2024-01-18
  */
@@ -39,6 +40,7 @@ public class Embedder implements Serializable {
 
     /**
      * Create an embedder with embedder source.
+     *
      * @param source embedder source
      */
     public Embedder(EmbedderSource source) {

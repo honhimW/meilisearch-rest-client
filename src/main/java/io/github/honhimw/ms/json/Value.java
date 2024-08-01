@@ -15,6 +15,8 @@
 package io.github.honhimw.ms.json;
 
 /**
+ * Value
+ *
  * @author hon_him
  * @since 2024-08-01
  */
@@ -23,6 +25,7 @@ public interface Value {
 
     /**
      * Enum value
+     *
      * @return the enum value
      */
     String value();

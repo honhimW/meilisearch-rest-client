@@ -25,6 +25,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
+ * The reactive client to access Meilisearch server.
+ *
  * @author hon_him
  * @since 2024-01-03
  */
@@ -33,14 +35,16 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * Get the indexes.
+     *
      * @return Indexes operator
      */
     ReactiveIndexes indexes();
 
     /**
      * Apply a function to the indexes.
+     *
      * @param operation operation
-     * @param <R> return type
+     * @param <R>       return type
      * @return the result of the operation
      */
     default <R> R indexes(Function<ReactiveIndexes, R> operation) {
@@ -49,14 +53,16 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * Get the tasks.
+     *
      * @return Tasks operator
      */
     ReactiveTasks tasks();
 
     /**
      * Apply a function to the tasks.
+     *
      * @param operation operation
-     * @param <R> return type
+     * @param <R>       return type
      * @return Tasks operator
      */
     default <R> R tasks(Function<ReactiveTasks, R> operation) {
@@ -65,14 +71,16 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * Get the keys.
+     *
      * @return Keys operator
      */
     ReactiveKeys keys();
 
     /**
      * Apply a function to the keys.
+     *
      * @param operation operation
-     * @param <R> return type
+     * @param <R>       return type
      * @return Keys operator
      */
     default <R> R keys(Function<ReactiveKeys, R> operation) {
@@ -98,6 +106,13 @@ public interface ReactiveMSearchClient extends AutoCloseable {
     @Operation(method = "POST", tags = "/multi-search")
     Mono<MultiSearchResponse> multiSearch(MultiSearchRequest request);
 
+    /**
+     * By using the POST /multi-search endpoint, you can now return a single search result object,
+     * whose list of hits is built by merging the hits coming from all the queries in descending ranking score order.
+     *
+     * @param request multi-search request with federation
+     * @return multi-search result federated
+     */
     @Operation(method = "POST", tags = "/multi-search")
     Mono<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request);
 
@@ -105,6 +120,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      * The /health route allows you to verify the status and availability of a Meilisearch instance.
      * <p>
      * Get health of Meilisearch server.
+     *
      * @return None
      */
     @Operation(method = "GET", tags = "/health")
@@ -142,6 +158,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      * <a style="color:red" href="https://www.meilisearch.com/docs/learn/advanced/snapshots">Learn more about snapshots.</a>
      * <p>
      * Snapshot tasks take priority over other tasks in the queue.
+     *
      * @return snapshot task
      */
     @Operation(method = "POST", tags = "/snapshots")
@@ -149,20 +166,23 @@ public interface ReactiveMSearchClient extends AutoCloseable {
 
     /**
      * Get the logs.
+     *
      * @return ReactiveLogs operator
      */
     ReactiveLogs logs();
 
     /**
      * Get the experimental features settings.
+     *
      * @return ExperimentalFeaturesSettings operator
      */
     ReactiveExperimentalFeaturesSettings experimentalFeatures();
 
     /**
      * Apply a function to the experimental features settings.
+     *
      * @param operation operation
-     * @param <R> return type
+     * @param <R>       return type
      * @return ExperimentalFeaturesSettings operator
      */
     default <R> R experimentalFeatures(Function<ReactiveExperimentalFeaturesSettings, R> operation) {

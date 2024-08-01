@@ -14,19 +14,24 @@
 
 package io.github.honhimw.ms.model;
 
+import lombok.Getter;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * Entry list
+ *
  * @author hon_him
  * @since 2024-01-05
  */
 
+@Getter
 public class EntryList {
 
-    private List<Map.Entry<String, String>> list;
+    private final List<Map.Entry<String, String>> list;
 
     private EntryList() {
         this.list = new ArrayList<>();
@@ -51,14 +56,6 @@ public class EntryList {
     public EntryList add(String key, String value) {
         list.add(new AbstractMap.SimpleEntry<>(key, value));
         return this;
-    }
-
-    /**
-     * Returns the list of key-value pairs in the EntryList.
-     * @return the list of key-value pairs
-     */
-    public List<Map.Entry<String, String>> getList() {
-        return list;
     }
 
 }

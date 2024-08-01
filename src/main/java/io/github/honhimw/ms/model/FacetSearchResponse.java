@@ -24,6 +24,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Facet search response
+ *
  * @author hon_him
  * @since 2024-01-02
  */

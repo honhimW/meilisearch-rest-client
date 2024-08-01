@@ -25,6 +25,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
+ * The blocking client to access Meilisearch server.
+ *
  * @author hon_him
  * @since 2024-01-03
  */
@@ -104,6 +106,13 @@ public interface MSearchClient extends AutoCloseable {
     @Operation(method = "POST", tags = "/multi-search")
     MultiSearchResponse multiSearch(MultiSearchRequest request);
 
+    /**
+     * By using the POST /multi-search endpoint, you can now return a single search result object,
+     * whose list of hits is built by merging the hits coming from all the queries in descending ranking score order.
+     *
+     * @param request multi-search request with federation
+     * @return multi-search result federated
+     */
     @Operation(method = "POST", tags = "/multi-search")
     SearchResponse<Map<String, Object>> multiSearch(MultiSearchWithFederationRequest request);
 

@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * Similar search request. depend on AI search
+ *
  * @author hon_him
  * @since 2024-06-05 v1.9.0.0
  */

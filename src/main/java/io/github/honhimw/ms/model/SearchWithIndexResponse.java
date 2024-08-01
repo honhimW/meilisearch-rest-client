@@ -20,13 +20,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
 /**
  * MultiSearch response with indexUid.
  *
+ * @param <T> document type
  * @author hon_him
  * @since 2024-04-26
  */

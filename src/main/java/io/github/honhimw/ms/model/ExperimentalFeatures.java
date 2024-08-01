@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * Experimental features
+ *
  * @author hon_him
  * @since 2024-01-03
  */
@@ -47,6 +49,7 @@ public class ExperimentalFeatures implements Serializable {
 
     /**
      * edit documents by executing a Rhai function on all the documents of your database or a subset of them that you can select by a Meilisearch filter.
+     *
      * @since v1.10
      */
     @Schema(description = "edit documents by executing a Rhai function on all the documents of your database or a subset of them that you can select by a Meilisearch filter.")
@@ -61,6 +64,7 @@ public class ExperimentalFeatures implements Serializable {
     /**
      * Enabling the experimental feature will make a new CONTAINS operator available while filtering on strings.
      * This is similar to the SQL LIKE operator used with %.
+     *
      * @since v1.10
      */
     @Schema(description = "Enabling the experimental feature will make a new CONTAINS operator available while filtering on strings.")

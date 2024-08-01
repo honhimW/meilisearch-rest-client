@@ -31,7 +31,6 @@ package io.github.honhimw.ms;
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.http.ResponseFilter;
 import io.github.honhimw.ms.json.JsonHandler;
-import io.github.honhimw.ms.support.Asserts;
 import io.github.honhimw.ms.support.StringUtils;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -42,6 +41,8 @@ import java.time.Duration;
 import java.util.Objects;
 
 /**
+ * Configuration for MSearchClient.
+ *
  * @author hon_him
  * @since 2023-07-24
  */
@@ -238,10 +239,10 @@ public final class MSearchConfig {
             if (StringUtils.isBlank(serverUrl)) {
                 serverUrl = String.format("%s://%s:%s", ssl ? "https" : "http", host, port);
             }
-            Asserts.status(Objects.nonNull(serverUrl), "serverUrl must not be null");
-            Asserts.status(Objects.nonNull(jsonHandler), "jsonHandler must not be null");
-            Asserts.status(Objects.nonNull(httpClient), "httpClient must not be null");
-            Asserts.status(Objects.nonNull(responseFilter), "responseConsumer must not be null");
+            Objects.requireNonNull(serverUrl, "serverUrl must not be null");
+            Objects.requireNonNull(jsonHandler, "jsonHandler must not be null");
+            Objects.requireNonNull(httpClient, "httpClient must not be null");
+            Objects.requireNonNull(responseFilter, "responseConsumer must not be null");
             return new MSearchConfig(
                 serverUrl,
                 apiKey,

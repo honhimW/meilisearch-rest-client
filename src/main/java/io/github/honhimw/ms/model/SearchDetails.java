@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Search result details
+ *
  * @author hon_him
  * @since 2024-02-22
  */

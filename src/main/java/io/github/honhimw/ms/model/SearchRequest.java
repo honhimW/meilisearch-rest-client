@@ -24,6 +24,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * Search request
+ *
  * @author hon_him
  * @since 2024-01-02
  */

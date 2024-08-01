@@ -23,8 +23,10 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * @since v1.10
+ * Search with indexUid and federation options request
+ *
  * @author hon_him
+ * @since v1.10
  * @since 2024-07-30
  */
 
@@ -77,6 +79,7 @@ public class SearchWithIndexAndFederationOptionsRequest extends SearchWithIndexR
 
     /**
      * set the {@link FederationOptions}
+     *
      * @param federationOptions federation options
      * @return this
      */
@@ -87,6 +90,7 @@ public class SearchWithIndexAndFederationOptionsRequest extends SearchWithIndexR
 
     /**
      * set the {@link FederationOptions}
+     *
      * @param federationWeight federation weight
      * @return this
      */

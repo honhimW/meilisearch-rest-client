@@ -69,6 +69,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * Reactive M-Search client implementation.
+ *
  * @author hon_him
  * @since 2023-07-24
  */
@@ -109,6 +111,7 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
 
     /**
      * Construct a new {@link ReactiveMSearchClientImpl} with the given {@link MSearchConfig}.
+     *
      * @param config the {@link MSearchConfig}
      */
     public ReactiveMSearchClientImpl(MSearchConfig config) {
