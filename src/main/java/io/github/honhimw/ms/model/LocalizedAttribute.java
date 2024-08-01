@@ -30,7 +30,6 @@ import java.util.List;
  *     <li>if the locales list is empty, then Meilisearch is allowed to auto-detect any language in the matching attributes</li>
  *     <li>These rules are applied to the searchableAttributes, the filterableAttributes, and the sortableAttributes.</li>
  * </ul>
- * <p>
  * <pre>{@code
  * {
  *     "locales": [],
@@ -39,7 +38,6 @@ import java.util.List;
  * }
  * </pre>
  * means the is the default rule.
- * <p>
  * <p style="font-weight:bold;font-size:large">Default: null</p>
  *
  * @author hon_him

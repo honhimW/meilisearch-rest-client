@@ -46,6 +46,7 @@ import io.github.honhimw.ms.api.LocalizedAttributesSettings;
 import io.github.honhimw.ms.model.LocalizedAttribute;
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.support.EnabledOnVersion;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -56,6 +57,7 @@ import java.util.Objects;
  * @since 2024-08-01
  */
 
+@EnabledOnVersion("1.10")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LocalizedAttributesSettingsTests extends SettingTestBase {
 

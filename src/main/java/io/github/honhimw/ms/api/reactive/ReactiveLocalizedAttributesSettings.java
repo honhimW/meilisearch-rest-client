@@ -28,6 +28,7 @@ import java.util.List;
  * This will prevent users from using alternative Meilisearch images we were separately created until now
  *
  * @author hon_him
+ * @since v1.10
  * @since 2024-08-01
  */
 

@@ -27,6 +27,7 @@ import java.util.List;
  * You can now set up the language of your index in your settings and during the search.
  * This will prevent users from using alternative Meilisearch images we were separately created until now
  *
+ * @since v1.10
  * @author hon_him
  * @since 2024-08-01
  */
