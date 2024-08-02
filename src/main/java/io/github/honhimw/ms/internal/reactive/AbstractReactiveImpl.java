@@ -18,12 +18,20 @@ import io.github.honhimw.ms.http.HttpFailureException;
 import io.github.honhimw.ms.http.ReactiveHttpUtils;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.json.TypeRef;
+import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.TaskStatus;
+import io.github.honhimw.ms.model.TaskType;
+import io.github.honhimw.ms.model.TaskView;
+import io.github.honhimw.ms.support.ReactorUtils;
+import io.github.honhimw.ms.support.TypeRefs;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.Charset;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -140,7 +148,8 @@ abstract class AbstractReactiveImpl {
                 } else {
                     return false;
                 }
-            }, throwable -> Mono.empty());
+            }, throwable -> Mono.empty())
+            .map(t -> decorate(t, typeRef));
     }
 
     protected void json(ReactiveHttpUtils.Configurer configurer, Object object) {
@@ -150,5 +159,83 @@ abstract class AbstractReactiveImpl {
     protected void json(ReactiveHttpUtils.Configurer configurer, String json) {
         configurer.body(payload -> payload.raw(raw -> raw.json(json)));
     }
+
+    @SuppressWarnings("unchecked")
+    protected <T> T decorate(T delegate, TypeRef<T> typeRef) {
+        if (typeRef == TypeRefs.TaskInfoRef.INSTANCE) {
+            return (T) delegateTaskInfo((TaskInfo) delegate);
+        }
+        return delegate;
+    }
+
+    protected TaskInfo delegateTaskInfo(TaskInfo taskInfo) {
+        return new DelegateTaskInfo(taskInfo) {
+            @Override
+            public TaskView await(Duration duration) {
+                Mono<TaskView> tasks = _client.tasks(reactiveTasks -> reactiveTasks
+                    .await(this, _client.config.getAwaitAttempts(), _client.config.getAwaitFixedDelay(), duration));
+                return ReactorUtils.blockNonNull(tasks);
+            }
+        };
+    }
+
+    private static abstract class DelegateTaskInfo extends TaskInfo {
+        private final TaskInfo taskInfo;
+
+        public DelegateTaskInfo(TaskInfo taskInfo) {
+            this.taskInfo = taskInfo;
+        }
+
+        @Override
+        public Integer getTaskUid() {
+            return taskInfo.getTaskUid();
+        }
+
+        @Override
+        public String getIndexUid() {
+            return taskInfo.getIndexUid();
+        }
+
+        @Override
+        public TaskStatus getStatus() {
+            return taskInfo.getStatus();
+        }
+
+        @Override
+        public TaskType getType() {
+            return taskInfo.getType();
+        }
+
+        @Override
+        public LocalDateTime getEnqueuedAt() {
+            return taskInfo.getEnqueuedAt();
+        }
+
+        @Override
+        public void setTaskUid(Integer taskUid) {
+            taskInfo.setTaskUid(taskUid);
+        }
+
+        @Override
+        public void setIndexUid(String indexUid) {
+            taskInfo.setIndexUid(indexUid);
+        }
+
+        @Override
+        public void setStatus(TaskStatus status) {
+            taskInfo.setStatus(status);
+        }
+
+        @Override
+        public void setType(TaskType type) {
+            taskInfo.setType(type);
+        }
+
+        @Override
+        public void setEnqueuedAt(LocalDateTime enqueuedAt) {
+            taskInfo.setEnqueuedAt(enqueuedAt);
+        }
+    }
+
 
 }
