@@ -123,44 +123,27 @@ public static void main(String[] args) {
 
 ```java
 ReactiveTypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
-searcher.
-
-find(builder ->builder
-    .
-
-q("hello world")
-    .
-
-filter("id < 10")
-    .
-
-showRankingScore(true)
+searcher.find(builder ->builder
+    .q("hello world")
+    .filter("id < 10")
+    .showRankingScore(true)
 )
-    .
-
-map(response ->{
-Integer estimatedTotalHits = response.getEstimatedTotalHits();
-Long processingTimeMs = response.getProcessingTimeMs();
-        return response.
-
-getHits();
+    .map(response -> {
+        Integer estimatedTotalHits = response.getEstimatedTotalHits();
+        Long processingTimeMs = response.getProcessingTimeMs();
+        return response.getHits();
     })
-        .
+    .doOnNext(hitDetails -> {
+        for(HitDetails<Movie> hitDetail :hitDetails){
+            SearchDetails details = hitDetail.getDetails(); // Search Details
+            Movie source = hitDetail.getSource();           // Source Document
 
-doOnNext(hitDetails ->{
-    for(
-HitDetails<Movie> hitDetail :hitDetails){
-SearchDetails details = hitDetail.getDetails(); // Search Details
-Movie source = hitDetail.getSource();           // Source Document
-
-Map<String, Object> formatted = details.get_formatted();
-SearchDetails.Geo geo = details.get_geo();
-Double rankingScore = details.get_rankingScore();
-            }
-                })
-                .
-
-subscribe()
+            Map<String, Object> formatted = details.get_formatted();
+            SearchDetails.Geo geo = details.get_geo();
+            Double rankingScore = details.get_rankingScore();
+        }
+    })
+    .subscribe()
 ```
 
 #### Blocking
@@ -205,13 +188,12 @@ SearchDetailsResponse<Movie> response = searcher.find(builder -> builder
 Integer estimatedTotalHits = response.getEstimatedTotalHits();
 Long processingTimeMs = response.getProcessingTimeMs();
 List<HitDetails<Movie>> hitDetails = response.getHits();
-for(
-HitDetails<Movie> hitDetail :hitDetails){
-SearchDetails details = hitDetail.getDetails(); // Search Details
-Movie source = hitDetail.getSource();           // Source Document
+for(HitDetails<Movie> hitDetail :hitDetails){
+    SearchDetails details = hitDetail.getDetails(); // Search Details
+    Movie source = hitDetail.getSource();           // Source Document
 
-Map<String, Object> formatted = details.get_formatted();
-SearchDetails.Geo geo = details.get_geo();
-Double rankingScore = details.get_rankingScore();
+    Map<String, Object> formatted = details.get_formatted();
+    SearchDetails.Geo geo = details.get_geo();
+    Double rankingScore = details.get_rankingScore();
 }
 ```
