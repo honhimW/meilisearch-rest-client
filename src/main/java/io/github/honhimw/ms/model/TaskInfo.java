@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.model;
 
+import io.github.honhimw.ms.json.JsonHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
@@ -67,5 +69,19 @@ public class TaskInfo implements Serializable {
      */
     @Schema(description = "Represents the date and time in the RFC 3339 format when the task has been enqueued")
     private LocalDateTime enqueuedAt;
+
+    /**
+     * Only used in non-reactive context.
+     */
+    public TaskView await() {
+        return this.await(Duration.ofDays(1));
+    }
+
+    /**
+     * Only used in non-reactive context.
+     */
+    public TaskView await(Duration duration) {
+        throw new UnsupportedOperationException("Not Supported");
+    }
 
 }

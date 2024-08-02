@@ -89,10 +89,10 @@ meili-search.api-key=MASTER_KEY
 
 ## Usage
 
-#### Reactive(reactor)
+### Searching
 
 ```java
-public static void main(String[] args) {
+public static void reactive() {
     JsonHandler jsonHandler = new JacksonJsonHandler();
     @Cleanup
     ReactiveMSearchClient client = ReactiveMSearchClient.create(builder -> builder
@@ -117,39 +117,8 @@ public static void main(String[] args) {
         )
     ).block();
 }
-```
 
-##### Search With Details API
-
-```java
-ReactiveTypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
-searcher.find(builder ->builder
-    .q("hello world")
-    .filter("id < 10")
-    .showRankingScore(true)
-)
-    .map(response -> {
-        Integer estimatedTotalHits = response.getEstimatedTotalHits();
-        Long processingTimeMs = response.getProcessingTimeMs();
-        return response.getHits();
-    })
-    .doOnNext(hitDetails -> {
-        for(HitDetails<Movie> hitDetail :hitDetails){
-            SearchDetails details = hitDetail.getDetails(); // Search Details
-            Movie source = hitDetail.getSource();           // Source Document
-
-            Map<String, Object> formatted = details.get_formatted();
-            SearchDetails.Geo geo = details.get_geo();
-            Double rankingScore = details.get_rankingScore();
-        }
-    })
-    .subscribe()
-```
-
-#### Blocking
-
-```java
-public static void main(String[] args) {
+public static void blocking() {
     JsonHandler jsonHandler = new JacksonJsonHandler();
     @Cleanup
     MSearchClient client = MSearchClient.create(builder -> builder
@@ -176,24 +145,63 @@ public static void main(String[] args) {
 }
 ```
 
-##### Search With Details API
+### Search With Details API
 
 ```java
-TypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
-SearchDetailsResponse<Movie> response = searcher.find(builder -> builder
-    .q("hello world")
-    .filter("id < 10")
-    .showRankingScore(true)
-);
-Integer estimatedTotalHits = response.getEstimatedTotalHits();
-Long processingTimeMs = response.getProcessingTimeMs();
-List<HitDetails<Movie>> hitDetails = response.getHits();
-for(HitDetails<Movie> hitDetail :hitDetails){
-    SearchDetails details = hitDetail.getDetails(); // Search Details
-    Movie source = hitDetail.getSource();           // Source Document
+public static void reactive() {
+    ReactiveTypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
+    searcher.find(builder ->builder
+            .q("hello world")
+            .filter("id < 10")
+            .showRankingScore(true)
+        )
+        .map(response -> {
+            Integer estimatedTotalHits = response.getEstimatedTotalHits();
+            Long processingTimeMs = response.getProcessingTimeMs();
+            return response.getHits();
+        })
+        .doOnNext(hitDetails -> {
+            for(HitDetails<Movie> hitDetail :hitDetails){
+                SearchDetails details = hitDetail.getDetails(); // Search Details
+                Movie source = hitDetail.getSource();           // Source Document
 
-    Map<String, Object> formatted = details.get_formatted();
-    SearchDetails.Geo geo = details.get_geo();
-    Double rankingScore = details.get_rankingScore();
+                Map<String, Object> formatted = details.get_formatted();
+                SearchDetails.Geo geo = details.get_geo();
+                Double rankingScore = details.get_rankingScore();
+            }
+        })
+        .subscribe()
+}
+
+public static void blocking() {
+    TypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
+    SearchDetailsResponse<Movie> response = searcher.find(builder -> builder
+        .q("hello world")
+        .filter("id < 10")
+        .showRankingScore(true)
+    );
+    Integer estimatedTotalHits = response.getEstimatedTotalHits();
+    Long processingTimeMs = response.getProcessingTimeMs();
+    List<HitDetails<Movie>> hitDetails = response.getHits();
+    for(HitDetails<Movie> hitDetail :hitDetails){
+        SearchDetails details = hitDetail.getDetails(); // Search Details
+        Movie source = hitDetail.getSource();           // Source Document
+
+        Map<String, Object> formatted = details.get_formatted();
+        SearchDetails.Geo geo = details.get_geo();
+        Double rankingScore = details.get_rankingScore();
+    }
+}
+```
+
+### Await On TaskInfo, Only in blocking
+
+```java
+public static void blocking() {
+    TaskInfo saveTask = client.indexes(indexes -> indexes
+        .documents("movies").save(jsonQuote("{'id':100}")));
+    TaskView taskView = saveTask.await();
+    TaskStatus status = taskView.getStatus();
+    assert status == TaskStatus.SUCCEEDED || status == TaskStatus.FAILED;
 }
 ```

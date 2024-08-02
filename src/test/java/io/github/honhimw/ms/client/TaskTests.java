@@ -17,6 +17,7 @@ package io.github.honhimw.ms.client;
 import io.github.honhimw.ms.api.Documents;
 import io.github.honhimw.ms.api.Tasks;
 import io.github.honhimw.ms.model.TaskInfo;
+import io.github.honhimw.ms.model.TaskStatus;
 import io.github.honhimw.ms.model.TaskView;
 import io.github.honhimw.ms.support.TestSupport;
 import org.junit.jupiter.api.MethodOrderer;
@@ -44,6 +45,15 @@ public class TaskTests extends TestBase {
         Tasks tasks = getBlockingTasks();
         TaskView taskView = tasks.get(save.getTaskUid());
         assert Objects.nonNull(taskView.getUid());
+    }
+
+
+    @Order(1)
+    @Test
+    void awaitOnTaskInfo() {
+        TaskInfo saveTask = blockingClient.indexes(indexes -> indexes.documents(INDEX).save(TestSupport.jsonQuote("{'id':100}")));
+        TaskStatus status = saveTask.await().getStatus();
+        assert status == TaskStatus.SUCCEEDED || status == TaskStatus.FAILED;
     }
 
     @Test
