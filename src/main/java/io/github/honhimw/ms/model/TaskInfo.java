@@ -14,7 +14,6 @@
 
 package io.github.honhimw.ms.model;
 
-import io.github.honhimw.ms.json.JsonHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -72,6 +71,8 @@ public class TaskInfo implements Serializable {
 
     /**
      * Only used in non-reactive context.
+     *
+     * @return finish task view
      */
     public TaskView await() {
         return this.await(Duration.ofDays(1));
@@ -79,6 +80,9 @@ public class TaskInfo implements Serializable {
 
     /**
      * Only used in non-reactive context.
+     *
+     * @param duration duration
+     * @return finish task view
      */
     public TaskView await(Duration duration) {
         throw new UnsupportedOperationException("Not Supported");

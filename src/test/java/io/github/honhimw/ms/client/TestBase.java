@@ -19,6 +19,7 @@ import io.github.honhimw.ms.api.MSearchClient;
 import io.github.honhimw.ms.api.Tasks;
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
 import io.github.honhimw.ms.api.reactive.ReactiveTasks;
+import io.github.honhimw.ms.json.GsonJsonHandler;
 import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.model.TaskInfo;
@@ -53,6 +54,7 @@ public class TestBase {
     @BeforeAll
     public static void init() {
         jsonHandler = new JacksonJsonHandler();
+//        jsonHandler = new GsonJsonHandler();
         reactiveClient = ReactiveMSearchClient.create(builder -> builder
             .enableSSL(false)
             .host(MeiliSearchProperties.getHost())

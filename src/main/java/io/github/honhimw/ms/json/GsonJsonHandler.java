@@ -21,10 +21,9 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +49,7 @@ public class GsonJsonHandler implements JsonHandler {
 
     /**
      * Creates a new instance of the GsonJsonHandler with the given gson.
+     *
      * @param gson configured gson instance
      */
     public GsonJsonHandler(Gson gson) {
@@ -64,6 +64,8 @@ public class GsonJsonHandler implements JsonHandler {
     public static GsonBuilder defaultBuilder() {
         return new GsonBuilder()
             .setDateFormat(RFC_3339)
+            .setObjectToNumberStrategy(IToNumberPolicy.INSTANCE)
+            .setNumberToNumberStrategy(IToNumberPolicy.INSTANCE)
             .registerTypeAdapter(LocalDate.class, new TypeAdapter<LocalDate>() {
                 @Override
                 public void write(JsonWriter out, LocalDate value) throws IOException {
@@ -119,6 +121,25 @@ public class GsonJsonHandler implements JsonHandler {
                         return null;
                     }
                     return LocalDateTime.parse(in.nextString(), RFC_3339_FORMATTER).toInstant(ZoneOffset.UTC);
+                }
+            })
+            .registerTypeAdapter(Duration.class, new TypeAdapter<Duration>() {
+                @Override
+                public void write(JsonWriter out, Duration value) throws IOException {
+                    if (value == null) {
+                        out.nullValue();
+                        return;
+                    }
+                    out.value(value.toString());
+                }
+
+                @Override
+                public Duration read(JsonReader in) throws IOException {
+                    if (in.peek() == JsonToken.NULL) {
+                        in.nextNull();
+                        return null;
+                    }
+                    return Duration.parse(in.nextString());
                 }
             })
             .setLongSerializationPolicy(LongSerializationPolicy.STRING)
@@ -185,4 +206,36 @@ public class GsonJsonHandler implements JsonHandler {
     public <T> T transform(Object o, TypeRef<T> typeRef) {
         return gson.fromJson(gson.toJsonTree(o), typeRef.getType());
     }
+
+
+    private static class IToNumberPolicy implements ToNumberStrategy {
+
+        private static final IToNumberPolicy INSTANCE = new IToNumberPolicy();
+
+        private IToNumberPolicy() {
+        }
+
+        @Override
+        public Number readNumber(JsonReader in) throws IOException, JsonParseException {
+            String value = in.nextString();
+            if (value.indexOf('.') >= 0) {
+                BigDecimal bigDecimal = new BigDecimal(value);
+                if (bigDecimal.compareTo(BigDecimal.valueOf(Double.MAX_VALUE)) <= 0) {
+                    return bigDecimal.doubleValue();
+                } else {
+                    return bigDecimal;
+                }
+            } else {
+                BigInteger bigInteger = new BigInteger(value);
+                if (bigInteger.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0) {
+                    return bigInteger.intValue();
+                } else if (bigInteger.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) <= 0) {
+                    return bigInteger.longValue();
+                } else {
+                    return bigInteger;
+                }
+            }
+        }
+    }
+
 }
