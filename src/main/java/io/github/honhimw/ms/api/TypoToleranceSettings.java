@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.TypoTolerance;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.function.Consumer;
 
@@ -40,7 +40,7 @@ public interface TypoToleranceSettings {
      *
      * @return current index stop words
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     TypoTolerance get();
 
     /**
@@ -49,7 +49,7 @@ public interface TypoToleranceSettings {
      * @param typoTolerance An object that contains all synonyms and their associated words. Add the associated words in an array to set a synonym for a word.
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     TaskInfo update(TypoTolerance typoTolerance);
 
     /**
@@ -58,7 +58,7 @@ public interface TypoToleranceSettings {
      * @param builder TypoTolerance builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     default TaskInfo update(Consumer<TypoTolerance.Builder> builder) {
         TypoTolerance.Builder _builder = TypoTolerance.builder();
         builder.accept(_builder);
@@ -71,7 +71,7 @@ public interface TypoToleranceSettings {
      * @return reset task
      * @see TypoTolerance#defaultObject()
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     TaskInfo reset();
 
 }

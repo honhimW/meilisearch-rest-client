@@ -48,7 +48,7 @@ import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.api.reactive.ReactiveMSearchClient;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.Map;
 
@@ -108,13 +108,13 @@ public class MSearchClientImpl implements MSearchClient {
     }
 
     @Override
-    @Operation(method = "POST", tags = "/dumps")
+    @Operation(method = "POST", paths = "/dumps")
     public TaskInfo dumps() {
         return ReactorUtils.blockNonNull(reactiveMSearchClient.dumps());
     }
 
     @Override
-    @Operation(method = "POST", tags = "/snapshots")
+    @Operation(method = "POST", paths = "/snapshots")
     public TaskInfo snapshots() {
         return ReactorUtils.blockNonNull(reactiveMSearchClient.snapshots());
     }

@@ -19,7 +19,7 @@ import io.github.honhimw.ms.model.Embedder;
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.MapBuilder;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -41,7 +41,7 @@ public interface ReactiveEmbeddersSettings {
      *
      * @return current embedders
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/embedders")
     Mono<Map<String, ? extends Embedder>> get();
 
     /**
@@ -50,7 +50,7 @@ public interface ReactiveEmbeddersSettings {
      * @param embedders embedders
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/embedders")
     Mono<TaskInfo> update(Map<String, ? extends Embedder> embedders);
 
     /**
@@ -58,7 +58,7 @@ public interface ReactiveEmbeddersSettings {
      * @param embedders embedders builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/embedders")
     default Mono<TaskInfo> update(Consumer<MapBuilder<String, ? extends Embedder>> embedders) {
         MapBuilder<String, Embedder> builder = MapBuilder.builder();
         embedders.accept(builder);
@@ -74,7 +74,7 @@ public interface ReactiveEmbeddersSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/embedders")
     Mono<TaskInfo> reset();
 
 }

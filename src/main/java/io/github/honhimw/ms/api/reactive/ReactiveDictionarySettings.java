@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public interface ReactiveDictionarySettings {
      *
      * @return current index dictionary settings
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/dictionary")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/dictionary")
     Mono<List<String>> get();
 
     /**
@@ -61,7 +61,7 @@ public interface ReactiveDictionarySettings {
      * @param dictionary override dictionary settings
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/dictionary")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/dictionary")
     Mono<TaskInfo> update(List<String> dictionary);
 
     /**
@@ -69,7 +69,7 @@ public interface ReactiveDictionarySettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/dictionary")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/dictionary")
     Mono<TaskInfo> reset();
 
 }

@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.function.Consumer;
@@ -41,7 +41,7 @@ public interface Settings {
      *
      * @return settings detail of current index
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/settings")
     Setting get();
 
     /**
@@ -53,7 +53,7 @@ public interface Settings {
      * @param setting reset current index setting if null, any parameters not provided in the body will be left unchanged.
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "PATCH", paths = "/indexes/{indexUid}/settings")
     TaskInfo update(@Nullable Setting setting);
 
     /**
@@ -62,7 +62,7 @@ public interface Settings {
      * @param builder setting builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "PATCH", paths = "/indexes/{indexUid}/settings")
     default TaskInfo update(Consumer<Setting.Builder> builder) {
         Setting.Builder _builder = Setting.builder();
         builder.accept(_builder);
@@ -74,7 +74,7 @@ public interface Settings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/settings")
     TaskInfo reset();
 
     /**
@@ -82,7 +82,7 @@ public interface Settings {
      *
      * @return {@link DictionarySettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/dictionary")
+    @Operation(paths = "/indexes/{index_uid}/settings/dictionary")
     DictionarySettings dictionary();
 
     /**
@@ -101,7 +101,7 @@ public interface Settings {
      *
      * @return {@link DisplayedAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/displayed-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/displayed-attributes")
     DisplayedAttributesSettings displayedAttributes();
 
     /**
@@ -120,7 +120,7 @@ public interface Settings {
      *
      * @return {@link DistinctAttributeSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(paths = "/indexes/{index_uid}/settings/distinct-attribute")
     DistinctAttributeSettings distinctAttribute();
 
     /**
@@ -139,7 +139,7 @@ public interface Settings {
      *
      * @return {@link FacetingSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(paths = "/indexes/{index_uid}/settings/faceting")
     FacetingSettings faceting();
 
     /**
@@ -158,7 +158,7 @@ public interface Settings {
      *
      * @return {@link FilterableAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/filterable-attributes")
     FilterableAttributesSettings filterableAttributes();
 
     /**
@@ -177,7 +177,7 @@ public interface Settings {
      *
      * @return {@link PaginationSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(paths = "/indexes/{index_uid}/settings/pagination")
     PaginationSettings pagination();
 
     /**
@@ -196,7 +196,7 @@ public interface Settings {
      *
      * @return {@link ProximityPrecisionSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/proximity-precision")
+    @Operation(paths = "/indexes/{index_uid}/settings/proximity-precision")
     ProximityPrecisionSettings proximityPrecision();
 
     /**
@@ -215,7 +215,7 @@ public interface Settings {
      *
      * @return {@link RankingRulesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")
+    @Operation(paths = "/indexes/{index_uid}/settings/ranking-rules")
     RankingRulesSettings rankingRules();
 
     /**
@@ -234,7 +234,7 @@ public interface Settings {
      *
      * @return {@link SearchableAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/searchable-attributes")
     SearchableAttributesSettings searchAttributes();
 
     /**
@@ -253,7 +253,7 @@ public interface Settings {
      *
      * @return {@link CutoffSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/search-cutoff-ms")
+    @Operation(paths = "/indexes/{index_uid}/settings/search-cutoff-ms")
     CutoffSettings cutoff();
 
     /**
@@ -272,7 +272,7 @@ public interface Settings {
      *
      * @return {@link SeparatorTokensSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(paths = "/indexes/{index_uid}/settings/separator-tokens")
     SeparatorTokensSettings separatorTokens();
 
     /**
@@ -291,7 +291,7 @@ public interface Settings {
      *
      * @return {@link NonSeparatorTokensSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/non-separator-tokens")
+    @Operation(paths = "/indexes/{index_uid}/settings/non-separator-tokens")
     NonSeparatorTokensSettings nonSeparatorTokens();
 
     /**
@@ -310,7 +310,7 @@ public interface Settings {
      *
      * @return {@link SortableAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/sortable-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/sortable-attributes")
     SortableAttributesSettings sortableAttributes();
 
     /**
@@ -329,7 +329,7 @@ public interface Settings {
      *
      * @return {@link StopWordsSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(paths = "/indexes/{index_uid}/settings/stop-words")
     StopWordsSettings stopWords();
 
     /**
@@ -348,7 +348,7 @@ public interface Settings {
      *
      * @return {@link SynonymsSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/synonyms")
+    @Operation(paths = "/indexes/{index_uid}/settings/synonyms")
     SynonymsSettings synonyms();
 
     /**
@@ -367,7 +367,7 @@ public interface Settings {
      *
      * @return {@link TypoToleranceSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(paths = "/indexes/{index_uid}/settings/typo-tolerance")
     TypoToleranceSettings typoTolerance();
 
     /**
@@ -386,7 +386,7 @@ public interface Settings {
      *
      * @return {@link EmbeddersSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(paths = "/indexes/{index_uid}/settings/embedders")
     EmbeddersSettings embedders();
 
     /**
@@ -405,7 +405,7 @@ public interface Settings {
      *
      * @return {@link LocalizedAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/localized-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/localized-attributes")
     LocalizedAttributesSettings localizedAttributes();
 
     /**

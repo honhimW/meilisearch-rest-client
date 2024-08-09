@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.LogStreamRequest;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
@@ -34,7 +34,7 @@ public interface ReactiveLogs {
      * @param request request
      * @return None
      */
-    @Operation(method = "POST", tags = "/logs/stream")
+    @Operation(method = "POST", paths = "/logs/stream")
     Mono<Void> update(LogStreamRequest request);
 
     /**
@@ -53,7 +53,7 @@ public interface ReactiveLogs {
      * @param request request
      * @return None
      */
-    @Operation(method = "POST", tags = "/logs/stderr")
+    @Operation(method = "POST", paths = "/logs/stderr")
     Mono<Void> stderr(LogStreamRequest request);
 
     /**
@@ -72,7 +72,7 @@ public interface ReactiveLogs {
      * Reset the stream
      * @return None
      */
-    @Operation(method = "DELETE", tags = "/logs/stream")
+    @Operation(method = "DELETE", paths = "/logs/stream")
     Mono<Void> reset();
 
 }

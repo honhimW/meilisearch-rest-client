@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public interface Indexes {
      * @param limit  Number of indexes to return
      * @return paginated indexes
      */
-    @Operation(method = "GET", tags = "/indexes")
+    @Operation(method = "GET", paths = "/indexes")
     Page<Index> list(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
@@ -50,7 +50,7 @@ public interface Indexes {
      * @param page page builder
      * @return paginated indexes
      */
-    @Operation(method = "GET", tags = "/indexes")
+    @Operation(method = "GET", paths = "/indexes")
     Page<Index> list(Consumer<PageRequest> page);
 
     /**
@@ -59,7 +59,7 @@ public interface Indexes {
      * @param page page request
      * @return paginated indexes
      */
-    @Operation(method = "GET", tags = "/indexes")
+    @Operation(method = "GET", paths = "/indexes")
     Page<Index> list(PageRequest page);
 
     /**
@@ -68,7 +68,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      * @return index
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}")
     Optional<Index> get(String uid);
 
     /**
@@ -78,7 +78,7 @@ public interface Indexes {
      * @param primaryKey Primary key of the requested index
      * @return create task
      */
-    @Operation(method = "POST", tags = "/indexes")
+    @Operation(method = "POST", paths = "/indexes")
     TaskInfo create(String uid, @Nullable String primaryKey);
 
     /**
@@ -87,7 +87,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      * @return create task
      */
-    @Operation(method = "POST", tags = "/indexes")
+    @Operation(method = "POST", paths = "/indexes")
     TaskInfo create(String uid);
 
     /**
@@ -97,7 +97,7 @@ public interface Indexes {
      * @param primaryKey Primary key of the requested index
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}")
     TaskInfo update(String uid, String primaryKey);
 
     /**
@@ -106,7 +106,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}")
     TaskInfo delete(String uid);
 
     /**
@@ -117,7 +117,7 @@ public interface Indexes {
      * @param uids Array of the two indexUids to be swapped
      * @return update task
      */
-    @Operation(method = "POST", tags = "/swap-indexes")
+    @Operation(method = "POST", paths = "/swap-indexes")
     TaskInfo swap(List<Map.Entry<String, String>> uids);
 
     /**
@@ -128,7 +128,7 @@ public interface Indexes {
      * @param consumer entryList configurer
      * @return update task
      */
-    @Operation(method = "POST", tags = "/swap-indexes")
+    @Operation(method = "POST", paths = "/swap-indexes")
     TaskInfo swap(Consumer<EntryList> consumer);
 
     /**
@@ -148,7 +148,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      * @return {@link Documents} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/documents")
+    @Operation(paths = "/indexes/{index_uid}/documents")
     Documents documents(String uid);
 
     /**
@@ -217,7 +217,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      * @return {@link Search} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/search")
+    @Operation(paths = "/indexes/{index_uid}/search")
     Search search(String uid);
 
     /**
@@ -324,7 +324,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      * @return settings
      */
-    @Operation(tags = "/indexes/{indexUid}/settings")
+    @Operation(paths = "/indexes/{indexUid}/settings")
     Settings settings(String uid);
 
     /**
@@ -342,7 +342,7 @@ public interface Indexes {
      *
      * @return stats of all indexes.
      */
-    @Operation(method = "GET", tags = "/stats")
+    @Operation(method = "GET", paths = "/stats")
     Stats stats();
 
     /**
@@ -351,7 +351,7 @@ public interface Indexes {
      * @param uid uid of the requested index
      * @return stats of an index.
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/stats")
     IndexStats stats(String uid);
 
 }

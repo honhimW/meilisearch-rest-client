@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -41,7 +41,7 @@ public interface ReactiveIndexes {
      * @param limit  Number of indexes to return
      * @return page of indexes
      */
-    @Operation(method = "GET", tags = "/indexes")
+    @Operation(method = "GET", paths = "/indexes")
     Mono<Page<Index>> list(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
@@ -49,7 +49,7 @@ public interface ReactiveIndexes {
      * @param page page builder
      * @return page of indexes
      */
-    @Operation(method = "GET", tags = "/indexes")
+    @Operation(method = "GET", paths = "/indexes")
     default Mono<Page<Index>> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
         page.accept(pageRequest);
@@ -61,7 +61,7 @@ public interface ReactiveIndexes {
      * @param page page request
      * @return page of indexes
      */
-    @Operation(method = "GET", tags = "/indexes")
+    @Operation(method = "GET", paths = "/indexes")
     default Mono<Page<Index>> list(PageRequest page) {
         return list(page.toOffset(), page.toLimit());
     }
@@ -72,7 +72,7 @@ public interface ReactiveIndexes {
      * @param uid uid of the requested index
      * @return {@link Index}
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}")
     Mono<Index> get(String uid);
 
     /**
@@ -82,7 +82,7 @@ public interface ReactiveIndexes {
      * @param primaryKey Primary key of the requested index
      * @return create task
      */
-    @Operation(method = "POST", tags = "/indexes")
+    @Operation(method = "POST", paths = "/indexes")
     Mono<TaskInfo> create(String uid, @Nullable String primaryKey);
 
     /**
@@ -90,7 +90,7 @@ public interface ReactiveIndexes {
      * @param uid uid of the requested index
      * @return create task
      */
-    @Operation(method = "POST", tags = "/indexes")
+    @Operation(method = "POST", paths = "/indexes")
     default Mono<TaskInfo> create(String uid) {
         return create(uid, null);
     }
@@ -102,7 +102,7 @@ public interface ReactiveIndexes {
      * @param primaryKey Primary key of the requested index
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}")
     Mono<TaskInfo> update(String uid, String primaryKey);
 
     /**
@@ -111,7 +111,7 @@ public interface ReactiveIndexes {
      * @param uid uid of the requested index
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}")
     Mono<TaskInfo> delete(String uid);
 
     /**
@@ -122,7 +122,7 @@ public interface ReactiveIndexes {
      * @param uids Array of the two indexUids to be swapped
      * @return indexSwap
      */
-    @Operation(method = "POST", tags = "/swap-indexes")
+    @Operation(method = "POST", paths = "/swap-indexes")
     Mono<TaskInfo> swap(List<Map.Entry<String, String>> uids);
 
     /**
@@ -134,7 +134,7 @@ public interface ReactiveIndexes {
      * @see #swap(List)
      * @return swap task
      */
-    @Operation(method = "POST", tags = "/swap-indexes")
+    @Operation(method = "POST", paths = "/swap-indexes")
     default Mono<TaskInfo> swap(Consumer<EntryList> consumer) {
         EntryList entryList = EntryList.newInstance();
         consumer.accept(entryList);
@@ -157,7 +157,7 @@ public interface ReactiveIndexes {
      * @param uid uid of the requested index
      * @return {@link ReactiveDocuments} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/documents")
+    @Operation(paths = "/indexes/{index_uid}/documents")
     ReactiveDocuments documents(String uid);
 
     /**
@@ -229,7 +229,7 @@ public interface ReactiveIndexes {
      * @param uid uid of the requested index
      * @return {@link ReactiveSearch} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/search")
+    @Operation(paths = "/indexes/{index_uid}/search")
     ReactiveSearch search(String uid);
 
     /**
@@ -341,7 +341,7 @@ public interface ReactiveIndexes {
      * @param uid index uid
      * @return {@link ReactiveSettings} operator
      */
-    @Operation(tags = "/indexes/{indexUid}/settings")
+    @Operation(paths = "/indexes/{indexUid}/settings")
     ReactiveSettings settings(String uid);
 
     /**
@@ -360,7 +360,7 @@ public interface ReactiveIndexes {
      *
      * @return stats of all indexes.
      */
-    @Operation(method = "GET", tags = "/stats")
+    @Operation(method = "GET", paths = "/stats")
     Mono<Stats> stats();
 
     /**
@@ -369,7 +369,7 @@ public interface ReactiveIndexes {
      * @param uid index uidReactiveIndexes
      * @return stats of an index.
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/stats")
     Mono<IndexStats> stats(String uid);
 
 

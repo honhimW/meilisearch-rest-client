@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.support.FilterBuilder;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.github.honhimw.ms.api.annotation.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

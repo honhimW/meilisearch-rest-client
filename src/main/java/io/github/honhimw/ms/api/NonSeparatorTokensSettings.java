@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public interface NonSeparatorTokensSettings {
      *
      * @return current index non-separator tokens
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/non-separator-tokens")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/non-separator-tokens")
     List<String> get();
 
     /**
@@ -44,7 +44,7 @@ public interface NonSeparatorTokensSettings {
      * @param nonSeparatorTokens An array of strings, with each string indicating a token present in list of word separators.
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/non-separator-tokens")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/non-separator-tokens")
     TaskInfo update(List<String> nonSeparatorTokens);
 
 
@@ -53,7 +53,7 @@ public interface NonSeparatorTokensSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/non-separator-tokens")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/non-separator-tokens")
     TaskInfo reset();
 
 }

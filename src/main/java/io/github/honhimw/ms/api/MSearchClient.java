@@ -18,7 +18,7 @@ import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.api.reactive.Logs;
 import io.github.honhimw.ms.internal.MSearchClientImpl;
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -103,7 +103,7 @@ public interface MSearchClient extends AutoCloseable {
      * @param request multi-search request
      * @return multi-search result
      */
-    @Operation(method = "POST", tags = "/multi-search")
+    @Operation(method = "POST", paths = "/multi-search")
     MultiSearchResponse multiSearch(MultiSearchRequest request);
 
     /**
@@ -113,7 +113,7 @@ public interface MSearchClient extends AutoCloseable {
      * @param request multi-search request with federation
      * @return multi-search result federated
      */
-    @Operation(method = "POST", tags = "/multi-search")
+    @Operation(method = "POST", paths = "/multi-search")
     SearchResponse<Map<String, Object>> multiSearch(MultiSearchWithFederationRequest request);
 
     /**

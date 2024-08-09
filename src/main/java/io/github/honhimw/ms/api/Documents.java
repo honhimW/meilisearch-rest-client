@@ -17,9 +17,7 @@ package io.github.honhimw.ms.api;
 import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
@@ -47,7 +45,7 @@ public interface Documents {
      * @param limit  default 20
      * @return paginated result
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
@@ -56,7 +54,7 @@ public interface Documents {
      * @param page parameter builder
      * @return paginated result
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(Consumer<GetDocumentRequest> page);
 
     /**
@@ -65,7 +63,7 @@ public interface Documents {
      * @param page parameter builder
      * @return paginated result
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Page<Map<String, Object>> list(GetDocumentRequest page);
 
     /**
@@ -77,7 +75,7 @@ public interface Documents {
      * @param <T>     type
      * @return typed paginated result
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
 
     /**
@@ -89,7 +87,7 @@ public interface Documents {
      * @param <T>    type
      * @return typed paginated result
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     <T> Page<T> list(@Nullable Integer offset, @Nullable Integer limit, Class<T> type);
 
     /**
@@ -100,7 +98,7 @@ public interface Documents {
      * @param <T>     type
      * @return typed paginated result
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     <T> Page<T> list(Consumer<GetDocumentRequest> page, TypeRef<T> typeRef);
 
     /**
@@ -111,7 +109,7 @@ public interface Documents {
      * @param <T>  type
      * @return typed paginated result
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     <T> Page<T> list(Consumer<GetDocumentRequest> page, Class<T> type);
 
     /**
@@ -131,7 +129,7 @@ public interface Documents {
      * @param json json formatted array
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo save(@Nullable String json);
 
     /**
@@ -140,7 +138,7 @@ public interface Documents {
      * @param one document
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo save(Object one);
 
     /**
@@ -149,7 +147,7 @@ public interface Documents {
      * @param collection documents
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo save(Collection<?> collection);
 
     /**
@@ -158,7 +156,7 @@ public interface Documents {
      * @param one vectorized document
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo saveVectorized(VectorizedDocument one);
 
     /**
@@ -167,7 +165,7 @@ public interface Documents {
      * @param collection vectorized documents
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo saveVectorized(Collection<VectorizedDocument> collection);
 
 
@@ -188,7 +186,7 @@ public interface Documents {
      * @param json json formatted array
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     TaskInfo update(String json);
 
     /**
@@ -197,7 +195,7 @@ public interface Documents {
      * @param one document
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     TaskInfo update(Object one);
 
     /**
@@ -206,7 +204,7 @@ public interface Documents {
      * @param collection documents
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     TaskInfo update(Collection<?> collection);
 
     /**
@@ -216,7 +214,7 @@ public interface Documents {
      * @return edit task
      */
     @Experimental(features = Experimental.Features.EDIT_DOCUMENTS_BY_FUNCTION)
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/edit")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/edit")
     TaskInfo edit(EditRequest edit);
 
     /**
@@ -224,7 +222,7 @@ public interface Documents {
      *
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents")
     TaskInfo deleteAll();
 
     /**
@@ -233,7 +231,7 @@ public interface Documents {
      * @param fetch request
      * @return paginated result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     Page<Map<String, Object>> batchGet(BatchGetDocumentsRequest fetch);
 
     /**
@@ -242,7 +240,7 @@ public interface Documents {
      * @param builder parameter builder
      * @return paginated result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     Page<Map<String, Object>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder);
 
     /**
@@ -253,7 +251,7 @@ public interface Documents {
      * @param <T>     document type
      * @return typed paginated result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
 
     /**
@@ -264,7 +262,7 @@ public interface Documents {
      * @param <T>     document type
      * @return typed paginated result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef);
 
     /**
@@ -275,7 +273,7 @@ public interface Documents {
      * @param <T>   document type
      * @return typed paginated result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(BatchGetDocumentsRequest fetch, Class<T> type);
 
     /**
@@ -286,7 +284,7 @@ public interface Documents {
      * @param <T>     document type
      * @return typed paginated result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     <T> Page<T> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, Class<T> type);
 
     /**
@@ -295,7 +293,7 @@ public interface Documents {
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete-batch")
     TaskInfo batchDelete(List<String> ids);
 
     /**
@@ -304,7 +302,7 @@ public interface Documents {
      * @param filter A filter expression written as a string or array of array of strings for the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete")
     TaskInfo delete(FilterableAttributesRequest filter);
 
     /**
@@ -316,7 +314,7 @@ public interface Documents {
      *               Default *.
      * @return document
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     Optional<Map<String, Object>> get(String id, @Nullable String... fields);
 
     /**
@@ -330,7 +328,7 @@ public interface Documents {
      * @param <T>     document type
      * @return typed document
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     <T> Optional<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields);
 
     /**
@@ -344,7 +342,7 @@ public interface Documents {
      * @param <T>    document type
      * @return typed document
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     <T> Optional<T> get(String id, Class<T> type, @Nullable String... fields);
 
     /**
@@ -353,7 +351,7 @@ public interface Documents {
      * @param id Document id of the requested document
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents/{documentId}")
     TaskInfo delete(String id);
 
 

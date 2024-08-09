@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 /**
  * <a style="font-weight:bold;font-size:x-large" href="https://www.meilisearch.com/docs/reference/api/settings#pagination">Pagination</a>
@@ -41,7 +41,7 @@ public interface PaginationSettings {
      *
      * @return current index pagination
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/pagination")
     Pagination get();
 
     /**
@@ -54,7 +54,7 @@ public interface PaginationSettings {
      * @param pagination new pagination settings
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/pagination")
     TaskInfo update(Pagination pagination);
 
     /**
@@ -62,7 +62,7 @@ public interface PaginationSettings {
      * @param maxTotalHits new maxTotalHits in pagination
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/pagination")
     default TaskInfo update(int maxTotalHits) {
         Pagination pagination = new Pagination();
         pagination.setMaxTotalHits(maxTotalHits);
@@ -75,7 +75,7 @@ public interface PaginationSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/pagination")
     TaskInfo reset();
 
 }

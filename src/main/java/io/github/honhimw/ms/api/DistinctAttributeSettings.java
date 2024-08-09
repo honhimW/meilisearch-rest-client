@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 /**
@@ -42,7 +42,7 @@ public interface DistinctAttributeSettings {
      * @return current index distinct attributes
      */
     @Nullable
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/distinct-attribute")
     String get();
 
     /**
@@ -51,7 +51,7 @@ public interface DistinctAttributeSettings {
      * @param distinctAttribute the new distinct attribute
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/distinct-attribute")
     TaskInfo update(String distinctAttribute);
 
     /**
@@ -59,7 +59,7 @@ public interface DistinctAttributeSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/distinct-attribute")
     TaskInfo reset();
 
 }

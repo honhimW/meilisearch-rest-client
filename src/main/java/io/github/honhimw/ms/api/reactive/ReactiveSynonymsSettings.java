@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.MapBuilder;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public interface ReactiveSynonymsSettings {
      *
      * @return current index stop words
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/synonyms")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/synonyms")
     Mono<Map<String, List<String>>> get();
 
     /**
@@ -50,7 +50,7 @@ public interface ReactiveSynonymsSettings {
      * @param synonyms An object that contains all synonyms and their associated words. Add the associated words in an array to set a synonym for a word.
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/synonyms")
     Mono<TaskInfo> update(Map<String, List<String>> synonyms);
 
     /**
@@ -58,7 +58,7 @@ public interface ReactiveSynonymsSettings {
      * @param synonyms map builder
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/synonyms")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/synonyms")
     default Mono<TaskInfo> update(Consumer<MapBuilder<String, List<String>>> synonyms) {
         MapBuilder<String, List<String>> builder = MapBuilder.builder();
         synonyms.accept(builder);
@@ -70,7 +70,7 @@ public interface ReactiveSynonymsSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/synonyms")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/synonyms")
     Mono<TaskInfo> reset();
 
 }

@@ -17,9 +17,7 @@ package io.github.honhimw.ms.api.reactive;
 import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -48,7 +46,7 @@ public interface ReactiveDocuments {
      * @param limit  default 20
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     default Mono<Page<Map<String, Object>>> list(@Nullable Integer offset, @Nullable Integer limit) {
         return list(request -> {
             request.setOffset(offset);
@@ -62,7 +60,7 @@ public interface ReactiveDocuments {
      * @param page page request builder
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     default Mono<Page<Map<String, Object>>> list(Consumer<GetDocumentRequest> page) {
         GetDocumentRequest pageRequest = new GetDocumentRequest();
         page.accept(pageRequest);
@@ -75,7 +73,7 @@ public interface ReactiveDocuments {
      * @param page page request
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Mono<Page<Map<String, Object>>> list(GetDocumentRequest page);
 
     /**
@@ -87,7 +85,7 @@ public interface ReactiveDocuments {
      * @param <T>     document type
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     <T> Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit, TypeRef<T> typeRef);
 
     /**
@@ -99,7 +97,7 @@ public interface ReactiveDocuments {
      * @param <T>    document type
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     default <T> Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit, Class<T> type) {
         return list(offset, limit, TypeRef.of(type));
     }
@@ -112,7 +110,7 @@ public interface ReactiveDocuments {
      * @param <T>     document type
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     <T> Mono<Page<T>> list(GetDocumentRequest page, TypeRef<T> typeRef);
 
     /**
@@ -123,7 +121,7 @@ public interface ReactiveDocuments {
      * @param <T>     document type
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     default <T> Mono<Page<T>> list(Consumer<GetDocumentRequest> page, TypeRef<T> typeRef) {
         GetDocumentRequest pageRequest = new GetDocumentRequest();
         page.accept(pageRequest);
@@ -138,7 +136,7 @@ public interface ReactiveDocuments {
      * @param <T>  document type
      * @return a list of documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     default <T> Mono<Page<T>> list(Consumer<GetDocumentRequest> page, Class<T> type) {
         return list(page, TypeRef.of(type));
     }
@@ -161,7 +159,7 @@ public interface ReactiveDocuments {
      * @param json json formatted array
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> save(String json);
 
     /**
@@ -170,7 +168,7 @@ public interface ReactiveDocuments {
      * @param one document
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     default Mono<TaskInfo> save(Object one) {
         return save(Collections.singleton(one));
     }
@@ -181,7 +179,7 @@ public interface ReactiveDocuments {
      * @param collection documents
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> save(Collection<?> collection);
 
     /**
@@ -191,7 +189,7 @@ public interface ReactiveDocuments {
      * @return save task
      */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     default Mono<TaskInfo> saveVectorized(VectorizedDocument one) {
         return save(Collections.singleton(one));
     }
@@ -203,7 +201,7 @@ public interface ReactiveDocuments {
      * @return save task
      */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> saveVectorized(Collection<VectorizedDocument> collection);
 
     /**
@@ -223,7 +221,7 @@ public interface ReactiveDocuments {
      * @param json json formatted array
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> update(String json);
 
     /**
@@ -232,7 +230,7 @@ public interface ReactiveDocuments {
      * @param one document
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     default Mono<TaskInfo> update(Object one) {
         return update(Collections.singleton(one));
     }
@@ -243,7 +241,7 @@ public interface ReactiveDocuments {
      * @param collection documents
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> update(Collection<?> collection);
 
     /**
@@ -253,7 +251,7 @@ public interface ReactiveDocuments {
      * @return edit task
      */
     @Experimental(features = Experimental.Features.EDIT_DOCUMENTS_BY_FUNCTION)
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/edit")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/edit")
     Mono<TaskInfo> edit(EditRequest edit);
 
     /**
@@ -261,7 +259,7 @@ public interface ReactiveDocuments {
      *
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> deleteAll();
 
     /**
@@ -270,7 +268,7 @@ public interface ReactiveDocuments {
      * @param fetch fetch request
      * @return a list of documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     Mono<Page<Map<String, Object>>> batchGet(BatchGetDocumentsRequest fetch);
 
     /**
@@ -279,7 +277,7 @@ public interface ReactiveDocuments {
      * @param builder fetch request builder
      * @return a list of documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     default Mono<Page<Map<String, Object>>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder) {
         BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
         builder.accept(_builder);
@@ -294,7 +292,7 @@ public interface ReactiveDocuments {
      * @param <T>     document type
      * @return a list of documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, TypeRef<T> typeRef);
 
     /**
@@ -305,7 +303,7 @@ public interface ReactiveDocuments {
      * @param <T>     document type
      * @return a list of documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     default <T> Mono<Page<T>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, TypeRef<T> typeRef) {
         BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
         builder.accept(_builder);
@@ -320,7 +318,7 @@ public interface ReactiveDocuments {
      * @param <T>   document type
      * @return a list of documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     default <T> Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch, Class<T> type) {
         return batchGet(fetch, TypeRef.of(type));
     }
@@ -333,7 +331,7 @@ public interface ReactiveDocuments {
      * @param <T>     document type
      * @return a list of documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     default <T> Mono<Page<T>> batchGet(Consumer<BatchGetDocumentsRequest.Builder> builder, Class<T> type) {
         BatchGetDocumentsRequest.Builder _builder = BatchGetDocumentsRequest.builder();
         builder.accept(_builder);
@@ -346,7 +344,7 @@ public interface ReactiveDocuments {
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete-batch")
     Mono<TaskInfo> batchDelete(List<String> ids);
 
     /**
@@ -355,7 +353,7 @@ public interface ReactiveDocuments {
      * @param filter A filter expression written as a string or array of array of strings for the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete")
     Mono<TaskInfo> delete(FilterableAttributesRequest filter);
 
     /**
@@ -367,7 +365,7 @@ public interface ReactiveDocuments {
      *               Default *.
      * @return one document
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     Mono<Map<String, Object>> get(String id, @Nullable String... fields);
 
     /**
@@ -381,7 +379,7 @@ public interface ReactiveDocuments {
      * @param <T>     document type
      * @return one document
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     <T> Mono<T> get(String id, TypeRef<T> typeRef, @Nullable String... fields);
 
     /**
@@ -394,7 +392,7 @@ public interface ReactiveDocuments {
      * @return one document
      * @param <T> document type
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     default <T> Mono<T> get(String id, Class<T> type, @Nullable String... fields) {
         return get(id, TypeRef.of(type), fields);
     }
@@ -405,7 +403,7 @@ public interface ReactiveDocuments {
      * @param id Document id of the requested document
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents/{documentId}")
     Mono<TaskInfo> delete(String id);
 
 }

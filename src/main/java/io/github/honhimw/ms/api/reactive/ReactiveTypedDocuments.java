@@ -15,9 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -45,7 +43,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param limit  default 20
      * @return paginated documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     default Mono<Page<T>> list(@Nullable Integer offset, @Nullable Integer limit) {
         return list(request -> {
             request.setOffset(offset);
@@ -59,7 +57,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param page request
      * @return paginated documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Mono<Page<T>> list(GetDocumentRequest page);
 
     /**
@@ -68,7 +66,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param page request builder
      * @return paginated documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     default Mono<Page<T>> list(Consumer<GetDocumentRequest> page) {
         GetDocumentRequest pageRequest = new GetDocumentRequest();
         page.accept(pageRequest);
@@ -92,7 +90,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param json json formatted array
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> save(String json);
 
     /**
@@ -101,7 +99,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param t document
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     default Mono<TaskInfo> save(T t) {
         return save(Collections.singleton(t));
     }
@@ -112,7 +110,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param collection documents
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> save(Collection<? extends T> collection);
 
     /**
@@ -132,7 +130,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param json json formatted array
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> update(String json);
 
     /**
@@ -141,7 +139,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param t document
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     default Mono<TaskInfo> update(T t) {
         return update(Collections.singleton(t));
     }
@@ -152,7 +150,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param collection documents
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> update(Collection<? extends T> collection);
 
     /**
@@ -160,7 +158,7 @@ public interface ReactiveTypedDocuments<T> {
      *
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents")
     Mono<TaskInfo> deleteAll();
 
     /**
@@ -169,7 +167,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param fetch request
      * @return paginated documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     Mono<Page<T>> batchGet(BatchGetDocumentsRequest fetch);
 
     /**
@@ -178,7 +176,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete-batch")
     Mono<TaskInfo> batchDelete(Collection<String> ids);
 
     /**
@@ -187,7 +185,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param filter A filter expression written as a string or array of array of strings for the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete")
     Mono<TaskInfo> delete(FilterableAttributesRequest filter);
 
     /**
@@ -199,7 +197,7 @@ public interface ReactiveTypedDocuments<T> {
      *               Default *.
      * @return the requested document
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     Mono<T> get(String id, @Nullable String... fields);
 
     /**
@@ -208,7 +206,7 @@ public interface ReactiveTypedDocuments<T> {
      * @param id Document id of the requested document
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents/{documentId}")
     Mono<TaskInfo> delete(String id);
 
 

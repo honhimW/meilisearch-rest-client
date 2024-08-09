@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.ExperimentalFeatures;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
@@ -43,7 +43,7 @@ public interface ReactiveExperimentalFeaturesSettings {
      *
      * @return current index sortable attribute
      */
-    @Operation(method = "GET", tags = "/experimental-features")
+    @Operation(method = "GET", paths = "/experimental-features")
     Mono<ExperimentalFeatures> get();
 
     /**
@@ -52,7 +52,7 @@ public interface ReactiveExperimentalFeaturesSettings {
      * @param configure feature configure
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/experimental-features")
+    @Operation(method = "PATCH", paths = "/experimental-features")
     Mono<ExperimentalFeatures> configure(ExperimentalFeatures configure);
 
     /**
@@ -60,7 +60,7 @@ public interface ReactiveExperimentalFeaturesSettings {
      * @param builder feature builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/experimental-features")
+    @Operation(method = "PATCH", paths = "/experimental-features")
     default Mono<ExperimentalFeatures> configure(Consumer<ExperimentalFeatures.Builder> builder) {
         ExperimentalFeatures.Builder _builder = ExperimentalFeatures.builder();
         builder.accept(_builder);

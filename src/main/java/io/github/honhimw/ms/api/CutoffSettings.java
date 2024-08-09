@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -38,7 +38,7 @@ public interface CutoffSettings {
      *
      * @return current index sortable attribute
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/search-cutoff-ms")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/search-cutoff-ms")
     Optional<Duration> get();
 
     /**
@@ -47,7 +47,7 @@ public interface CutoffSettings {
      * @param cutoff the maximum duration of a search query.
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/search-cutoff-ms")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/search-cutoff-ms")
     TaskInfo update(Duration cutoff);
 
     /**
@@ -55,7 +55,7 @@ public interface CutoffSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/search-cutoff-ms")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/search-cutoff-ms")
     TaskInfo reset();
 
 }

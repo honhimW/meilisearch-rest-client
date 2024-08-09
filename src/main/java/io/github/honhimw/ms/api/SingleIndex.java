@@ -18,7 +18,7 @@ import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.Index;
 import io.github.honhimw.ms.model.IndexStats;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.Optional;
@@ -38,7 +38,7 @@ public interface SingleIndex {
      *
      * @return current index
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}")
     Optional<Index> get();
 
     /**
@@ -47,7 +47,7 @@ public interface SingleIndex {
      * @param primaryKey Primary key of current index
      * @return create task
      */
-    @Operation(method = "POST", tags = "/indexes")
+    @Operation(method = "POST", paths = "/indexes")
     TaskInfo create(@Nullable String primaryKey);
 
     /**
@@ -56,7 +56,7 @@ public interface SingleIndex {
      * @param primaryKey update primary key of current index
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}")
     TaskInfo update(String primaryKey);
 
     /**
@@ -64,7 +64,7 @@ public interface SingleIndex {
      *
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}")
     TaskInfo delete();
 
     /**
@@ -75,7 +75,7 @@ public interface SingleIndex {
      *
      * @return {@link Documents} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/documents")
+    @Operation(paths = "/indexes/{index_uid}/documents")
     Documents documents();
 
     /**
@@ -146,7 +146,7 @@ public interface SingleIndex {
      *
      * @return {@link Search} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/search")
+    @Operation(paths = "/indexes/{index_uid}/search")
     Search search();
 
     /**
@@ -257,7 +257,7 @@ public interface SingleIndex {
      *
      * @return {@link Settings} operator
      */
-    @Operation(tags = "/indexes/{indexUid}/settings")
+    @Operation(paths = "/indexes/{indexUid}/settings")
     Settings settings();
 
     /**
@@ -276,7 +276,7 @@ public interface SingleIndex {
      *
      * @return stats of current index.
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/stats")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/stats")
     IndexStats stats();
 
 

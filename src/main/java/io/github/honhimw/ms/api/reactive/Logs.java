@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.LogStreamRequest;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.function.Consumer;
 
@@ -32,7 +32,7 @@ public interface Logs {
      * Focused debugging sessions
      * @param request request
      */
-    @Operation(method = "POST", tags = "/logs/stream")
+    @Operation(method = "POST", paths = "/logs/stream")
     void update(LogStreamRequest request);
 
     /**
@@ -49,7 +49,7 @@ public interface Logs {
      * Customize logging levels for the default logging system.
      * @param request request
      */
-    @Operation(method = "POST", tags = "/logs/stderr")
+    @Operation(method = "POST", paths = "/logs/stderr")
     void stderr(LogStreamRequest request);
 
     /**
@@ -66,7 +66,7 @@ public interface Logs {
     /**
      * Reset the stream
      */
-    @Operation(method = "DELETE", tags = "/logs/stream")
+    @Operation(method = "DELETE", paths = "/logs/stream")
     void reset();
 
 }

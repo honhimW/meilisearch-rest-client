@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.Faceting;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.function.Consumer;
 
@@ -43,7 +43,7 @@ public interface FacetingSettings {
      *
      * @return current index faceting
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/faceting")
     Faceting get();
 
     /**
@@ -53,7 +53,7 @@ public interface FacetingSettings {
      * @param faceting faceting settings
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/faceting")
     TaskInfo update(Faceting faceting);
 
     /**
@@ -63,7 +63,7 @@ public interface FacetingSettings {
      * @param builder faceting settings builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/faceting")
     default TaskInfo update(Consumer<Faceting.Builder> builder) {
         Faceting.Builder _builder = Faceting.builder();
         builder.accept(_builder);
@@ -76,7 +76,7 @@ public interface FacetingSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/faceting")
     TaskInfo reset();
 
 }

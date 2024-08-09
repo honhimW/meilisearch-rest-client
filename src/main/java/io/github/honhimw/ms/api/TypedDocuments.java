@@ -15,9 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.Collection;
@@ -44,7 +42,7 @@ public interface TypedDocuments<T> {
      * @param limit  default 20
      * @return paginated documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Page<T> list(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
@@ -53,7 +51,7 @@ public interface TypedDocuments<T> {
      * @param page request builder
      * @return paginated documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Page<T> list(Consumer<GetDocumentRequest> page);
 
     /**
@@ -62,7 +60,7 @@ public interface TypedDocuments<T> {
      * @param page request
      * @return paginated documents
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents")
     Page<T> list(GetDocumentRequest page);
 
     /**
@@ -82,7 +80,7 @@ public interface TypedDocuments<T> {
      * @param json json formatted array
      * @return save task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo save(String json);
 
     /**
@@ -92,7 +90,7 @@ public interface TypedDocuments<T> {
      * @return save task
      * @see #save
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo save(T t);
 
     /**
@@ -102,7 +100,7 @@ public interface TypedDocuments<T> {
      * @return save task
      * @see #save(String)
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents")
     TaskInfo save(Collection<? extends T> collection);
 
     /**
@@ -122,7 +120,7 @@ public interface TypedDocuments<T> {
      * @param json json formatted array
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     TaskInfo update(String json);
 
     /**
@@ -132,7 +130,7 @@ public interface TypedDocuments<T> {
      * @return update task
      * @see #update(String)
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     TaskInfo update(T t);
 
     /**
@@ -142,7 +140,7 @@ public interface TypedDocuments<T> {
      * @return update task
      * @see #update(String)
      */
-    @Operation(method = "PUT", tags = "/indexes/{indexUid}/documents", requestBody = @RequestBody(content = @Content(mediaType = "application/json")))
+    @Operation(method = "PUT", paths = "/indexes/{indexUid}/documents")
     TaskInfo update(Collection<? extends T> collection);
 
     /**
@@ -150,7 +148,7 @@ public interface TypedDocuments<T> {
      *
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents")
     TaskInfo deleteAll();
 
     /**
@@ -159,7 +157,7 @@ public interface TypedDocuments<T> {
      * @param fetch request
      * @return paginated documents
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/fetch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/fetch")
     Page<T> batchGet(BatchGetDocumentsRequest fetch);
 
     /**
@@ -168,7 +166,7 @@ public interface TypedDocuments<T> {
      * @param ids An array of numbers containing the unique ids of the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete-batch")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete-batch")
     TaskInfo batchDelete(Collection<String> ids);
 
     /**
@@ -177,7 +175,7 @@ public interface TypedDocuments<T> {
      * @param filter A filter expression written as a string or array of array of strings for the documents to be deleted.
      * @return delete task
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/documents/delete")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/documents/delete")
     TaskInfo delete(FilterableAttributesRequest filter);
 
     /**
@@ -189,7 +187,7 @@ public interface TypedDocuments<T> {
      *               Default *.
      * @return optional document
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/documents/{documentId}")
     Optional<T> get(String id, @Nullable String... fields);
 
     /**
@@ -198,7 +196,7 @@ public interface TypedDocuments<T> {
      * @param id Document id of the requested document
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/documents/{documentId}")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/documents/{documentId}")
     TaskInfo delete(String id);
 
 

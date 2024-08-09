@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.model.TypoTolerance;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
@@ -41,7 +41,7 @@ public interface ReactiveTypoToleranceSettings {
      *
      * @return current index stop words
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     Mono<TypoTolerance> get();
 
     /**
@@ -50,7 +50,7 @@ public interface ReactiveTypoToleranceSettings {
      * @param typoTolerance An object that contains all synonyms and their associated words. Add the associated words in an array to set a synonym for a word.
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     Mono<TaskInfo> update(TypoTolerance typoTolerance);
 
     /**
@@ -59,7 +59,7 @@ public interface ReactiveTypoToleranceSettings {
      * @param builder TypoTolerance builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     default Mono<TaskInfo> update(Consumer<TypoTolerance.Builder> builder) {
         TypoTolerance.Builder _builder = TypoTolerance.builder();
         builder.accept(_builder);
@@ -72,7 +72,7 @@ public interface ReactiveTypoToleranceSettings {
      * @return reset task
      * @see TypoTolerance#defaultObject()
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/typo-tolerance")
     Mono<TaskInfo> reset();
 
 }

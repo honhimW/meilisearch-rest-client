@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.Faceting;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
@@ -44,7 +44,7 @@ public interface ReactiveFacetingSettings {
      *
      * @return current index faceting
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/faceting")
     Mono<Faceting> get();
 
     /**
@@ -54,7 +54,7 @@ public interface ReactiveFacetingSettings {
      * @param faceting new faceting
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/faceting")
     Mono<TaskInfo> update(Faceting faceting);
 
     /**
@@ -63,7 +63,7 @@ public interface ReactiveFacetingSettings {
      * @param builder faceting builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/faceting")
     default Mono<TaskInfo> update(Consumer<Faceting.Builder> builder) {
         Faceting.Builder _builder = Faceting.builder();
         builder.accept(_builder);
@@ -76,7 +76,7 @@ public interface ReactiveFacetingSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/faceting")
     Mono<TaskInfo> reset();
 
 }

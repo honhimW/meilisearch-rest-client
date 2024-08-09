@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.function.Consumer;
 
@@ -42,7 +42,7 @@ public interface TypedSearch<T> {
      * @param q Query string
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     SearchResponse<T> find(String q);
 
     /**
@@ -52,7 +52,7 @@ public interface TypedSearch<T> {
      * @param request SearchRequest
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     SearchResponse<T> find(SearchRequest request);
 
     /**
@@ -62,7 +62,7 @@ public interface TypedSearch<T> {
      * @param builder request builder
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     SearchResponse<T> find(Consumer<SearchRequest.Builder> builder);
 
     /**
@@ -72,7 +72,7 @@ public interface TypedSearch<T> {
      * @param request facet-search request
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(FacetSearchRequest request);
 
     /**
@@ -82,7 +82,7 @@ public interface TypedSearch<T> {
      * @param builder facet-search request builder
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder);
 
     /**

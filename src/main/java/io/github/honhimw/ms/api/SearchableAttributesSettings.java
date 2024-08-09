@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public interface SearchableAttributesSettings {
      *
      * @return current index searchable attributes
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/searchable-attributes")
     List<String> get();
 
     /**
@@ -62,7 +62,7 @@ public interface SearchableAttributesSettings {
      *                             <pre>If the field does not exist, no error will be thrown.</pre>
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/searchable-attributes")
     TaskInfo update(List<String> searchableAttributes);
 
 
@@ -71,7 +71,7 @@ public interface SearchableAttributesSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/searchable-attributes")
     TaskInfo reset();
 
 }
