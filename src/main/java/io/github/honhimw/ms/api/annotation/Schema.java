@@ -28,7 +28,7 @@ import static java.lang.annotation.ElementType.*;
  */
 
 @Target({FIELD, METHOD, PARAMETER, TYPE, ANNOTATION_TYPE})
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 public @interface Schema {
 
     /**
