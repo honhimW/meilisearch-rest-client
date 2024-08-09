@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public interface SortableAttributesSettings {
      *
      * @return current index sortable attribute
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/sortable-attributes")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/sortable-attributes")
     List<String> get();
 
     /**
@@ -55,7 +55,7 @@ public interface SortableAttributesSettings {
      *                           <pre>If the field does not exist, no error will be thrown.</pre>
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/sortable-attributes")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/sortable-attributes")
     TaskInfo update(List<String> sortableAttributes);
 
     /**
@@ -63,7 +63,7 @@ public interface SortableAttributesSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/sortable-attributes")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/sortable-attributes")
     TaskInfo reset();
 
 }

@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public interface ReactiveDisplayedAttributesSettings {
      *
      * @return current index displayed attributes
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/displayed-attributes")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/displayed-attributes")
     Mono<List<String>> get();
 
     /**
@@ -50,7 +50,7 @@ public interface ReactiveDisplayedAttributesSettings {
      * @param displayedAttributes new displayed attributes
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/displayed-attributes")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/displayed-attributes")
     Mono<TaskInfo> update(List<String> displayedAttributes);
 
 
@@ -59,7 +59,7 @@ public interface ReactiveDisplayedAttributesSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/displayed-attributes")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/displayed-attributes")
     Mono<TaskInfo> reset();
 
 }

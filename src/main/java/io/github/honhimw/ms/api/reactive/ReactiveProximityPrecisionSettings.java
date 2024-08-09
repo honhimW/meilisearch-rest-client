@@ -17,7 +17,7 @@ package io.github.honhimw.ms.api.reactive;
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.ProximityPrecisionType;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 /**
@@ -43,7 +43,7 @@ public interface ReactiveProximityPrecisionSettings {
      *
      * @return current index proximity-precision
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/proximity-precision")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/proximity-precision")
     Mono<ProximityPrecisionType> get();
 
     /**
@@ -52,7 +52,7 @@ public interface ReactiveProximityPrecisionSettings {
      * @param type new index proximity-precision
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/proximity-precision")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/proximity-precision")
     Mono<TaskInfo> update(ProximityPrecisionType type);
 
     /**
@@ -60,7 +60,7 @@ public interface ReactiveProximityPrecisionSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/proximity-precision")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/proximity-precision")
     Mono<TaskInfo> reset();
 
 }

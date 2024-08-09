@@ -142,7 +142,7 @@ public final class Locales {
      */
     public static final String CES = "ces";
     /**
-     * Greek, Modern (1453–)
+     * Greek, Modern (1453–now)
      */
     public static final String ELL = "ell";
     /**

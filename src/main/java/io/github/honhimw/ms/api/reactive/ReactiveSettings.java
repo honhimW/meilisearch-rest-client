@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.Setting;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -42,7 +42,7 @@ public interface ReactiveSettings {
      *
      * @return settings detail of current index
      */
-    @Operation(method = "GET", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "GET", paths = "/indexes/{indexUid}/settings")
     Mono<Setting> get();
 
     /**
@@ -54,7 +54,7 @@ public interface ReactiveSettings {
      * @param setting reset current index setting if null, any parameters not provided in the body will be left unchanged.
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "PATCH", paths = "/indexes/{indexUid}/settings")
     Mono<TaskInfo> update(@Nullable Setting setting);
 
     /**
@@ -63,7 +63,7 @@ public interface ReactiveSettings {
      * @param builder setting builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "PATCH", paths = "/indexes/{indexUid}/settings")
     default Mono<TaskInfo> update(Consumer<Setting.Builder> builder) {
         Setting.Builder _builder = Setting.builder();
         builder.accept(_builder);
@@ -75,7 +75,7 @@ public interface ReactiveSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{indexUid}/settings")
+    @Operation(method = "DELETE", paths = "/indexes/{indexUid}/settings")
     Mono<TaskInfo> reset();
 
     /**
@@ -83,7 +83,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveDictionarySettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/dictionary")
+    @Operation(paths = "/indexes/{index_uid}/settings/dictionary")
     ReactiveDictionarySettings dictionary();
 
     /**
@@ -102,7 +102,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveDisplayedAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/displayed-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/displayed-attributes")
     ReactiveDisplayedAttributesSettings displayedAttributes();
 
     /**
@@ -121,7 +121,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveDistinctAttributeSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(paths = "/indexes/{index_uid}/settings/distinct-attribute")
     ReactiveDistinctAttributeSettings distinctAttribute();
 
     /**
@@ -140,7 +140,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveFacetingSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/faceting")
+    @Operation(paths = "/indexes/{index_uid}/settings/faceting")
     ReactiveFacetingSettings faceting();
 
     /**
@@ -159,7 +159,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveFilterableAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/filterable-attributes")
     ReactiveFilterableAttributesSettings filterableAttributes();
 
     /**
@@ -178,7 +178,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactivePaginationSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(paths = "/indexes/{index_uid}/settings/pagination")
     ReactivePaginationSettings pagination();
 
     /**
@@ -197,7 +197,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveProximityPrecisionSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/proximity-precision")
+    @Operation(paths = "/indexes/{index_uid}/settings/proximity-precision")
     ReactiveProximityPrecisionSettings proximityPrecision();
 
     /**
@@ -216,7 +216,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveRankingRulesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/ranking-rules")
+    @Operation(paths = "/indexes/{index_uid}/settings/ranking-rules")
     ReactiveRankingRulesSettings rankingRules();
 
     /**
@@ -235,7 +235,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveSearchableAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/searchable-attributes")
     ReactiveSearchableAttributesSettings searchAttributes();
 
     /**
@@ -254,7 +254,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveSeparatorTokensSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(paths = "/indexes/{index_uid}/settings/separator-tokens")
     ReactiveSeparatorTokensSettings separatorTokens();
 
     /**
@@ -273,7 +273,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveNonSeparatorTokensSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/non-separator-tokens")
+    @Operation(paths = "/indexes/{index_uid}/settings/non-separator-tokens")
     ReactiveNonSeparatorTokensSettings nonSeparatorTokens();
 
     /**
@@ -292,7 +292,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveSortableAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/sortable-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/sortable-attributes")
     ReactiveSortableAttributesSettings sortableAttributes();
 
     /**
@@ -311,7 +311,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveCutoffSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/search-cutoff-ms")
+    @Operation(paths = "/indexes/{index_uid}/settings/search-cutoff-ms")
     ReactiveCutoffSettings cutoff();
 
     /**
@@ -330,7 +330,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveStopWordsSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(paths = "/indexes/{index_uid}/settings/stop-words")
     ReactiveStopWordsSettings stopWords();
 
     /**
@@ -349,7 +349,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveSynonymsSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/synonyms")
+    @Operation(paths = "/indexes/{index_uid}/settings/synonyms")
     ReactiveSynonymsSettings synonyms();
 
     /**
@@ -368,7 +368,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveTypoToleranceSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/typo-tolerance")
+    @Operation(paths = "/indexes/{index_uid}/settings/typo-tolerance")
     ReactiveTypoToleranceSettings typoTolerance();
 
     /**
@@ -387,7 +387,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveEmbeddersSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(paths = "/indexes/{index_uid}/settings/embedders")
     ReactiveEmbeddersSettings embedders();
 
     /**
@@ -406,7 +406,7 @@ public interface ReactiveSettings {
      *
      * @return {@link ReactiveLocalizedAttributesSettings} operator
      */
-    @Operation(tags = "/indexes/{index_uid}/settings/localized-attributes")
+    @Operation(paths = "/indexes/{index_uid}/settings/localized-attributes")
     ReactiveLocalizedAttributesSettings localizedAttributes();
 
     /**

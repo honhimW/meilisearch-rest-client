@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public interface ReactiveSeparatorTokensSettings {
      *
      * @return current index separator tokens
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/separator-tokens")
     Mono<List<String>> get();
 
     /**
@@ -52,7 +52,7 @@ public interface ReactiveSeparatorTokensSettings {
      * @param separatorTokens An array of strings, with each string indicating a word separator.
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/separator-tokens")
     Mono<TaskInfo> update(List<String> separatorTokens);
 
 
@@ -61,7 +61,7 @@ public interface ReactiveSeparatorTokensSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/separator-tokens")
     Mono<TaskInfo> reset();
 
 }

@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.Optional;
@@ -39,7 +39,7 @@ public interface Keys {
      * @param limit  Maximum number of results to return.
      * @return Returns the 20 most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
      */
-    @Operation(method = "GET", tags = "/keys")
+    @Operation(method = "GET", paths = "/keys")
     Page<Key> list(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
@@ -48,7 +48,7 @@ public interface Keys {
      * @param page page builder
      * @return Returns the most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
      */
-    @Operation(method = "GET", tags = "/keys")
+    @Operation(method = "GET", paths = "/keys")
     default Page<Key> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
         page.accept(pageRequest);
@@ -61,7 +61,7 @@ public interface Keys {
      * @param keyOrUid key value of the requested API key, uid of the requested API key
      * @return Returns information on the specified key.
      */
-    @Operation(method = "GET", tags = "/keys/{key_or_uid}")
+    @Operation(method = "GET", paths = "/keys/{key_or_uid}")
     Optional<Key> get(String keyOrUid);
 
     /**
@@ -70,7 +70,7 @@ public interface Keys {
      * @param request CreateKeyRequest
      * @return Returns information on the created key.
      */
-    @Operation(method = "POST", tags = "/keys/{key_or_uid}")
+    @Operation(method = "POST", paths = "/keys/{key_or_uid}")
     Key create(CreateKeyRequest request);
 
     /**
@@ -79,7 +79,7 @@ public interface Keys {
      * @param builder request builder
      * @return Returns information on the created key.
      */
-    @Operation(method = "POST", tags = "/keys/{key_or_uid}")
+    @Operation(method = "POST", paths = "/keys/{key_or_uid}")
     Key create(Consumer<CreateKeyRequest.Builder> builder);
 
     /**
@@ -89,7 +89,7 @@ public interface Keys {
      * @param request  UpdateKeyRequest request
      * @return Returns information on the updated key.
      */
-    @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
+    @Operation(method = "PATCH", paths = "/keys/{key_or_uid}")
     Key update(String keyOrUid, UpdateKeyRequest request);
 
     /**
@@ -98,14 +98,14 @@ public interface Keys {
      * @param builder request builder
      * @return Returns information on the updated key.
      */
-    @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
+    @Operation(method = "PATCH", paths = "/keys/{key_or_uid}")
     Key update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder);
 
     /**
      * Delete the specified key. Attempting to use this endpoint with a non-existent or deleted key will result in an error.
      * @param keyOrUid key value of the requested API key, uid of the requested API key
      */
-    @Operation(method = "DELETE", tags = "/keys/{key_or_uid}")
+    @Operation(method = "DELETE", paths = "/keys/{key_or_uid}")
     void delete(String keyOrUid);
 
 }

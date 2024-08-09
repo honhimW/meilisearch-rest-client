@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public interface SeparatorTokensSettings {
      *
      * @return current index separator tokens
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/separator-tokens")
     List<String> get();
 
     /**
@@ -51,7 +51,7 @@ public interface SeparatorTokensSettings {
      * @param separatorTokens An array of strings, with each string indicating a word separator.
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/separator-tokens")
     TaskInfo update(List<String> separatorTokens);
 
 
@@ -60,7 +60,7 @@ public interface SeparatorTokensSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/separator-tokens")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/separator-tokens")
     TaskInfo reset();
 
 }

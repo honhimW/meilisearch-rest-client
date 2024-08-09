@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 /**
@@ -42,7 +42,7 @@ public interface ReactivePaginationSettings {
      *
      * @return current index pagination
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/pagination")
     Mono<Pagination> get();
 
     /**
@@ -55,7 +55,7 @@ public interface ReactivePaginationSettings {
      * @param pagination new index pagination
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/pagination")
     Mono<TaskInfo> update(Pagination pagination);
 
     /**
@@ -63,7 +63,7 @@ public interface ReactivePaginationSettings {
      * @param maxTotalHits new maxTotalHits in pagination
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/pagination")
     default Mono<TaskInfo> update(int maxTotalHits) {
         Pagination pagination = new Pagination();
         pagination.setMaxTotalHits(maxTotalHits);
@@ -76,7 +76,7 @@ public interface ReactivePaginationSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/pagination")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/pagination")
     Mono<TaskInfo> reset();
 
 }

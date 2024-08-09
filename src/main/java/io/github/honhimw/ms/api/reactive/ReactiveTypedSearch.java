@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
@@ -43,7 +43,7 @@ public interface ReactiveTypedSearch<T> {
      * @param q Query string
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     Mono<SearchResponse<T>> find(String q);
 
     /**
@@ -53,7 +53,7 @@ public interface ReactiveTypedSearch<T> {
      * @param request SearchRequest
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     Mono<SearchResponse<T>> find(SearchRequest request);
 
     /**
@@ -62,7 +62,7 @@ public interface ReactiveTypedSearch<T> {
      * @param builder request builder
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     default Mono<SearchResponse<T>> find(Consumer<SearchRequest.Builder> builder) {
         SearchRequest.Builder _builder = SearchRequest.builder();
         builder.accept(_builder);
@@ -76,7 +76,7 @@ public interface ReactiveTypedSearch<T> {
      * @param request facet-search request
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request);
 
     /**
@@ -86,7 +86,7 @@ public interface ReactiveTypedSearch<T> {
      * @param builder request builder
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     default Mono<FacetSearchResponse> facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
         FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();
         builder.accept(_builder);

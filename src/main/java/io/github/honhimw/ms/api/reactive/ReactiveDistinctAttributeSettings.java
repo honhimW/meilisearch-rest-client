@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 /**
@@ -41,7 +41,7 @@ public interface ReactiveDistinctAttributeSettings {
      *
      * @return current index distinct attributes
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/distinct-attribute")
     Mono<String> get();
 
     /**
@@ -50,7 +50,7 @@ public interface ReactiveDistinctAttributeSettings {
      * @param distinctAttribute distinct attribute
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/distinct-attribute")
     Mono<TaskInfo> update(String distinctAttribute);
 
     /**
@@ -58,7 +58,7 @@ public interface ReactiveDistinctAttributeSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/distinct-attribute")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/distinct-attribute")
     Mono<TaskInfo> reset();
 
 }

@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public interface ReactiveSearchableAttributesSettings {
      *
      * @return current index searchable attributes
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/searchable-attributes")
     Mono<List<String>> get();
 
     /**
@@ -65,7 +65,7 @@ public interface ReactiveSearchableAttributesSettings {
      *                                                         </pre>
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/searchable-attributes")
     Mono<TaskInfo> update(List<String> searchableAttributes);
 
 
@@ -74,7 +74,7 @@ public interface ReactiveSearchableAttributesSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/searchable-attributes")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/searchable-attributes")
     Mono<TaskInfo> reset();
 
 }

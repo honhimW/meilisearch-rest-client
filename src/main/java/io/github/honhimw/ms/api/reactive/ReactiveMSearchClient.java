@@ -17,7 +17,7 @@ package io.github.honhimw.ms.api.reactive;
 import io.github.honhimw.ms.MSearchConfig;
 import io.github.honhimw.ms.internal.reactive.ReactiveMSearchClientImpl;
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -103,7 +103,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      * @param request multi-search request
      * @return multi-search result
      */
-    @Operation(method = "POST", tags = "/multi-search")
+    @Operation(method = "POST", paths = "/multi-search")
     Mono<MultiSearchResponse> multiSearch(MultiSearchRequest request);
 
     /**
@@ -113,7 +113,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      * @param request multi-search request with federation
      * @return multi-search result federated
      */
-    @Operation(method = "POST", tags = "/multi-search")
+    @Operation(method = "POST", paths = "/multi-search")
     Mono<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request);
 
     /**
@@ -123,7 +123,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      *
      * @return None
      */
-    @Operation(method = "GET", tags = "/health")
+    @Operation(method = "GET", paths = "/health")
     default Mono<Void> healthy() {
         throw new IllegalStateException("server status not ['available']");
     }
@@ -133,7 +133,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      *
      * @return Meilisearch server version information.
      */
-    @Operation(method = "GET", tags = "/version")
+    @Operation(method = "GET", paths = "/version")
     Mono<Version> version();
 
     /**
@@ -147,7 +147,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      *
      * @return dump task
      */
-    @Operation(method = "POST", tags = "/dumps")
+    @Operation(method = "POST", paths = "/dumps")
     Mono<TaskInfo> dumps();
 
     /**
@@ -161,7 +161,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      *
      * @return snapshot task
      */
-    @Operation(method = "POST", tags = "/snapshots")
+    @Operation(method = "POST", paths = "/snapshots")
     Mono<TaskInfo> snapshots();
 
     /**

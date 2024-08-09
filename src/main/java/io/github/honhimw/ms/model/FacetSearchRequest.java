@@ -14,7 +14,7 @@
 
 package io.github.honhimw.ms.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.github.honhimw.ms.api.annotation.Schema;
 import lombok.*;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
     /**
      * Facet name to search values on
      */
-    @Schema(description = "Facet name to search values on", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Facet name to search values on")
     private String facetName;
 
     /**

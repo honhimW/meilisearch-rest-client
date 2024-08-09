@@ -28,5 +28,18 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Operation {
 
+    /**
+     * The HTTP methods for this operation.
+     *
+     * @return The HTTP methods for this operation.
+     */
+    String[] method() default {};
+
+    /**
+     * Tags can be used for logical grouping of operations by resources or any other qualifier.
+     *
+     * @return the array of tags associated with this operation
+     */
+    String[] paths() default {};
 
 }

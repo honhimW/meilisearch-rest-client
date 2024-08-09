@@ -18,7 +18,7 @@ import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.TypeRefs;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -45,7 +45,7 @@ public interface Search {
      * @param q Query string
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(String q);
 
     /**
@@ -56,7 +56,7 @@ public interface Search {
      * @param <T>     document type
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(String q, TypeRef<T> typeRef);
 
     /**
@@ -67,7 +67,7 @@ public interface Search {
      * @param <T>  document type
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(String q, Class<T> type);
 
     /**
@@ -76,7 +76,7 @@ public interface Search {
      * @param request search request
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(SearchRequest request);
 
     /**
@@ -85,7 +85,7 @@ public interface Search {
      * @param builder request builder
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     SearchResponse<Map<String, Object>> find(Consumer<SearchRequest.Builder> builder);
 
     /**
@@ -96,7 +96,7 @@ public interface Search {
      * @param <T>     document type
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(SearchRequest request, TypeRef<T> typeRef);
 
     /**
@@ -107,7 +107,7 @@ public interface Search {
      * @param <T>     document type
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(SearchRequest request, Class<T> type);
 
     /**
@@ -118,7 +118,7 @@ public interface Search {
      * @param <T>     document type
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, TypeRef<T> typeRef);
 
     /**
@@ -129,7 +129,7 @@ public interface Search {
      * @param <T>     document type
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     <T> SearchResponse<T> find(Consumer<SearchRequest.Builder> builder, Class<T> type);
 
     /**
@@ -139,7 +139,7 @@ public interface Search {
      * @param request facet-search request
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(FacetSearchRequest request);
 
     /**
@@ -148,7 +148,7 @@ public interface Search {
      * @param builder facet-request builder
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder);
 
     /**
@@ -158,7 +158,7 @@ public interface Search {
      * @return search result
      */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/similar")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/similar")
     default SearchResponse<Map<String, Object>> similar(SimilarSearchRequest request) {
         return similar(request, TypeRefs.StringObjectMapRef.INSTANCE);
     }

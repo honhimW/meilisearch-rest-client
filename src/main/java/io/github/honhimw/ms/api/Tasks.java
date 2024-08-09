@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.time.Duration;
 import java.util.function.Consumer;
@@ -35,7 +35,7 @@ public interface Tasks {
      * @param request request
      * @return paginated result
      */
-    @Operation(method = "GET", tags = "/tasks")
+    @Operation(method = "GET", paths = "/tasks")
     Page<TaskView> list(GetTasksRequest request);
 
     /**
@@ -44,7 +44,7 @@ public interface Tasks {
      * @param builder request builder
      * @return paginated result
      */
-    @Operation(method = "GET", tags = "/tasks")
+    @Operation(method = "GET", paths = "/tasks")
     default Page<TaskView> list(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
         builder.accept(_builder);
@@ -57,7 +57,7 @@ public interface Tasks {
      * @param request request
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/tasks")
+    @Operation(method = "DELETE", paths = "/tasks")
     TaskInfo delete(GetTasksRequest request);
 
     /**
@@ -66,7 +66,7 @@ public interface Tasks {
      * @param builder request builder
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/tasks")
+    @Operation(method = "DELETE", paths = "/tasks")
     default TaskInfo delete(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
         builder.accept(_builder);
@@ -79,7 +79,7 @@ public interface Tasks {
      * @param uid uid of the requested task
      * @return the requested task
      */
-    @Operation(method = "GET", tags = "/tasks/{taskUid}")
+    @Operation(method = "GET", paths = "/tasks/{taskUid}")
     TaskView get(Integer uid);
 
     /**
@@ -90,7 +90,7 @@ public interface Tasks {
      * @param request A valid uids, statuses, types, indexUids, or date(beforeXAt or afterXAt) parameter is required.
      * @return cancel task
      */
-    @Operation(method = "POST", tags = "/tasks/cancel")
+    @Operation(method = "POST", paths = "/tasks/cancel")
     TaskInfo cancel(CancelTasksRequest request);
 
     /**
@@ -101,7 +101,7 @@ public interface Tasks {
      * @param builder A valid uids, statuses, types, indexUids, or date(beforeXAt or afterXAt) parameter is required.
      * @return cancel task
      */
-    @Operation(method = "POST", tags = "/tasks/cancel")
+    @Operation(method = "POST", paths = "/tasks/cancel")
     default TaskInfo cancel(Consumer<CancelTasksRequest.Builder> builder) {
         CancelTasksRequest.Builder _builder = CancelTasksRequest.builder();
         builder.accept(_builder);

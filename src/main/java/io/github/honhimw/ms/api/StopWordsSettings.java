@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public interface StopWordsSettings {
      *
      * @return current index stop words
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/stop-words")
     List<String> get();
 
     /**
@@ -56,7 +56,7 @@ public interface StopWordsSettings {
      *                  If a list of stop words already exists, it will be overwritten (replaced).
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/stop-words")
     TaskInfo update(List<String> stopWords);
 
     /**
@@ -64,7 +64,7 @@ public interface StopWordsSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/stop-words")
     TaskInfo reset();
 
 }

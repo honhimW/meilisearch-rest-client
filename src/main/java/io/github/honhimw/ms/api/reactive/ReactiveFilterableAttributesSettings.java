@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public interface ReactiveFilterableAttributesSettings {
      *
      * @return current index displayed attributes
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/filterable-attributes")
     Mono<List<String>> get();
 
     /**
@@ -57,7 +57,7 @@ public interface ReactiveFilterableAttributesSettings {
      *                             <pre>If the field does not exist, no error will be thrown.</pre>
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/filterable-attributes")
     Mono<TaskInfo> update(List<String> filterableAttributes);
 
 
@@ -66,7 +66,7 @@ public interface ReactiveFilterableAttributesSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/filterable-attributes")
     Mono<TaskInfo> reset();
 
 }

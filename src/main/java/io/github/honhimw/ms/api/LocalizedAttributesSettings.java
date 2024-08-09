@@ -16,7 +16,7 @@ package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.LocalizedAttribute;
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public interface LocalizedAttributesSettings {
      * @return current index dictionary settings
      */
     @Nullable
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/localized-attributes")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/localized-attributes")
     List<LocalizedAttribute> get();
 
     /**
@@ -49,7 +49,7 @@ public interface LocalizedAttributesSettings {
      * @param localizedAttributes override dictionary settings
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/localized-attributes")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/localized-attributes")
     TaskInfo update(List<LocalizedAttribute> localizedAttributes);
 
     /**
@@ -57,7 +57,7 @@ public interface LocalizedAttributesSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/localized-attributes")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/localized-attributes")
     TaskInfo reset();
 
 }

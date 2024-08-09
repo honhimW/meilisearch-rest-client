@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.ExperimentalFeatures;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.function.Consumer;
 
@@ -42,7 +42,7 @@ public interface ExperimentalFeaturesSettings {
      *
      * @return current index sortable attribute
      */
-    @Operation(method = "GET", tags = "/experimental-features")
+    @Operation(method = "GET", paths = "/experimental-features")
     ExperimentalFeatures get();
 
     /**
@@ -51,7 +51,7 @@ public interface ExperimentalFeaturesSettings {
      * @param configure feature configure
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/experimental-features")
+    @Operation(method = "PATCH", paths = "/experimental-features")
     ExperimentalFeatures configure(ExperimentalFeatures configure);
 
     /**

@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public interface FilterableAttributesSettings {
      *
      * @return current index displayed attributes
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/filterable-attributes")
     List<String> get();
 
     /**
@@ -56,7 +56,7 @@ public interface FilterableAttributesSettings {
      *                             <pre>If the field does not exist, no error will be thrown.</pre>
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/filterable-attributes")
     TaskInfo update(List<String> filterableAttributes);
 
 
@@ -65,7 +65,7 @@ public interface FilterableAttributesSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/filterable-attributes")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/filterable-attributes")
     TaskInfo reset();
 
 }

@@ -14,16 +14,23 @@
 
 package io.github.honhimw.ms.json;
 
+import io.github.honhimw.ms.support.MapBuilder;
 import lombok.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
+
+import static io.github.honhimw.ms.support.TestSupport.jsonQuote;
 
 /**
  * @author hon_him
@@ -36,6 +43,35 @@ public class GsonTests {
 
     private static final LocalDateTime localDateTime = LocalDateTime.of(2024, 2, 29, 9, 0, 0, 1_000_001);
     private static final Instant instant = Timestamp.valueOf(localDateTime).toInstant();
+
+    @Test
+    @SneakyThrows
+    void number() {
+        Map<Object, Object> map = MapBuilder.builder()
+            .put("int", 10)
+            .put("long", Long.MAX_VALUE)
+            .put("bigint", new BigInteger("1234567891011121314151617181920"))
+            .put("float", 9.9f)
+            .put("double", Double.MAX_VALUE)
+            .put("bigdecimal", new BigDecimal("12345678910111213141516171819201234567891011121314151617181920.1234567891011121314151617181920"))
+            .build();
+        String json = jsonHandler.toJson(map);
+        System.out.println(json);
+        Map map1 = jsonHandler.fromJson(json, Map.class);
+        System.out.println(map1);
+    }
+
+    @Test
+    @SneakyThrows
+    void duration() {
+        String json = jsonHandler.toJson(Duration.ofDays(1));
+        assert jsonQuote("'PT24H'").equals(json);
+        Duration duration = jsonHandler.fromJson(json, Duration.class);
+        assert duration.toDays() == 1;
+
+        Map<Object, Object> map = MapBuilder.builder().put("duration", duration).build();
+        assert jsonQuote("{'duration':'PT24H'}").equals(jsonHandler.toJson(map));
+    }
 
     @Test
     @SneakyThrows

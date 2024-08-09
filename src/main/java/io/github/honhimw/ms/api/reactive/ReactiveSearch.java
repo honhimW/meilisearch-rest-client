@@ -18,7 +18,7 @@ import io.github.honhimw.ms.Experimental;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.TypeRefs;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -46,7 +46,7 @@ public interface ReactiveSearch {
      * @param q Query string
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     Mono<SearchResponse<Map<String, Object>>> find(String q);
 
     /**
@@ -78,7 +78,7 @@ public interface ReactiveSearch {
      * @param request SearchRequest
      * @return typed search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     Mono<SearchResponse<Map<String, Object>>> find(SearchRequest request);
 
     /**
@@ -87,7 +87,7 @@ public interface ReactiveSearch {
      * @param builder request builder
      * @return typed search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/search")
     default Mono<SearchResponse<Map<String, Object>>> find(Consumer<SearchRequest.Builder> builder) {
         SearchRequest.Builder _builder = SearchRequest.builder();
         builder.accept(_builder);
@@ -150,7 +150,7 @@ public interface ReactiveSearch {
      * @param request facet-search request
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     Mono<FacetSearchResponse> facetSearch(FacetSearchRequest request);
 
     /**
@@ -160,7 +160,7 @@ public interface ReactiveSearch {
      * @param builder facet-search request builder
      * @return search result
      */
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/facet-search")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     default Mono<FacetSearchResponse> facetSearch(Consumer<FacetSearchRequest.Builder> builder) {
         FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();
         builder.accept(_builder);
@@ -174,7 +174,7 @@ public interface ReactiveSearch {
      * @return search result
      */
     @Experimental(features = Experimental.Features.VECTOR_SEARCH)
-    @Operation(method = "POST", tags = "/indexes/{indexUid}/similar")
+    @Operation(method = "POST", paths = "/indexes/{indexUid}/similar")
     default Mono<SearchResponse<Map<String, Object>>> similar(SimilarSearchRequest request) {
         return similar(request, TypeRefs.StringObjectMapRef.INSTANCE);
     }

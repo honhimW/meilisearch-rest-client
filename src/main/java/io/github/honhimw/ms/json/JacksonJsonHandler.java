@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -109,6 +110,7 @@ public class JacksonJsonHandler implements JsonHandler {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        simpleModule.addSerializer(Duration.class, ToStringSerializer.instance);
 
         simpleModule.addSerializer(EnumValue.class, new JsonSerializer<EnumValue>() {
             @Override

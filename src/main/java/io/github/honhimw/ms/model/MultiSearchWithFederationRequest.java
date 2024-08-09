@@ -14,7 +14,7 @@
 
 package io.github.honhimw.ms.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.github.honhimw.ms.api.annotation.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -87,6 +87,28 @@ public class MultiSearchWithFederationRequest implements Serializable {
          */
         @Schema(description = "Maximum number of documents returned", defaultValue = "20")
         private Integer limit;
+
+        /**
+         * Sets the {@code offset} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param offset the {@code offset} to set
+         * @return this
+         */
+        public Federation offset(Integer offset) {
+            this.offset = offset;
+            return this;
+        }
+
+        /**
+         * Sets the {@code limit} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param limit the {@code limit} to set
+         * @return this
+         */
+        public Federation limit(Integer limit) {
+            this.limit = limit;
+            return this;
+        }
 
     }
 

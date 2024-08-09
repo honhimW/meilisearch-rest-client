@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.TaskInfo;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public interface ReactiveStopWordsSettings {
      *
      * @return current index stop words
      */
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/stop-words")
     Mono<List<String>> get();
 
     /**
@@ -57,7 +57,7 @@ public interface ReactiveStopWordsSettings {
      *                  If a list of stop words already exists, it will be overwritten (replaced).
      * @return update task
      */
-    @Operation(method = "PUT", tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(method = "PUT", paths = "/indexes/{index_uid}/settings/stop-words")
     Mono<TaskInfo> update(List<String> stopWords);
 
     /**
@@ -65,7 +65,7 @@ public interface ReactiveStopWordsSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/stop-words")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/stop-words")
     Mono<TaskInfo> reset();
 
 }

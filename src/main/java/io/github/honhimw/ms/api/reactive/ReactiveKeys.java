@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 import reactor.core.publisher.Mono;
 
@@ -39,7 +39,7 @@ public interface ReactiveKeys {
      * @param limit  Maximum number of results to return.
      * @return Returns the 20 most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
      */
-    @Operation(method = "GET", tags = "/keys")
+    @Operation(method = "GET", paths = "/keys")
     Mono<Page<Key>> list(@Nullable Integer offset, @Nullable Integer limit);
 
     /**
@@ -47,7 +47,7 @@ public interface ReactiveKeys {
      * @param page page request builder
      * @return Returns the most recently created keys in a results array. Expired keys are included in the response, but deleted keys are not.
      */
-    @Operation(method = "GET", tags = "/keys")
+    @Operation(method = "GET", paths = "/keys")
     default Mono<Page<Key>> list(Consumer<PageRequest> page) {
         PageRequest pageRequest = new PageRequest();
         page.accept(pageRequest);
@@ -60,7 +60,7 @@ public interface ReactiveKeys {
      * @param keyOrUid key value of the requested API key, uid of the requested API key
      * @return Returns information on the specified key.
      */
-    @Operation(method = "GET", tags = "/keys/{key_or_uid}")
+    @Operation(method = "GET", paths = "/keys/{key_or_uid}")
     Mono<Key> get(String keyOrUid);
 
     /**
@@ -68,7 +68,7 @@ public interface ReactiveKeys {
      * @param request CreateKeyRequest
      * @return Returns information on the created key.
      */
-    @Operation(method = "POST", tags = "/keys/{key_or_uid}")
+    @Operation(method = "POST", paths = "/keys/{key_or_uid}")
     Mono<Key> create(CreateKeyRequest request);
 
     /**
@@ -76,7 +76,7 @@ public interface ReactiveKeys {
      * @param builder CreateKeyRequest.Builder
      * @return Returns information on the created key.
      */
-    @Operation(method = "POST", tags = "/keys/{key_or_uid}")
+    @Operation(method = "POST", paths = "/keys/{key_or_uid}")
     default Mono<Key> create(Consumer<CreateKeyRequest.Builder> builder) {
         CreateKeyRequest.Builder _builder = CreateKeyRequest.builder();
         builder.accept(_builder);
@@ -90,7 +90,7 @@ public interface ReactiveKeys {
      * @param request UpdateKeyRequest request
      * @return Returns information on the updated key.
      */
-    @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
+    @Operation(method = "PATCH", paths = "/keys/{key_or_uid}")
     Mono<Key> update(String keyOrUid, UpdateKeyRequest request);
 
     /**
@@ -99,7 +99,7 @@ public interface ReactiveKeys {
      * @param builder UpdateKeyRequest.Builder
      * @return Returns information on the updated key.
      */
-    @Operation(method = "PATCH", tags = "/keys/{key_or_uid}")
+    @Operation(method = "PATCH", paths = "/keys/{key_or_uid}")
     default Mono<Key> update(String keyOrUid, Consumer<UpdateKeyRequest.Builder> builder) {
         UpdateKeyRequest.Builder _builder = UpdateKeyRequest.builder();
         builder.accept(_builder);
@@ -111,7 +111,7 @@ public interface ReactiveKeys {
      * @param keyOrUid key value of the requested API key, uid of the requested API key
      * @return NoneReactiveLogs
      */
-    @Operation(method = "DELETE", tags = "/keys/{key_or_uid}")
+    @Operation(method = "DELETE", paths = "/keys/{key_or_uid}")
     Mono<Void> delete(String keyOrUid);
 
 }

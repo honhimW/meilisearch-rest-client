@@ -19,7 +19,7 @@ import io.github.honhimw.ms.model.Embedder;
 import io.github.honhimw.ms.model.Pagination;
 import io.github.honhimw.ms.model.TaskInfo;
 import io.github.honhimw.ms.support.MapBuilder;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import jakarta.annotation.Nullable;
 
 import java.util.Map;
@@ -42,7 +42,7 @@ public interface EmbeddersSettings {
      * @return current embedders
      */
     @Nullable
-    @Operation(method = "GET", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "GET", paths = "/indexes/{index_uid}/settings/embedders")
     Map<String, ? extends Embedder> get();
 
     /**
@@ -51,7 +51,7 @@ public interface EmbeddersSettings {
      * @param embedders new embedders
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/embedders")
     TaskInfo update(Map<String, ? extends Embedder> embedders);
 
     /**
@@ -59,7 +59,7 @@ public interface EmbeddersSettings {
      * @param embedders new embedders builder
      * @return update task
      */
-    @Operation(method = "PATCH", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "PATCH", paths = "/indexes/{index_uid}/settings/embedders")
     default TaskInfo update(Consumer<MapBuilder<String, ? extends Embedder>> embedders) {
         MapBuilder<String, ? extends Embedder> builder = MapBuilder.builder();
         embedders.accept(builder);
@@ -75,7 +75,7 @@ public interface EmbeddersSettings {
      *
      * @return reset task
      */
-    @Operation(method = "DELETE", tags = "/indexes/{index_uid}/settings/embedders")
+    @Operation(method = "DELETE", paths = "/indexes/{index_uid}/settings/embedders")
     TaskInfo reset();
 
 }

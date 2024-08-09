@@ -15,7 +15,7 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.model.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -36,7 +36,7 @@ public interface ReactiveTasks {
      * @param request GetTasksRequest
      * @return paginated result
      */
-    @Operation(method = "GET", tags = "/tasks")
+    @Operation(method = "GET", paths = "/tasks")
     Mono<Page<TaskView>> list(GetTasksRequest request);
 
     /**
@@ -45,7 +45,7 @@ public interface ReactiveTasks {
      * @param builder request builder
      * @return paginated result
      */
-    @Operation(method = "GET", tags = "/tasks")
+    @Operation(method = "GET", paths = "/tasks")
     default Mono<Page<TaskView>> list(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
         builder.accept(_builder);
@@ -58,7 +58,7 @@ public interface ReactiveTasks {
      * @param request GetTasksRequest
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/tasks")
+    @Operation(method = "DELETE", paths = "/tasks")
     Mono<TaskInfo> delete(GetTasksRequest request);
 
     /**
@@ -67,7 +67,7 @@ public interface ReactiveTasks {
      * @param builder request builder
      * @return delete task
      */
-    @Operation(method = "DELETE", tags = "/tasks")
+    @Operation(method = "DELETE", paths = "/tasks")
     default Mono<TaskInfo> delete(Consumer<GetTasksRequest.Builder> builder) {
         GetTasksRequest.Builder _builder = GetTasksRequest.builder();
         builder.accept(_builder);
@@ -80,7 +80,7 @@ public interface ReactiveTasks {
      * @param uid uid of the requested task
      * @return the requested task
      */
-    @Operation(method = "GET", tags = "/tasks/{taskUid}")
+    @Operation(method = "GET", paths = "/tasks/{taskUid}")
     Mono<TaskView> get(Integer uid);
 
     /**
@@ -91,7 +91,7 @@ public interface ReactiveTasks {
      * @param request A valid uids, statuses, types, indexUids, or date(beforeXAt or afterXAt) parameter is required.
      * @return cancel task
      */
-    @Operation(method = "POST", tags = "/tasks/cancel")
+    @Operation(method = "POST", paths = "/tasks/cancel")
     Mono<TaskInfo> cancel(CancelTasksRequest request);
 
     /**
@@ -102,7 +102,7 @@ public interface ReactiveTasks {
      * @param builder request builder
      * @return cancel task
      */
-    @Operation(method = "POST", tags = "/tasks/cancel")
+    @Operation(method = "POST", paths = "/tasks/cancel")
     default Mono<TaskInfo> cancel(Consumer<CancelTasksRequest.Builder> builder) {
         CancelTasksRequest.Builder _builder = CancelTasksRequest.builder();
         builder.accept(_builder);
