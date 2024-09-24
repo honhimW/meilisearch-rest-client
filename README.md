@@ -25,7 +25,8 @@ The version number of this library is named by appending `.X` to the version num
 
 | Doc's Version | Library's Version |
 |---------------|-------------------|
-| V1.10(latest) | 1.10.X.X          |
+| V1.11(latest) | 1.11.X.X          |
+| V1.10         | 1.10.X.X          |
 | V1.9          | 1.9.X.X           |
 | V1.8          | 1.8.X.X           |
 | V1.7          | 1.7.X.X           |
@@ -50,7 +51,7 @@ $ ./gradlew publishToMavenLocal
 
 ```groovy
 // Gradle
-implementation 'io.github.honhimw:meilisearch-rest-client:1.10.0.0'
+implementation 'io.github.honhimw:meilisearch-rest-client:1.11.0.0'
 ```
 
 ```xml
@@ -58,7 +59,7 @@ implementation 'io.github.honhimw:meilisearch-rest-client:1.10.0.0'
 <dependency>
     <groupId>io.github.honhimw</groupId>
     <artifactId>meilisearch-rest-client</artifactId>
-    <version>1.10.0.0</version>
+    <version>1.11.0.0</version>
 </dependency>
 ```
 
@@ -150,7 +151,7 @@ public static void blocking() {
 ```java
 public static void reactive() {
     ReactiveTypedDetailsSearch<Movie> searcher = client.indexes().searchWithDetails("movies", Movie.class);
-    searcher.find(builder ->builder
+    searcher.find(builder -> builder
             .q("hello world")
             .filter("id < 10")
             .showRankingScore(true)
@@ -161,7 +162,7 @@ public static void reactive() {
             return response.getHits();
         })
         .doOnNext(hitDetails -> {
-            for(HitDetails<Movie> hitDetail :hitDetails){
+            for (HitDetails<Movie> hitDetail : hitDetails) {
                 SearchDetails details = hitDetail.getDetails(); // Search Details
                 Movie source = hitDetail.getSource();           // Source Document
 
@@ -183,7 +184,7 @@ public static void blocking() {
     Integer estimatedTotalHits = response.getEstimatedTotalHits();
     Long processingTimeMs = response.getProcessingTimeMs();
     List<HitDetails<Movie>> hitDetails = response.getHits();
-    for(HitDetails<Movie> hitDetail :hitDetails){
+    for (HitDetails<Movie> hitDetail : hitDetails) {
         SearchDetails details = hitDetail.getDetails(); // Search Details
         Movie source = hitDetail.getSource();           // Source Document
 
