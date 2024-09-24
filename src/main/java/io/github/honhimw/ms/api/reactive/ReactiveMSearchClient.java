@@ -15,9 +15,9 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.MSearchConfig;
+import io.github.honhimw.ms.api.annotation.Operation;
 import io.github.honhimw.ms.internal.reactive.ReactiveMSearchClientImpl;
 import io.github.honhimw.ms.model.*;
-import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -112,6 +112,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      *
      * @param request multi-search request with federation
      * @return multi-search result federated
+     * @since v1.10
      */
     @Operation(method = "POST", paths = "/multi-search")
     Mono<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request);

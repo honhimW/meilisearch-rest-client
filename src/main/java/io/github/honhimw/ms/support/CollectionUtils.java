@@ -14,6 +14,7 @@
 
 package io.github.honhimw.ms.support;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
 
@@ -25,6 +26,30 @@ import java.util.Map;
  */
 
 public class CollectionUtils {
+
+    /**
+     * Null-safe check if the specified array is empty.
+     * <p>
+     * Null returns true.
+     *
+     * @param arr the array to check, may be null
+     * @return true if empty or null
+     */
+    public static boolean isEmpty(Object[] arr) {
+        return arr == null || Array.getLength(arr) == 0;
+    }
+
+    /**
+     * Null-safe check if the specified array is not empty.
+     * <p>
+     * Null returns false.
+     *
+     * @param arr the array to check, may be null
+     * @return true if non-null and non-empty
+     */
+    public static boolean isNotEmpty(Object[] arr) {
+        return !isEmpty(arr);
+    }
 
     /**
      * Null-safe check if the specified collection is empty.

@@ -62,6 +62,13 @@ class ReactiveTypedDetailsSearchImpl<T> extends AbstractReactiveImpl implements 
         return post(String.format("/indexes/%s/facet-search", indexUid), configurer -> json(configurer, jsonHandler.toJson(request)), TypeRefs.of(FacetSearchResponse.class));
     }
 
+    @Override
+    public Mono<SearchDetailsResponse<T>> multiSearch(AttributeSearchRequest request) {
+        MultiSearchWithFederationRequest multiSearch = request.toMultiSearch(indexUid);
+        return post("/multi-search", configurer -> json(configurer, jsonHandler.toJson(multiSearch)), TypeRefs.StringObjectMapSearchResponseRef.INSTANCE)
+            .map(this::transform);
+    }
+
     private SearchDetailsResponse<T> transform(SearchResponse<Map<String, Object>> searchResponse) {
         SearchDetailsResponse<T> response = new SearchDetailsResponse<>();
         response.setOffset(searchResponse.getOffset());

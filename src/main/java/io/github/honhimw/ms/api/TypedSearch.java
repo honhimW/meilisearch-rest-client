@@ -14,8 +14,8 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.api.annotation.Operation;
+import io.github.honhimw.ms.model.*;
 
 import java.util.function.Consumer;
 
@@ -84,6 +84,24 @@ public interface TypedSearch<T> {
      */
     @Operation(method = "POST", paths = "/indexes/{indexUid}/facet-search")
     FacetSearchResponse facetSearch(Consumer<FacetSearchRequest.Builder> builder);
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param request search request
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    SearchResponse<T> multiSearch(AttributeSearchRequest request);
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param builder request builder
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    SearchResponse<T> multiSearch(Consumer<AttributeSearchRequest.Builder> builder);
 
     /**
      * To retrieve similar documents in your datasets, two new routes have been introduced

@@ -14,8 +14,8 @@
 
 package io.github.honhimw.ms.api.reactive;
 
-import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.api.annotation.Operation;
+import io.github.honhimw.ms.model.*;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
@@ -91,6 +91,28 @@ public interface ReactiveTypedSearch<T> {
         FacetSearchRequest.Builder _builder = FacetSearchRequest.builder();
         builder.accept(_builder);
         return facetSearch(_builder.build());
+    }
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param request search request
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    Mono<SearchResponse<T>> multiSearch(AttributeSearchRequest request);
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param builder request builder
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    default Mono<SearchResponse<T>> multiSearch(Consumer<AttributeSearchRequest.Builder> builder) {
+        AttributeSearchRequest.Builder _builder = AttributeSearchRequest.builder();
+        builder.accept(_builder);
+        return multiSearch(_builder.build());
     }
 
     /**

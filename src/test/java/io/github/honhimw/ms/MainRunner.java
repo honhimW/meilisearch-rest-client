@@ -36,7 +36,6 @@ import java.util.List;
 public class MainRunner {
 
     public static void main(String[] args) {
-
         JsonHandler jsonHandler = new JacksonJsonHandler();
         SearchResponse<String> strings = jsonHandler.fromJson("{\"hits\": [\"hello\", \"world\"]}", type(new TypeRef<String>() {
         }));

@@ -14,11 +14,8 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.FacetSearchRequest;
-import io.github.honhimw.ms.model.FacetSearchResponse;
-import io.github.honhimw.ms.model.SearchDetailsResponse;
-import io.github.honhimw.ms.model.SearchRequest;
 import io.github.honhimw.ms.api.annotation.Operation;
+import io.github.honhimw.ms.model.*;
 
 import java.util.function.Consumer;
 
@@ -95,5 +92,23 @@ public interface TypedDetailsSearch<T> {
         builder.accept(_builder);
         return facetSearch(_builder.build());
     }
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param request search request
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    SearchDetailsResponse<T> multiSearch(AttributeSearchRequest request);
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param builder request builder
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    SearchDetailsResponse<T> multiSearch(Consumer<AttributeSearchRequest.Builder> builder);
 
 }
