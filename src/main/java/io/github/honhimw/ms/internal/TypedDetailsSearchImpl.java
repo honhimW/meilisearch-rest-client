@@ -30,11 +30,10 @@ package io.github.honhimw.ms.internal;
 
 import io.github.honhimw.ms.api.TypedDetailsSearch;
 import io.github.honhimw.ms.api.reactive.ReactiveTypedDetailsSearch;
-import io.github.honhimw.ms.model.FacetSearchRequest;
-import io.github.honhimw.ms.model.FacetSearchResponse;
-import io.github.honhimw.ms.model.SearchDetailsResponse;
-import io.github.honhimw.ms.model.SearchRequest;
+import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.ReactorUtils;
+
+import java.util.function.Consumer;
 
 /**
  * @author hon_him
@@ -62,5 +61,15 @@ class TypedDetailsSearchImpl<T> implements TypedDetailsSearch<T> {
     @Override
     public FacetSearchResponse facetSearch(FacetSearchRequest request) {
         return ReactorUtils.blockNonNull(_search.facetSearch(request));
+    }
+
+    @Override
+    public SearchDetailsResponse<T> multiSearch(AttributeSearchRequest request) {
+        return ReactorUtils.blockNonNull(_search.multiSearch(request));
+    }
+
+    @Override
+    public SearchDetailsResponse<T> multiSearch(Consumer<AttributeSearchRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_search.multiSearch(builder));
     }
 }

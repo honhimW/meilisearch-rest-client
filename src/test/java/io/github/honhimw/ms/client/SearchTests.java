@@ -27,6 +27,7 @@ import io.github.honhimw.ms.support.StringUtils;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author hon_him
@@ -240,6 +241,20 @@ public class SearchTests extends TestBase {
         HitDetails<Movie> movieHitDetails = hits.get(0);
 
         assert movieHitDetails.getSource().getId() == 18;
+    }
+
+    @Order(10)
+    @Test
+    @EnabledOnVersion("1.10")
+    void utilityMultiSearch() {
+        TypedDetailsSearch<Movie> search = indexes.searchWithDetails(INDEX, Movie.class);
+        SearchDetailsResponse<Movie> response = search.multiSearch(builder -> builder
+            .queryOn("girl", "overview")
+            .queryOn("Metropolis", "title")
+        );
+        List<HitDetails<Movie>> hits = response.getHits();
+        List<Integer> collect = hits.stream().map(movieHitDetails -> movieHitDetails.getSource().getId()).collect(Collectors.toList());
+        assert collect.containsAll(toList(17, 18, 19));
     }
 
     @AfterEach

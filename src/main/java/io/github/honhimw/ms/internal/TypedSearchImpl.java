@@ -74,6 +74,16 @@ class TypedSearchImpl<T> implements TypedSearch<T> {
     }
 
     @Override
+    public SearchResponse<T> multiSearch(AttributeSearchRequest request) {
+        return ReactorUtils.blockNonNull(_search.multiSearch(request));
+    }
+
+    @Override
+    public SearchResponse<T> multiSearch(Consumer<AttributeSearchRequest.Builder> builder) {
+        return ReactorUtils.blockNonNull(_search.multiSearch(builder));
+    }
+
+    @Override
     public SearchResponse<T> similar(SimilarSearchRequest request) {
         return ReactorUtils.blockNonNull(_search.similar(request));
     }

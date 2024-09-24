@@ -15,10 +15,10 @@
 package io.github.honhimw.ms.api.reactive;
 
 import io.github.honhimw.ms.Experimental;
+import io.github.honhimw.ms.api.annotation.Operation;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.support.TypeRefs;
-import io.github.honhimw.ms.api.annotation.Operation;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -166,6 +166,28 @@ public interface ReactiveSearch {
         builder.accept(_builder);
         return facetSearch(_builder.build());
     }
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param request search request
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    default Mono<SearchResponse<Map<String, Object>>> multiSearch(AttributeSearchRequest request) {
+        return multiSearch(request, TypeRefs.StringObjectMapRef.INSTANCE);
+    }
+
+    /**
+     * An utility api to search multiple queries in a single request on the same index.
+     *
+     * @param request search request
+     * @param typeRef type reference
+     * @param <T>     document type
+     * @return search result
+     */
+    @Operation(method = "POST", paths = "/multi-search")
+    <T> Mono<SearchResponse<T>> multiSearch(AttributeSearchRequest request, TypeRef<T> typeRef);
 
     /**
      * To retrieve similar documents in your datasets, two new routes have been introduced

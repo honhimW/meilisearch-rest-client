@@ -84,6 +84,15 @@ class ReactiveSearchImpl extends AbstractReactiveImpl implements ReactiveSearch 
     }
 
     @Override
+    public <T> Mono<SearchResponse<T>> multiSearch(AttributeSearchRequest request, TypeRef<T> typeRef) {
+        MultiSearchWithFederationRequest multiSearch = request.toMultiSearch(indexUid);
+        return post("/multi-search", configurer -> configurer
+                .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(multiSearch))))
+            , new ComplexTypeRef<SearchResponse<T>>(typeRef) {
+            });
+    }
+
+    @Override
     public <T> Mono<SearchResponse<T>> similar(SimilarSearchRequest request, TypeRef<T> typeRef) {
         return post(String.format("/indexes/%s/similar", indexUid), configurer -> configurer
                 .body(payload -> payload.raw(raw -> raw.json(jsonHandler.toJson(request))))

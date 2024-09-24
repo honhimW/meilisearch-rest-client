@@ -106,6 +106,16 @@ class SearchImpl implements Search {
     }
 
     @Override
+    public SearchResponse<Map<String, Object>> multiSearch(AttributeSearchRequest request) {
+        return ReactorUtils.blockNonNull(_search.multiSearch(request));
+    }
+
+    @Override
+    public <T> SearchResponse<T> multiSearch(AttributeSearchRequest request, TypeRef<T> typeRef) {
+        return ReactorUtils.blockNonNull(_search.multiSearch(request, typeRef));
+    }
+
+    @Override
     public <T> SearchResponse<T> similar(SimilarSearchRequest request, TypeRef<T> typeRef) {
         return ReactorUtils.blockNonNull(_search.similar(request, typeRef));
     }
