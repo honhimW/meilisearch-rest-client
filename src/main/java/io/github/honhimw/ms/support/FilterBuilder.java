@@ -270,6 +270,18 @@ public class FilterBuilder {
         }
 
         /**
+         * Starts with expression.
+         *
+         * @param attribute attribute name
+         * @param value     filter value
+         * @return this
+         */
+        public Expression startsWith(String attribute, String value) {
+            this.expression = String.format("%s %s '%s'", attribute, Operator.STARTS_WITH.symbol(), value);
+            return this;
+        }
+
+        /**
          * Greater than expression.
          *
          * @param attribute attribute name
