@@ -493,6 +493,10 @@ public class FilterBuilder {
          */
         CONTAINS("CONTAINS"),
         /**
+         * starts with
+         */
+        STARTS_WITH("STARTS_WITH"),
+        /**
          * greater than
          */
         GT(">"),
