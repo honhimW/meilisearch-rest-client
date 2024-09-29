@@ -62,6 +62,14 @@ public class Embedder implements Serializable {
     private Distribution distribution;
 
     /**
+     * Image to text settings.
+     *
+     * @since v1.11
+     */
+    @Schema(description = "TODO")
+    private Image2Text image2text;
+
+    /**
      * Describes the natural distribution of results
      */
     @Data
@@ -79,6 +87,30 @@ public class Embedder implements Serializable {
          */
         @Schema(description = "variance")
         private Double sigma;
+    }
+
+    /**
+     * Image to text settings.
+     *
+     * @since v1.11
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static final class Image2Text implements Serializable {
+
+        /**
+         * Enable binary quantization to convert embeddings of floating point numbers into embeddings of boolean values.
+         * This will negatively impact the relevancy of AI-powered searches, but significantly improve performance in large collections with more than 100 dimensions.
+         * <p style="color:orange;font-weight:bold;font-size:large">WARNING</p>
+         * <pre>
+         * Enabling this feature will update all of your vectors to contain only 1s or -1s, impacting the relevancy significantly.
+         * <b style="color:red">You cannot revert this option once you enable it.</b>
+         * Before setting binaryQuantized to true, Meilisearch recommends testing it in a smaller or duplicate index in a development environment.
+         * </pre>
+         */
+        @Schema(description = "Enable binary quantization to convert embeddings of floating point numbers into embeddings of boolean values.")
+        private Boolean binaryQuantized;
+
     }
 
     /**

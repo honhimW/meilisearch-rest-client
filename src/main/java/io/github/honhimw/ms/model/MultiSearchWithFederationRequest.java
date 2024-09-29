@@ -15,15 +15,14 @@
 package io.github.honhimw.ms.model;
 
 import io.github.honhimw.ms.api.annotation.Schema;
+import io.github.honhimw.ms.support.CollectionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -89,6 +88,28 @@ public class MultiSearchWithFederationRequest implements Serializable {
         private Integer limit;
 
         /**
+         * To obtain facet distribution and stats for each separate index
+         */
+        @Schema(description = "To obtain facet distribution and stats for each separate index")
+        private Map<String, List<String>> facetsByIndex;
+
+        /**
+         * To obtain facet distribution and stats for all index merged into a single
+         */
+        @Schema(description = "To obtain facet distribution and stats for all index merged into a single")
+        private MergeFacets mergeFacets;
+
+        /**
+         * Federation with offset and limit
+         * @param offset offset
+         * @param limit  limit
+         */
+        public Federation(Integer offset, Integer limit) {
+            this.offset = offset;
+            this.limit = limit;
+        }
+
+        /**
          * Sets the {@code offset} and returns a reference to this Builder enabling method chaining.
          *
          * @param offset the {@code offset} to set
@@ -110,6 +131,70 @@ public class MultiSearchWithFederationRequest implements Serializable {
             return this;
         }
 
+        /**
+         * Sets the {@code facetsByIndex} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param facetsByIndex the {@code facetsByIndex} to set
+         * @return this
+         */
+        public Federation facetsByIndex(Map<String, List<String>> facetsByIndex) {
+            this.facetsByIndex = facetsByIndex;
+            return this;
+        }
+
+        /**
+         * Set facets
+         * @param index  index
+         * @param facets facets
+         * @return this
+         */
+        public Federation setFacets(String index, String... facets) {
+            if (CollectionUtils.isEmpty(facets)) {
+                return this;
+            }
+            return this.setFacets(index, Arrays.asList(facets));
+        }
+
+        /**
+         * Set facets
+         * @param index  index
+         * @param facets facets
+         * @return this
+         */
+        public Federation setFacets(String index, Collection<String> facets) {
+            if (CollectionUtils.isEmpty(facets)) {
+                return this;
+            }
+            if (Objects.isNull(facetsByIndex)) {
+                facetsByIndex = new HashMap<>();
+            }
+            facetsByIndex.put(index, new ArrayList<>(facets));
+            return this;
+        }
+
+        /**
+         * Sets the {@code mergeFacets} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param maxValuesPerFacet the {@code mergeFacets} to set
+         * @return this
+         */
+        public Federation mergeFacets(int maxValuesPerFacet) {
+            this.mergeFacets = new MergeFacets(maxValuesPerFacet);
+            return this;
+        }
+
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MergeFacets implements Serializable {
+        /**
+         * Maximum number of values per facet among all indexes
+         */
+        @Schema(description = "Maximum number of values per facet among all indexes")
+        private Integer maxValuesPerFacet;
     }
 
     /**
