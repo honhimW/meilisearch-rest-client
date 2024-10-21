@@ -20,7 +20,7 @@ version = '1.11.0.0' // API docs version plus '.x(-SNAPSHOT/RC.x)?'
 description = 'Reactive meilisearch rest client powered by reactor-netty-http.'
 
 def title = 'Meilisearch rest client for java'
-def reactorVersion = '2023.0.10'
+def reactorVersion = '2023.0.11'
 def jacksonVersion = '2.18.0'
 def gsonVersion = '2.11.0'
 def lombokVersion = '1.18.34'
