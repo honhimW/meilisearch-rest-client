@@ -186,7 +186,7 @@ testing {
         test {
             useJUnitJupiter()
             dependencies {
-                implementation platform('org.junit:junit-bom:5.11.2')
+                implementation platform('org.junit:junit-bom:5.11.3')
             }
             targets {
                 all {
