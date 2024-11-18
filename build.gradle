@@ -23,7 +23,7 @@ def title = 'Meilisearch rest client for java'
 def reactorVersion = '2023.0.11'
 def jacksonVersion = '2.18.1'
 def gsonVersion = '2.11.0'
-def lombokVersion = '1.18.34'
+def lombokVersion = '1.18.36'
 def slf4jVersion = '2.0.16'
 
 apply plugin: 'idea'
