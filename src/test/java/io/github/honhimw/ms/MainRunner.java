@@ -22,6 +22,7 @@ import io.github.honhimw.ms.json.JacksonJsonHandler;
 import io.github.honhimw.ms.json.JsonHandler;
 import io.github.honhimw.ms.json.TypeRef;
 import io.github.honhimw.ms.model.SearchResponse;
+import io.github.honhimw.ms.support.ReactorUtils;
 import lombok.Cleanup;
 import reactor.core.publisher.Mono;
 
@@ -63,7 +64,7 @@ public class MainRunner {
         Mono<SearchResponse<Movie>> searchResponse = client.indexes(indexes -> indexes
             .search(indexUid, search -> search
                 .find("hello world", Movie.class)));
-        List<Movie> hits = searchResponse.block().getHits();
+        List<Movie> hits = ReactorUtils.blockNonNull(searchResponse).getHits();
         // or
         List<Movie> hits2 = client.indexes(indexes -> indexes
             .search(indexUid, Movie.class, search -> search

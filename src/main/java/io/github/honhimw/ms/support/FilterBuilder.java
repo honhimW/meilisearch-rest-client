@@ -507,7 +507,7 @@ public class FilterBuilder {
         /**
          * starts with
          */
-        STARTS_WITH("STARTS_WITH"),
+        STARTS_WITH("STARTS WITH"),
         /**
          * greater than
          */

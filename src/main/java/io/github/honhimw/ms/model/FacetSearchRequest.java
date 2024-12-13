@@ -20,6 +20,8 @@ import lombok.*;
 import java.util.List;
 
 /**
+ * Facet search request
+ *
  * @author hon_him
  * @since 2024-01-02
  */
@@ -49,7 +51,7 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
     private String facetQuery;
 
     /**
-     *
+     * Strategy used to match query terms within documents
      */
     @Schema(description = "Strategy used to match query terms within documents")
     private MatchingStrategy matchingStrategy;
@@ -72,7 +74,7 @@ public class FacetSearchRequest extends FilterableAttributesRequest {
     /**
      * Creates and returns a new instance of the Builder class.
      *
-     * @return  a new instance of the Builder class
+     * @return a new instance of the Builder class
      */
     public static Builder builder() {
         return new Builder();

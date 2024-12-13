@@ -32,6 +32,8 @@ import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339;
 import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339_FORMATTER;
 
 /**
+ * JsonHandler implementation using Gson
+ *
  * @author hon_him
  * @since 2024-01-19
  */

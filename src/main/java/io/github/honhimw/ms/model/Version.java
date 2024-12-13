@@ -28,7 +28,6 @@ import java.io.Serializable;
  * @author hon_him
  * @since 2024-01-03
  */
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor

@@ -144,12 +144,12 @@ public class ReactiveMSearchClientImpl implements ReactiveMSearchClient {
     }
 
     @Override
-    public Mono<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request) {
+    public Mono<FederationSearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request) {
         // If federation is empty ({}) default values of offset and limit are used, so respectively 0 and 20.
         if (Objects.isNull(request.getFederation())) {
             request.setFederation(new MultiSearchWithFederationRequest.Federation());
         }
-        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), TypeRefs.StringObjectMapSearchResponseRef.INSTANCE);
+        return getSimpleReactive().post("/multi-search", configurer -> simpleReactive.json(configurer, request), TypeRefs.StringObjectMapFederationSearchResponseRef.INSTANCE);
     }
 
     @Override

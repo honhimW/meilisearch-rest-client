@@ -46,6 +46,8 @@ import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339;
 import static io.github.honhimw.ms.support.DateTimeUtils.RFC_3339_FORMATTER;
 
 /**
+ * JsonHandler implementation using Jackson
+ *
  * @author hon_him
  * @since 2023-12-29
  */
@@ -63,6 +65,7 @@ public class JacksonJsonHandler implements JsonHandler {
 
     /**
      * Creates a new instance of the JacksonJsonHandler with the given {@link JsonMapper}.
+     *
      * @param jsonMapper configured {@link JsonMapper}
      */
     public JacksonJsonHandler(JsonMapper jsonMapper) {
@@ -71,6 +74,7 @@ public class JacksonJsonHandler implements JsonHandler {
 
     /**
      * Returns a new {@link JsonMapper.Builder} with the default configuration.
+     *
      * @return a new {@link JsonMapper.Builder}
      */
     @SuppressWarnings("rawtypes")
@@ -197,9 +201,10 @@ public class JacksonJsonHandler implements JsonHandler {
 
     /**
      * Get current json mapper
+     *
      * @return current json mapper
      */
-    public JsonMapper getJsonMapper() {
+    public JsonMapper getMapper() {
         return jsonMapper;
     }
 

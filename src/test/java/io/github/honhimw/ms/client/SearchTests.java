@@ -177,7 +177,7 @@ public class SearchTests extends TestBase {
     @Order(6)
     @Test
     void multiSearchWithFederation() {
-        SearchResponse<Map<String, Object>> searchWithFederationResponse = blockingClient.multiSearch(MultiSearchWithFederationRequest.builder()
+        FederationSearchResponse<Map<String, Object>> searchWithFederationResponse = blockingClient.multiSearch(MultiSearchWithFederationRequest.builder()
             .addQuery(INDEX, 0.999, SearchRequest.builder()
                 .q("2")
                 .build())

@@ -105,6 +105,9 @@ public class SearchWithIndexAndFederationOptionsRequest extends SearchWithIndexR
     @AllArgsConstructor
     public static class FederationOptions implements Serializable {
 
+        /**
+         * must be positive
+         */
         @Schema(description = "must be positive (>=0)")
         private Number weight;
 

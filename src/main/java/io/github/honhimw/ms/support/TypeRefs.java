@@ -233,6 +233,17 @@ public class TypeRefs {
     }
 
     /**
+     * String-Object Map SearchResponse type reference.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class StringObjectMapFederationSearchResponseRef extends TypeRef<FederationSearchResponse<Map<String, Object>>> {
+        /**
+         * Instance.
+         */
+        public static final StringObjectMapFederationSearchResponseRef INSTANCE = new StringObjectMapFederationSearchResponseRef();
+    }
+
+    /**
      * String-StringList Map type reference.
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

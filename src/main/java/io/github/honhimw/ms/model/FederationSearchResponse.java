@@ -24,6 +24,9 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * Federation search response
+ *
+ * @param <T> the type of the search result
  * @author hon_him
  * @since 2024-09-29 v1.11
  */

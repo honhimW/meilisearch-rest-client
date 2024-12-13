@@ -171,6 +171,8 @@ public class SearchRequest extends FilterableAttributesRequest {
     private List<Number> vector;
 
     /**
+     * If a distinct attribute is already defined in the settings it'll be ignored in favor of the one defined at search time.
+     *
      * @since v1.9.0
      */
     @Schema(description = "If a distinct attribute is already defined in the settings it'll be ignored in favor of the one defined at search time.")

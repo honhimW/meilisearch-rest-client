@@ -115,7 +115,7 @@ public interface ReactiveMSearchClient extends AutoCloseable {
      * @since v1.10
      */
     @Operation(method = "POST", paths = "/multi-search")
-    Mono<SearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request);
+    Mono<FederationSearchResponse<Map<String, Object>>> multiSearch(MultiSearchWithFederationRequest request);
 
     /**
      * The /health route allows you to verify the status and availability of a Meilisearch instance.

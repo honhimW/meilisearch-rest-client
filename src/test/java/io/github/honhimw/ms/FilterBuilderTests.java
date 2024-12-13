@@ -68,6 +68,13 @@ public class FilterBuilderTests {
     }
 
     @Test
+    void stringStartsWith() {
+        String filter = FilterBuilder.builder(expression -> expression.startsWith("genres", "action")).build();
+        log.info(filter);
+        assert filter.equals("genres STARTS WITH 'action'");
+    }
+
+    @Test
     void gt() {
         String filter = FilterBuilder.builder(expression -> expression.gt("rating.users", 85)).build();
         log.info(filter);

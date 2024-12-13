@@ -93,7 +93,7 @@ public class MSearchClientImpl implements MSearchClient {
     }
 
     @Override
-    public SearchResponse<Map<String, Object>> multiSearch(MultiSearchWithFederationRequest request) {
+    public FederationSearchResponse<Map<String, Object>> multiSearch(MultiSearchWithFederationRequest request) {
         return ReactorUtils.blockNonNull(reactiveMSearchClient.multiSearch(request));
     }
 

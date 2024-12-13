@@ -114,7 +114,7 @@ public interface MSearchClient extends AutoCloseable {
      * @return multi-search result federated
      */
     @Operation(method = "POST", paths = "/multi-search")
-    SearchResponse<Map<String, Object>> multiSearch(MultiSearchWithFederationRequest request);
+    FederationSearchResponse<Map<String, Object>> multiSearch(MultiSearchWithFederationRequest request);
 
     /**
      * The /health route allows you to verify the status and availability of a Meilisearch instance.

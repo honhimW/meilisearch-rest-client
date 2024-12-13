@@ -122,6 +122,7 @@ public class AttributeSearchRequest extends FilterableAttributesRequest {
     private Boolean showRankingScoreDetails;
 
     /**
+     * If a distinct attribute is already defined in the settings it'll be ignored in favor of the one defined at search time.
      * @since v1.9.0
      */
     @Schema(description = "If a distinct attribute is already defined in the settings it'll be ignored in favor of the one defined at search time.")
@@ -156,6 +157,7 @@ public class AttributeSearchRequest extends FilterableAttributesRequest {
 
     /**
      * Build MultiSearchWithFederationRequest
+     *
      * @param indexUid index
      * @return MultiSearchWithFederationRequest
      */
@@ -186,6 +188,9 @@ public class AttributeSearchRequest extends FilterableAttributesRequest {
         return builder.build();
     }
 
+    /**
+     * Search for specific attributes for each query
+     */
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -404,6 +409,7 @@ public class AttributeSearchRequest extends FilterableAttributesRequest {
 
         /**
          * Search on specific attributes, at least one attribute is required
+         *
          * @param q          content to search
          * @param attribute  attribute to search
          * @param attributes attributes to search
@@ -448,6 +454,12 @@ public class AttributeSearchRequest extends FilterableAttributesRequest {
             return this;
         }
 
+        /**
+         * Sets the {@code federation} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param federation the {@code federation} to set
+         * @return a reference to this Builder
+         */
         public Builder federation(MultiSearchWithFederationRequest.Federation federation) {
             this.federation = federation;
             return this;

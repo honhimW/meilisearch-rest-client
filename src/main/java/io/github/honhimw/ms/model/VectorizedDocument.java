@@ -30,7 +30,6 @@ import java.util.Map;
  * @author hon_him
  * @since 2024-01-18 V1.6
  */
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
