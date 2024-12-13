@@ -122,6 +122,7 @@ public class GetTasksRequest implements Serializable {
 
     /**
      * If set to true, then the tasks will be returned in reversed order (the oldest first)
+     * @since v1.12
      */
     @Schema(description = "If set to true, then the tasks will be returned in reversed order (the oldest first)", defaultValue = "false")
     private Boolean reverse;
@@ -172,6 +173,7 @@ public class GetTasksRequest implements Serializable {
         Optional.ofNullable(afterEnqueuedAt).map(DateTimeUtils::format).ifPresent(at -> parameters.put("afterEnqueuedAt", at));
         Optional.ofNullable(afterStartedAt).map(DateTimeUtils::format).ifPresent(at -> parameters.put("afterStartedAt", at));
         Optional.ofNullable(afterFinishedAt).map(DateTimeUtils::format).ifPresent(at -> parameters.put("afterFinishedAt", at));
+        Optional.ofNullable(reverse).ifPresent(reverse -> parameters.put("reverse", String.valueOf(reverse)));
         return parameters;
     }
 
