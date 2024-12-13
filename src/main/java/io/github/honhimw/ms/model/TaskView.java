@@ -108,6 +108,12 @@ public class TaskView implements Serializable {
     private LocalDateTime finishedAt;
 
     /**
+     * The batch unique identifier. Starting at 0 and increasing by one for every new batch.
+     */
+    @Schema(description = "The batch unique identifier. Starting at 0 and increasing by one for every new batch.")
+    private Integer batchUid;
+
+    /**
      * If the task has the failed status, then this object contains the error definition. Otherwise, set to null
      */
     @Data

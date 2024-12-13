@@ -1,0 +1,286 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.github.honhimw.ms.model;
+
+import io.github.honhimw.ms.api.annotation.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * Batched tasks
+ * @author hon_him
+ * @since 2024-12-13 v1.12
+ */
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@AllArgsConstructor
+public class BatchedTask implements Serializable {
+
+    /**
+     * The batch unique identifier. Starting at 0 and increasing by one for every new batch.
+     */
+    @Schema(description = "The batch unique identifier. Starting at 0 and increasing by one for every new batch.")
+    private Integer uid;
+
+    /**
+     * This is akin to the task details but with the information of everything that happened during this batch.
+     * For example, if multiple document additions were processed together with a document deletion,
+     * we should see the total of documents updated and removed.
+     */
+    @Schema(description = "This is akin to the task details but with the information of everything that happened during this batch.")
+    private Details details;
+
+    /**
+     * Shows the progress and indexing step of the current batch.
+     */
+    @Schema(description = "Shows the progress and indexing step of the current batch.")
+    private Progress progress;
+
+    /**
+     * The date at which the batch started processing, follow the rfc3339 format
+     */
+    @Schema(description = "The date at which the batch started processing, follow the rfc3339 format")
+    private LocalDateTime startedAt;
+
+    /**
+     * The date at which the batch finished processing, follows the rfc3339 format
+     */
+    @Schema(description = "The date at which the batch finished processing, follows the rfc3339 format")
+    private LocalDateTime finishedAt;
+
+    /**
+     * The duration the batch took to process its tasks
+     */
+    @Schema(description = "The duration the batch took to process its tasks")
+    private String duration;
+
+    /**
+     * Stats
+     */
+    @Schema(description = "Stats")
+    private Stats stats;
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Details implements Serializable {
+
+        /**
+         * Number of received documents
+         */
+        @Schema(description = "Number of received documents")
+        private Integer receivedDocuments;
+
+        /**
+         * Number of indexed documents
+         */
+        @Schema(description = "Number of indexed documents")
+        private Integer indexedDocuments;
+
+
+    }
+
+    /**
+     *  Shows the progress and indexing step of the current batch. Once a batch is finished, it must display the progress: null
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Progress implements Serializable {
+
+        /**
+         * An array of all the steps currently being processed
+         */
+        @Schema(description = "An array of all the steps currently being processed")
+        private List<Step> steps;
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Step implements Serializable {
+
+            /**
+             * A string representing the name of the current step - It will change over time and break.
+             * It is NOT stable, and users should not rely on it.
+             * It’s only for the eyes, not for the code
+             */
+            @Schema(description = "A string representing the name of the current step")
+            private String currentStep;
+
+            /**
+             * How many tasks are finished
+             */
+            @Schema(description = "How many tasks are finished")
+            private Integer finished;
+
+            /**
+             * The total number of tasks that must be finished before moving to the next step
+             */
+            @Schema(description = "The total number of tasks that must be finished before moving to the next step")
+            private Integer total;
+
+        }
+
+    }
+    
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Stats implements Serializable {
+
+        /**
+         * number of tasks in this batch
+         */
+        @Schema(description = "number of tasks in this batch")
+        private Integer totalNbTasks;
+
+        /**
+         * status
+         */
+        @Schema(description = "status")
+        private Status status;
+
+        /**
+         * types
+         */
+        @Schema(description = "types")
+        private Types types;
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Status implements Serializable {
+
+            /**
+             * Number of tasks succeded
+             */
+            @Schema(description = "Number of tasks succeded")
+            private Integer succeeded;
+
+            /**
+             * Number of tasks failed
+             */
+            @Schema(description = "Number of tasks failed")
+            private Integer failed;
+
+            /**
+             * Number of tasks canceled
+             */
+            @Schema(description = "Number of tasks canceled")
+            private Integer canceled;
+
+            /**
+             * Number of tasks processing
+             */
+            @Schema(description = "Number of tasks processing")
+            private Integer processing;
+
+            /**
+             * Number of tasks enqueued
+             */
+            @Schema(description = "Number of tasks enqueued")
+            private Integer enqueued;
+
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Types implements Serializable {
+
+            /**
+             * indexCreation
+             */
+            @Schema(description = "indexCreation")
+            private Integer indexCreation;
+
+            /**
+             * indexUpdate
+             */
+            @Schema(description = "indexUpdate")
+            private Integer indexUpdate;
+            
+            /**
+             * indexDeletion
+             */
+            @Schema(description = "indexDeletion")
+            private Integer indexDeletion;
+            
+            /**
+             * indexSwap
+             */
+            @Schema(description = "indexSwap")
+            private Integer indexSwap;
+
+            /**
+             * documentAdditionOrUpdate
+             */
+            @Schema(description = "documentAdditionOrUpdate")
+            private Integer documentAdditionOrUpdate;
+
+            /**
+             * documentDeletion
+             */
+            @Schema(description = "documentDeletion")
+            private Integer documentDeletion;
+
+            /**
+             * settingsUpdate
+             */
+            @Schema(description = "settingsUpdate")
+            private Integer settingsUpdate;
+
+            /**
+             * dumpCreation
+             */
+            @Schema(description = "dumpCreation")
+            private Integer dumpCreation;
+
+            /**
+             * taskCancelation
+             */
+            @Schema(description = "taskCancelation")
+            private Integer taskCancelation;
+
+            /**
+             * taskDeletion
+             */
+            @Schema(description = "taskDeletion")
+            private Integer taskDeletion;
+
+            /**
+             * snapshotCreation
+             */
+            @Schema(description = "snapshotCreation")
+            private Integer snapshotCreation;
+
+        }
+
+    }
+}
