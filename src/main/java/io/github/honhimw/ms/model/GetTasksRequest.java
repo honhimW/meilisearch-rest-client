@@ -120,6 +120,12 @@ public class GetTasksRequest implements Serializable {
     @Schema(description = "Filter tasks by their finishedAt field", defaultValue = "*")
     private LocalDateTime afterFinishedAt;
 
+    /**
+     * If set to true, then the tasks will be returned in reversed order (the oldest first)
+     */
+    @Schema(description = "If set to true, then the tasks will be returned in reversed order (the oldest first)", defaultValue = "false")
+    private Boolean reverse;
+
     private GetTasksRequest(Builder builder) {
         setLimit(builder.limit);
         setFrom(builder.from);
@@ -134,6 +140,7 @@ public class GetTasksRequest implements Serializable {
         setAfterEnqueuedAt(builder.afterEnqueuedAt);
         setAfterStartedAt(builder.afterStartedAt);
         setAfterFinishedAt(builder.afterFinishedAt);
+        setReverse(builder.reverse);
     }
 
     /**
@@ -185,6 +192,7 @@ public class GetTasksRequest implements Serializable {
         private LocalDateTime afterEnqueuedAt;
         private LocalDateTime afterStartedAt;
         private LocalDateTime afterFinishedAt;
+        private Boolean reverse;
 
         private Builder() {
         }
@@ -329,6 +337,17 @@ public class GetTasksRequest implements Serializable {
          */
         public Builder afterFinishedAt(LocalDateTime val) {
             afterFinishedAt = val;
+            return this;
+        }
+
+        /**
+         * Sets the {@code reverse} and returns a reference to this Builder enabling method chaining.
+         *
+         * @param val the {@code reverse} to set
+         * @return a reference to this Builder
+         */
+        public Builder reverse(Boolean val) {
+            reverse = val;
             return this;
         }
 
