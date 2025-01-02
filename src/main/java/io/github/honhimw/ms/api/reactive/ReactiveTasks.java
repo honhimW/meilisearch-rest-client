@@ -14,8 +14,8 @@
 
 package io.github.honhimw.ms.api.reactive;
 
-import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.api.annotation.Operation;
+import io.github.honhimw.ms.model.*;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -119,6 +119,7 @@ public interface ReactiveTasks {
 
     /**
      * Wait for task to complete
+     *
      * @param uid         task uid
      * @param maxAttempts max attempts
      * @param fixedDelay  fixed delay
@@ -173,5 +174,28 @@ public interface ReactiveTasks {
     default Mono<TaskView> await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay, Duration maxDuration) {
         return await(taskInfo.getTaskUid(), maxAttempts, fixedDelay, maxDuration);
     }
+
+    /**
+     * List all batches, regardless of index. The batch objects are contained in the results array.
+     * <p>
+     * Batches are always returned in descending order of uid. This means that by default, the most recently created batch objects appear first.
+     * <p>
+     * Batch results are paginated and can be filtered with query parameters.
+     *
+     * @param request GetTasksRequest
+     * @return paginated result
+     * @since v1.12
+     */
+    @Operation(method = "GET", paths = "/batches")
+    Mono<BatchPage<Batch>> batches(GetTasksRequest request);
+
+    /**
+     * Get a single batch.
+     *
+     * @param uid 	uid of the requested batch
+     * @return the requested batch
+     */
+    @Operation(method = "GET", paths = "/batches/{batch_uid}")
+    Mono<Batch> getBatch(Integer uid);
 
 }

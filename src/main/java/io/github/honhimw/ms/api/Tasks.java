@@ -14,8 +14,8 @@
 
 package io.github.honhimw.ms.api;
 
-import io.github.honhimw.ms.model.*;
 import io.github.honhimw.ms.api.annotation.Operation;
+import io.github.honhimw.ms.model.*;
 
 import java.time.Duration;
 import java.util.function.Consumer;
@@ -165,5 +165,28 @@ public interface Tasks {
      * @return task info if MSearchConfig#isAwaitExhaustedError() is false
      */
     TaskView await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay, Duration maxDuration);
+
+    /**
+     * List all batches, regardless of index. The batch objects are contained in the results array.
+     * <p>
+     * Batches are always returned in descending order of uid. This means that by default, the most recently created batch objects appear first.
+     * <p>
+     * Batch results are paginated and can be filtered with query parameters.
+     *
+     * @param request GetTasksRequest
+     * @return paginated result
+     * @since v1.12
+     */
+    @Operation(method = "GET", paths = "/batches")
+    BatchPage<Batch> batches(GetTasksRequest request);
+
+    /**
+     * Get a single batch.
+     *
+     * @param uid 	uid of the requested batch
+     * @return the requested batch
+     */
+    @Operation(method = "GET", paths = "/batches/{batch_uid}")
+    Batch getBatch(Integer uid);
 
 }

@@ -83,4 +83,14 @@ class TasksImpl implements Tasks {
     public TaskView await(TaskInfo taskInfo, int maxAttempts, Duration fixedDelay, Duration maxDuration) {
         return ReactorUtils.blockNonNull(_reactive.await(taskInfo, maxAttempts, fixedDelay, maxDuration));
     }
+
+    @Override
+    public BatchPage<Batch> batches(GetTasksRequest request) {
+        return ReactorUtils.blockNonNull(_reactive.batches(request));
+    }
+
+    @Override
+    public Batch getBatch(Integer uid) {
+        return ReactorUtils.blockNonNull(_reactive.getBatch(uid));
+    }
 }

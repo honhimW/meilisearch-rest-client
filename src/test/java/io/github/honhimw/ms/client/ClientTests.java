@@ -43,7 +43,7 @@ public class ClientTests extends TestBase {
     @Test
     void version() {
         Version version = blockingClient.version();
-        assert StringUtils.startsWith(version.getPkgVersion(), "1.11");
+        assert StringUtils.startsWith(version.getPkgVersion(), "1.12");
     }
 
     @Order(1)
@@ -89,5 +89,11 @@ public class ClientTests extends TestBase {
         assert getSucceededTasks.getLimit() == 20;
     }
 
+    @Order(4)
+    @Test
+    void batches() {
+        BatchPage<Batch> batches = blockingClient.tasks(tasks -> tasks.batches(new GetTasksRequest()));
+        assert batches.getLimit() == 20;
+    }
 
 }

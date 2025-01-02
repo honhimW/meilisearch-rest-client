@@ -192,6 +192,19 @@ public class Setting implements Serializable {
     @Schema(description = "To avoid any crash and performance issues, Meilisearch now stops search requests lasting more than 1500ms.", defaultValue = "null")
     private Integer searchCutoffMs;
 
+    /**
+     * Enable or disable facet search functionality
+     */
+    @Schema(description = "Enable or disable facet search functionality", defaultValue = "true")
+    private Boolean facetSearch;
+
+    /**
+     * When Meilisearch should return results only matching the beginning of query
+     * "indexingTime" | "disabled"
+     */
+    @Schema(description = "When Meilisearch should return results only matching the beginning of query", defaultValue = "indexingTime")
+    private String prefixSearch;
+
     private Setting(Builder builder) {
         setDisplayedAttributes(builder.displayedAttributes);
         setSearchableAttributes(builder.searchableAttributes);
@@ -237,6 +250,8 @@ public class Setting implements Serializable {
         setting.setProximityPrecision(ProximityPrecisionType.BY_WORD);
         setting.setLocalizedAttributes(null);
         setting.setSearchCutoffMs(null);
+        setting.setFacetSearch(true);
+        setting.setPrefixSearch("indexingTime");
         return setting;
     }
 

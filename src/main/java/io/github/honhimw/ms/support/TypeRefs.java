@@ -112,6 +112,17 @@ public class TypeRefs {
     }
 
     /**
+     * Batch type reference.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class BatchRef extends TypeRef<Batch> {
+        /**
+         * Instance.
+         */
+        public static final BatchRef INSTANCE = new BatchRef();
+    }
+
+    /**
      * String-String Map type reference.
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -164,6 +175,17 @@ public class TypeRefs {
          * Instance.
          */
         public static final PageTaskViewRef INSTANCE = new PageTaskViewRef();
+    }
+
+    /**
+     * Paginated Batch type reference.
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class BatchPageBatchViewRef extends TypeRef<BatchPage<Batch>> {
+        /**
+         * Instance.
+         */
+        public static final BatchPageBatchViewRef INSTANCE = new BatchPageBatchViewRef();
     }
 
     /**

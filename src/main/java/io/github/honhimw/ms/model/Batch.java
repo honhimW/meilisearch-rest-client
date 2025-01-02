@@ -23,9 +23,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Batched tasks
+ *
  * @author hon_him
  * @since 2024-12-13 v1.12
  */
@@ -34,7 +36,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatchedTask implements Serializable {
+public class Batch implements Serializable {
 
     /**
      * The batch unique identifier. Starting at 0 and increasing by one for every new batch.
@@ -57,6 +59,12 @@ public class BatchedTask implements Serializable {
     private Progress progress;
 
     /**
+     * Stats
+     */
+    @Schema(description = "Stats")
+    private Stats stats;
+
+    /**
      * The date at which the batch started processing, follow the rfc3339 format
      */
     @Schema(description = "The date at which the batch started processing, follow the rfc3339 format")
@@ -73,12 +81,6 @@ public class BatchedTask implements Serializable {
      */
     @Schema(description = "The duration the batch took to process its tasks")
     private String duration;
-
-    /**
-     * Stats
-     */
-    @Schema(description = "Stats")
-    private Stats stats;
 
     @Data
     @EqualsAndHashCode(callSuper = false)
@@ -102,7 +104,7 @@ public class BatchedTask implements Serializable {
     }
 
     /**
-     *  Shows the progress and indexing step of the current batch. Once a batch is finished, it must display the progress: null
+     * Shows the progress and indexing step of the current batch. Once a batch is finished, it must display the progress: null
      */
     @Data
     @EqualsAndHashCode(callSuper = false)
@@ -115,6 +117,14 @@ public class BatchedTask implements Serializable {
          */
         @Schema(description = "An array of all the steps currently being processed")
         private List<Step> steps;
+
+        /**
+         * The percentage of completed operations, calculated from all current steps and substeps.
+         * This value is a rough estimate and may not always reflect the current state of
+         * the batch due to how different steps are processed more quickly than others.
+         */
+        @Schema(description = "The percentage of completed operations.")
+        private Double percentage;
 
         @Data
         @EqualsAndHashCode(callSuper = false)
@@ -145,7 +155,7 @@ public class BatchedTask implements Serializable {
         }
 
     }
-    
+
     @Data
     @EqualsAndHashCode(callSuper = false)
     @NoArgsConstructor
@@ -169,6 +179,12 @@ public class BatchedTask implements Serializable {
          */
         @Schema(description = "types")
         private Types types;
+
+        /**
+         * List of the number of tasks in the batch separated by the indexes they affect.
+         */
+        @Schema(description = "List of the number of tasks in the batch separated by the indexes they affect.")
+        private Map<String, Integer> indexUids;
 
         @Data
         @EqualsAndHashCode(callSuper = false)
@@ -225,13 +241,13 @@ public class BatchedTask implements Serializable {
              */
             @Schema(description = "indexUpdate")
             private Integer indexUpdate;
-            
+
             /**
              * indexDeletion
              */
             @Schema(description = "indexDeletion")
             private Integer indexDeletion;
-            
+
             /**
              * indexSwap
              */

@@ -23,7 +23,6 @@ import reactor.util.retry.RetrySpec;
 
 import java.time.Duration;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 /**
  * @author hon_him
@@ -95,5 +94,18 @@ class ReactiveTasksImpl extends AbstractReactiveImpl implements ReactiveTasks {
             mono = mono.timeout(maxDuration);
         }
         return mono;
+    }
+
+    @Override
+    public Mono<BatchPage<Batch>> batches(GetTasksRequest request) {
+        return get("/batches", configurer -> {
+            Map<String, String> parameters = request.toParameters();
+            configurer.params(parameters);
+        }, TypeRefs.BatchPageBatchViewRef.INSTANCE);
+    }
+
+    @Override
+    public Mono<Batch> getBatch(Integer uid) {
+        return get(String.format("/batches/%s", uid), TypeRefs.BatchRef.INSTANCE);
     }
 }
